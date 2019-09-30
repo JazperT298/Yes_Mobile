@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                     String user_token = jsonObject.getString("user_token");
 
                     UserEducator userEducator = new UserEducator();
-                    userEducator.setId(user_id);
+                    userEducator.setId(user_id); 
                     userEducator.setToken(user_token);
 
                     if (result.contains("success"))
