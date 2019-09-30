@@ -18,8 +18,20 @@
         tools:layout="@layout/fragment_quiz" />
 
     <fragment
+        android:id="@+id/navigation_rank"
+        android:name="com.theyestech.yes_mobile.fragments.RankFragment"
+        android:label="Rank"
+        tools:layout="@layout/fragment_rank" />
+
+    <fragment
         android:id="@+id/navigation_notification"
         android:name="com.theyestech.yes_mobile.fragments.NotificationFragment"
         android:label="Notification"
         tools:layout="@layout/fragment_notification" />
+
+    <fragment
+        android:id="@+id/navigation_menu"
+        android:name="com.theyestech.yes_mobile.fragments.MenuFragment"
+        android:label="Menu"
+        tools:layout="@layout/fragment_menu" />
 </navigation>

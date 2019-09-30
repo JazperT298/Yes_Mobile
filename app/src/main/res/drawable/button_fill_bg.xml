@@ -3,9 +3,7 @@
 
     <item>
         <shape>
-            <solid android:color="@color/accentColor"></solid>
-            <corners android:radius="8dp"></corners>
-            <stroke android:color="@color/accentColor"/>
+            <solid android:color="@color/colorAccent"></solid>
         </shape>
     </item>
 

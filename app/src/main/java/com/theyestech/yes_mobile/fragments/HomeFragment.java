@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.activities.ProfileActivity;
+import com.theyestech.yes_mobile.activities.StartActivity;
+import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.UserRole;
+
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
@@ -35,7 +44,9 @@ public class HomeFragment extends Fragment {
 
         context = getContext();
 
+        checkSession();
         initializeUI();
+
     }
 
     private void initializeUI() {
@@ -57,9 +68,19 @@ public class HomeFragment extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(context, QuizListActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(context, ProfileActivity.class);
+                startActivity(intent);
             }
         });
+    }
+
+    private void checkSession(){
+        if (UserRole.getRole(context).equals(UserRole.Educator())) {
+            if (UserEducator.getToken(context) == null) {
+                Intent intent = new Intent(context, StartActivity.class);
+                startActivity(intent);
+                Objects.requireNonNull(getActivity()).finish();
+            }
+        }
     }
 }

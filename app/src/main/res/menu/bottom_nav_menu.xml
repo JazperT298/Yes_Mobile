@@ -12,8 +12,18 @@
         android:title="Quiz"/>
 
     <item
+        android:id="@+id/navigation_rank"
+        android:icon="@drawable/ic_nav_rank"
+        android:title="Rank"/>
+
+    <item
         android:id="@+id/navigation_notification"
         android:icon="@drawable/ic_nav_notification"
+        android:title="Notification"/>
+
+    <item
+        android:id="@+id/navigation_menu"
+        android:icon="@drawable/ic_nav_menu"
         android:title="Notification"/>
 
 </menu>

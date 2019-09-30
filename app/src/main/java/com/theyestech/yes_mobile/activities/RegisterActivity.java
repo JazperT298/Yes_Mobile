@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
@@ -85,13 +86,14 @@ public class RegisterActivity extends AppCompatActivity {
         HttpProvider.post(context, "controller_educator/register_as_educator_class.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String str = null;
-                try {
-                    str = new String(responseBody, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD(str);
+                if (str.equals("success")) {
+                    finish();
+                    Toasty.success(context, "Saved.").show();
+                } else
+                    etEmail.requestFocus();
+                    Toasty.warning(context, str).show();
             }
 
             @Override

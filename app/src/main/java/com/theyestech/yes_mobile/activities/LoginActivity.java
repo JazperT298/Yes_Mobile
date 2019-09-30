@@ -1,6 +1,5 @@
 package com.theyestech.yes_mobile.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,15 +7,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
+import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
 import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.KeyboardHandler;
+import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,10 +33,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private Context context;
 
-    private ProgressDialog progressDialog;
-
+    private TextView tvSignUp;
     private EditText etEmail, etPassword;
-    private Button btnRegister, btnLogin;
+    private Button btnLogin;
 
     private int roleId;
 
@@ -54,8 +56,8 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeUI() {
         etEmail = findViewById(R.id.et_LoginEmail);
         etPassword = findViewById(R.id.et_LoginPassword);
-        btnLogin = findViewById(R.id.btn_LoginLogin);
-        btnRegister = findViewById(R.id.btn_LoginRegister);
+        btnLogin = findViewById(R.id.btn_LoginSignIn);
+        tvSignUp = findViewById(R.id.tv_LoginSignUp);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RegisterActivity.class);
@@ -110,14 +112,10 @@ public class LoginActivity extends AppCompatActivity {
                     UserEducator userEducator = new UserEducator();
                     userEducator.setId(user_id);
                     userEducator.setToken(user_token);
+                    Debugger.logD(result);
 
                     if (result.contains("success"))
                         getEducatorDetails(userEducator);
-                    else {
-                        ProgressPopup.hideProgress();
-//                        OkayClosePopup.showDialog(context, result, "Close");
-                        Toasty.warning(context, result).show();
-                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -137,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getEducatorDetails(final UserEducator userEducator) {
-//        ProgressPopup.showProgress(context, "", "Loading...");
+        ProgressPopup.showProgress(context, "", "Loading...");
 
         RequestParams params = new RequestParams();
         params.put("teach_token", userEducator.getToken());
@@ -180,9 +178,12 @@ public class LoginActivity extends AppCompatActivity {
                     userEducator.setPosition(user_position);
                     userEducator.saveUserSession(context);
 
-                    Toasty.warning(context, "SUCCESS").show();
+                    UserRole userRole = new UserRole();
+                    userRole.setUserRole(UserRole.Educator());
+                    userRole.saveRole(context);
 
-                    Debugger.logD(UserEducator.getToken(context));
+                    Intent intent = new Intent(context, MainActivity.class);
+                    startActivity(intent);
 
                 } catch (Exception e) {
                     e.printStackTrace();
