@@ -24,7 +24,7 @@
 
             <Button
                 android:id="@+id/btn_DialogOkayOkay"
-                style="@style/Widget.AppCompat.Button.Colored"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -33,6 +33,7 @@
                 android:background="@drawable/button_fill_bg"
                 android:text="Okay"
                 android:textAllCaps="false"
+                android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/tv_DialogOkayMessage"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"

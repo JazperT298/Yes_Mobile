@@ -18,7 +18,6 @@ import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
 import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
-import com.theyestech.yes_mobile.utils.KeyboardHandler;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -66,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toasty.warning(context, "Complete the fields.").show();
                 else {
                     if (!etEmail.getText().toString().contains("@"))
-                        Toasty.warning(context, "Invalid email.").show();
+                        etEmail.setError("Invalid email.");
                     else
                         switch (roleId) {
                             case 1:
@@ -91,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginEducator() {
-        ProgressPopup.showProgress(context, "", "Loading...");
+        ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
         params.put("login_e_email_address", etEmail.getText().toString());
@@ -135,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getEducatorDetails(final UserEducator userEducator) {
-        ProgressPopup.showProgress(context, "", "Loading...");
+        ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
         params.put("teach_token", userEducator.getToken());
@@ -183,6 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                     userRole.saveRole(context);
 
                     Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 
                 } catch (Exception e) {

@@ -7,10 +7,10 @@ public class ProgressPopup {
 
     private static ProgressDialog progressDialog = null;
 
-    public static ProgressDialog showProgress(Context context, String title, String message) {
+    public static ProgressDialog showProgress(Context context) {
         progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle(title);
-        progressDialog.setMessage(message);
+        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
