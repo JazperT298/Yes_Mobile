@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.fragments.HomeFragment;
+import com.theyestech.yes_mobile.models.Section;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.UserRole;
 
@@ -33,11 +34,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (role.equals(UserRole.Educator()))
             initializeEducatorUI();
-
     }
 
     private void initializeEducatorUI() {
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_profile_educator);
 
         ivProfile = findViewById(R.id.iv_ProfileImage);
         ivBack = findViewById(R.id.iv_ProfileBack);
@@ -72,14 +72,16 @@ public class ProfileActivity extends AppCompatActivity {
         ivSubjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, SubjectActivity.class);
+                startActivity(intent);
             }
         });
 
         ivSections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, SectionActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -110,10 +112,17 @@ public class ProfileActivity extends AppCompatActivity {
                 openLogoutDialog();
             }
         });
+
+        setEducatorDetails();
     }
 
     private void initializeStudentUI() {
 
+    }
+
+    private void setEducatorDetails() {
+        tvFullname.setText(UserEducator.getFirstname(context) + " " + UserEducator.getMiddlename(context) + " " + UserEducator.getLastname(context));
+        tvEmail.setText(UserEducator.getEmail(context));
     }
 
     private void openLogoutDialog() {
@@ -141,4 +150,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setEducatorDetails();
+    }
 }
