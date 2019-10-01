@@ -159,6 +159,12 @@ public class UserEducator {
         return settings.getString("EMAIL", "");
     }
 
+    public static String getPassword(Context context)
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("PASSWORD", "");
+    }
+
     public static String getFirstname(Context context)
     {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -232,6 +238,7 @@ public class UserEducator {
         editor.putString("ID", id);
         editor.putString("TOKEN", token);
         editor.putString("EMAIL", email_address);
+        editor.putString("PASSWORD", password);
         editor.putString("FIRST_NAME", firsname);
         editor.putString("LAST_NAME", lastname);
         editor.putString("MIDDLE_NAME", middlename);

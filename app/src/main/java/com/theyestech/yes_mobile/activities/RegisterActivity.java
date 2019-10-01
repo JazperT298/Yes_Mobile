@@ -14,6 +14,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
+import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.utils.Debugger;
 
 import org.json.JSONArray;
@@ -79,6 +81,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerEducator() {
+        ProgressPopup.showProgress(context);
+
         RequestParams params = new RequestParams();
         params.put("e_email_address", etEmail.getText().toString());
         params.put("e_password", etConfirmPassword.getText().toString());
@@ -86,6 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
         HttpProvider.post(context, "controller_educator/register_as_educator_class.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD(str);
                 if (str.equals("success")) {
@@ -98,7 +103,8 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
     }
