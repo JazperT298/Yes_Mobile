@@ -240,7 +240,7 @@ public class SectionActivity extends AppCompatActivity {
 
                 } else {
                     if (sectionName.isEmpty()) {
-                        etName.setError("Please input section name.");
+                        Toasty.warning(context, "Please input section name.").show();
                     } else {
                         saveSection();
                         b.hide();

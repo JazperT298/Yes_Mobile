@@ -63,9 +63,9 @@ public class RegisterActivity extends AppCompatActivity {
                     Toasty.warning(context, "Complete the fields.").show();
                 else {
                     if (!etEmail.getText().toString().contains("@"))
-                        etEmail.setError("Invalid email.");
+                        Toasty.warning(context, "Invalid email.").show();
                     else if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString()))
-                        etPassword.setError("Password didn't match.");
+                        Toasty.warning(context, "Password didn't match.").show();
                     else
                         switch (roleId) {
                             case 1:

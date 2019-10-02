@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/button_fill_bg"
                 android:text="Okay"

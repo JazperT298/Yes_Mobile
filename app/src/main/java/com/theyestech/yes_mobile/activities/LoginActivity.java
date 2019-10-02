@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toasty.warning(context, "Complete the fields.").show();
                 else {
                     if (!etEmail.getText().toString().contains("@"))
-                        etEmail.setError("Invalid email.");
+                        Toasty.warning(context, "Invalid email.").show();
                     else
                         switch (roleId) {
                             case 1:

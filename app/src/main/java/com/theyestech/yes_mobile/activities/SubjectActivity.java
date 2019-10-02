@@ -356,11 +356,11 @@ public class SubjectActivity extends AppCompatActivity {
                 schoolYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
                 if (name.isEmpty())
-                    etName.setError("Please input subject name.");
+                    Toasty.warning(context, "Please input subject name.").show();
                 else {
                     if (level.equals(sLevel.get(2))) {
                         if (semester.isEmpty())
-                            spSemester.setError("Please select semester.");
+                            Toasty.warning(context, "Please select semester.").show();
                         else {
                             saveSubject();
                             b.hide();
