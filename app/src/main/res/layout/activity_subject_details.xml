@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/iv_SubjectDetailsBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -25,15 +25,18 @@
             app:srcCompat="@drawable/ic_back" />
 
         <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_SubjectDetailsSHeader"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:singleLine="true"
             android:text="Subject Details"
             android:textColor="@android:color/primary_text_light_nodisable"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_SubjectDetailsBack"
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
@@ -50,11 +53,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/iv_SubjectDetailsViewDetails"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageView6"
+                app:layout_constraintEnd_toStartOf="@+id/iv_SubjectDetailsViewStudents"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
@@ -62,35 +65,35 @@
                 app:srcCompat="@drawable/ic_details" />
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/iv_SubjectDetailsViewStudents"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintStart_toEndOf="@+id/iv_SubjectDetailsViewDetails"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_students" />
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/iv_SubjectDetailsViewTopics"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageView8"
+                app:layout_constraintEnd_toStartOf="@+id/iv_SubjectDetailsViewQuizzes"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5"
                 app:srcCompat="@drawable/ic_topic" />
 
             <ImageView
-                android:id="@+id/imageView8"
+                android:id="@+id/iv_SubjectDetailsViewQuizzes"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView7"
+                app:layout_constraintStart_toEndOf="@+id/iv_SubjectDetailsViewTopics"
                 app:layout_constraintTop_toBottomOf="@+id/textView7"
                 app:srcCompat="@drawable/ic_quiz" />
 
@@ -100,9 +103,9 @@
                 android:layout_height="wrap_content"
                 android:text="View Details"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/imageView4"
-                app:layout_constraintStart_toStartOf="@+id/imageView4"
-                app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_SubjectDetailsViewDetails"
+                app:layout_constraintStart_toStartOf="@+id/iv_SubjectDetailsViewDetails"
+                app:layout_constraintTop_toBottomOf="@+id/iv_SubjectDetailsViewDetails" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -110,33 +113,51 @@
                 android:layout_height="wrap_content"
                 android:text="View Students"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/imageView6"
-                app:layout_constraintStart_toStartOf="@+id/imageView6"
-                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_SubjectDetailsViewStudents"
+                app:layout_constraintStart_toStartOf="@+id/iv_SubjectDetailsViewStudents"
+                app:layout_constraintTop_toBottomOf="@+id/iv_SubjectDetailsViewStudents" />
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:text="View Topics"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/imageView7"
-                app:layout_constraintStart_toStartOf="@+id/imageView7"
-                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_SubjectDetailsViewTopics"
+                app:layout_constraintStart_toStartOf="@+id/iv_SubjectDetailsViewTopics"
+                app:layout_constraintTop_toBottomOf="@+id/iv_SubjectDetailsViewTopics" />
 
             <TextView
                 android:id="@+id/textView18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:text="View Quizzes"
                 android:textColor="@android:color/primary_text_light_nodisable"
+                app:layout_constraintEnd_toEndOf="@+id/iv_SubjectDetailsViewQuizzes"
+                app:layout_constraintStart_toStartOf="@+id/iv_SubjectDetailsViewQuizzes"
+                app:layout_constraintTop_toBottomOf="@+id/iv_SubjectDetailsViewQuizzes" />
+
+            <ImageView
+                android:id="@+id/iv_SubjectDetailsDeleteSubject"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView9"
+                app:srcCompat="@drawable/ic_delete" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Delete Subject"
+                android:textColor="@android:color/primary_text_light_nodisable"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/imageView8"
-                app:layout_constraintStart_toStartOf="@+id/imageView8"
-                app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_SubjectDetailsDeleteSubject"
+                app:layout_constraintStart_toStartOf="@+id/iv_SubjectDetailsDeleteSubject"
+                app:layout_constraintTop_toBottomOf="@+id/iv_SubjectDetailsDeleteSubject" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

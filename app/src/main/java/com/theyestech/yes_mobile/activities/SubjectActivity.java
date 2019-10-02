@@ -78,9 +78,9 @@ public class SubjectActivity extends AppCompatActivity {
         context = this;
         role = UserRole.getRole(context);
 
-        sLevel.add("Primary");
-        sLevel.add("Secondary");
-        sLevel.add("Tertiary");
+        sLevel.add("Primary Level");
+        sLevel.add("Secondary Level");
+        sLevel.add("Tertiary Level");
 
         sSemester.add("1st Semester");
         sSemester.add("2nd Semester");
@@ -126,6 +126,7 @@ public class SubjectActivity extends AppCompatActivity {
         subjectArrayList.clear();
 
         swipeRefreshLayout.setRefreshing(true);
+        floatingActionButton.setEnabled(false);
 
         RequestParams params = new RequestParams();
         params.put("teach_token", UserEducator.getToken(context));
@@ -135,6 +136,7 @@ public class SubjectActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
+                floatingActionButton.setEnabled(true);
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
@@ -190,6 +192,7 @@ public class SubjectActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 swipeRefreshLayout.setRefreshing(false);
+                floatingActionButton.setEnabled(true);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
@@ -323,8 +326,10 @@ public class SubjectActivity extends AppCompatActivity {
                 if (level.equals(sLevel.get(2))) {
                     spSemester.setVisibility(View.VISIBLE);
                     semester = sSemester.get(0);
-                } else
+                } else {
                     spSemester.setVisibility(View.GONE);
+                    semester = "";
+                }
             }
         });
 
@@ -375,5 +380,12 @@ public class SubjectActivity extends AppCompatActivity {
 
         b.show();
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        getSubjectDetails();
     }
 }
