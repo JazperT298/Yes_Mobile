@@ -124,7 +124,9 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         ivTopics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, SubjectTopicsActivity.class);
+                intent.putExtra("SUBJECT", subject);
+                startActivity(intent);
             }
         });
 

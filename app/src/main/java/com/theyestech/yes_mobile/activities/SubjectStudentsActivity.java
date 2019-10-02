@@ -11,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DebugUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +21,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.StudentAdapter;
+import com.theyestech.yes_mobile.adapters.StudentsAdapter;
 import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
 import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
@@ -55,7 +54,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
     private FloatingActionButton floatingActionButton;
 
     private ArrayList<Student> studentArrayList = new ArrayList<>();
-    private StudentAdapter studentAdapter;
+    private StudentsAdapter studentAdapter;
     private Student student = new Student();
 
     private Subject subject;
@@ -93,7 +92,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getStudents();
+                getStudentDetails();
             }
         });
 
@@ -104,10 +103,10 @@ public class SubjectStudentsActivity extends AppCompatActivity {
             }
         });
 
-        getStudents();
+        getStudentDetails();
     }
 
-    private void getStudents() {
+    private void getStudentDetails() {
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
@@ -154,14 +153,14 @@ public class SubjectStudentsActivity extends AppCompatActivity {
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
-                    studentAdapter = new StudentAdapter(context, studentArrayList);
+                    studentAdapter = new StudentsAdapter(context, studentArrayList);
                     studentAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            student = studentArrayList.get(position);
-                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
-//                            intent.putExtra("SUBJECT", student);
-                            startActivity(intent);
+//                            student = studentArrayList.get(position);
+//                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
+//                            intent.putExtra("STUDENT", student);
+//                            startActivity(intent);
                         }
                     });
 
@@ -204,7 +203,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
                         Toasty.success(context, "Saved.").show();
                     } else
                         Toasty.warning(context, result).show();
-                    getStudents();
+                    getStudentDetails();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

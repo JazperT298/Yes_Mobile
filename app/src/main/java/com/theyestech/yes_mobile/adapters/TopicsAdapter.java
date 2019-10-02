@@ -12,20 +12,20 @@ import android.widget.TextView;
 
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Student;
+import com.theyestech.yes_mobile.models.Topic;
 
 import java.util.ArrayList;
 
-public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHolder> {
+public class TopicsAdapter extends  RecyclerView.Adapter<TopicsAdapter.ViewHolder>{
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Student> studentArrayList;
+    private ArrayList<Topic> topicArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public StudentAdapter(Context context, ArrayList<Student> subjectArrayList) {
+    public TopicsAdapter(Context context, ArrayList<Topic> topicArrayList) {
         this.context = context;
-        this.studentArrayList = subjectArrayList;
+        this.topicArrayList = topicArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -33,19 +33,21 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.listrow_subject_students, viewGroup, false);
+        View view = layoutInflater.inflate(R.layout.listrow_subject_topics, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        Topic topic = topicArrayList.get(i);
 
+        viewHolder.tvName.setText(topic.getTopic_details());
     }
 
     @Override
     public int getItemCount() {
-        return studentArrayList.size();
+        return topicArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
