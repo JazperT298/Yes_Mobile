@@ -3,6 +3,7 @@ package com.theyestech.yes_mobile.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -56,7 +57,6 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
     private Subject subject;
 
-    private SectionsAdapter sectionsAdapter;
     private ArrayList<Section> sectionArrayList = new ArrayList<>();
 
     private ArrayList<String> sName = new ArrayList<>();
@@ -115,7 +115,9 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         ivStudents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, SubjectStudentsActivity.class);
+                intent.putExtra("SUBJECT", subject);
+                startActivity(intent);
             }
         });
 
