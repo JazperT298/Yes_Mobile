@@ -43,6 +43,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.ViewHo
         Student student = studentArrayList.get(i);
 
         viewHolder.tvName.setText(student.getUser_firstname() + " " + student.getUser_lastname());
+        viewHolder.tvEmail.setText(student.getUser_email_address());
     }
 
     @Override
@@ -53,15 +54,16 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView ivImage;
-        private TextView tvName;
+        private TextView tvName, tvEmail;
         private CardView cardView;
 
         public ViewHolder(View view) {
             super(view);
 
-            ivImage = view.findViewById(R.id.iv_ListrowSubjectsImage);
-            tvName = view.findViewById(R.id.tv_ListrowSubjectsName);
-            cardView = view.findViewById(R.id.cv_ListrowSubjects);
+            ivImage = view.findViewById(R.id.iv_ListrowSubjectStudentsProfile);
+            tvName = view.findViewById(R.id.tv_ListrowSubjectStudentsFullname);
+            tvEmail = view.findViewById(R.id.tv_ListrowSubjectStudentsEmail);
+            cardView = view.findViewById(R.id.cv_ListrowSubjectStudents);
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override

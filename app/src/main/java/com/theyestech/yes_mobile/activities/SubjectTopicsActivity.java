@@ -31,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.entity.mime.Header;
+import es.dmoral.toasty.Toasty;
 
 public class SubjectTopicsActivity extends AppCompatActivity {
 
@@ -45,7 +46,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
 
     private ArrayList<Topic> topicArrayList = new ArrayList<>();
     private TopicsAdapter topicsAdapter;
-    private Topic topic = new Topic();
+    private Topic selectedTopic = new Topic();
 
     private Subject subject;
 
@@ -85,7 +86,8 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, NewTopicActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -98,13 +100,12 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("subj_id", subject.getId());
 
-        HttpProvider.post(context, "controller_educator/get_students_from_subject.php", params, new AsyncHttpResponseHandler() {
+        HttpProvider.post(context, "controller_educator/get_topics.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
-                    Debugger.logD("TOPIC: " + str);
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("TOPIC: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
@@ -112,14 +113,14 @@ public class SubjectTopicsActivity extends AppCompatActivity {
                         String topic_id = jsonObject.getString("topic_id");
                         String topic_subj_id = jsonObject.getString("topic_subj_id");
                         String topic_file = jsonObject.getString("topic_file");
-                        String topic_filetype = jsonObject.getString("topic_filetype");
+//                        String topic_filetype = jsonObject.getString("topic_filetype");
                         String topic_details = jsonObject.getString("topic_details");
 
                         Topic topic = new Topic();
                         topic.setTopic_id(topic_id);
                         topic.setTopic_subj_id(topic_subj_id);
                         topic.setTopic_details(topic_details);
-                        topic.setTopic_filetype(topic_filetype);
+//                        topic.setTopic_filetype(topic_filetype);
                         topic.setTopic_file(topic_file);
 
                         topicArrayList.add(topic);
@@ -131,7 +132,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
                     topicsAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position) {
-//                            topic = topicArrayList.get(position);
+                            selectedTopic = topicArrayList.get(position);
 //                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
 //                            intent.putExtra("TOPIC", topic);
 //                            startActivity(intent);
@@ -142,7 +143,6 @@ public class SubjectTopicsActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Debugger.logD("TOPIC:" + e.toString());
                 }
             }
 

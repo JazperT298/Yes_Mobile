@@ -2,7 +2,6 @@ package com.theyestech.yes_mobile.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.Subject;
-import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
@@ -107,6 +105,8 @@ public class SubjectStudentsActivity extends AppCompatActivity {
     }
 
     private void getStudentDetails() {
+        studentArrayList.clear();
+
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
@@ -118,7 +118,6 @@ public class SubjectStudentsActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
-                    Debugger.logD("STUDENTS: " + str);
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("STUDENTS: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
@@ -168,7 +167,6 @@ public class SubjectStudentsActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Debugger.logD("STUDENT:" + e.toString());
                 }
             }
 
@@ -180,13 +178,12 @@ public class SubjectStudentsActivity extends AppCompatActivity {
         });
     }
 
-    private void addStudentToSubject(){
+    private void addStudentToSubject() {
         ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
         params.put("stud_code", studentCode);
         params.put("subj_id", subject.getId());
-        params.put("teach_token", UserEducator.getToken(context));
 
         HttpProvider.post(context, "controller_educator/add_student_to_subject.php", params, new AsyncHttpResponseHandler() {
             @Override
@@ -194,7 +191,6 @@ public class SubjectStudentsActivity extends AppCompatActivity {
                 ProgressPopup.hideProgress();
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
-                    Debugger.logD("STUDENT: " + str);
                     JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     String result = jsonObject.getString("result");
@@ -206,6 +202,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
                     getStudentDetails();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Debugger.logD("STUDENT: " + e.toString());
                 }
             }
 
@@ -245,6 +242,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 studentCode = etCode.getText().toString();
                 addStudentToSubject();
+                b.hide();
             }
         });
 

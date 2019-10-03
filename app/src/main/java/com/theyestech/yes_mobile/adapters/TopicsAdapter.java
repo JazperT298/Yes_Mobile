@@ -2,6 +2,7 @@ package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Topic;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class TopicsAdapter extends  RecyclerView.Adapter<TopicsAdapter.ViewHolder>{
 
@@ -40,9 +43,23 @@ public class TopicsAdapter extends  RecyclerView.Adapter<TopicsAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Topic topic = topicArrayList.get(i);
+        final Topic topic = topicArrayList.get(i);
 
-        viewHolder.tvName.setText(topic.getTopic_details());
+        viewHolder.tvDetails.setText(topic.getTopic_details());
+
+        viewHolder.constraintYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        viewHolder.constraintComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -53,17 +70,26 @@ public class TopicsAdapter extends  RecyclerView.Adapter<TopicsAdapter.ViewHolde
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView ivImage;
-        private TextView tvName;
-        private CardView cardView;
+        private TextView tvDetails;
+        private ConstraintLayout constraintYes, constraintComment;
 
         public ViewHolder(View view) {
             super(view);
 
-            ivImage = view.findViewById(R.id.iv_ListrowSubjectsImage);
-            tvName = view.findViewById(R.id.tv_ListrowSubjectsName);
-            cardView = view.findViewById(R.id.cv_ListrowSubjects);
+            ivImage = view.findViewById(R.id.iv_ListrowSubjectTopicsImage);
+            tvDetails = view.findViewById(R.id.tv_ListrowSubjectTopicsDetails);
+            constraintYes = view.findViewById(R.id.constraint_ListrowSubjectTopicsYes);
+            constraintComment = view.findViewById(R.id.constraint_ListrowSubjectTopicsComments);
 
-            cardView.setOnClickListener(new View.OnClickListener() {
+            constraintYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickRecyclerView != null)
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+            constraintComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
