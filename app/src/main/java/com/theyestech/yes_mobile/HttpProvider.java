@@ -26,53 +26,6 @@ public class HttpProvider {
     private static AsyncHttpClient client = new AsyncHttpClient();
     private static SyncHttpClient syncHttpClient = new SyncHttpClient();
 
-//    public static void post(Context context, String url, StringEntity entity, AsyncHttpResponseHandler responseHandler) {
-//        client.addHeader("Authorization", "Token " + UserSessionStudent.getToken(context));
-//        client.addHeader("Content-Type", "application/x-www-form-urlencoded");
-//        client.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-//        client.post(context, getAbsoluteUrl(url), entity, null, responseHandler);
-//    }
-
-//    public static void get(Context context, String url, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-//        client.addHeader("Authorization", "Token " + UserSessionStudent.getToken(context));
-//        client.addHeader("Content-Type", "application/x-www-form-urlencoded");
-//        client.setMaxRetriesAndTimeout(2, 5);
-//        client.get(context, getAbsoluteUrl(url), params, jsonHttpResponseHandler);
-//    }
-
-//    public static void postRegister(Context context, String url, StringEntity entity, AsyncHttpResponseHandler responseHandler) {
-//        client.addHeader("Content-Type", "application/x-www-form-urlencoded");
-//        client.post(context, getAbsoluteUrl(url), entity, null, responseHandler);
-//    }
-
-//    public static void post(Context context, String url, StringEntity entity, boolean possibleLongOperation, AsyncHttpResponseHandler responseHandler) {
-//        client.addHeader("Authorization", "Token " + UserSessionStudent.getToken(context));
-//        client.addHeader("Content-Type", "application/json;charset=UTF-8");
-//        client.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-//
-//        if (possibleLongOperation) {
-//            client.setConnectTimeout(50000);
-//            client.setTimeout(50000);
-//            client.setResponseTimeout(50000);
-//        }
-//
-//        client.post(context, BASE_URL + (url), entity, null, responseHandler);
-//    }
-
-//    public static void postSync(Context context, String url, StringEntity entity, boolean possibleLongOperation, AsyncHttpResponseHandler responseHandler) {
-//        syncHttpClient.addHeader("Authorization", "Token " + UserSessionStudent.getToken(context));
-//        syncHttpClient.addHeader("Content-Type", "application/json;charset=UTF-8");
-//        syncHttpClient.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-//
-//        if (possibleLongOperation) {
-//            syncHttpClient.setConnectTimeout(50000);
-//            syncHttpClient.setTimeout(50000);
-//            syncHttpClient.setResponseTimeout(50000);
-//        }
-//
-//        syncHttpClient.post(context, getAbsoluteUrl(url), entity, null, responseHandler);
-//    }
-
     public static void post(Context ctx, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         /* Fixed Login problem where second login attempt after logout changes content type of data */
         /* Problem - Can't Login after logout from previous account */
@@ -101,6 +54,10 @@ public class HttpProvider {
 
     public static String getSubjectDir(){
         return BASE_URL.replace("controllerClass/", "subject-files/");
+    }
+
+    public static String getTopicDir(){
+        return BASE_URL.replace("controllerClass/", "topic-files/");
     }
 
 }

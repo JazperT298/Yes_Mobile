@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,12 +19,21 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
+import com.theyestech.yes_mobile.dialogs.ProgressPopup;
+import com.theyestech.yes_mobile.models.Subject;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
-import java.io.ByteArrayOutputStream;
-import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 
+import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
 
 public class NewTopicActivity extends AppCompatActivity {
@@ -34,29 +42,26 @@ public class NewTopicActivity extends AppCompatActivity {
 
     private String role;
 
-    private static final int CAMERA_REQUEST_CODE = 200;
     private static final int STORAGE_REQUEST_CODE = 400;
     private static final int IMAGE_PICK_GALLERY_CODE = 1000;
 
-    private String cameraPermission[];
     private String storagePermission[];
-    private Uri image_uri;
-
-    private List<Bitmap> mL;
-    private List<Uri> mL1;
     private Uri selectImageUrl;
-    private Bitmap imageBitmap;
-    private String mCurrentPhotoPath;
-    private String picturePath;
+    private String picturePath = "";
 
     private ImageView ivBack, ivImage, ivGallery, ivAttach, ivSend;
     private EditText etDetails;
     private VideoView vvVideo;
 
+    private Subject subject;
+    private File myFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_topic);
+
+        subject = getIntent().getParcelableExtra("SUBJECT");
 
         context = this;
         role = UserRole.getRole(context);
@@ -103,7 +108,50 @@ public class NewTopicActivity extends AppCompatActivity {
         ivSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (etDetails.getText().toString().isEmpty()) {
+                    Toasty.warning(context, "Please input details.").show();
+                } else {
+                    if (picturePath.isEmpty()) {
+                        Toasty.warning(context, "Please select image or video.").show();
+                    } else {
+                        myFile = new File(picturePath);
+                        saveNewTopic();
+                    }
+                }
+            }
+        });
+    }
 
+    private void saveNewTopic() {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("topic_details", etDetails.getText().toString());
+        params.put("subj_id", subject.getId());
+        try {
+            params.put("topic_file", myFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Debugger.logD(e.toString());
+        }
+
+        HttpProvider.post(context, "controller_educator/upload_topic.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD(str);
+                if (str.contains("success")) {
+                    Toasty.success(context, "Saved.").show();
+                    finish();
+                } else
+                    Toasty.warning(context, "Failed").show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
     }
@@ -144,6 +192,7 @@ public class NewTopicActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_GALLERY_CODE) {
             selectImageUrl = data.getData();
             ivImage.setImageURI(selectImageUrl);
+            ivImage.setVisibility(View.VISIBLE);
 
             Uri selectedImage = data.getData();
 

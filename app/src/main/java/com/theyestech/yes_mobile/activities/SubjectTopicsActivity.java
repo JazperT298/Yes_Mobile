@@ -79,7 +79,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                getTopicDetails();
             }
         });
 
@@ -87,6 +87,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, NewTopicActivity.class);
+                intent.putExtra("SUBJECT", subject);
                 startActivity(intent);
             }
         });
@@ -95,6 +96,8 @@ public class SubjectTopicsActivity extends AppCompatActivity {
     }
 
     private void getTopicDetails() {
+        topicArrayList.clear();
+
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
