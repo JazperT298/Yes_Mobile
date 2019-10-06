@@ -60,7 +60,6 @@ public class SubjectActivity extends AppCompatActivity {
     private SubjectsAdapter subjectsAdapter;
     private Subject selectedSubject = new Subject();
 
-    private SectionsAdapter sectionsAdapter;
     private ArrayList<Section> sectionArrayList = new ArrayList<>();
 
     private ArrayList<String> sName = new ArrayList<>();
@@ -84,7 +83,7 @@ public class SubjectActivity extends AppCompatActivity {
 
         sSemester.add("1st Semester");
         sSemester.add("2nd Semester");
-        sSemester.add("Summmer");
+        sSemester.add("Summer");
 
         initializeUI();
 
@@ -118,7 +117,7 @@ public class SubjectActivity extends AppCompatActivity {
             }
         });
 
-        getSubjectDetails();
+//        getSubjectDetails();
         getSectionDetails();
     }
 

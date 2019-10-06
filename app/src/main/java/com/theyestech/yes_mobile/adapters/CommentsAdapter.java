@@ -2,7 +2,6 @@ package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +13,21 @@ import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Subject;
+import com.theyestech.yes_mobile.models.Comment;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
-public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHolder> {
+public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Subject> subjectArrayList;
+    private ArrayList<com.theyestech.yes_mobile.models.Comment> commentArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public SubjectsAdapter(Context context, ArrayList<Subject> subjectArrayList) {
+    public CommentsAdapter(Context context, ArrayList<Comment> commentArrayList) {
         this.context = context;
-        this.subjectArrayList = subjectArrayList;
+        this.commentArrayList = commentArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -35,47 +35,42 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.listrow_subjects, viewGroup, false);
+        View view = layoutInflater.inflate(R.layout.listrow_subject_topics_comments, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Subject subject = subjectArrayList.get(i);
+        Comment comment = commentArrayList.get(i);
 
-        viewHolder.tvName.setText(subject.getTitle());
+        viewHolder.tvFullname.setText(comment.getUser_fullname());
+        viewHolder.tvDetails.setText(comment.getTc_details());
+        viewHolder.tvDateTime.setText(comment.getTc_datetime());
 
         Glide.with(context)
-                .load(HttpProvider.getSubjectDir() + subject.getImage())
+                .load(HttpProvider.getProfileImageDir() + comment.getUser_image())
+                .apply(GlideOptions.getOptions())
                 .into(viewHolder.ivImage);
     }
 
     @Override
     public int getItemCount() {
-        return subjectArrayList.size();
+        return commentArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView ivImage;
-        private TextView tvName;
-        private CardView cardView;
+        private TextView tvDetails, tvFullname, tvDateTime;
 
         public ViewHolder(View view) {
             super(view);
 
-            ivImage = view.findViewById(R.id.iv_ListrowSubjectsImage);
-            tvName = view.findViewById(R.id.tv_ListrowSubjectsName);
-            cardView = view.findViewById(R.id.cv_ListrowSubjects);
-
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onClickRecyclerView != null)
-                        onClickRecyclerView.onItemClick(v, getAdapterPosition());
-                }
-            });
+            ivImage = view.findViewById(R.id.iv_ListrowCommentProfile);
+            tvDetails = view.findViewById(R.id.tv_ListrowCommentDetails);
+            tvFullname = view.findViewById(R.id.tv_ListrowCommentFullname);
+            tvDateTime = view.findViewById(R.id.tv_ListrowCommentDateTime);
         }
     }
 

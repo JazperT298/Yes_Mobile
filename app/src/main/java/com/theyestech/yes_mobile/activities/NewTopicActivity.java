@@ -3,6 +3,7 @@ package com.theyestech.yes_mobile.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -44,10 +45,11 @@ public class NewTopicActivity extends AppCompatActivity {
 
     private static final int STORAGE_REQUEST_CODE = 400;
     private static final int IMAGE_PICK_GALLERY_CODE = 1000;
+    private static final int VIDEO_PICK_GALLERY_CODE = 2000;
 
     private String storagePermission[];
-    private Uri selectImageUrl;
-    private String picturePath = "";
+    private Uri selectedFile;
+    private String selectedFilePath = "";
 
     private ImageView ivBack, ivImage, ivGallery, ivAttach, ivSend;
     private EditText etDetails;
@@ -90,11 +92,8 @@ public class NewTopicActivity extends AppCompatActivity {
         ivGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!checkStoragePermission()) {
-                    requestStoragePermission();
-                } else {
-                    pickGallery();
-                }
+                selectedFilePath = "";
+                selectAction();
             }
         });
 
@@ -111,10 +110,10 @@ public class NewTopicActivity extends AppCompatActivity {
                 if (etDetails.getText().toString().isEmpty()) {
                     Toasty.warning(context, "Please input details.").show();
                 } else {
-                    if (picturePath.isEmpty()) {
+                    if (selectedFilePath.isEmpty()) {
                         Toasty.warning(context, "Please select image or video.").show();
                     } else {
-                        myFile = new File(picturePath);
+                        myFile = new File(selectedFilePath);
                         saveNewTopic();
                     }
                 }
@@ -165,10 +164,45 @@ public class NewTopicActivity extends AppCompatActivity {
         return result;
     }
 
-    private void pickGallery() {
+    private void pickImageGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
+    }
+
+    private void pickVideoGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("video/*");
+        startActivityForResult(intent, VIDEO_PICK_GALLERY_CODE);
+    }
+
+    private void selectAction() {
+        String items[] = {" Image ", " Video ", " Cancel "};
+        android.support.v7.app.AlertDialog.Builder dialog = new android.support.v7.app.AlertDialog.Builder(context);
+        dialog.setTitle("Select action");
+        dialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    if (!checkStoragePermission()) {
+                        requestStoragePermission();
+                    } else {
+                        pickImageGallery();
+                    }
+                }
+                if (which == 1) {
+                    if (!checkStoragePermission()) {
+                        requestStoragePermission();
+                    } else {
+                        pickVideoGallery();
+                    }
+                }
+                if (which == 2) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.create().show();
     }
 
     @Override
@@ -178,7 +212,7 @@ public class NewTopicActivity extends AppCompatActivity {
                 if (grantResults.length > 0) {
                     boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (writeStorageAccepted) {
-                        pickGallery();
+                        pickImageGallery();
                     } else {
                         Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
                     }
@@ -189,22 +223,40 @@ public class NewTopicActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_GALLERY_CODE) {
-            selectImageUrl = data.getData();
-            ivImage.setImageURI(selectImageUrl);
-            ivImage.setVisibility(View.VISIBLE);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
+                selectedFile = data.getData();
+                ivImage.setImageURI(selectedFile);
+                ivImage.setVisibility(View.VISIBLE);
 
-            Uri selectedImage = data.getData();
+                Uri selectedImage = data.getData();
 
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor = context.getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
+                Cursor cursor = context.getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                selectedFilePath = cursor.getString(columnIndex);
+            } else if (requestCode == VIDEO_PICK_GALLERY_CODE) {
+                selectedFile = data.getData();
+                vvVideo.setVideoPath(selectedFile.getPath());
+                vvVideo.setVisibility(View.VISIBLE);
+
+                Uri selectedVideo = data.getData();
+
+                String[] filePathColumn = {MediaStore.Video.Media.DATA};
+
+                Cursor cursor = context.getContentResolver().query(selectedVideo,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                selectedFilePath = cursor.getString(columnIndex);
+            }
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

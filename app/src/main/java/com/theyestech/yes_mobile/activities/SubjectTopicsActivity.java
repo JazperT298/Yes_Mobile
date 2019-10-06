@@ -91,8 +91,6 @@ public class SubjectTopicsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        getTopicDetails();
     }
 
     private void getTopicDetails() {
@@ -116,14 +114,14 @@ public class SubjectTopicsActivity extends AppCompatActivity {
                         String topic_id = jsonObject.getString("topic_id");
                         String topic_subj_id = jsonObject.getString("topic_subj_id");
                         String topic_file = jsonObject.getString("topic_file");
-//                        String topic_filetype = jsonObject.getString("topic_filetype");
+                        String topic_filetype = jsonObject.getString("topic_filetype");
                         String topic_details = jsonObject.getString("topic_details");
 
                         Topic topic = new Topic();
                         topic.setTopic_id(topic_id);
                         topic.setTopic_subj_id(topic_subj_id);
                         topic.setTopic_details(topic_details);
-//                        topic.setTopic_filetype(topic_filetype);
+                        topic.setTopic_filetype(topic_filetype);
                         topic.setTopic_file(topic_file);
 
                         topicArrayList.add(topic);
@@ -155,5 +153,12 @@ public class SubjectTopicsActivity extends AppCompatActivity {
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        getTopicDetails();
     }
 }
