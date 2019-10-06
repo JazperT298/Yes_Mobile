@@ -1,13 +1,19 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Debug;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -16,19 +22,22 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.CommentsAdapter;
 import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
+import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Comment;
-import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
+import es.dmoral.toasty.Toasty;
 
 public class SubjectTopicsCommentActivity extends AppCompatActivity {
 
@@ -39,10 +48,13 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
     private ImageView ivBack;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    private FloatingActionButton floatingActionButton;
 
     private ArrayList<Comment> commentArrayList = new ArrayList<>();
     private CommentsAdapter commentsAdapter;
     private Comment selectedComment = new Comment();
+
+    private String commentDetails;
 
     private String topicId;
 
@@ -63,6 +75,7 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
         ivBack = findViewById(R.id.iv_CommentBack);
         swipeRefreshLayout = findViewById(R.id.swipe_Comment);
         recyclerView = findViewById(R.id.rv_Comments);
+        floatingActionButton = findViewById(R.id.fab_CommentAdd);
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -80,6 +93,13 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
             }
         });
 
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAddCommentDialog();
+            }
+        });
+
         getCommentDetails();
     }
 
@@ -89,7 +109,7 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
-        params.put("token", UserEducator.getToken(context));
+//        params.put("token", UserEducator.getToken(context));
         params.put("topic_id", topicId);
         Debugger.logD(topicId);
 
@@ -97,8 +117,6 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
-                String aw = new String(responseBody, StandardCharsets.UTF_8);
-                Debugger.logD("COMMENTS: " + aw);
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
@@ -122,7 +140,7 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
                         comment.setTc_file(tc_file);
                         comment.setTc_datetime(tc_datetime);
                         comment.setUser_image(user_image);
-                        comment.setUser_image(user_fullname);
+                        comment.setUser_fullname(user_fullname);
 
                         commentArrayList.add(comment);
                     }
@@ -144,7 +162,6 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Debugger.logD(e.toString());
                 }
             }
 
@@ -155,4 +172,82 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void saveComment() {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("topic_id", topicId);
+        params.put("topic_comment", commentDetails);
+
+        HttpProvider.post(context, "controller_educator/post_comment_topic.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String aw = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD(aw);
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String result = jsonObject.getString("result");
+                    Debugger.logD(str);
+                    if (result.contains("success")) {
+                        Toasty.success(context, "Saved.").show();
+                    } else
+                        Toasty.warning(context, result).show();
+                    getCommentDetails();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void openAddCommentDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_add_comment, null);
+        final EditText etComment;
+        final Button btnSave;
+        final ImageView ivClose;
+
+        etComment = dialogView.findViewById(R.id.et_AddCommentCpmment);
+        btnSave = dialogView.findViewById(R.id.btn_AddCommentSave);
+        ivClose = dialogView.findViewById(R.id.iv_AddCommentClose);
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.hide();
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commentDetails = etComment.getText().toString();
+                if (commentDetails.isEmpty()) {
+                    Toasty.warning(context, "Please input comment.").show();
+                } else {
+                    saveComment();
+                    b.hide();
+                }
+            }
+        });
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
 }

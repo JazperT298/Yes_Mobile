@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -18,6 +19,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
 import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -210,6 +212,11 @@ public class UserDetailsActivity extends AppCompatActivity {
             tvHeader.setText("Educator Details");
         else
             tvHeader.setText("Student Details");
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(ivProfile);
+
     }
 
     private void setFieldsMode(boolean enable) {

@@ -10,10 +10,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.fragments.HomeFragment;
 import com.theyestech.yes_mobile.models.Section;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -123,6 +126,10 @@ public class ProfileActivity extends AppCompatActivity {
     private void setEducatorDetails() {
         tvFullname.setText(UserEducator.getFirstname(context) + " " + UserEducator.getMiddlename(context) + " " + UserEducator.getLastname(context));
         tvEmail.setText(UserEducator.getEmail(context));
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(ivProfile);
     }
 
     private void openLogoutDialog() {

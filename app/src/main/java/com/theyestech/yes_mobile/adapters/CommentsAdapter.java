@@ -49,7 +49,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         viewHolder.tvDateTime.setText(comment.getTc_datetime());
 
         Glide.with(context)
-                .load(HttpProvider.getProfileImageDir() + comment.getUser_image())
+                .load(HttpProvider.getProfileDir() + comment.getUser_image())
                 .apply(GlideOptions.getOptions())
                 .into(viewHolder.ivImage);
     }

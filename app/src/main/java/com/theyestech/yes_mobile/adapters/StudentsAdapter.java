@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Student;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
@@ -44,6 +47,11 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.ViewHo
 
         viewHolder.tvName.setText(student.getUser_firstname() + " " + student.getUser_lastname());
         viewHolder.tvEmail.setText(student.getUser_email_address());
+
+//        Glide.with(context)
+//                .load(HttpProvider.getProfileDir() + student.getUser_image())
+//                .apply(GlideOptions.getOptions())
+//                .into(viewHolder.ivImage);
     }
 
     @Override
