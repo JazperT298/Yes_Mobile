@@ -20,7 +20,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.SectionsAdapter;
 import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
 import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.models.Section;
@@ -82,7 +81,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
         sSemester.add("1st Semester");
         sSemester.add("2nd Semester");
-        sSemester.add("Summmer");
+        sSemester.add("Summer");
 
         initializeUI();
     }
@@ -133,7 +132,9 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         ivQuizzes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, SubjectQuizzesActivity.class);
+                intent.putExtra("SUBJECT", subject);
+                startActivity(intent);
             }
         });
 

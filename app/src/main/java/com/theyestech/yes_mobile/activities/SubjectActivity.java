@@ -117,8 +117,6 @@ public class SubjectActivity extends AppCompatActivity {
             }
         });
 
-//        getSubjectDetails();
-        getSectionDetails();
     }
 
     private void getSubjectDetails() {
@@ -340,7 +338,7 @@ public class SubjectActivity extends AppCompatActivity {
             }
         });
 
-        tvHeader.setText("Add Section");
+        tvHeader.setText("Add Subject");
 
         dialogBuilder.setView(dialogView);
         final AlertDialog b = dialogBuilder.create();
@@ -386,5 +384,6 @@ public class SubjectActivity extends AppCompatActivity {
         super.onResume();
 
         getSubjectDetails();
+        getSectionDetails();
     }
 }

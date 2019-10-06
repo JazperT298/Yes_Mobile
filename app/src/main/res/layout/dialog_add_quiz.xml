@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -21,17 +23,28 @@
             android:layout_height="match_parent">
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout7"
+                android:id="@+id/constraintLayout18"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <TextView
+                    android:id="@+id/textView27"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Add Quiz"
+                    android:textColor="@android:color/primary_text_light_nodisable"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
-                    android:id="@+id/iv_AddEditSubjectClose"
+                    android:id="@+id/iv_AddQuizClose"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="8dp"
@@ -39,22 +52,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_close" />
-
-                <TextView
-                    android:id="@+id/tv_AddEditSubjectHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="Add/Edit Subject"
-                    android:textColor="@android:color/primary_text_light_nodisable"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
             </android.support.constraint.ConstraintLayout>
 
             <EditText
-                android:id="@+id/et_AddEditSubjectName"
+                android:id="@+id/et_AddQuizTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -62,15 +63,15 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/bg_edittext"
                 android:ems="10"
-                android:hint="Name"
+                android:hint="Title"
                 android:inputType="textPersonName"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout18" />
 
             <EditText
-                android:id="@+id/et_AddEditSubjectDescription"
+                android:id="@+id/et_AddQuizItems"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -78,37 +79,31 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/bg_edittext"
                 android:ems="10"
-                android:hint="Description(Optional)"
+                android:hint="Items"
+                android:inputType="number"
+                android:padding="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_AddQuizTitle" />
+
+            <EditText
+                android:id="@+id/et_AddQuizTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_edittext"
+                android:ems="10"
+                android:hint="Time (Optional)"
                 android:inputType="textPersonName"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_AddEditSubjectName" />
+                app:layout_constraintTop_toBottomOf="@+id/et_AddQuizItems" />
 
             <com.jaredrummler.materialspinner.MaterialSpinner
-                android:id="@+id/sp_AddEditSubjectSection"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_AddEditSubjectDescription" />
-
-            <com.jaredrummler.materialspinner.MaterialSpinner
-                android:id="@+id/sp_AddEditSubjectLevel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sp_AddEditSubjectSection" />
-
-            <com.jaredrummler.materialspinner.MaterialSpinner
-                android:id="@+id/sp_AddEditSubjectSemester"
+                android:id="@+id/sp_AddQuizType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -116,10 +111,10 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sp_AddEditSubjectLevel" />
+                app:layout_constraintTop_toBottomOf="@+id/et_AddQuizTime" />
 
             <Button
-                android:id="@+id/btn_AddEditSubjectSave"
+                android:id="@+id/btn_AddQuizSave"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -133,8 +128,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sp_AddEditSubjectSemester" />
-
+                app:layout_constraintTop_toBottomOf="@+id/sp_AddQuizType" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>
