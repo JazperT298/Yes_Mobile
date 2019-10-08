@@ -148,6 +148,7 @@ public class LoginActivity extends AppCompatActivity {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    Debugger.logD(str);
                     String user_email_address = jsonObject.getString("user_email_address");
                     String user_password = jsonObject.getString("user_password");
                     String user_firstname = jsonObject.getString("user_firstname");

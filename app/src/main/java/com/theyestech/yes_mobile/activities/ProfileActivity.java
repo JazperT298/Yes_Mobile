@@ -153,7 +153,7 @@ public class ProfileActivity extends AppCompatActivity {
             UserEducator.clearSession(context);
             UserRole.clearRole(context);
             HomeFragment homeFragment = new HomeFragment();
-            homeFragment.checkSession();
+            homeFragment.checkEducatorSession();
         }
     }
 

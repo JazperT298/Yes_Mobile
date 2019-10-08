@@ -46,9 +46,12 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
 
         viewHolder.tvName.setText(subject.getTitle());
 
-        Glide.with(context)
-                .load(HttpProvider.getSubjectDir() + subject.getImage())
-                .into(viewHolder.ivImage);
+        if(subject.getImage().length() > 5){
+            Glide.with(context)
+                    .load(HttpProvider.getSubjectDir() + subject.getImage())
+                    .into(viewHolder.ivImage);
+        }
+
     }
 
     @Override

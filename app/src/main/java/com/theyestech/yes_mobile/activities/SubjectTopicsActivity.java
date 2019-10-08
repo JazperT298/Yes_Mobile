@@ -15,7 +15,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.StudentsAdapter;
 import com.theyestech.yes_mobile.adapters.TopicsAdapter;
 import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
@@ -29,9 +28,6 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.entity.mime.Header;
-import es.dmoral.toasty.Toasty;
 
 public class SubjectTopicsActivity extends AppCompatActivity {
 

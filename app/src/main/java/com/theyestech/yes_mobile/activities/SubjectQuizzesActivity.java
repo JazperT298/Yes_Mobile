@@ -290,7 +290,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
 
         getQuizzesDetails();
 
-        if (!selectedQuiz.getQuiz_id().isEmpty()){
+        if (selectedQuiz.getQuiz_id().isEmpty()){
             Intent intent = new Intent(context, SubjectQuizDetailsActivity.class);
             intent.putExtra("QUIZ", selectedQuiz);
             startActivity(intent);
