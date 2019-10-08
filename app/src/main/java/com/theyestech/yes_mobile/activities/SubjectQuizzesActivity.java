@@ -62,7 +62,6 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
 
     private String title, items, time, type;
     private ArrayList<String> sType = new ArrayList<>();
-    private String quizId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,6 +205,14 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         Toasty.success(context, "Saved.").show();
                         selectedQuiz = new Quiz();
                         selectedQuiz.setQuiz_id(quiz_id);
+                        selectedQuiz.setQuiz_title(title);
+                        selectedQuiz.setQuiz_type(type);
+                        selectedQuiz.setQuiz_item(items);
+                        selectedQuiz.setQuiz_time(time);
+                        Intent intent = new Intent(context, SubjectQuizDetailsActivity.class);
+                        intent.putExtra("QUIZ", selectedQuiz);
+                        startActivity(intent);
+
                     } else
                         Toasty.warning(context, "Failed").show();
                     getQuizzesDetails();
@@ -289,11 +296,5 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
         super.onResume();
 
         getQuizzesDetails();
-
-        if (selectedQuiz.getQuiz_id().isEmpty()){
-            Intent intent = new Intent(context, SubjectQuizDetailsActivity.class);
-            intent.putExtra("QUIZ", selectedQuiz);
-            startActivity(intent);
-        }
     }
 }

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.NewTopicActivity">
+    tools:context=".activities.NewNewsfeedActivity">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout12"
+        android:id="@+id/constraintLayout20"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:padding="8dp"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iv_NewTopicBack"
+            android:id="@+id/iv_NewNewsfeedBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="8dp"
@@ -26,33 +26,32 @@
             app:srcCompat="@drawable/ic_back" />
 
         <TextView
-            android:id="@+id/textView23"
+            android:id="@+id/textView28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="New Topic"
+            android:text="New News Feed"
             android:textColor="@android:color/primary_text_light_nodisable"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_NewTopicBack"
+            app:layout_constraintStart_toEndOf="@+id/iv_NewNewsfeedBack"
             app:layout_constraintTop_toTopOf="parent" />
-
     </android.support.constraint.ConstraintLayout>
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout13"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout21"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout12">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout20">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/et_NewTopicDetails"
+                android:id="@+id/tv_NewNewsfeedDetails"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -60,8 +59,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/bg_edittext"
                 android:ems="10"
-                android:gravity="start|top"
-                android:hint="Details"
+                android:hint="Write something"
                 android:inputType="textMultiLine"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +67,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_NewTopicImage"
+                android:id="@+id/iv_NewNewsfeedImage"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_marginStart="16dp"
@@ -80,27 +78,13 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_NewTopicDetails"
-                app:srcCompat="@drawable/ic_topic" />
-
-            <VideoView
-                android:id="@+id/vv_NewTopicVideo"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_NewTopicDetails" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_NewNewsfeedDetails"
+                app:srcCompat="@drawable/ic_home_new_post" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout13"
+        android:id="@+id/constraintLayout21"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:padding="8dp"
@@ -109,7 +93,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/iv_NewTopicGallery"
+            android:id="@+id/iv_NewNewsfeedGallery"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="8dp"
@@ -119,7 +103,17 @@
             app:srcCompat="@drawable/ic_gallery" />
 
         <ImageView
-            android:id="@+id/iv_NewTopicSend"
+            android:id="@+id/iv_NewNewsfeedAttach"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_NewNewsfeedGallery"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_attach" />
+
+        <ImageView
+            android:id="@+id/iv_NewNewsfeedSend"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
@@ -127,16 +121,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_send" />
-
-        <ImageView
-            android:id="@+id/iv_NewTopicAttach"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_NewTopicGallery"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_attach" />
     </android.support.constraint.ConstraintLayout>
-
 </android.support.constraint.ConstraintLayout>

@@ -100,6 +100,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
+                String aw = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD(aw);
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
@@ -115,9 +117,12 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (result.contains("success"))
                         getEducatorDetails(userEducator);
+                    else
+                        Toasty.warning(context, result).show();
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Debugger.logD(e.toString());
                 }
             }
 

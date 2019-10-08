@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
+import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.fragments.HomeFragment;
 import com.theyestech.yes_mobile.models.Section;
@@ -152,8 +153,8 @@ public class ProfileActivity extends AppCompatActivity {
         if (role.equals(UserRole.Educator())) {
             UserEducator.clearSession(context);
             UserRole.clearRole(context);
-            HomeFragment homeFragment = new HomeFragment();
-            homeFragment.checkEducatorSession();
+            MainActivity mainActivity = new MainActivity();
+            mainActivity.checkEducatorSession();
         }
     }
 

@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_quiz"
-        android:name="com.theyestech.yes_mobile.fragments.QuizFragment"
-        android:label="Quiz"
-        tools:layout="@layout/fragment_quiz" />
+        android:id="@+id/navigation_chat"
+        android:name="com.theyestech.yes_mobile.fragments.ChatFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat" />
 
     <fragment
         android:id="@+id/navigation_rank"

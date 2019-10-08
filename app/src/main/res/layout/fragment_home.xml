@@ -36,14 +36,14 @@
             app:srcCompat="@drawable/ic_home_new_post" />
 
         <ImageView
-            android:id="@+id/iv_HomeChat"
+            android:id="@+id/iv_HomeSearch"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_HomeNewPost"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_home_chat" />
+            app:srcCompat="@drawable/ic_search" />
 
         <TextView
             android:id="@+id/tv_HomeFirstname"

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.theyestech.yes_mobile.R;
 
-public class QuizFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
     private View view;
 
@@ -18,7 +18,7 @@ public class QuizFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_quiz, container, false);
+        view = inflater.inflate(R.layout.fragment_chat, container, false);
         return view;
     }
 

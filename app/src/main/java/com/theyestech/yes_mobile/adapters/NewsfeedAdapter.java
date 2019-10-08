@@ -1,7 +1,6 @@
 package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -14,22 +13,22 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.activities.SubjectTopicsCommentActivity;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Topic;
+import com.theyestech.yes_mobile.models.Newsfeed;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
-public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder> {
+public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHolder>{
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Topic> topicArrayList;
+    private ArrayList<Newsfeed> newsfeedArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public TopicsAdapter(Context context, ArrayList<Topic> topicArrayList) {
+    public NewsfeedAdapter(Context context, ArrayList<Newsfeed> newsfeedArrayList) {
         this.context = context;
-        this.topicArrayList = topicArrayList;
+        this.newsfeedArrayList = newsfeedArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -37,60 +36,61 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.listrow_subject_topics, viewGroup, false);
+        View view = layoutInflater.inflate(R.layout.listrow_home_newsfeed, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        final Topic topic = topicArrayList.get(i);
+        Newsfeed newsfeed = newsfeedArrayList.get(i);
 
-        viewHolder.tvDetails.setText(topic.getTopic_details());
+        viewHolder.tvFullname.setText(newsfeed.getNf_fullname());
+        viewHolder.tvDateTime.setText(newsfeed.getNf_date());
+        viewHolder.tvDetails.setText(newsfeed.getNf_details());
 
-        if (topic.getTopic_file().isEmpty()) {
+        if (newsfeed.getNf_filetype().equals("video")){
+            Glide.with(context)
+                    .load(R.drawable.ic_video)
+                    .into(viewHolder.ivType);
             viewHolder.ivImage.setVisibility(View.GONE);
         } else {
             Glide.with(context)
-                    .load(HttpProvider.getTopicDir() + topic.getTopic_file())
+                    .load(HttpProvider.getNewsfeedDir() + newsfeed.getNf_files())
                     .into(viewHolder.ivImage);
+            viewHolder.ivImage.setVisibility(View.VISIBLE);
         }
 
-        viewHolder.fabYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + newsfeed.getNf_image())
+                .apply(GlideOptions.getOptions())
+                .into(viewHolder.ivProfile);
 
-        viewHolder.fabComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, SubjectTopicsCommentActivity.class);
-                intent.putExtra("TOPIC_ID", topic.getTopic_id());
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override
     public int getItemCount() {
-        return topicArrayList.size();
+        return newsfeedArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivImage;
-        private TextView tvDetails;
+        private ImageView ivImage, ivProfile, ivType;
+        private TextView tvDetails, tvFullname, tvDateTime;
         private FloatingActionButton fabYes, fabComment;
 
         public ViewHolder(View view) {
             super(view);
 
-            ivImage = view.findViewById(R.id.iv_ListrowSubjectTopicsImage);
-            tvDetails = view.findViewById(R.id.tv_ListrowSubjectTopicsDetails);
-            fabYes = view.findViewById(R.id.fab_ListrowSubjectTopicYes);
-            fabComment = view.findViewById(R.id.fab_ListrowSubjectTopicComment);
+            ivImage = view.findViewById(R.id.iv_ListrowHomeImage);
+            ivProfile = view.findViewById(R.id.iv_ListrowHomeProfile);
+            ivType = view.findViewById(R.id.iv_ListrowHomeType);
+            tvDetails = view.findViewById(R.id.tv_ListrowHomeDetails);
+            tvFullname = view.findViewById(R.id.tv_ListrowHomeFullname);
+            tvDateTime = view.findViewById(R.id.tv_ListrowHomeDateTime);
+            fabYes = view.findViewById(R.id.fab_ListrowHomeYes);
+            fabComment = view.findViewById(R.id.fab_ListrowHomeComment);
 
             fabYes.setOnClickListener(new View.OnClickListener() {
                 @Override

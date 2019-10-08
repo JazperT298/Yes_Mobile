@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout19"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_ListrowHomeProfile"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_educator_profile" />
+
+                <TextView
+                    android:id="@+id/tv_ListrowHomeFullname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Vanne Marsmyle Pagapong"
+                    android:textColor="@android:color/primary_text_light_nodisable"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_ListrowHomeDateTime"
+                    app:layout_constraintStart_toEndOf="@+id/iv_ListrowHomeProfile"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/tv_ListrowHomeDateTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="April 08, 1996"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_ListrowHomeFullname"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_ListrowHomeFullname" />
+
+                <ImageView
+                    android:id="@+id/iv_ListrowHomeType"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_gallery" />
+            </android.support.constraint.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_ListrowHomeDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="TextView"
+                android:textColor="@android:color/primary_text_light_nodisable"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout19" />
+
+            <ImageView
+                android:id="@+id/iv_ListrowHomeImage"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_ListrowHomeDetails"
+                app:srcCompat="@drawable/ic_home_new_post" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_ListrowHomeYes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView3"
+        app:layout_constraintEnd_toStartOf="@+id/fab_ListrowHomeComment"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView3"
+        app:srcCompat="@drawable/ic_yes_unselected" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_ListrowHomeComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fab_ListrowHomeYes"
+        app:layout_constraintTop_toBottomOf="@+id/cardView3"
+        app:srcCompat="@drawable/ic_comment" />
+</android.support.constraint.ConstraintLayout>

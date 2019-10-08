@@ -3,6 +3,7 @@ package com.theyestech.yes_mobile.activities;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +40,13 @@ public class SubjectQuizDetailsActivity extends AppCompatActivity {
         ivBack = findViewById(R.id.iv_QuizDetailsBack);
         tvHeader = findViewById(R.id.tv_QuizDetailsTitle);
 
-        tvHeader.setText(quiz.getQuiz_id());
+        tvHeader.setText(quiz.getQuiz_title());
+
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }
