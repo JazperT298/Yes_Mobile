@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".activities.NewNewsfeedActivity"></activity>
-        <activity android:name=".activities.SubjectQuizDetailsActivity" />
+        <activity android:name=".activities.SubjectQuizQuestionsActivity" />
         <activity android:name=".activities.SubjectQuizzesActivity" />
         <activity android:name=".activities.SubjectTopicsCommentActivity" />
         <activity android:name=".activities.NewTopicActivity" />

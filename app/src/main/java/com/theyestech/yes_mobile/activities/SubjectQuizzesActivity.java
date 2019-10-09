@@ -160,7 +160,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position) {
                             selectedQuiz = quizArrayList.get(position);
-                            Intent intent = new Intent(context, SubjectQuizDetailsActivity.class);
+                            Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
                             intent.putExtra("QUIZ", selectedQuiz);
                             startActivity(intent);
                         }
@@ -210,7 +210,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         selectedQuiz.setQuiz_type(type);
                         selectedQuiz.setQuiz_item(items);
                         selectedQuiz.setQuiz_time(time);
-                        Intent intent = new Intent(context, SubjectQuizDetailsActivity.class);
+                        Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
                         intent.putExtra("QUIZ", selectedQuiz);
                         startActivity(intent);
 
