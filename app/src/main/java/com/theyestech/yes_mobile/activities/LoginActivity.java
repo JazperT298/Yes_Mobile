@@ -100,8 +100,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
-                String aw = new String(responseBody, StandardCharsets.UTF_8);
-                Debugger.logD(aw);
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
@@ -142,10 +140,10 @@ public class LoginActivity extends AppCompatActivity {
         ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
-        params.put("teach_token", userEducator.getToken());
-        params.put("teach_id", userEducator.getId());
+        params.put("user_token", userEducator.getToken());
+        params.put("user_id", userEducator.getId());
 
-        HttpProvider.post(context, "controller_educator/get_educator_details.php", params, new AsyncHttpResponseHandler() {
+        HttpProvider.post(context, "controller_global/get_user_details.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();

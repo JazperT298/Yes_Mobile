@@ -170,6 +170,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Debugger.logD(e.toString());
                 }
             }
 

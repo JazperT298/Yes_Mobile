@@ -129,18 +129,17 @@ public class UserDetailsActivity extends AppCompatActivity {
         ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
-        params.put("teach_id", UserEducator.getID(context));
-        params.put("teach_token", UserEducator.getToken(context));
-        params.put("teach_email_address", etEmail.getText().toString());
-        params.put("teach_contact_number", etContactnumber.getText().toString());
-        params.put("teach_lastname", etLastname.getText().toString());
-        params.put("teach_lastname", etLastname.getText().toString());
-        params.put("teach_firstname", etFirstname.getText().toString());
-        params.put("teach_middlename", etMiddlename.getText().toString());
-        params.put("teach_suffixes", etSuffix.getText().toString());
-        params.put("teach_gender", gender);
+        params.put("user_id", UserEducator.getID(context));
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_email_address", etEmail.getText().toString());
+        params.put("user_contact_number", etContactnumber.getText().toString());
+        params.put("user_lastname", etLastname.getText().toString());
+        params.put("user_firstname", etFirstname.getText().toString());
+        params.put("user_middlename", etMiddlename.getText().toString());
+        params.put("user_suffixes", etSuffix.getText().toString());
+        params.put("user_gender", gender);
 
-        HttpProvider.post(context, "controller_educator/update_basic_details.php", params, new AsyncHttpResponseHandler() {
+        HttpProvider.post(context, "controller_global/update_basic_details.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
