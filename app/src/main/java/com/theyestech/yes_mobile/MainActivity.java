@@ -16,6 +16,7 @@ import com.theyestech.yes_mobile.activities.StartActivity;
 import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
 import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         role = UserRole.getRole(context);
 
-        checkUserRole();
     }
 
     private void checkUserRole() {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkEducatorSession() {
         if (!UserRole.getRole(context).isEmpty()) {
-            if (UserEducator.getToken(context) == null) {
+            if (UserEducator.getToken(context).isEmpty()) {
                 Intent intent = new Intent(context, StartActivity.class);
                 startActivity(intent);
                 finish();
@@ -120,4 +120,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        checkUserRole();
+    }
 }

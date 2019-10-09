@@ -24,6 +24,6 @@
     <item
         android:id="@+id/navigation_menu"
         android:icon="@drawable/ic_nav_menu"
-        android:title="Notification"/>
+        android:title="Menu"/>
 
 </menu>

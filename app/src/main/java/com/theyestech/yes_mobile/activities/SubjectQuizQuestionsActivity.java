@@ -1,15 +1,23 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -18,6 +26,7 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.QuestionsAdapter;
 import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
+import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Question;
 import com.theyestech.yes_mobile.models.Quiz;
@@ -26,12 +35,15 @@ import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
+import es.dmoral.toasty.Toasty;
 
 public class SubjectQuizQuestionsActivity extends AppCompatActivity {
 
@@ -50,7 +62,16 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
     private Question selectedQuestion = new Question();
 
     private Quiz quiz;
-    private String quiizType;
+    private String quizType;
+
+    private boolean isEdit = false;
+
+    private String questionId;
+    private String question;
+    private String choice1, choice2, choice3, choice4;
+    private String answer;
+    private ArrayList<String> choicesArrayList = new ArrayList<>();
+    private ArrayList<String> isCorrectArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +86,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         initializeUI();
 
         tvHeader.setText(quiz.getQuiz_title());
-        quiizType = quiz.getQuiz_type();
+        quizType = quiz.getQuiz_type();
 
     }
 
@@ -95,7 +116,15 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                isEdit = false;
+                switch (quizType) {
+                    case "Multiple Choice":
+                        openAddEditMultipleChoiceDialog();
+                        break;
+                    case "True or False":
+                        openAddEditTrueOrFalseDialog();
+                        break;
+                }
             }
         });
     }
@@ -161,7 +190,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position) {
                             selectedQuestion = questionArrayList.get(position);
-
+                            isEdit = true;
+                            selectAction();
                         }
                     });
 
@@ -180,6 +210,296 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
+    }
+
+    private void saveUpdateQuestion() {
+        ProgressPopup.showProgress(context);
+        JSONArray jArray = new JSONArray();
+
+        try {
+            JSONObject jGroup = new JSONObject();
+            for (int i = 0; i < choicesArrayList.size(); i++) {
+                jGroup.put("choice", choicesArrayList.get(i));
+                jGroup.put("isCorrect", isCorrectArrayList.get(i));
+                jArray.put(jGroup);
+            }
+            Debugger.logD(jArray.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestParams params = new RequestParams();
+        params.put("quiz_type", quizType);
+        params.put("selectedAnswer", answer);
+        params.put("question", question);
+        params.put("quiz_id", quiz.getQuiz_id());
+        params.put("question_id", questionId);
+        params.put("choices", jArray);
+
+        HttpProvider.post(context, "controller_educator/AddUpdateQuestion.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String result = jsonObject.getString("result");
+                    if (result.contains("success")) {
+                        Toasty.success(context, "Saved.").show();
+
+                    } else
+                        Toasty.warning(context, "Failed").show();
+                    getQuestionDetails();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Debugger.logD(e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void selectAction() {
+        String items[] = {" Edit ", " Delete ", " Cancel "};
+        android.support.v7.app.AlertDialog.Builder dialog = new android.support.v7.app.AlertDialog.Builder(context);
+        dialog.setTitle("Select action");
+        dialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    switch (quizType) {
+                        case "Multiple Choice":
+                            openAddEditMultipleChoiceDialog();
+                            break;
+                        case "True or False":
+                            openAddEditTrueOrFalseDialog();
+                            break;
+                    }
+                }
+                if (which == 1) {
+                    openDeleteDialog();
+                }
+                if (which == 2) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.create().show();
+    }
+
+    private void openAddEditTrueOrFalseDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_add_edit_question_true_or_false, null);
+        final EditText etQuestion;
+        final Button btnSave;
+        final ImageView ivClose;
+        final RadioGroup radioGroup;
+        final RadioButton rbTrue, rbFalse;
+        final TextView tvQuizHeader;
+
+        tvQuizHeader = dialogView.findViewById(R.id.tv_QuizTrueOrFalseHeader);
+        etQuestion = dialogView.findViewById(R.id.et_QuizTrueOrFalseQuestion);
+        btnSave = dialogView.findViewById(R.id.btn_QuizTrueOrFalseSave);
+        ivClose = dialogView.findViewById(R.id.iv_QuizTrueOrFalseBack);
+        radioGroup = dialogView.findViewById(R.id.rg_QuizTrueOrFalse);
+        rbTrue = dialogView.findViewById(R.id.rb_QuizTrueOrFalseTrue);
+        rbFalse = dialogView.findViewById(R.id.rb_QuizTrueOrFalseFalse);
+
+        if (isEdit) {
+            etQuestion.setText(selectedQuestion.getQuestion_value());
+            if (selectedQuestion.getQuestion_correct_answer().equals("True"))
+                rbTrue.setChecked(true);
+            else
+                rbFalse.setChecked(true);
+            tvQuizHeader.setText("Edit Question");
+        } else {
+            tvQuizHeader.setText("Add Question");
+            etQuestion.setText("");
+        }
+
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.hide();
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                question = etQuestion.getText().toString();
+                choicesArrayList.add("True");
+                choicesArrayList.add("False");
+                isCorrectArrayList.add("0");
+                isCorrectArrayList.add("0");
+                if (rbTrue.isSelected()) {
+                    answer = "True";
+                    isCorrectArrayList.set(0, "1");
+                } else if (rbFalse.isSelected()) {
+                    answer = "False";
+                    isCorrectArrayList.set(1, "1");
+                }
+
+                if (isEdit) {
+
+                } else {
+                    if (question.isEmpty()) {
+                        Toasty.warning(context, "Please input question.").show();
+                    } else {
+                        if (radioGroup.getCheckedRadioButtonId() == -1) {
+                            Toasty.warning(context, "Please select answer.").show();
+                        } else {
+                            questionId = selectedQuestion.getQuestion_id();
+                            saveUpdateQuestion();
+                            b.hide();
+                        }
+                    }
+                }
+            }
+        });
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    private void openAddEditMultipleChoiceDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_add_edit_question_multiple_choice, null);
+        final EditText etQuestion, etChoice1, etChoice2, etChoice3, etChoice4;
+        final Button btnSave;
+        final ImageView ivClose;
+        final RadioGroup radioGroup;
+        final RadioButton rbChoice1, rbChoice2, rbChoice3, rbChoice4;
+        final TextView tvQuizHeader;
+
+        tvQuizHeader = dialogView.findViewById(R.id.tv_QuizMultipleChoiceHeader);
+        etQuestion = dialogView.findViewById(R.id.et_QuizMultipleChoiceQuestion);
+        etChoice1 = dialogView.findViewById(R.id.et_QuizMultipleChoice1);
+        etChoice2 = dialogView.findViewById(R.id.et_QuizMultipleChoice2);
+        etChoice3 = dialogView.findViewById(R.id.et_QuizMultipleChoice3);
+        etChoice4 = dialogView.findViewById(R.id.et_QuizMultipleChoice4);
+        radioGroup = dialogView.findViewById(R.id.rg_QuizMultipleChoice);
+        rbChoice1 = dialogView.findViewById(R.id.rb_QuizMultipleChoice1);
+        rbChoice2 = dialogView.findViewById(R.id.rb_QuizMultipleChoice2);
+        rbChoice3 = dialogView.findViewById(R.id.rb_QuizMultipleChoice3);
+        rbChoice4 = dialogView.findViewById(R.id.rb_QuizMultipleChoice4);
+        btnSave = dialogView.findViewById(R.id.btn_QuizMultipleChoiceSave);
+        ivClose = dialogView.findViewById(R.id.iv_QuizMultipleChoiceBack);
+
+        if (isEdit) {
+            etQuestion.setText(selectedQuestion.getQuestion_value());
+            etChoice1.setText(selectedQuestion.getAnswers().get(0).getAnswer_value());
+            etChoice2.setText(selectedQuestion.getAnswers().get(1).getAnswer_value());
+            etChoice3.setText(selectedQuestion.getAnswers().get(2).getAnswer_value());
+            etChoice4.setText(selectedQuestion.getAnswers().get(3).getAnswer_value());
+            if (selectedQuestion.getQuestion_correct_answer().equalsIgnoreCase("A"))
+                rbChoice1.setChecked(true);
+            else if (selectedQuestion.getQuestion_correct_answer().equalsIgnoreCase("B"))
+                rbChoice2.setChecked(true);
+            else if (selectedQuestion.getQuestion_correct_answer().equalsIgnoreCase("C"))
+                rbChoice3.setChecked(true);
+            else if (selectedQuestion.getQuestion_correct_answer().equalsIgnoreCase("D"))
+                rbChoice4.setChecked(true);
+            tvQuizHeader.setText("Edit Question");
+        } else {
+            tvQuizHeader.setText("Add Question");
+            etQuestion.setText("");
+        }
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.hide();
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                question = etQuestion.getText().toString();
+                choice1 = etChoice1.getText().toString();
+                choice2 = etChoice2.getText().toString();
+                choice3 = etChoice3.getText().toString();
+                choice4 = etChoice4.getText().toString();
+                choicesArrayList.add(choice1);
+                choicesArrayList.add(choice2);
+                choicesArrayList.add(choice3);
+                choicesArrayList.add(choice4);
+                isCorrectArrayList.add("0");
+                isCorrectArrayList.add("0");
+                isCorrectArrayList.add("0");
+                isCorrectArrayList.add("0");
+                if (rbChoice1.isSelected()) {
+                    answer = choice1;
+                    isCorrectArrayList.set(0, "1");
+                } else if (rbChoice2.isSelected()) {
+                    answer = choice2;
+                    isCorrectArrayList.set(1, "1");
+                } else if (rbChoice3.isSelected()) {
+                    answer = choice3;
+                    isCorrectArrayList.set(2, "1");
+                } else if (rbChoice4.isSelected()) {
+                    answer = choice4;
+                    isCorrectArrayList.set(3, "1");
+                }
+
+                if (isEdit) {
+
+                } else {
+                    if (question.isEmpty() ||
+                            choice1.isEmpty() ||
+                            choice2.isEmpty() ||
+                            choice3.isEmpty() ||
+                            choice4.isEmpty()) {
+                        Toasty.warning(context, "Please complete the fields.").show();
+                    } else {
+                        if (radioGroup.getCheckedRadioButtonId() == -1) {
+                            Toasty.warning(context, "Please select answer.").show();
+                        } else {
+                            questionId = selectedQuestion.getQuestion_id();
+                            saveUpdateQuestion();
+                            b.hide();
+                        }
+                    }
+                }
+            }
+        });
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    private void openDeleteDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Delete")
+                .setIcon(R.drawable.ic_delete)
+                .setMessage("Are you sure you want to delete question?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        logoutUser();
+                    }
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
     }
 
     @Override

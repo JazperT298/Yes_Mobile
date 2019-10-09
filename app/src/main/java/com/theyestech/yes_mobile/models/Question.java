@@ -15,10 +15,6 @@ public class Question {
         private String answer_value;
         private String answer_isCorrect;
 
-        public Answer() {
-
-        }
-
         public String getAnswer_id() {
             return answer_id;
         }

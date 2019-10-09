@@ -107,6 +107,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         ivDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getSectionDetails();
                 openAddSubjectDialog();
             }
         });
@@ -144,8 +145,6 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 openDeleteDialog();
             }
         });
-
-        getSectionDetails();
     }
 
     private void getSectionDetails() {
