@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -28,6 +29,7 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -107,6 +109,27 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        if (role.equals(UserRole.Educator()))
+            setEducatorHeader();
+        else
+            setStudentHeador();
+    }
+
+    private void setEducatorHeader(){
+        if (!UserEducator.getFirstname(context).equals(""))
+            tvFirstname.setText(UserEducator.getFirstname(context));
+        else
+            tvFirstname.setText(UserEducator.getEmail(context));
+
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(ivProfile);
+    }
+
+    private void setStudentHeador() {
+
     }
 
     private void getEducatorNewsfeedDetails() {

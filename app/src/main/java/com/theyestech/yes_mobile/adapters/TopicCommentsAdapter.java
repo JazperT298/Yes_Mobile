@@ -13,19 +13,19 @@ import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Comment;
+import com.theyestech.yes_mobile.models.TopicComment;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
-public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
+public class TopicCommentsAdapter extends RecyclerView.Adapter<TopicCommentsAdapter.ViewHolder> {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<com.theyestech.yes_mobile.models.Comment> commentArrayList;
+    private ArrayList<TopicComment> commentArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public CommentsAdapter(Context context, ArrayList<Comment> commentArrayList) {
+    public TopicCommentsAdapter(Context context, ArrayList<TopicComment> commentArrayList) {
         this.context = context;
         this.commentArrayList = commentArrayList;
         this.layoutInflater = LayoutInflater.from(context);
@@ -42,7 +42,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Comment comment = commentArrayList.get(i);
+        TopicComment comment = commentArrayList.get(i);
 
         viewHolder.tvFullname.setText(comment.getUser_fullname());
         viewHolder.tvDetails.setText(comment.getTc_details());

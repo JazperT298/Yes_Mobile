@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         role = UserRole.getRole(context);
 
+        checkUserRole();
     }
 
     private void checkUserRole() {
@@ -124,6 +125,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        checkUserRole();
     }
 }

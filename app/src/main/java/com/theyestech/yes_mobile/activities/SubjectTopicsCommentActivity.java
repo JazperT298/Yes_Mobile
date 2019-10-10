@@ -1,18 +1,12 @@
 package com.theyestech.yes_mobile.activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -20,11 +14,11 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.CommentsAdapter;
+import com.theyestech.yes_mobile.adapters.TopicCommentsAdapter;
 import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
 import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Comment;
+import com.theyestech.yes_mobile.models.TopicComment;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.KeyboardHandler;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -35,7 +29,6 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
@@ -51,9 +44,9 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private EditText etComment;
 
-    private ArrayList<Comment> commentArrayList = new ArrayList<>();
-    private CommentsAdapter commentsAdapter;
-    private Comment selectedComment = new Comment();
+    private ArrayList<TopicComment> commentArrayList = new ArrayList<>();
+    private TopicCommentsAdapter commentsAdapter;
+    private TopicComment selectedComment = new TopicComment();
 
     private String commentDetails;
 
@@ -73,11 +66,11 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        ivBack = findViewById(R.id.iv_CommentBack);
-        ivSend = findViewById(R.id.iv_CommentSend);
-        swipeRefreshLayout = findViewById(R.id.swipe_Comment);
-        recyclerView = findViewById(R.id.rv_Comments);
-        etComment = findViewById(R.id.et_CommentComment);
+        ivBack = findViewById(R.id.iv_TopicCommentBack);
+        ivSend = findViewById(R.id.iv_TopicCommentSend);
+        swipeRefreshLayout = findViewById(R.id.swipe_TopicComment);
+        recyclerView = findViewById(R.id.rv_TopicComment);
+        etComment = findViewById(R.id.et_TopicCommentComment);
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -96,8 +89,9 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
                     Toasty.warning(context, "Please input comment.").show();
                 } else {
                     KeyboardHandler.closeKeyboard(etComment, context);
-                    saveComment();
                     etComment.setText("");
+                    if (role.equals(UserRole.Educator()))
+                        saveComment();
                 }
             }
         });
@@ -105,14 +99,16 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getCommentDetails();
+                if (role.equals(UserRole.Educator()))
+                    getEducatorCommentDetails();
             }
         });
 
-        getCommentDetails();
+        if (role.equals(UserRole.Educator()))
+            getEducatorCommentDetails();
     }
 
-    private void getCommentDetails() {
+    private void getEducatorCommentDetails() {
         commentArrayList.clear();
 
         swipeRefreshLayout.setRefreshing(true);
@@ -140,7 +136,7 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
                         String user_image = jsonObject.getString("user_image");
                         String user_fullname = jsonObject.getString("user_fullname");
 
-                        Comment comment = new Comment();
+                        TopicComment comment = new TopicComment();
                         comment.setTc_id(tc_id);
                         comment.setTc_topic_id(tc_topic_id);
                         comment.setTc_user_id(tc_user_id);
@@ -155,7 +151,7 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
-                    commentsAdapter = new CommentsAdapter(context, commentArrayList);
+                    commentsAdapter = new TopicCommentsAdapter(context, commentArrayList);
                     commentsAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position) {
@@ -203,7 +199,7 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
 //                        Toasty.success(context, "Saved.").show();
                     } else
                         Toasty.warning(context, result).show();
-                    getCommentDetails();
+                    getEducatorCommentDetails();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

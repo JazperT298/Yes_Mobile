@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,8 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.activities.NewsfeedCommentActivity;
+import com.theyestech.yes_mobile.activities.SubjectTopicsCommentActivity;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.utils.Debugger;
@@ -47,7 +50,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Newsfeed newsfeed = newsfeedArrayList.get(i);
+        final Newsfeed newsfeed = newsfeedArrayList.get(i);
 
         viewHolder.tvFullname.setText(newsfeed.getNf_fullname());
         viewHolder.tvDateTime.setText(newsfeed.getNf_date());
@@ -70,6 +73,16 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 .load(HttpProvider.getProfileDir() + newsfeed.getNf_image())
                 .apply(GlideOptions.getOptions())
                 .into(viewHolder.ivProfile);
+
+        viewHolder.fabComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NewsfeedCommentActivity.class);
+                intent.putExtra("NEWSFEED_ID", newsfeed.getNf_id());
+                intent.putExtra("NEWSFEED_TOKEN", newsfeed.getNf_token());
+                context.startActivity(intent);
+            }
+        });
 
     }
 

@@ -1,6 +1,6 @@
 package com.theyestech.yes_mobile.models;
 
-public class Comment {
+public class TopicComment {
     private String tc_id;
     private String tc_topic_id;
     private String tc_user_id;
