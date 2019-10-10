@@ -2,6 +2,7 @@ package com.theyestech.yes_mobile.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,7 @@ public class NewsfeedCommentActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private EditText etComment;
+    private ConstraintLayout emptyIndicator;
 
     private ArrayList<NewsfeedComment> commentArrayList = new ArrayList<>();
     private NewsfeedCommentsAdapter commentsAdapter;
@@ -73,6 +75,7 @@ public class NewsfeedCommentActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_NewsfeedComment);
         recyclerView = findViewById(R.id.rv_NewsfeedComment);
         etComment = findViewById(R.id.et_NewsfeedCommentComment);
+        emptyIndicator = findViewById(R.id.view_Empty);
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -122,8 +125,13 @@ public class NewsfeedCommentActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                if (str.equals(""))
+                    emptyIndicator.setVisibility(View.VISIBLE);
+
                 try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
+
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("COMMENTS: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
@@ -164,6 +172,7 @@ public class NewsfeedCommentActivity extends AppCompatActivity {
                     });
 
                     recyclerView.setAdapter(commentsAdapter);
+                    emptyIndicator.setVisibility(View.GONE);
 
                 } catch (Exception e) {
                     e.printStackTrace();

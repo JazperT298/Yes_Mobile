@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
+    private ConstraintLayout emptyIndicator;
 
     private ArrayList<Student> studentArrayList = new ArrayList<>();
     private StudentsAdapter studentAdapter;
@@ -77,6 +79,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_SubjectStudents);
         recyclerView = findViewById(R.id.rv_SubjectStudents);
         floatingActionButton = findViewById(R.id.fab_SubjectStudentsAdd);
+        emptyIndicator = findViewById(R.id.view_Empty);
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -116,8 +119,13 @@ public class SubjectStudentsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                if (str.equals(""))
+                    emptyIndicator.setVisibility(View.VISIBLE);
+
                 try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
+
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("STUDENTS: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
@@ -164,6 +172,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
                     });
 
                     recyclerView.setAdapter(studentAdapter);
+                    emptyIndicator.setVisibility(View.GONE);
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +48,7 @@ public class HomeFragment extends Fragment {
     private TextView tvFirstname;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    private ConstraintLayout emptyIndicator;
 
     private ArrayList<Newsfeed> newsfeedArrayList = new ArrayList<>();
     private NewsfeedAdapter newsfeedAdapter;
@@ -76,6 +78,7 @@ public class HomeFragment extends Fragment {
         tvFirstname = view.findViewById(R.id.tv_HomeFirstname);
         swipeRefreshLayout = view.findViewById(R.id.swipe_Home);
         recyclerView = view.findViewById(R.id.rv_Home);
+        emptyIndicator = view.findViewById(R.id.view_Empty);
 
         swipeRefreshLayout.setRefreshing(false);
 
@@ -139,8 +142,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                if (str.equals(""))
+                    emptyIndicator.setVisibility(View.VISIBLE);
                 try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("NEWSFEED: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
@@ -183,6 +188,8 @@ public class HomeFragment extends Fragment {
                     });
 
                     recyclerView.setAdapter(newsfeedAdapter);
+
+                    emptyIndicator.setVisibility(View.GONE);
 
                 } catch (Exception e) {
                     e.printStackTrace();

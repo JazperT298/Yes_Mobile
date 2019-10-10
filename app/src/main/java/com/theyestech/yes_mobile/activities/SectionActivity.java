@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class SectionActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
+    private ConstraintLayout emptyIndicator;
 
     private SectionsAdapter sectionsAdapter;
     private ArrayList<Section> sectionArrayList = new ArrayList<>();
@@ -75,6 +77,7 @@ public class SectionActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_Sections);
         recyclerView = findViewById(R.id.rv_Sections);
         floatingActionButton = findViewById(R.id.fab_SectionsAdd);
+        emptyIndicator = findViewById(R.id.view_Empty);
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -116,8 +119,13 @@ public class SectionActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                if (str.equals(""))
+                    emptyIndicator.setVisibility(View.VISIBLE);
+
                 try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
+
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("SECTION: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
@@ -149,6 +157,7 @@ public class SectionActivity extends AppCompatActivity {
                     });
 
                     recyclerView.setAdapter(sectionsAdapter);
+                    emptyIndicator.setVisibility(View.GONE);
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +55,7 @@ public class SubjectActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
+    private ConstraintLayout emptyIndicator;
 
     private ArrayList<Subject> subjectArrayList = new ArrayList<>();
     private SubjectsAdapter subjectsAdapter;
@@ -94,6 +96,7 @@ public class SubjectActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_Subjects);
         recyclerView = findViewById(R.id.rv_Subjects);
         floatingActionButton = findViewById(R.id.fab_SubjectsAdd);
+        emptyIndicator = findViewById(R.id.view_Empty);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -134,8 +137,13 @@ public class SubjectActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
                 floatingActionButton.setEnabled(true);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                if (str.equals(""))
+                    emptyIndicator.setVisibility(View.VISIBLE);
+
                 try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
+
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("SUBJECTS: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
@@ -180,6 +188,7 @@ public class SubjectActivity extends AppCompatActivity {
                     });
 
                     recyclerView.setAdapter(subjectsAdapter);
+                    emptyIndicator.setVisibility(View.GONE);
 
                 } catch (Exception e) {
                     e.printStackTrace();
