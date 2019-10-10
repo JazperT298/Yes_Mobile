@@ -85,7 +85,7 @@
             <ImageView
                 android:id="@+id/iv_ListrowHomeImage"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -97,7 +97,7 @@
             <VideoView
                 android:id="@+id/vv_ListrowHomeVideo"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:layout_marginTop="8dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"

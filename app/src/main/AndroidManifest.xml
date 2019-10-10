@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.NewNewsfeedActivity"></activity>
+        <activity android:name=".activities.NewsfeedCommentActivity"></activity>
+        <activity android:name=".activities.NewNewsfeedActivity" />
         <activity android:name=".activities.SubjectQuizQuestionsActivity" />
         <activity android:name=".activities.SubjectQuizzesActivity" />
         <activity android:name=".activities.SubjectTopicsCommentActivity" />

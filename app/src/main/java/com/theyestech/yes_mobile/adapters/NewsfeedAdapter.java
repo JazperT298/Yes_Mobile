@@ -18,6 +18,7 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
@@ -52,18 +53,18 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         viewHolder.tvDateTime.setText(newsfeed.getNf_date());
         viewHolder.tvDetails.setText(newsfeed.getNf_details());
 
-        if (newsfeed.getNf_filetype().equalsIgnoreCase("video")){
+        if (newsfeed.getNf_filetype().equals("video")){
             viewHolder.videoView.setVideoURI(Uri.parse(HttpProvider.getNewsfeedDir() + newsfeed.getNf_files()));
-            viewHolder.videoView.start();
             viewHolder.videoView.setMediaController(new MediaController(context));
+//            viewHolder.videoView.start();
             viewHolder.videoView.setVisibility(View.VISIBLE);
+            viewHolder.ivType.setImageResource(R.drawable.ic_video);
         } else {
             Glide.with(context)
                     .load(HttpProvider.getNewsfeedDir() + newsfeed.getNf_files())
                     .into(viewHolder.ivImage);
             viewHolder.ivImage.setVisibility(View.VISIBLE);
         }
-
 
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + newsfeed.getNf_image())

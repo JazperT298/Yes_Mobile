@@ -58,8 +58,8 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
             viewHolder.ivImage.setVisibility(View.VISIBLE);
         } else {
             viewHolder.videoView.setVideoURI(Uri.parse(HttpProvider.getTopicDir() + topic.getTopic_file()));
-            viewHolder.videoView.start();
             viewHolder.videoView.setMediaController(new MediaController(context));
+//            viewHolder.videoView.start();
             viewHolder.videoView.setVisibility(View.VISIBLE);
         }
 

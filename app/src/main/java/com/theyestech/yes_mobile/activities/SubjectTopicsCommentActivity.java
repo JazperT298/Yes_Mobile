@@ -26,6 +26,7 @@ import com.theyestech.yes_mobile.dialogs.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Comment;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.KeyboardHandler;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -45,10 +46,10 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
 
     private String role;
 
-    private ImageView ivBack;
+    private ImageView ivBack, ivSend;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private FloatingActionButton floatingActionButton;
+    private EditText etComment;
 
     private ArrayList<Comment> commentArrayList = new ArrayList<>();
     private CommentsAdapter commentsAdapter;
@@ -73,9 +74,10 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
 
     private void initializeUI() {
         ivBack = findViewById(R.id.iv_CommentBack);
+        ivSend = findViewById(R.id.iv_CommentSend);
         swipeRefreshLayout = findViewById(R.id.swipe_Comment);
         recyclerView = findViewById(R.id.rv_Comments);
-        floatingActionButton = findViewById(R.id.fab_CommentAdd);
+        etComment = findViewById(R.id.et_CommentComment);
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -86,17 +88,24 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
             }
         });
 
+        ivSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commentDetails = etComment.getText().toString();
+                if (commentDetails.isEmpty()) {
+                    Toasty.warning(context, "Please input comment.").show();
+                } else {
+                    KeyboardHandler.closeKeyboard(etComment, context);
+                    saveComment();
+                    etComment.setText("");
+                }
+            }
+        });
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getCommentDetails();
-            }
-        });
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAddCommentDialog();
             }
         });
 
@@ -109,7 +118,6 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
-//        params.put("token", UserEducator.getToken(context));
         params.put("topic_id", topicId);
         Debugger.logD(topicId);
 
@@ -191,9 +199,8 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     String result = jsonObject.getString("result");
-                    Debugger.logD(str);
                     if (result.contains("success")) {
-                        Toasty.success(context, "Saved.").show();
+//                        Toasty.success(context, "Saved.").show();
                     } else
                         Toasty.warning(context, result).show();
                     getCommentDetails();
@@ -209,45 +216,4 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void openAddCommentDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-
-        LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_add_comment, null);
-        final EditText etComment;
-        final Button btnSave;
-        final ImageView ivClose;
-
-        etComment = dialogView.findViewById(R.id.et_AddCommentCpmment);
-        btnSave = dialogView.findViewById(R.id.btn_AddCommentSave);
-        ivClose = dialogView.findViewById(R.id.iv_AddCommentClose);
-
-        dialogBuilder.setView(dialogView);
-        final AlertDialog b = dialogBuilder.create();
-
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                b.hide();
-            }
-        });
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commentDetails = etComment.getText().toString();
-                if (commentDetails.isEmpty()) {
-                    Toasty.warning(context, "Please input comment.").show();
-                } else {
-                    saveComment();
-                    b.hide();
-                }
-            }
-        });
-
-        b.show();
-        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-    }
-
 }
