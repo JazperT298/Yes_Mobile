@@ -21,6 +21,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -203,8 +204,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                     });
 
                     recyclerView.setAdapter(questionsAdapter);
-
-                    emptyIndicator.setVisibility(View.VISIBLE);
+                    emptyIndicator.setVisibility(View.GONE);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -223,17 +223,15 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
 
     private void saveUpdateQuestion() {
         ProgressPopup.showProgress(context);
-
         JSONArray jArray = new JSONArray();
         try {
-            JSONObject jGroup = new JSONObject();
             for (int i = 0; i < choicesArrayList.size(); i++) {
+                JSONObject jGroup = new JSONObject();
                 jGroup.put("choice", choicesArrayList.get(i));
                 jGroup.put("isCorrect", isCorrectArrayList.get(i));
                 jArray.put(jGroup);
-                Debugger.logD(choicesArrayList.get(i));
-                Debugger.logD(String.valueOf(isCorrectArrayList.get(i)));
             }
+            Debugger.logD(jArray.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -244,7 +242,10 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         params.put("question", question);
         params.put("quiz_id", quiz.getQuiz_id());
         params.put("question_id", questionId);
-        params.put("choices", jArray.toString());
+        params.put("choices", jArray);
+
+        Debugger.printO(params);
+        Debugger.logD("ANSWER:" + answer);
 
         HttpProvider.post(context, "controller_educator/AddUpdateQuestion.php", params, new AsyncHttpResponseHandler() {
             @Override
@@ -252,10 +253,9 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                 ProgressPopup.hideProgress();
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
-                    JSONArray jsonArray = new JSONArray(str);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    JSONObject jsonObject = new JSONObject(str);
                     String result = jsonObject.getString("result");
-                    if (result.contains("success")) {
+                    if (result.contains("added")) {
                         Toasty.success(context, "Saved.").show();
 
                     } else
@@ -374,16 +374,21 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                 choicesArrayList.add("True");
                 choicesArrayList.add("False");
 
+                if (rbTrue.isSelected())
+                    answer = "True";
+                else if (rbFalse.isSelected())
+                    answer = "False";
+
                 if (isEdit) {
 
                 } else {
+                    questionId = "0";
                     if (question.isEmpty()) {
                         Toasty.warning(context, "Please input question.").show();
                     } else {
                         if (radioGroup.getCheckedRadioButtonId() == -1) {
                             Toasty.warning(context, "Please select answer.").show();
                         } else {
-                            questionId = selectedQuestion.getQuestion_id();
                             saveUpdateQuestion();
                             b.hide();
                         }
@@ -448,7 +453,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         rbChoice1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                answer = choice1;
                 isCorrectArrayList.add(1);
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
@@ -459,7 +463,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         rbChoice2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                answer = choice2;
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(1);
                 isCorrectArrayList.add(0);
@@ -470,7 +473,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         rbChoice3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                answer = choice3;
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(1);
@@ -481,7 +483,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         rbChoice4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                answer = choice4;
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
@@ -512,9 +513,19 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                 choicesArrayList.add(choice3);
                 choicesArrayList.add(choice4);
 
+                if (rbChoice1.isSelected())
+                    answer = choice1;
+                else if (rbChoice2.isSelected())
+                    answer = choice2;
+                else if (rbChoice3.isSelected())
+                    answer = choice3;
+                else if (rbChoice4.isSelected())
+                    answer = choice4;
+
                 if (isEdit) {
 
                 } else {
+                    questionId = "0";
                     if (question.isEmpty() ||
                             choice1.isEmpty() ||
                             choice2.isEmpty() ||
@@ -525,7 +536,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                         if (radioGroup.getCheckedRadioButtonId() == -1) {
                             Toasty.warning(context, "Please select answer.").show();
                         } else {
-                            questionId = selectedQuestion.getQuestion_id();
                             saveUpdateQuestion();
                             b.hide();
                         }

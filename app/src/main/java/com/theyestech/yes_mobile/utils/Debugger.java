@@ -2,16 +2,18 @@ package com.theyestech.yes_mobile.utils;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 public class Debugger {
     public static final String TAG = "YES";
 
-//    public static String printO(Object obj)
-//    {
-////        Gson gson = new Gson();
-////        System.out.println(gson.toJson(obj));
-////        Log.d(TAG,gson.toJson(obj));
-////        return gson.toJson(obj);
-//    }
+    public static String printO(Object obj)
+    {
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(obj));
+        Log.d(TAG,gson.toJson(obj));
+        return gson.toJson(obj);
+    }
 
     public static void logD(String message)
     {
