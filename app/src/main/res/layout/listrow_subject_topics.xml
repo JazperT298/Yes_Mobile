@@ -38,11 +38,23 @@
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_marginTop="16dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_ListrowSubjectTopicsDetails"
                 app:srcCompat="@drawable/ic_topic" />
+
+            <VideoView
+                android:id="@+id/vv_ListrowSubjectTopicVideo"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_ListrowSubjectTopicsDetails" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

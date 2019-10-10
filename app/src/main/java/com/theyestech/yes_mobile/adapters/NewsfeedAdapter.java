@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -49,11 +52,11 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         viewHolder.tvDateTime.setText(newsfeed.getNf_date());
         viewHolder.tvDetails.setText(newsfeed.getNf_details());
 
-        if (newsfeed.getNf_filetype().equals("video")){
-            Glide.with(context)
-                    .load(R.drawable.ic_video)
-                    .into(viewHolder.ivType);
-            viewHolder.ivImage.setVisibility(View.GONE);
+        if (newsfeed.getNf_filetype().equalsIgnoreCase("video")){
+            viewHolder.videoView.setVideoURI(Uri.parse(HttpProvider.getNewsfeedDir() + newsfeed.getNf_files()));
+            viewHolder.videoView.start();
+            viewHolder.videoView.setMediaController(new MediaController(context));
+            viewHolder.videoView.setVisibility(View.VISIBLE);
         } else {
             Glide.with(context)
                     .load(HttpProvider.getNewsfeedDir() + newsfeed.getNf_files())
@@ -78,11 +81,13 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
 
         private ImageView ivImage, ivProfile, ivType;
         private TextView tvDetails, tvFullname, tvDateTime;
+        private VideoView videoView;
         private FloatingActionButton fabYes, fabComment;
 
         public ViewHolder(View view) {
             super(view);
 
+            videoView = view.findViewById(R.id.vv_ListrowHomeVideo);
             ivImage = view.findViewById(R.id.iv_ListrowHomeImage);
             ivProfile = view.findViewById(R.id.iv_ListrowHomeProfile);
             ivType = view.findViewById(R.id.iv_ListrowHomeType);

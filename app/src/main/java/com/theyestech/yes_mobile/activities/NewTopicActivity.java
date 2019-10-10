@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -32,6 +33,7 @@ import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 import cz.msebera.android.httpclient.Header;
@@ -241,8 +243,6 @@ public class NewTopicActivity extends AppCompatActivity {
                 selectedFilePath = cursor.getString(columnIndex);
             } else if (requestCode == VIDEO_PICK_GALLERY_CODE) {
                 selectedFile = data.getData();
-                vvVideo.setVideoPath(selectedFile.getPath());
-                vvVideo.setVisibility(View.VISIBLE);
 
                 Uri selectedVideo = data.getData();
 
@@ -254,6 +254,11 @@ public class NewTopicActivity extends AppCompatActivity {
 
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 selectedFilePath = cursor.getString(columnIndex);
+
+                vvVideo.setVideoURI(Uri.parse(selectedFilePath));
+                vvVideo.start();
+                vvVideo.setMediaController(new MediaController(context));
+                vvVideo.setVisibility(View.VISIBLE);
             }
         }
 

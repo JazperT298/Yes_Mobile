@@ -2,6 +2,7 @@ package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -48,12 +51,16 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
 
         viewHolder.tvDetails.setText(topic.getTopic_details());
 
-        if (topic.getTopic_file().isEmpty()) {
-            viewHolder.ivImage.setVisibility(View.GONE);
-        } else {
+        if (topic.getTopic_filetype().equalsIgnoreCase("image")){
             Glide.with(context)
                     .load(HttpProvider.getTopicDir() + topic.getTopic_file())
                     .into(viewHolder.ivImage);
+            viewHolder.ivImage.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.videoView.setVideoURI(Uri.parse(HttpProvider.getTopicDir() + topic.getTopic_file()));
+            viewHolder.videoView.start();
+            viewHolder.videoView.setMediaController(new MediaController(context));
+            viewHolder.videoView.setVisibility(View.VISIBLE);
         }
 
         viewHolder.fabYes.setOnClickListener(new View.OnClickListener() {
@@ -82,11 +89,13 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
 
         private ImageView ivImage;
         private TextView tvDetails;
+        private VideoView videoView;
         private FloatingActionButton fabYes, fabComment;
 
         public ViewHolder(View view) {
             super(view);
 
+            videoView = view.findViewById(R.id.vv_ListrowSubjectTopicVideo);
             ivImage = view.findViewById(R.id.iv_ListrowSubjectTopicsImage);
             tvDetails = view.findViewById(R.id.tv_ListrowSubjectTopicsDetails);
             fabYes = view.findViewById(R.id.fab_ListrowSubjectTopicYes);

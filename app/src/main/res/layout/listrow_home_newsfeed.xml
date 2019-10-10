@@ -94,6 +94,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_ListrowHomeDetails"
                 app:srcCompat="@drawable/ic_home_new_post" />
 
+            <VideoView
+                android:id="@+id/vv_ListrowHomeVideo"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_ListrowHomeDetails" />
+
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
