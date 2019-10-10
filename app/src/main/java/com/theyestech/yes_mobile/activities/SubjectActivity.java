@@ -108,7 +108,6 @@ public class SubjectActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSectionDetails();
                 openAddSubjectDialog();
             }
         });
@@ -393,5 +392,6 @@ public class SubjectActivity extends AppCompatActivity {
         super.onResume();
 
         getSubjectDetails();
+        getSectionDetails();
     }
 }

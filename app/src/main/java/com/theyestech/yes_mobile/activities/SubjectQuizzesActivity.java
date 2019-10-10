@@ -228,6 +228,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                     getQuizzesDetails();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Debugger.logD(e.toString());
                 }
             }
 

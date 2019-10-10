@@ -14,13 +14,13 @@ public class HttpProvider {
     //private static final String BASE_URL = "http://127.0.0.1/yes/api/api/student/";
 
     //OFFICE IP
-    private static final String BASE_URL = "http://192.168.168.207/yes_tech/controllerClass/";
+//    private static final String BASE_URL = "http://192.168.168.207/yes_tech/controllerClass/";
 
     //MY IP
-//    private static final String BASE_URL = "http://192.168.43.8/yes_tech/controllerClass/";
+//    private static final String BASE_URL = "http://192.168.254.157/yes_tech/controllerClass/";
 
     //LIVE IP
-//    private static final String BASE_URL = "http://ec2-18-139-228-46.ap-southeast-1.compute.amazonaws.com/yes_tech/controllerClass/";
+    private static final String BASE_URL = "http://theyestech.com/controllerClass/";
 
     //MICHAEL IP
 //    private static final String BASE_URL = "http://192.168.1.111/LearningApplication/yes_tech/controllerClass/";

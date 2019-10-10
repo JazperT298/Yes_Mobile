@@ -21,19 +21,18 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.QuestionsAdapter;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Question;
 import com.theyestech.yes_mobile.models.Quiz;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -380,7 +379,9 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                     answer = "False";
 
                 if (isEdit) {
-
+                    questionId = selectedQuestion.getQuestion_id();
+                    saveUpdateQuestion();
+                    b.hide();
                 } else {
                     questionId = "0";
                     if (question.isEmpty()) {
@@ -453,6 +454,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         rbChoice1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                choice1 = etChoice1.getText().toString();
+                answer = choice1;
                 isCorrectArrayList.add(1);
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
@@ -463,6 +466,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         rbChoice2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                choice2 = etChoice2.getText().toString();
+                answer = choice2;
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(1);
                 isCorrectArrayList.add(0);
@@ -473,6 +478,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         rbChoice3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                choice3 = etChoice3.getText().toString();
+                answer = choice3;
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(1);
@@ -483,6 +490,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         rbChoice4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                choice4 = etChoice4.getText().toString();
+                answer = choice4;
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
@@ -513,17 +522,10 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                 choicesArrayList.add(choice3);
                 choicesArrayList.add(choice4);
 
-                if (rbChoice1.isSelected())
-                    answer = choice1;
-                else if (rbChoice2.isSelected())
-                    answer = choice2;
-                else if (rbChoice3.isSelected())
-                    answer = choice3;
-                else if (rbChoice4.isSelected())
-                    answer = choice4;
-
                 if (isEdit) {
-
+                    questionId = selectedQuestion.getQuestion_id();
+                    saveUpdateQuestion();
+                    b.hide();
                 } else {
                     questionId = "0";
                     if (question.isEmpty() ||
