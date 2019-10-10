@@ -1,4 +1,4 @@
-package com.theyestech.yes_mobile.dialogs;
+package com.theyestech.yes_mobile.utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;

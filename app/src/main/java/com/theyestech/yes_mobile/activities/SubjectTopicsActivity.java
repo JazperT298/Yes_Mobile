@@ -16,7 +16,7 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.TopicsAdapter;
-import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.Topic;

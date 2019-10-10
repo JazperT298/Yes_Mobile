@@ -24,8 +24,8 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.SubjectsAdapter;
-import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
-import com.theyestech.yes_mobile.dialogs.ProgressPopup;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Section;
 import com.theyestech.yes_mobile.models.Subject;
@@ -105,6 +105,7 @@ public class SubjectActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getSectionDetails();
                 openAddSubjectDialog();
             }
         });
@@ -383,6 +384,5 @@ public class SubjectActivity extends AppCompatActivity {
         super.onResume();
 
         getSubjectDetails();
-        getSectionDetails();
     }
 }

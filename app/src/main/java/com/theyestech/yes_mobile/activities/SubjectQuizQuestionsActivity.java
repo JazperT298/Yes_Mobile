@@ -25,8 +25,8 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.QuestionsAdapter;
-import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
-import com.theyestech.yes_mobile.dialogs.ProgressPopup;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Question;
 import com.theyestech.yes_mobile.models.Quiz;
@@ -71,7 +71,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
     private String choice1, choice2, choice3, choice4;
     private String answer;
     private ArrayList<String> choicesArrayList = new ArrayList<>();
-    private ArrayList<String> isCorrectArrayList = new ArrayList<>();
+    private ArrayList<Integer> isCorrectArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,6 +214,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
 
     private void saveUpdateQuestion() {
         ProgressPopup.showProgress(context);
+
         JSONArray jArray = new JSONArray();
         try {
             JSONObject jGroup = new JSONObject();
@@ -221,11 +222,9 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                 jGroup.put("choice", choicesArrayList.get(i));
                 jGroup.put("isCorrect", isCorrectArrayList.get(i));
                 jArray.put(jGroup);
+                Debugger.logD(choicesArrayList.get(i));
+                Debugger.logD(String.valueOf(isCorrectArrayList.get(i)));
             }
-
-            Debugger.logD(choicesArrayList.toString());
-            Debugger.logD(isCorrectArrayList.toString());
-            Debugger.logD(jArray.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -236,7 +235,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         params.put("question", question);
         params.put("quiz_id", quiz.getQuiz_id());
         params.put("question_id", questionId);
-        params.put("choices", jArray);
+        params.put("choices", jArray.toString());
 
         HttpProvider.post(context, "controller_educator/AddUpdateQuestion.php", params, new AsyncHttpResponseHandler() {
             @Override
@@ -296,6 +295,9 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
     }
 
     private void openAddEditTrueOrFalseDialog() {
+        choicesArrayList.clear();
+        isCorrectArrayList.clear();
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
         LayoutInflater inflater = getLayoutInflater();
@@ -327,6 +329,24 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
             etQuestion.setText("");
         }
 
+        rbTrue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                answer = "True";
+                isCorrectArrayList.add(1);
+                isCorrectArrayList.add(0);
+            }
+        });
+
+        rbFalse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                answer = "False";
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(1);
+            }
+        });
+
 
         dialogBuilder.setView(dialogView);
         final AlertDialog b = dialogBuilder.create();
@@ -341,20 +361,9 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                choicesArrayList.clear();
-                isCorrectArrayList.clear();
                 question = etQuestion.getText().toString();
                 choicesArrayList.add("True");
                 choicesArrayList.add("False");
-                isCorrectArrayList.add("0");
-                isCorrectArrayList.add("0");
-                if (rbTrue.isSelected()) {
-                    answer = "True";
-                    isCorrectArrayList.set(0, "1");
-                } else if (rbFalse.isSelected()) {
-                    answer = "False";
-                    isCorrectArrayList.set(1, "1");
-                }
 
                 if (isEdit) {
 
@@ -379,6 +388,9 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
     }
 
     private void openAddEditMultipleChoiceDialog() {
+        choicesArrayList.clear();
+        isCorrectArrayList.clear();
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
         LayoutInflater inflater = getLayoutInflater();
@@ -424,6 +436,50 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
             etQuestion.setText("");
         }
 
+        rbChoice1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                answer = choice1;
+                isCorrectArrayList.add(1);
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(0);
+            }
+        });
+
+        rbChoice2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                answer = choice2;
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(1);
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(0);
+            }
+        });
+
+        rbChoice3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                answer = choice3;
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(1);
+                isCorrectArrayList.add(0);
+            }
+        });
+
+        rbChoice4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                answer = choice4;
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(0);
+                isCorrectArrayList.add(1);
+            }
+        });
+
         dialogBuilder.setView(dialogView);
         final AlertDialog b = dialogBuilder.create();
 
@@ -437,8 +493,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                choicesArrayList.clear();
-                isCorrectArrayList.clear();
                 question = etQuestion.getText().toString();
                 choice1 = etChoice1.getText().toString();
                 choice2 = etChoice2.getText().toString();
@@ -448,23 +502,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                 choicesArrayList.add(choice2);
                 choicesArrayList.add(choice3);
                 choicesArrayList.add(choice4);
-                isCorrectArrayList.add("0");
-                isCorrectArrayList.add("0");
-                isCorrectArrayList.add("0");
-                isCorrectArrayList.add("0");
-                if (rbChoice1.isSelected()) {
-                    answer = choice1;
-                    isCorrectArrayList.set(0, "1");
-                } else if (rbChoice2.isSelected()) {
-                    answer = choice2;
-                    isCorrectArrayList.set(1, "1");
-                } else if (rbChoice3.isSelected()) {
-                    answer = choice3;
-                    isCorrectArrayList.set(2, "1");
-                } else if (rbChoice4.isSelected()) {
-                    answer = choice4;
-                    isCorrectArrayList.set(3, "1");
-                }
 
                 if (isEdit) {
 
@@ -492,6 +529,41 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
+    private void deleteQuizQuestion(){
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("quiz_id", quiz.getQuiz_id());
+        params.put("question_id", questionId);
+
+        HttpProvider.post(context, "controller_educator/DeleteQuestionAndAnswer.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONObject jsonObject = new JSONObject(str);
+                    String result = jsonObject.getString("result");
+                    if (result.contains("deleted")) {
+                        Toasty.success(context, "Deleted.").show();
+
+                    } else
+                        Toasty.warning(context, "Failed").show();
+                    getQuestionDetails();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Debugger.logD(e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
     private void openDeleteDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")
@@ -500,7 +572,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        logoutUser();
+                        questionId = selectedQuestion.getQuestion_id();
+                        deleteQuizQuestion();
                     }
                 })
                 .setNegativeButton("NO", null)

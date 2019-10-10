@@ -21,10 +21,8 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.NewNewsfeedActivity;
 import com.theyestech.yes_mobile.activities.ProfileActivity;
-import com.theyestech.yes_mobile.activities.StartActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
-import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
-import com.theyestech.yes_mobile.dialogs.ProgressPopup;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.UserEducator;
@@ -37,9 +35,6 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import cz.msebera.android.httpclient.Header;
 
 public class HomeFragment extends Fragment {
 
@@ -116,7 +111,7 @@ public class HomeFragment extends Fragment {
             setStudentHeador();
     }
 
-    private void setEducatorHeader(){
+    private void setEducatorHeader() {
         if (!UserEducator.getFirstname(context).equals(""))
             tvFirstname.setText(UserEducator.getFirstname(context));
         else
@@ -211,10 +206,9 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (!UserRole.getRole(context).isEmpty())
-            if (UserRole.getRole(context).equals(UserRole.Educator()))
-                getEducatorNewsfeedDetails();
-            else
-                getStudentNewsfeedDetails();
+        if (UserRole.getRole(context).equals(UserRole.Educator()))
+            getEducatorNewsfeedDetails();
+        else
+            getStudentNewsfeedDetails();
     }
 }

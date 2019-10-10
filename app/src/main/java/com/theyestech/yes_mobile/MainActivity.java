@@ -13,17 +13,15 @@ import androidx.navigation.ui.NavigationUI;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.activities.StartActivity;
-import com.theyestech.yes_mobile.dialogs.OkayClosePopup;
-import com.theyestech.yes_mobile.dialogs.ProgressPopup;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 
