@@ -215,7 +215,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
     private void saveUpdateQuestion() {
         ProgressPopup.showProgress(context);
         JSONArray jArray = new JSONArray();
-
         try {
             JSONObject jGroup = new JSONObject();
             for (int i = 0; i < choicesArrayList.size(); i++) {
@@ -223,6 +222,9 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                 jGroup.put("isCorrect", isCorrectArrayList.get(i));
                 jArray.put(jGroup);
             }
+
+            Debugger.logD(choicesArrayList.toString());
+            Debugger.logD(isCorrectArrayList.toString());
             Debugger.logD(jArray.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -339,6 +341,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                choicesArrayList.clear();
+                isCorrectArrayList.clear();
                 question = etQuestion.getText().toString();
                 choicesArrayList.add("True");
                 choicesArrayList.add("False");
@@ -433,6 +437,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                choicesArrayList.clear();
+                isCorrectArrayList.clear();
                 question = etQuestion.getText().toString();
                 choice1 = etChoice1.getText().toString();
                 choice2 = etChoice2.getText().toString();

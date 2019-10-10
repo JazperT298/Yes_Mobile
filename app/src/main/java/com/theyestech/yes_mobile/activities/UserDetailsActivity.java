@@ -1,7 +1,17 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -26,6 +37,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 
 import cz.msebera.android.httpclient.Header;
@@ -44,6 +57,14 @@ public class UserDetailsActivity extends AppCompatActivity {
     private TextView tvHeader;
     private Button btnEditSave, btnCancel;
 
+    private static final int STORAGE_REQUEST_CODE = 400;
+    private static final int IMAGE_PICK_GALLERY_CODE = 1000;
+
+    private String storagePermission[];
+    private Uri selectedFile;
+    private String selectedFilePath = "";
+    private File myFile;
+
     private boolean isEdit = true;
     private String gender;
 
@@ -54,6 +75,8 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         context = this;
         role = UserRole.getRole(context);
+
+        storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         initializeUI();
         setFieldsMode(false);
@@ -78,6 +101,18 @@ public class UserDetailsActivity extends AppCompatActivity {
         radioGroup = findViewById(R.id.rg_UserDetails);
         btnEditSave = findViewById(R.id.btn_UserDetailsEditSave);
         btnCancel = findViewById(R.id.btn_UserDetailsCancel);
+
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!checkStoragePermission()) {
+                    requestStoragePermission();
+                } else {
+                    selectedFilePath = "";
+                    pickImageGallery();
+                }
+            }
+        });
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -123,6 +158,21 @@ public class UserDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void requestStoragePermission() {
+        ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
+    }
+
+    private boolean checkStoragePermission() {
+        boolean result = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result;
+    }
+
+    private void pickImageGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
     }
 
     private void updateEducatorDetails() {
@@ -211,6 +261,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             tvHeader.setText("Educator Details");
         else
             tvHeader.setText("Student Details");
+
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
                 .apply(GlideOptions.getOptions())
@@ -230,5 +281,93 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         etFirstname.requestFocus();
         btnEditSave.setText(enable ? "Save" : "Edit");
+    }
+
+    private void updateEducatorProfileImage() throws FileNotFoundException {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("user_id", UserEducator.getID(context));
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_image", myFile);
+
+        HttpProvider.post(context, "controller_global/update_profile_pic.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                try {
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                    if (jsonObject.getString("result").contains("success")) {
+                        Toasty.success(context, "Saved.").show();
+                        updateEducatorSession();
+                    } else
+                        Toasty.error(context, "Saving failed.").show();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case STORAGE_REQUEST_CODE:
+                if (grantResults.length > 0) {
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (writeStorageAccepted) {
+                        pickImageGallery();
+                    } else {
+                        Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
+                selectedFile = data.getData();
+                Glide.with(context)
+                        .load(selectedFile)
+                        .apply(GlideOptions.getOptions())
+                        .into(ivProfile);
+
+                Uri selectedImage = data.getData();
+
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                Cursor cursor = context.getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                selectedFilePath = cursor.getString(columnIndex);
+                myFile = new File(selectedFilePath);
+
+                if (role.equals(UserRole.Educator())) {
+                    try {
+                        updateEducatorProfileImage();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
