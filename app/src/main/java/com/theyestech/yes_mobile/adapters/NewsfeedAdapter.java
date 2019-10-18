@@ -3,6 +3,8 @@ package com.theyestech.yes_mobile.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -49,7 +51,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         final Newsfeed newsfeed = newsfeedArrayList.get(i);
 
         viewHolder.tvFullname.setText(newsfeed.getNf_fullname());
@@ -81,6 +83,21 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 intent.putExtra("NEWSFEED_ID", newsfeed.getNf_id());
                 intent.putExtra("NEWSFEED_TOKEN", newsfeed.getNf_token());
                 context.startActivity(intent);
+            }
+        });
+
+        viewHolder.fabYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewHolder.fabYes.setImageResource(R.drawable.ic_yes_up);
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Do something here
+                        viewHolder.fabYes.setImageResource(R.drawable.ic_yes_selected);
+                    }
+                }, 500);
             }
         });
 
