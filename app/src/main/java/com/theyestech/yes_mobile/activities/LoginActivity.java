@@ -3,17 +3,25 @@ package com.theyestech.yes_mobile.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.utils.KeyboardHandler;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.models.UserEducator;
@@ -29,7 +37,7 @@ import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
 
 public class LoginActivity extends AppCompatActivity {
-
+    private View view;
     private Context context;
 
     private TextView tvSignUp;
@@ -37,6 +45,9 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
 
     private int roleId;
+    //Firebase
+    FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,5 +218,61 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         else
             return false;
+    }
+    //-----------------------------------------Firebase----------------------------------------//
+
+    private void doFirebaseLoginEducator() {
+        String txt_email = etEmail.getText().toString();
+        String txt_password = etPassword.getText().toString();
+
+        if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
+            Toast.makeText(context, "All fileds are required", Toast.LENGTH_SHORT).show();
+        } else {
+
+            auth.signInWithEmailAndPassword(txt_email, txt_password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                String firebaseUser = FirebaseAuth.getInstance().getUid();
+                                KeyboardHandler.closeKeyboard(view, context);
+                                Intent intent = new Intent(context, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                //finish();
+                            } else {
+                                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void doFirebaseLoginStudent() {
+        String txt_email = etEmail.getText().toString();
+        String txt_password = etPassword.getText().toString();
+
+        if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
+            Toast.makeText(context, "All fileds are required", Toast.LENGTH_SHORT).show();
+        } else {
+
+            auth.signInWithEmailAndPassword(txt_email, txt_password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                String firebaseUser = FirebaseAuth.getInstance().getUid();
+                                KeyboardHandler.closeKeyboard(view, context);
+                                Toasty.success(context, "Success.").show();
+                                Intent intent = new Intent(context, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+//                                finish();
+                            } else {
+                                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 }
