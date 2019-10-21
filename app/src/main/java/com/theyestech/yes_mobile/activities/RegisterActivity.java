@@ -1,13 +1,22 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -17,6 +26,7 @@ import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
@@ -29,7 +39,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnSave;
 
     private int roleId;
-
+    //Firebase
+    FirebaseAuth auth;
+    DatabaseReference reference;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,4 +128,92 @@ public class RegisterActivity extends AppCompatActivity {
         else
             return false;
     }
+
+    //Firebase Database
+    private void firebaseRegisterStudent(final String username, String email, String password, final ProgressDialog progressDialog){
+        //final UserSessionEducator userSessionEducator = null;
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            FirebaseUser firebaseUser = auth.getCurrentUser();
+                            assert firebaseUser != null;
+                            String userid = firebaseUser.getUid();
+
+                            reference = FirebaseDatabase.getInstance().getReference("Student").child(userid);
+
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("id", userid);
+                            hashMap.put("username", username);
+                            hashMap.put("imageURL", "default");
+                            hashMap.put("status", "offline");
+                            hashMap.put("search", username.toLowerCase());
+
+                            reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    progressDialog.hide();
+                                    if (task.isSuccessful()){
+                                        //openHomeFragment(role);
+//                                        String firebaseUser = FirebaseAuth.getInstance().getCurrentUser().toString();
+//                                        userSessionEducator.setFirebaseToken(firebaseUser);
+                                        Intent intent = new Intent(context, LoginActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                        Toasty.success(context, "Successfully Registered, Please check your email for verification.").show();
+                                    }
+                                }
+                            });
+                        } else {
+                            progressDialog.hide();
+                            Toasty.warning(context, "You can't register with this email or password").show();
+                        }
+                    }
+                });
+    }
+
+    //Firebase Database
+    private void firebaseRegisterEducator(final String username, String email, String password, final ProgressDialog progressDialog){
+        //final UserSessionEducator userSessionEducator = null;
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            FirebaseUser firebaseUser = auth.getCurrentUser();
+                            assert firebaseUser != null;
+                            String userid = firebaseUser.getUid();
+
+                            reference = FirebaseDatabase.getInstance().getReference("Educator").child(userid);
+
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("id", userid);
+                            hashMap.put("username", username);
+                            hashMap.put("imageURL", "default");
+                            hashMap.put("status", "offline");
+                            hashMap.put("search", username.toLowerCase());
+
+                            reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        progressDialog.hide();
+                                        Intent intent = new Intent(context, LoginActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                        Toasty.success(context, "Successfully Registered, Please check your email for verification.").show();
+                                    }
+                                }
+                            });
+                        } else {
+                            progressDialog.hide();
+                            Toasty.warning(context, "You can't register with this email or password").show();
+                        }
+                    }
+                });
+    }
+
 }
