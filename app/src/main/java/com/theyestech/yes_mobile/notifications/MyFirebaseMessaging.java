@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.theyestech.yestech_mobile_app.activities.MessageActivity;
+import com.theyestech.yes_mobile.activities.MessageActivity;
 
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {

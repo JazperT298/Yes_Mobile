@@ -101,7 +101,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD(str);
                 if (str.equals("success")) {
-                    finish();
+                    //finish();
+                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
                     Toasty.success(context, "Saved.").show();
                 } else
                     etEmail.requestFocus();
@@ -175,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Firebase Database
-    private void firebaseRegisterEducator(final String username, String email, String password, final ProgressDialog progressDialog){
+    private void firebaseRegisterEducator(final String email, String password){
         //final UserSessionEducator userSessionEducator = null;
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -190,10 +191,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userid);
-                            hashMap.put("username", username);
-                            hashMap.put("imageURL", "default");
                             hashMap.put("status", "offline");
-                            hashMap.put("search", username.toLowerCase());
+                            hashMap.put("search", email.toLowerCase());
 
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
