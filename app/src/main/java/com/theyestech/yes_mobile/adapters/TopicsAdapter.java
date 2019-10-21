@@ -3,6 +3,8 @@ package com.theyestech.yes_mobile.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +48,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         final Topic topic = topicArrayList.get(i);
 
         viewHolder.tvDetails.setText(topic.getTopic_details());
@@ -66,7 +68,15 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
         viewHolder.fabYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                viewHolder.fabYes.setImageResource(R.drawable.ic_yes_up);
 
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Do something here
+                        viewHolder.fabYes.setImageResource(R.drawable.ic_yes_selected);
+                    }
+                }, 500);
             }
         });
 
