@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Yes Mobile</string>
-
+    <string name="FCM_PREF">com.theyestech.yes_mobile.fcm_pref</string>
+    <string name="FCM_TOKEN">com.theyestech.yes_mobile.fcm_token</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
