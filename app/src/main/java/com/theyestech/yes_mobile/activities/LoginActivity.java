@@ -21,6 +21,7 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.KeyboardHandler;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -144,7 +145,46 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginStudent() {
+        ProgressPopup.showProgress(context);
 
+        RequestParams params = new RequestParams();
+        params.put("login_s_email_address", etEmail.getText().toString());
+        params.put("login_s_password", etPassword.getText().toString());
+
+        HttpProvider.post(context, "controller_student/login_as_student_class.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String result = jsonObject.getString("result");
+                    String user_id = jsonObject.getString("user_id");
+                    String user_token = jsonObject.getString("user_token");
+
+                    UserStudent userStudent = new UserStudent();
+                    userStudent.setId(user_id);
+                    userStudent.setToken(user_token);
+                    Debugger.logD(result);
+
+                    if (result.contains("success"))
+                        getStudentDetails(userStudent);
+                    else
+                        Toasty.warning(context, result).show();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Debugger.logD(e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 
     private void getEducatorDetails(final UserEducator userEducator) {
@@ -193,6 +233,71 @@ public class LoginActivity extends AppCompatActivity {
 
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
+                    userRole.saveRole(context);
+
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void getStudentDetails(final UserStudent userStudent) {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("user_token", userStudent.getToken());
+        params.put("user_id", userStudent.getId());
+
+        HttpProvider.post(context, "controller_global/get_user_details.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    Debugger.logD(str);
+                    String user_email_address = jsonObject.getString("user_email_address");
+                    String user_firstname = jsonObject.getString("user_firstname");
+                    String user_lastname = jsonObject.getString("user_lastname");
+                    String user_middlename = jsonObject.getString("user_middlename");
+                    String user_suffixes = jsonObject.getString("user_suffixes");
+                    String user_gender = jsonObject.getString("user_gender");
+                    String user_contact_number = jsonObject.getString("user_contact_number");
+                    String user_image = jsonObject.getString("user_image");
+                    String user_educational_attainment = jsonObject.getString("user_educational_attainment");
+                    String user_subj_major = jsonObject.getString("user_subj_major");
+                    String user_current_school = jsonObject.getString("user_current_school");
+                    String user_position = jsonObject.getString("user_position");
+
+                    userStudent.setEmail_address(user_email_address);
+                    userStudent.setPassword(etPassword.getText().toString());
+                    userStudent.setFirsname(user_firstname);
+                    userStudent.setLastname(user_lastname);
+                    userStudent.setMiddlename(user_middlename);
+                    userStudent.setSuffix(user_suffixes);
+                    userStudent.setGender(user_gender);
+                    userStudent.setContact_number(user_contact_number);
+                    userStudent.setImage(user_image);
+                    userStudent.setEducational_attainment(user_educational_attainment);
+                    userStudent.setSubj_major(user_subj_major);
+                    userStudent.setCurrent_school(user_current_school);
+                    userStudent.setPosition(user_position);
+                    userStudent.saveUserSession(context);
+
+                    UserRole userRole = new UserRole();
+                    userRole.setUserRole(UserRole.Student());
                     userRole.saveRole(context);
 
                     Intent intent = new Intent(context, MainActivity.class);

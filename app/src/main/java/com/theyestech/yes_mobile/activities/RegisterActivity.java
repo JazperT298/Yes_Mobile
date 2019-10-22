@@ -39,9 +39,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnSave;
 
     private int roleId;
+
     //Firebase
-    FirebaseAuth auth;
-    DatabaseReference reference;
+    private FirebaseAuth auth;
+    private DatabaseReference reference;
     private ProgressDialog progressDialog;
 
     @Override
@@ -103,7 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Debugger.logD(str);
                 if (str.equals("success")) {
                     //finish();
-                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+//                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
                     Toasty.success(context, "Saved.").show();
                 } else
                     etEmail.requestFocus();
@@ -119,7 +120,34 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerStudent() {
+        ProgressPopup.showProgress(context);
 
+        RequestParams params = new RequestParams();
+        params.put("s_email_address", etEmail.getText().toString());
+        params.put("s_password", etConfirmPassword.getText().toString());
+
+        HttpProvider.post(context, "controller_student/register_as_student_class.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD(str);
+                if (str.equals("success")) {
+                    //finish();
+//                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+                    Toasty.success(context, "Saved.").show();
+                } else
+                    etEmail.requestFocus();
+
+                Toasty.warning(context, str).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 
     private boolean fieldsAreEmpty() {

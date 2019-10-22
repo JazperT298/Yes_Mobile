@@ -97,7 +97,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                     public void run() {
                         //Do something here
                         viewHolder.ivYes.setImageResource(R.drawable.ic_yes_selected);
-                        viewHolder.tvYes.setTextColor(R.color.colorAccent);
+                        viewHolder.tvYes.setTextColor(context.getResources().getColor(R.color.colorAccent));
                     }
                 }, 500);
             }

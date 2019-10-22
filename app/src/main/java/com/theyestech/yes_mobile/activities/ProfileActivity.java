@@ -14,9 +14,8 @@ import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.fragments.HomeFragment;
-import com.theyestech.yes_mobile.models.Section;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.UserRole;
 
@@ -26,8 +25,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private String role;
 
-    private ImageView ivProfile, ivBack, ivDetails, ivSubjects, ivSections, ivVideos, ivAssessments, ivAnnouncements, ivLogout;
-    private TextView tvFullname, tvEmail, tvPostCount, tvSubjectCount, tvSectionCount;
+    //Educator widgets
+    private ImageView ivProfileEducator, ivBackEducator, ivDetailsEducator, ivSubjectsEducator, ivSectionsEducator, ivVideosEducator, ivAssessmentsEducator, ivAnnouncementsEducator, ivLogoutEducator;
+    private TextView tvFullnameEducator, tvEmailEducator, tvPostCountEducator, tvSubjectCountEducator, tvSectionCountEducator;
+
+    //Student widgets
+    private ImageView ivProfileStudent, ivBackStudent, ivDetailsStudent, ivSubjectsStudent, ivEducatorsStudent, ivStickersStudent, ivLogoutStudent;
+    private TextView tvFullnameStudent, tvEmailStudent, tvStickerCountStudent, tvSubjectCountStudent, tvEducatorCountStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,34 +42,36 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (role.equals(UserRole.Educator()))
             initializeEducatorUI();
+        else
+            initializeStudentUI();
     }
 
     private void initializeEducatorUI() {
         setContentView(R.layout.activity_profile_educator);
 
-        ivProfile = findViewById(R.id.iv_ProfileImage);
-        ivBack = findViewById(R.id.iv_ProfileBack);
-        ivDetails = findViewById(R.id.iv_ProfileDetails);
-        ivSubjects = findViewById(R.id.iv_ProfileSubjects);
-        ivSections = findViewById(R.id.iv_ProfileSections);
-        ivVideos = findViewById(R.id.iv_ProfileVideos);
-        ivAssessments = findViewById(R.id.iv_ProfileAssessment);
-        ivAnnouncements = findViewById(R.id.iv_ProfileAnnouncement);
-        ivLogout = findViewById(R.id.iv_ProfileLogout);
-        tvFullname = findViewById(R.id.tv_ProfileFullname);
-        tvEmail = findViewById(R.id.tv_ProfileEmail);
-        tvPostCount = findViewById(R.id.tv_ProfilePosts);
-        tvSubjectCount = findViewById(R.id.tv_ProfileSubjects);
-        tvSectionCount = findViewById(R.id.tv_ProfileSections);
+        ivProfileEducator = findViewById(R.id.iv_ProfileEducatorImage);
+        ivBackEducator = findViewById(R.id.iv_ProfileEducatorBack);
+        ivDetailsEducator = findViewById(R.id.iv_ProfileEducatorDetails);
+        ivSubjectsEducator = findViewById(R.id.iv_ProfileEducatorSubjects);
+        ivSectionsEducator = findViewById(R.id.iv_ProfileEducatorSections);
+        ivVideosEducator = findViewById(R.id.iv_ProfileEducatorVideos);
+        ivAssessmentsEducator = findViewById(R.id.iv_ProfileEducatorAssessment);
+        ivAnnouncementsEducator = findViewById(R.id.iv_ProfileEducatorAnnouncement);
+        ivLogoutEducator = findViewById(R.id.iv_ProfileEducatorLogout);
+        tvFullnameEducator = findViewById(R.id.tv_ProfileEducatorFullname);
+        tvEmailEducator = findViewById(R.id.tv_ProfileEducatorEmail);
+        tvPostCountEducator = findViewById(R.id.tv_ProfileEducatorPosts);
+        tvSubjectCountEducator = findViewById(R.id.tv_ProfileEducatorSubjects);
+        tvSectionCountEducator = findViewById(R.id.tv_ProfileEducatorSections);
 
-        ivBack.setOnClickListener(new View.OnClickListener() {
+        ivBackEducator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        ivDetails.setOnClickListener(new View.OnClickListener() {
+        ivDetailsEducator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserDetailsActivity.class);
@@ -73,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        ivSubjects.setOnClickListener(new View.OnClickListener() {
+        ivSubjectsEducator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SubjectActivity.class);
@@ -81,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        ivSections.setOnClickListener(new View.OnClickListener() {
+        ivSectionsEducator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SectionActivity.class);
@@ -89,28 +95,28 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        ivVideos.setOnClickListener(new View.OnClickListener() {
+        ivVideosEducator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        ivAssessments.setOnClickListener(new View.OnClickListener() {
+        ivAssessmentsEducator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        ivAnnouncements.setOnClickListener(new View.OnClickListener() {
+        ivAnnouncementsEducator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        ivLogout.setOnClickListener(new View.OnClickListener() {
+        ivLogoutEducator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openLogoutDialog();
@@ -121,16 +127,70 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void initializeStudentUI() {
+        setContentView(R.layout.activity_profile_student);
 
+        ivProfileStudent = findViewById(R.id.iv_ProfileStudentImage);
+        ivBackStudent = findViewById(R.id.iv_ProfileStudentBack);
+        ivDetailsStudent = findViewById(R.id.iv_ProfileStudentDetails);
+        ivSubjectsStudent = findViewById(R.id.iv_ProfileStudentSubjects);
+        ivEducatorsStudent = findViewById(R.id.iv_ProfileStudentEducators);
+        ivStickersStudent = findViewById(R.id.iv_ProfileStudentStickers);
+        ivLogoutStudent = findViewById(R.id.iv_ProfileStudentLogout);
+        tvFullnameStudent = findViewById(R.id.tv_ProfileStudentFullname);
+        tvEmailStudent = findViewById(R.id.tv_ProfileStudentEmail);
+        tvStickerCountStudent = findViewById(R.id.tv_ProfileStudentStickers);
+        tvSubjectCountStudent = findViewById(R.id.tv_ProfileStudentSubjects);
+        tvEducatorCountStudent = findViewById(R.id.tv_ProfileStudentEducators);
+
+        ivBackStudent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        ivDetailsStudent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserDetailsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ivSubjectsStudent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SubjectActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ivLogoutStudent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLogoutDialog();
+            }
+        });
+
+        setStudentDetails();
     }
 
     private void setEducatorDetails() {
-        tvFullname.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context));
-        tvEmail.setText(UserEducator.getEmail(context));
+        tvFullnameEducator.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context));
+        tvEmailEducator.setText(UserEducator.getEmail(context));
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
                 .apply(GlideOptions.getOptions())
-                .into(ivProfile);
+                .into(ivProfileEducator);
+    }
+
+    private void setStudentDetails() {
+        tvFullnameStudent.setText(UserStudent.getFirstname(context) + " " + UserStudent.getLastname(context));
+        tvEmailStudent.setText(UserStudent.getEmail(context));
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(ivProfileStudent);
     }
 
     private void openLogoutDialog() {
@@ -155,6 +215,11 @@ public class ProfileActivity extends AppCompatActivity {
             UserRole.clearRole(context);
             MainActivity mainActivity = new MainActivity();
             mainActivity.checkEducatorSession();
+        } else {
+            UserStudent.clearSession(context);
+            UserRole.clearRole(context);
+            MainActivity mainActivity = new MainActivity();
+            mainActivity.checkStudentSession();
         }
     }
 
@@ -162,6 +227,9 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        setEducatorDetails();
+        if (role.equals(UserRole.Educator()))
+            setEducatorDetails();
+        else
+            setStudentDetails();
     }
 }

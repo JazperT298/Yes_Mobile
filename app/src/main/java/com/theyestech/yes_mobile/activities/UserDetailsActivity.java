@@ -27,10 +27,11 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
-import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -83,6 +84,8 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         if (role.equals(UserRole.Educator()))
             setEducatorFieldsData();
+        else
+            setStudentFieldsData();
 
     }
 
@@ -136,7 +139,11 @@ public class UserDetailsActivity extends AppCompatActivity {
                     isEdit = false;
                     btnCancel.setVisibility(View.VISIBLE);
                 } else {
-                    updateEducatorDetails();
+                    if (role.equals(UserRole.Educator()))
+                        updateEducatorDetails();
+                    else
+                        updateStudentDetails();
+
                     btnCancel.setVisibility(View.GONE);
                 }
             }
@@ -145,7 +152,11 @@ public class UserDetailsActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setEducatorFieldsData();
+                if (role.equals(UserRole.Educator()))
+                    setEducatorFieldsData();
+                else
+                    updateStudentDetails();
+
                 setFieldsMode(false);
                 btnCancel.setVisibility(View.GONE);
                 isEdit = true;
@@ -219,6 +230,50 @@ public class UserDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void updateStudentDetails() {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("user_id", UserStudent.getID(context));
+        params.put("user_token", UserStudent.getToken(context));
+        params.put("user_email_address", etEmail.getText().toString());
+        params.put("user_contact_number", etContactnumber.getText().toString());
+        params.put("user_lastname", etLastname.getText().toString());
+        params.put("user_firstname", etFirstname.getText().toString());
+        params.put("user_middlename", etMiddlename.getText().toString());
+        params.put("user_suffixes", etSuffix.getText().toString());
+        params.put("user_gender", gender);
+
+        HttpProvider.post(context, "controller_global/update_basic_details.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                try {
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                    if (jsonObject.getString("result").contains("success")) {
+                        Toasty.success(context, "Saved.").show();
+                        setFieldsMode(isEdit);
+                        isEdit = true;
+                        updateStudentSession();
+                    } else
+                        Toasty.error(context, "Saving failed.").show();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
     private void updateEducatorSession() {
         UserEducator userEducator = new UserEducator();
         userEducator.setId(UserEducator.getID(context));
@@ -239,6 +294,28 @@ public class UserDetailsActivity extends AppCompatActivity {
         userEducator.saveUserSession(context);
 
         setEducatorFieldsData();
+    }
+
+    private void updateStudentSession() {
+        UserEducator userEducator = new UserEducator();
+        userEducator.setId(UserEducator.getID(context));
+        userEducator.setToken(UserEducator.getToken(context));
+        userEducator.setPassword(UserEducator.getPassword(context));
+        userEducator.setFirsname(etFirstname.getText().toString());
+        userEducator.setMiddlename(etMiddlename.getText().toString());
+        userEducator.setLastname(etLastname.getText().toString());
+        userEducator.setSuffix(etSuffix.getText().toString());
+        userEducator.setEmail_address(etEmail.getText().toString());
+        userEducator.setContact_number(etEmail.getText().toString());
+        userEducator.setGender(gender);
+        userEducator.setImage(UserEducator.getImage(context));
+        userEducator.setEducational_attainment(UserEducator.getEducationalAttainment(context));
+        userEducator.setSubj_major(UserEducator.getSubjectMajor(context));
+        userEducator.setCurrent_school(UserEducator.getCurrentSchool(context));
+        userEducator.setPosition(UserEducator.getPosition(context));
+        userEducator.saveUserSession(context);
+
+        setStudentFieldsData();
     }
 
     private void setEducatorFieldsData() {
@@ -266,7 +343,33 @@ public class UserDetailsActivity extends AppCompatActivity {
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
                 .apply(GlideOptions.getOptions())
                 .into(ivProfile);
+    }
 
+    private void setStudentFieldsData() {
+        etFirstname.setText(UserStudent.getFirstname(context));
+        etMiddlename.setText(UserStudent.getMiddlename(context));
+        etLastname.setText(UserStudent.getLastname(context));
+        etSuffix.setText(UserStudent.getSuffix(context));
+        etEmail.setText(UserStudent.getEmail(context));
+        etContactnumber.setText(UserStudent.getContactNumber(context));
+
+        switch (UserStudent.getGender(context)) {
+            case "Male":
+                radioGroup.check(R.id.rb_UserDetailsMale);
+                break;
+            case "Female":
+                radioGroup.check(R.id.rb_UserDetailsFemale);
+        }
+
+        if (role.equals(UserRole.Educator()))
+            tvHeader.setText("Educator Details");
+        else
+            tvHeader.setText("Student Details");
+
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(ivProfile);
     }
 
     private void setFieldsMode(boolean enable) {
@@ -284,6 +387,42 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
     private void updateEducatorProfileImage() throws FileNotFoundException {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("user_id", UserEducator.getID(context));
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_image", myFile);
+
+        HttpProvider.post(context, "controller_global/update_profile_pic.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                try {
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                    if (jsonObject.getString("result").contains("success")) {
+                        Toasty.success(context, "Saved.").show();
+                        updateEducatorSession();
+                    } else
+                        Toasty.error(context, "Saving failed.").show();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void updateStudentProfileImage() throws FileNotFoundException {
         ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
@@ -361,6 +500,12 @@ public class UserDetailsActivity extends AppCompatActivity {
                 if (role.equals(UserRole.Educator())) {
                     try {
                         updateEducatorProfileImage();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        updateStudentProfileImage();
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }

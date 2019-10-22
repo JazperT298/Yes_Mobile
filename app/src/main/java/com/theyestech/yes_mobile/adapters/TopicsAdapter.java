@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -65,22 +66,23 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
             viewHolder.videoView.setVisibility(View.VISIBLE);
         }
 
-        viewHolder.fabYes.setOnClickListener(new View.OnClickListener() {
+        viewHolder.constraintYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewHolder.fabYes.setImageResource(R.drawable.ic_yes_up);
+                viewHolder.ivYes.setImageResource(R.drawable.ic_yes_up);
 
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         //Do something here
-                        viewHolder.fabYes.setImageResource(R.drawable.ic_yes_selected);
+                        viewHolder.ivYes.setImageResource(R.drawable.ic_yes_selected);
+                        viewHolder.tvYes.setTextColor(context.getResources().getColor(R.color.colorAccent));
                     }
                 }, 500);
             }
         });
 
-        viewHolder.fabComment.setOnClickListener(new View.OnClickListener() {
+        viewHolder.constraintComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SubjectTopicsCommentActivity.class);
@@ -97,21 +99,23 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivImage;
-        private TextView tvDetails;
+        private ImageView ivImage, ivYes;
+        private TextView tvDetails, tvYes;
         private VideoView videoView;
-        private FloatingActionButton fabYes, fabComment;
+        private ConstraintLayout constraintYes, constraintComment;
 
         public ViewHolder(View view) {
             super(view);
 
             videoView = view.findViewById(R.id.vv_ListrowSubjectTopicVideo);
             ivImage = view.findViewById(R.id.iv_ListrowSubjectTopicsImage);
+            ivYes = view.findViewById(R.id.iv_ListrowSubjectTopicYes);
             tvDetails = view.findViewById(R.id.tv_ListrowSubjectTopicsDetails);
-            fabYes = view.findViewById(R.id.fab_ListrowSubjectTopicYes);
-            fabComment = view.findViewById(R.id.fab_ListrowSubjectTopicComment);
+            tvYes = view.findViewById(R.id.tv_ListrowSubjectTopicYes);
+            constraintYes = view.findViewById(R.id.constraint_ListrowSubjectTopicsYes);
+            constraintComment = view.findViewById(R.id.constraint_ListrowSubjectTopicsComments);
 
-            fabYes.setOnClickListener(new View.OnClickListener() {
+            constraintYes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
@@ -119,7 +123,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                 }
             });
 
-            fabComment.setOnClickListener(new View.OnClickListener() {
+            constraintComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
