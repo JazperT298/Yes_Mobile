@@ -21,9 +21,9 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
-import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -43,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth auth;
     DatabaseReference reference;
     private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toasty.success(context, "Saved.").show();
                 } else
                     etEmail.requestFocus();
-                    Toasty.warning(context, str).show();
+                Toasty.warning(context, str).show();
             }
 
             @Override
@@ -131,13 +132,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Firebase Database
-    private void firebaseRegisterStudent(final String username, String email, String password, final ProgressDialog progressDialog){
+    private void firebaseRegisterStudent(final String username, String email, String password, final ProgressDialog progressDialog) {
         //final UserSessionEducator userSessionEducator = null;
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
@@ -155,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     progressDialog.hide();
-                                    if (task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         //openHomeFragment(role);
 //                                        String firebaseUser = FirebaseAuth.getInstance().getCurrentUser().toString();
 //                                        userSessionEducator.setFirebaseToken(firebaseUser);
@@ -176,13 +177,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Firebase Database
-    private void firebaseRegisterEducator(final String email, String password){
+    private void firebaseRegisterEducator(final String email, String password) {
         //final UserSessionEducator userSessionEducator = null;
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
@@ -197,7 +198,7 @@ public class RegisterActivity extends AppCompatActivity {
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         progressDialog.hide();
                                         Intent intent = new Intent(context, LoginActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -125,7 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setEducatorDetails() {
-        tvFullname.setText(UserEducator.getFirstname(context) + " " + UserEducator.getMiddlename(context) + " " + UserEducator.getLastname(context));
+        tvFullname.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context));
         tvEmail.setText(UserEducator.getEmail(context));
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
