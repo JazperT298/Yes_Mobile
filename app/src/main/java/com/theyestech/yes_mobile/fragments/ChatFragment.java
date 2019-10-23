@@ -24,6 +24,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ViewPagerAdapter;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 
 public class ChatFragment extends Fragment {
 
@@ -70,11 +71,16 @@ public class ChatFragment extends Fragment {
                 assert user != null;
                 tv_SignIn.setText(user.getFirsname());
                 if (user.getImage().equals("default")){
-                    profile_image.setImageResource(R.drawable.yes_logo);
+                    Glide.with(context)
+                            .load(R.drawable.ic_educator_profile)
+                            .apply(GlideOptions.getOptions())
+                            .into(profile_image);
                 } else {
 
-                    //change this
-                    Glide.with(getContext()).load(user.getImage()).into(profile_image);
+                    Glide.with(context)
+                            .load(R.drawable.ic_educator_profile)
+                            .apply(GlideOptions.getOptions())
+                            .into(profile_image);
                 }
             }
 
