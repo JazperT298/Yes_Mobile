@@ -37,6 +37,7 @@ import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
@@ -101,9 +102,6 @@ public class SubjectActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.fab_SubjectsAdd);
         emptyIndicator = findViewById(R.id.view_Empty);
 
-        if (!role.equals(UserRole.Educator()))
-            floatingActionButton.setVisibility(View.GONE);
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -117,7 +115,14 @@ public class SubjectActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAddSubjectDialog();
+                if (sId.isEmpty())
+                    Toasty.warning(context, "Add section before creating subject.").show();
+                else {
+                    if (role.equals(UserRole.Educator()))
+                        openAddSubjectDialog();
+                    else
+                        openRequestSubjectDialog();
+                }
             }
         });
 
@@ -329,6 +334,42 @@ public class SubjectActivity extends AppCompatActivity {
         });
     }
 
+    private void sendRequestToJoin(String subjectCode) {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("stud_token", UserStudent.getToken(context));
+        params.put("stud_id", UserStudent.getID(context));
+        params.put("subj_code", subjectCode);
+
+        HttpProvider.post(context, "controller_student/request_join_subject.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String result = jsonObject.getString("result");
+                    Debugger.logD(str);
+                    if (result.contains("success")) {
+                        Toasty.success(context, "Saved.").show();
+                    } else
+                        Toasty.warning(context, result).show();
+                    getSectionDetails();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
     private void getSectionDetails() {
         sectionArrayList.clear();
         sName.clear();
@@ -475,11 +516,54 @@ public class SubjectActivity extends AppCompatActivity {
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
+    private void openRequestSubjectDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_request_subject_code, null);
+        final EditText etCode;
+        final Button btnSend;
+        final ImageView ivClose;
+
+        etCode = dialogView.findViewById(R.id.et_RequestSubjectCode);
+        btnSend = dialogView.findViewById(R.id.btn_RequestSubjectCodeSend);
+        ivClose = dialogView.findViewById(R.id.iv_RequestSubjectCodeClose);
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.hide();
+            }
+        });
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etCode.getText().toString().isEmpty())
+                    Toasty.warning(context, "Please input subject code.").show();
+                else {
+                    sendRequestToJoin(etCode.getText().toString());
+                    b.hide();
+                }
+            }
+        });
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        getEducatorSubjectDetails();
+        if (role.equals(UserRole.Educator()))
+            getEducatorSubjectDetails();
+        else
+            getStudentSubjectDetails();
+
         getSectionDetails();
     }
 }
