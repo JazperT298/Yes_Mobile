@@ -43,7 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
     //Firebase
     private FirebaseAuth auth;
     private DatabaseReference reference;
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,13 +101,15 @@ public class RegisterActivity extends AppCompatActivity {
                 ProgressPopup.hideProgress();
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD(str);
-                if (str.equals("success")) {
-                    //finish();
+                if (!str.contains("exists")) {
 //                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
-                    Toasty.success(context, "Saved.").show();
-                } else
+                    finish();
+                    Toasty.success(context, "Successfully registered.").show();
+                } else{
                     etEmail.requestFocus();
-                Toasty.warning(context, str).show();
+                    Toasty.warning(context, str).show();
+                }
+
             }
 
             @Override
@@ -192,13 +193,13 @@ public class RegisterActivity extends AppCompatActivity {
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();
-                                        Toasty.success(context, "Successfully Registered, Please check your email for verification.").show();
+                                        Toasty.success(context, "Successfully registered.").show();
                                     }
                                 }
                             });
                         } else {
                             progressDialog.hide();
-                            Toasty.warning(context, "You can't register with this email or password").show();
+                            Toasty.warning(context, "Email address already exists.").show();
                         }
                     }
                 });
@@ -206,11 +207,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     //Firebase Database
     private void firebaseRegisterEducator(final String email, String password) {
-        //final UserSessionEducator userSessionEducator = null;
+        ProgressPopup.showProgress(context);
+
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        ProgressPopup.hideProgress();
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             assert firebaseUser != null;
@@ -226,19 +229,18 @@ public class RegisterActivity extends AppCompatActivity {
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
+                                    ProgressPopup.hideProgress();
                                     if (task.isSuccessful()) {
-                                        progressDialog.hide();
                                         Intent intent = new Intent(context, LoginActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();
-                                        Toasty.success(context, "Successfully Registered, Please check your email for verification.").show();
+                                        Toasty.success(context, "Successfully registered.").show();
                                     }
                                 }
                             });
                         } else {
-                            progressDialog.hide();
-                            Toasty.warning(context, "You can't register with this email or password").show();
+                            Toasty.warning(context, "Email address already exists.").show();
                         }
                     }
                 });
