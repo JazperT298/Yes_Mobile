@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="8dp"
+    android:layout_height="70dp">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_ProfileEducatorImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/yes_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_ProfileEducatorFullname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@id/iv_ProfileEducatorImage"
+            android:layout_toRightOf="@id/iv_ProfileEducatorImage"
+            android:text="username"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.013"
+            app:layout_constraintStart_toEndOf="@+id/iv_ProfileEducatorImage"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@id/iv_ProfileEducatorImage"
+            android:layout_toRightOf="@id/iv_ProfileEducatorImage"
+            android:text="section"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.012"
+            app:layout_constraintStart_toEndOf="@+id/iv_ProfileEducatorImage"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ProfileEducatorFullname" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:id="@+id/img_on"
+            android:visibility="gone"
+            android:src="@mipmap/ic_launcher"
+            android:layout_below="@id/tv_ProfileEducatorFullname"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="-15dp"
+            android:layout_toRightOf="@id/iv_ProfileEducatorImage"
+            android:layout_toEndOf="@id/iv_ProfileEducatorImage"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:id="@+id/img_off"
+            android:visibility="gone"
+            android:src="@mipmap/ic_launcher"
+            android:layout_below="@id/tv_ProfileEducatorFullname"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="-15dp"
+            android:layout_toRightOf="@id/iv_ProfileEducatorImage"
+            android:layout_toEndOf="@id/iv_ProfileEducatorImage"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_ProfileEducatorFullname"
+            android:layout_toRightOf="@id/iv_ProfileEducatorImage"
+            android:layout_marginTop="5dp"
+            android:paddingTop="5dp"
+            android:id="@+id/last_msg"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="20dp"
+            tools:ignore="MissingConstraints"
+            android:maxLines="1"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

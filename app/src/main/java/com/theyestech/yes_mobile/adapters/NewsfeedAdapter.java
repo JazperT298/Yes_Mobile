@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -76,7 +77,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 .apply(GlideOptions.getOptions())
                 .into(viewHolder.ivProfile);
 
-        viewHolder.fabComment.setOnClickListener(new View.OnClickListener() {
+        viewHolder.constraintComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, NewsfeedCommentActivity.class);
@@ -86,16 +87,17 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
             }
         });
 
-        viewHolder.fabYes.setOnClickListener(new View.OnClickListener() {
+        viewHolder.constraintYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewHolder.fabYes.setImageResource(R.drawable.ic_yes_up);
+                viewHolder.ivYes.setImageResource(R.drawable.ic_yes_up);
 
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         //Do something here
-                        viewHolder.fabYes.setImageResource(R.drawable.ic_yes_selected);
+                        viewHolder.ivYes.setImageResource(R.drawable.ic_yes_selected);
+                        viewHolder.tvYes.setTextColor(context.getResources().getColor(R.color.colorAccent));
                     }
                 }, 500);
             }
@@ -110,10 +112,10 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivImage, ivProfile, ivType;
-        private TextView tvDetails, tvFullname, tvDateTime;
+        private ImageView ivImage, ivProfile, ivType, ivYes;
+        private TextView tvDetails, tvFullname, tvDateTime, tvYes;
         private VideoView videoView;
-        private FloatingActionButton fabYes, fabComment;
+        private ConstraintLayout constraintYes, constraintComment;
 
         public ViewHolder(View view) {
             super(view);
@@ -125,10 +127,12 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
             tvDetails = view.findViewById(R.id.tv_ListrowHomeDetails);
             tvFullname = view.findViewById(R.id.tv_ListrowHomeFullname);
             tvDateTime = view.findViewById(R.id.tv_ListrowHomeDateTime);
-            fabYes = view.findViewById(R.id.fab_ListrowHomeYes);
-            fabComment = view.findViewById(R.id.fab_ListrowHomeComment);
+            tvYes = view.findViewById(R.id.tv_ListrowHomeYes);
+            ivYes = view.findViewById(R.id.iv_ListrowHomeYes);
+            constraintYes = view.findViewById(R.id.constraint_ListrowHomeYes);
+            constraintComment = view.findViewById(R.id.constraint_ListrowHomeComments);
 
-            fabYes.setOnClickListener(new View.OnClickListener() {
+            constraintYes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
@@ -136,7 +140,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 }
             });
 
-            fabComment.setOnClickListener(new View.OnClickListener() {
+            constraintComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)

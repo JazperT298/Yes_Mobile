@@ -1,5 +1,6 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,16 +26,18 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.SubjectsAdapter;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Section;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
@@ -91,6 +94,7 @@ public class SubjectActivity extends AppCompatActivity {
         swipeRefreshLayout.setRefreshing(true);
     }
 
+    @SuppressLint("RestrictedApi")
     private void initializeUI() {
         ivBack = findViewById(R.id.iv_SubjectsBack);
         swipeRefreshLayout = findViewById(R.id.swipe_Subjects);
@@ -101,14 +105,24 @@ public class SubjectActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getSubjectDetails();
+                if (role.equals(UserRole.Educator()))
+                    getEducatorSubjectDetails();
+                else
+                    getStudentSubjectDetails();
             }
         });
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAddSubjectDialog();
+                if (sId.isEmpty())
+                    Toasty.warning(context, "Add section before creating subject.").show();
+                else {
+                    if (role.equals(UserRole.Educator()))
+                        openAddSubjectDialog();
+                    else
+                        openRequestSubjectDialog();
+                }
             }
         });
 
@@ -121,7 +135,7 @@ public class SubjectActivity extends AppCompatActivity {
 
     }
 
-    private void getSubjectDetails() {
+    private void getEducatorSubjectDetails() {
         subjectArrayList.clear();
 
         swipeRefreshLayout.setRefreshing(true);
@@ -132,6 +146,88 @@ public class SubjectActivity extends AppCompatActivity {
         params.put("teach_id", UserEducator.getID(context));
 
         HttpProvider.post(context, "controller_educator/get_subjects.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                swipeRefreshLayout.setRefreshing(false);
+                floatingActionButton.setEnabled(true);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                if (str.equals(""))
+                    emptyIndicator.setVisibility(View.VISIBLE);
+
+                try {
+
+                    JSONArray jsonArray = new JSONArray(str);
+                    Debugger.logD("SUBJECTS: " + jsonArray);
+                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String subj_id = jsonObject.getString("subj_id");
+                        String subj_level = jsonObject.getString("subj_level");
+                        String user_id = jsonObject.getString("user_id");
+                        String section_id = jsonObject.getString("section_id");
+                        String subj_title = jsonObject.getString("subj_title");
+                        String subj_description = jsonObject.getString("subj_description");
+                        String subj_semester = jsonObject.getString("subj_semester");
+                        String subj_school_year = jsonObject.getString("subj_school_year");
+                        String subj_file = jsonObject.getString("subj_file");
+                        String subj_code = jsonObject.getString("subj_code");
+
+                        Subject subject = new Subject();
+                        subject.setId(subj_id);
+                        subject.setLevel(subj_level);
+                        subject.setUser_id(user_id);
+                        subject.setSection_id(section_id);
+                        subject.setTitle(subj_title);
+                        subject.setDescription(subj_description);
+                        subject.setSemester(subj_semester);
+                        subject.setSchool_year(subj_school_year);
+                        subject.setImage(subj_file);
+                        subject.setCode(subj_code);
+
+                        subjectArrayList.add(subject);
+                    }
+
+                    recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+                    recyclerView.setHasFixedSize(true);
+                    subjectsAdapter = new SubjectsAdapter(context, subjectArrayList);
+                    subjectsAdapter.setClickListener(new OnClickRecyclerView() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            selectedSubject = subjectArrayList.get(position);
+                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
+                            intent.putExtra("SUBJECT", selectedSubject);
+                            startActivity(intent);
+                        }
+                    });
+
+                    recyclerView.setAdapter(subjectsAdapter);
+                    emptyIndicator.setVisibility(View.GONE);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                swipeRefreshLayout.setRefreshing(false);
+                floatingActionButton.setEnabled(true);
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void getStudentSubjectDetails() {
+        subjectArrayList.clear();
+
+        swipeRefreshLayout.setRefreshing(true);
+        floatingActionButton.setEnabled(false);
+
+        RequestParams params = new RequestParams();
+        params.put("stud_token", UserStudent.getToken(context));
+        params.put("stud_id", UserStudent.getID(context));
+
+        HttpProvider.post(context, "controller_student/get_student_subjects.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
@@ -227,7 +323,43 @@ public class SubjectActivity extends AppCompatActivity {
                     Toasty.success(context, "Saved.").show();
                 } else
                     Toasty.warning(context, "Failed").show();
-                getSubjectDetails();
+                getEducatorSubjectDetails();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void sendRequestToJoin(String subjectCode) {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("stud_token", UserStudent.getToken(context));
+        params.put("stud_id", UserStudent.getID(context));
+        params.put("subj_code", subjectCode);
+
+        HttpProvider.post(context, "controller_student/request_join_subject.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String result = jsonObject.getString("result");
+                    Debugger.logD(str);
+                    if (result.contains("success")) {
+                        Toasty.success(context, "Saved.").show();
+                    } else
+                        Toasty.warning(context, result).show();
+                    getSectionDetails();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -243,8 +375,6 @@ public class SubjectActivity extends AppCompatActivity {
         sName.clear();
         sId.clear();
 
-        swipeRefreshLayout.setRefreshing(true);
-
         RequestParams params = new RequestParams();
         params.put("teach_token", UserEducator.getToken(context));
         params.put("teach_id", UserEducator.getID(context));
@@ -252,7 +382,6 @@ public class SubjectActivity extends AppCompatActivity {
         HttpProvider.post(context, "controller_educator/get_sections.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                swipeRefreshLayout.setRefreshing(false);
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
@@ -278,12 +407,12 @@ public class SubjectActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Debugger.logD("SECTION: " + e.toString());
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                swipeRefreshLayout.setRefreshing(false);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
@@ -387,11 +516,54 @@ public class SubjectActivity extends AppCompatActivity {
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
+    private void openRequestSubjectDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_request_subject_code, null);
+        final EditText etCode;
+        final Button btnSend;
+        final ImageView ivClose;
+
+        etCode = dialogView.findViewById(R.id.et_RequestSubjectCode);
+        btnSend = dialogView.findViewById(R.id.btn_RequestSubjectCodeSend);
+        ivClose = dialogView.findViewById(R.id.iv_RequestSubjectCodeClose);
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.hide();
+            }
+        });
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etCode.getText().toString().isEmpty())
+                    Toasty.warning(context, "Please input subject code.").show();
+                else {
+                    sendRequestToJoin(etCode.getText().toString());
+                    b.hide();
+                }
+            }
+        });
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        getSubjectDetails();
+        if (role.equals(UserRole.Educator()))
+            getEducatorSubjectDetails();
+        else
+            getStudentSubjectDetails();
+
         getSectionDetails();
     }
 }
