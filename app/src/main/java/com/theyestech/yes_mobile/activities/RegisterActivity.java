@@ -21,9 +21,9 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
-import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -39,10 +39,12 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnSave;
 
     private int roleId;
+
     //Firebase
-    FirebaseAuth auth;
-    DatabaseReference reference;
+    private FirebaseAuth auth;
+    private DatabaseReference reference;
     private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,11 +107,11 @@ public class RegisterActivity extends AppCompatActivity {
                 Debugger.logD(str);
                 if (str.equals("success")) {
                     //finish();
-                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+//                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
                     Toasty.success(context, "Saved.").show();
                 } else
                     etEmail.requestFocus();
-                    Toasty.warning(context, str).show();
+                Toasty.warning(context, str).show();
             }
 
             @Override
@@ -121,7 +123,34 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerStudent() {
+        ProgressPopup.showProgress(context);
 
+        RequestParams params = new RequestParams();
+        params.put("s_email_address", etEmail.getText().toString());
+        params.put("s_password", etConfirmPassword.getText().toString());
+
+        HttpProvider.post(context, "controller_student/register_as_student_class.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD(str);
+                if (str.equals("success")) {
+                    //finish();
+//                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+                    Toasty.success(context, "Saved.").show();
+                } else
+                    etEmail.requestFocus();
+
+                Toasty.warning(context, str).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 
     private boolean fieldsAreEmpty() {
@@ -134,13 +163,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Firebase Database
-    private void firebaseRegisterStudent(final String username, String email, String password, final ProgressDialog progressDialog){
+    private void firebaseRegisterStudent(final String username, String email, String password, final ProgressDialog progressDialog) {
         //final UserSessionEducator userSessionEducator = null;
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
@@ -158,7 +187,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     progressDialog.hide();
-                                    if (task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         //openHomeFragment(role);
 //                                        String firebaseUser = FirebaseAuth.getInstance().getCurrentUser().toString();
 //                                        userSessionEducator.setFirebaseToken(firebaseUser);
@@ -179,14 +208,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Firebase Database
-    private void firebaseRegisterEducator(final String email, String password){
+    private void firebaseRegisterEducator(final String email, String password) {
         //final UserSessionEducator userSessionEducator = null;
         Debugger.logD("yawa");
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             //assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
