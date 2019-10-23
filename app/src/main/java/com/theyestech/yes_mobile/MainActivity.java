@@ -13,6 +13,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.activities.StartActivity;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.models.UserEducator;
@@ -82,11 +83,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkStudentSession() {
-
+        if (!UserRole.getRole(context).isEmpty()) {
+            if (UserStudent.getToken(context).isEmpty()) {
+                Intent intent = new Intent(context, StartActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                loginStudent();
+            }
+        } else {
+            Intent intent = new Intent(context, StartActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void loginStudent() {
+        ProgressPopup.showProgress(context);
 
+        RequestParams params = new RequestParams();
+        params.put("login_s_email_address", UserStudent.getEmail(context));
+        params.put("login_s_password", UserStudent.getPassword(context));
+
+        HttpProvider.post(context, "controller_educator/login_as_educator_class.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String result = jsonObject.getString("result");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 
     private void loginEducator() {
