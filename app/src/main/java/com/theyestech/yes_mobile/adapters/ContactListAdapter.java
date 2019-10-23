@@ -29,7 +29,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     public ContactListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
 
-        View view = layoutInflater.inflate(R.layout.contact_list,viewGroup, false);
+        View view = layoutInflater.inflate(R.layout.listrow_contact_list,viewGroup, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
 

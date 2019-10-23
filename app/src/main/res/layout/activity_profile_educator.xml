@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iv_ProfileBack"
+            android:id="@+id/iv_ProfileEducatorBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -33,7 +33,7 @@
             android:textColor="@android:color/primary_text_light_nodisable"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_ProfileBack"
+            app:layout_constraintStart_toEndOf="@+id/iv_ProfileEducatorBack"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/iv_ProfileImage"
+                android:id="@+id/iv_ProfileEducatorImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="16dp"
@@ -65,49 +65,49 @@
                 app:srcCompat="@drawable/ic_educator_profile" />
 
             <ImageView
-                android:id="@+id/iv_ProfileDetails"
+                android:id="@+id/iv_ProfileEducatorDetails"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="24dp"
-                app:layout_constraintEnd_toStartOf="@+id/iv_ProfileSubjects"
+                app:layout_constraintEnd_toStartOf="@+id/iv_ProfileEducatorSubjects"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView"
                 app:srcCompat="@drawable/ic_update" />
 
             <ImageView
-                android:id="@+id/iv_ProfileSubjects"
+                android:id="@+id/iv_ProfileEducatorSubjects"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/iv_ProfileDetails"
+                app:layout_constraintStart_toEndOf="@+id/iv_ProfileEducatorDetails"
                 app:layout_constraintTop_toBottomOf="@+id/cardView"
                 app:srcCompat="@drawable/ic_subject" />
 
             <ImageView
-                android:id="@+id/iv_ProfileSections"
+                android:id="@+id/iv_ProfileEducatorSections"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileDetails"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileDetails"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorDetails"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorDetails"
                 app:layout_constraintTop_toBottomOf="@+id/textView11"
                 app:srcCompat="@drawable/ic_section" />
 
             <ImageView
-                android:id="@+id/iv_ProfileVideos"
+                android:id="@+id/iv_ProfileEducatorVideos"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileSubjects"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileSubjects"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorSubjects"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorSubjects"
                 app:layout_constraintTop_toBottomOf="@+id/textView12"
                 app:srcCompat="@drawable/ic_video" />
 
             <TextView
-                android:id="@+id/tv_ProfileEmail"
+                android:id="@+id/tv_ProfileEducatorEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -115,10 +115,10 @@
                 android:text="marsmylepagapong13@gmail.com"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_ProfileFullname" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_ProfileEducatorFullname" />
 
             <TextView
-                android:id="@+id/tv_ProfileFullname"
+                android:id="@+id/tv_ProfileEducatorFullname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -129,7 +129,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileImage" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorImage" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -137,9 +137,9 @@
                 android:layout_height="wrap_content"
                 android:text="Details"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileDetails"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileDetails"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileDetails" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorDetails"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorDetails"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorDetails" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -147,9 +147,9 @@
                 android:layout_height="wrap_content"
                 android:text="Subjects"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileSubjects"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileSubjects"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileSubjects" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorSubjects"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorSubjects"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorSubjects" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -157,9 +157,9 @@
                 android:layout_height="wrap_content"
                 android:text="Sections"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileSections"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileSections"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileSections" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorSections"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorSections"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorSections" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -167,9 +167,9 @@
                 android:layout_height="wrap_content"
                 android:text="Videos"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileVideos"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileVideos"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileVideos" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorVideos"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorVideos"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorVideos" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cardView"
@@ -180,14 +180,14 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_ProfileEmail">
+                app:layout_constraintTop_toBottomOf="@+id/tv_ProfileEducatorEmail">
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/tv_ProfilePosts"
+                        android:id="@+id/tv_ProfileEducatorPosts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -195,7 +195,7 @@
                         android:textColor="@android:color/primary_text_light_nodisable"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_ProfileSubjects"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_ProfileEducatorSubjects"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -207,12 +207,12 @@
                         android:layout_marginBottom="16dp"
                         android:text="Posts"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_ProfilePosts"
-                        app:layout_constraintStart_toStartOf="@+id/tv_ProfilePosts"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_ProfilePosts" />
+                        app:layout_constraintEnd_toEndOf="@+id/tv_ProfileEducatorPosts"
+                        app:layout_constraintStart_toStartOf="@+id/tv_ProfileEducatorPosts"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_ProfileEducatorPosts" />
 
                     <TextView
-                        android:id="@+id/tv_ProfileSubjects"
+                        android:id="@+id/tv_ProfileEducatorSubjects"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -220,9 +220,9 @@
                         android:textColor="@android:color/primary_text_light_nodisable"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_ProfileSections"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_ProfileEducatorSections"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/tv_ProfilePosts"
+                        app:layout_constraintStart_toEndOf="@+id/tv_ProfileEducatorPosts"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -232,12 +232,12 @@
                         android:layout_marginBottom="16dp"
                         android:text="Subjects"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_ProfileSubjects"
-                        app:layout_constraintStart_toStartOf="@+id/tv_ProfileSubjects"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_ProfileSubjects" />
+                        app:layout_constraintEnd_toEndOf="@+id/tv_ProfileEducatorSubjects"
+                        app:layout_constraintStart_toStartOf="@+id/tv_ProfileEducatorSubjects"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_ProfileEducatorSubjects" />
 
                     <TextView
-                        android:id="@+id/tv_ProfileSections"
+                        android:id="@+id/tv_ProfileEducatorSections"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -247,7 +247,7 @@
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/tv_ProfileSubjects"
+                        app:layout_constraintStart_toEndOf="@+id/tv_ProfileEducatorSubjects"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -257,30 +257,30 @@
                         android:layout_marginBottom="16dp"
                         android:text="Sections"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_ProfileSections"
-                        app:layout_constraintStart_toStartOf="@+id/tv_ProfileSections"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_ProfileSections" />
+                        app:layout_constraintEnd_toEndOf="@+id/tv_ProfileEducatorSections"
+                        app:layout_constraintStart_toStartOf="@+id/tv_ProfileEducatorSections"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_ProfileEducatorSections" />
                 </android.support.constraint.ConstraintLayout>
 
             </android.support.v7.widget.CardView>
 
             <ImageView
-                android:id="@+id/iv_ProfileAssessment"
+                android:id="@+id/iv_ProfileEducatorAssessment"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileSections"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileSections"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorSections"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorSections"
                 app:layout_constraintTop_toBottomOf="@+id/textView13"
                 app:srcCompat="@drawable/ic_assessment" />
 
             <ImageView
-                android:id="@+id/iv_ProfileAnnouncement"
+                android:id="@+id/iv_ProfileEducatorAnnouncement"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileVideos"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileVideos"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorVideos"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorVideos"
                 app:layout_constraintTop_toBottomOf="@+id/textView14"
                 app:srcCompat="@drawable/ic_announcement" />
 
@@ -290,9 +290,9 @@
                 android:layout_height="wrap_content"
                 android:text="Assessment"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileAssessment"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileAssessment"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileAssessment" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorAssessment"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorAssessment"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorAssessment" />
 
             <TextView
                 android:id="@+id/textView16"
@@ -300,17 +300,17 @@
                 android:layout_height="wrap_content"
                 android:text="Announcement"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileAnnouncement"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileAnnouncement"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileAnnouncement" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorAnnouncement"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorAnnouncement"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorAnnouncement" />
 
             <ImageView
-                android:id="@+id/iv_ProfileLogout"
+                android:id="@+id/iv_ProfileEducatorLogout"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileAnnouncement"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileAssessment"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorAnnouncement"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorAssessment"
                 app:layout_constraintTop_toBottomOf="@+id/textView15"
                 app:srcCompat="@drawable/ic_logout" />
 
@@ -322,9 +322,9 @@
                 android:text="Logout"
                 android:textColor="@android:color/primary_text_light_nodisable"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileLogout"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileLogout"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileLogout" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorLogout"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorLogout"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorLogout" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

@@ -20,12 +20,12 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.models.Section;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -94,6 +94,12 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         ivTopics = findViewById(R.id.iv_SubjectDetailsViewTopics);
         ivQuizzes = findViewById(R.id.iv_SubjectDetailsViewQuizzes);
         ivDelete = findViewById(R.id.iv_SubjectDetailsDeleteSubject);
+
+        if (!role.equals(UserRole.Educator())) {
+            ivDetails.setVisibility(View.GONE);
+            ivStudents.setVisibility(View.GONE);
+            ivDelete.setVisibility(View.GONE);
+        }
 
         tvHeader.setText(subject.getTitle());
 
