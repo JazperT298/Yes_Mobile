@@ -20,6 +20,7 @@ public class UserEducator {
     private String subj_major;
     private String current_school;
     private String position;
+    private String firebase_token;
 
     public String getId() {
         return id;
@@ -141,6 +142,14 @@ public class UserEducator {
         this.position = position;
     }
 
+    public String getFirebase_token() {
+        return firebase_token;
+    }
+
+    public void setFirebase_token(String firebase_token) {
+        this.firebase_token = firebase_token;
+    }
+
     public static String getID(Context context)
     {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -231,6 +240,12 @@ public class UserEducator {
         return settings.getString("POSITION", "");
     }
 
+    public static String getFirebaseToken(Context context)
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("FIREBASE_TOKEN", "");
+    }
+
     public boolean saveUserSession(Context context)
     {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -250,6 +265,7 @@ public class UserEducator {
         editor.putString("SUBJECT_MAJOR", subj_major);
         editor.putString("CURRENT_SCHOOL", current_school);
         editor.putString("POSITION", position);
+        editor.putString("FIREBASE_TOKEN", firebase_token);
         return editor.commit();
     }
 

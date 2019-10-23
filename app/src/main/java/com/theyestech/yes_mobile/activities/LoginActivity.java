@@ -239,6 +239,8 @@ public class LoginActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 
+//                    doFirebaseLoginEducator(userEducator);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -326,25 +328,26 @@ public class LoginActivity extends AppCompatActivity {
     }
     //-----------------------------------------Firebase----------------------------------------//
 
-    private void doFirebaseLoginEducator() {
+    private void doFirebaseLoginEducator(final UserEducator userEducator) {
         String txt_email = etEmail.getText().toString();
         String txt_password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
-            Toast.makeText(context, "All fileds are required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "All fields are required.", Toast.LENGTH_SHORT).show();
         } else {
-
             auth.signInWithEmailAndPassword(txt_email, txt_password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 String firebaseUser = FirebaseAuth.getInstance().getUid();
-                                KeyboardHandler.closeKeyboard(view, context);
+
+                                userEducator.setFirebase_token(firebaseUser);
+                                userEducator.saveUserSession(context);
+
                                 Intent intent = new Intent(context, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
-                                //finish();
                             } else {
                                 Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
                             }
