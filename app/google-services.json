@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "53842661601",
-    "firebase_url": "https://yestechmobile-22ede.firebaseio.com",
-    "project_id": "yestechmobile-22ede",
-    "storage_bucket": "yestechmobile-22ede.appspot.com"
+    "project_number": "701742442702",
+    "firebase_url": "https://yesmobile-86b5d.firebaseio.com",
+    "project_id": "yesmobile-86b5d",
+    "storage_bucket": "yesmobile-86b5d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:53842661601:android:8a9483b5382a53a51f27a0",
+        "mobilesdk_app_id": "1:701742442702:android:b78c0acd5eab2d287b489f",
         "android_client_info": {
           "package_name": "com.theyestech.yes_mobile"
         }
       },
       "oauth_client": [
         {
-          "client_id": "53842661601-ndcmo437av2ve4a06bt8ickb8ja5skbo.apps.googleusercontent.com",
+          "client_id": "701742442702-7gh04j69kabl0rken56ju8natemuak7t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theyestech.yes_mobile",
+            "certificate_hash": "79170208db93f7428290aa7d2df1ffdbbb64a385"
+          }
+        },
+        {
+          "client_id": "701742442702-lllevtc6tk26fjquajj0stqdtmcciqhm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC88Y1CZDgpAqLwfNiMg7M-OdhK9ykQ_ds"
+          "current_key": "AIzaSyCBFFYsP2jYmoGCLIpxoS4FSM3h5FC8UrM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "53842661601-ndcmo437av2ve4a06bt8ickb8ja5skbo.apps.googleusercontent.com",
+              "client_id": "701742442702-lllevtc6tk26fjquajj0stqdtmcciqhm.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

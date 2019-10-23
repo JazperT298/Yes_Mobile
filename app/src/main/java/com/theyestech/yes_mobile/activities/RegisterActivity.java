@@ -63,6 +63,8 @@ public class RegisterActivity extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.et_RegisterConfirmPassword);
         btnSave = findViewById(R.id.btn_RegisterSave);
 
+        auth = FirebaseAuth.getInstance();
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +78,8 @@ public class RegisterActivity extends AppCompatActivity {
                     else
                         switch (roleId) {
                             case 1:
-                                registerEducator();
+                                firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+                                //registerEducator();
                                 break;
                             case 2:
                                 registerStudent();
@@ -178,13 +181,14 @@ public class RegisterActivity extends AppCompatActivity {
     //Firebase Database
     private void firebaseRegisterEducator(final String email, String password){
         //final UserSessionEducator userSessionEducator = null;
+        Debugger.logD("yawa");
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             FirebaseUser firebaseUser = auth.getCurrentUser();
-                            assert firebaseUser != null;
+                            //assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
 
                             reference = FirebaseDatabase.getInstance().getReference("Educator").child(userid);
@@ -198,7 +202,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
-                                        progressDialog.hide();
+//                                        progressDialog.hide();
                                         Intent intent = new Intent(context, LoginActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
