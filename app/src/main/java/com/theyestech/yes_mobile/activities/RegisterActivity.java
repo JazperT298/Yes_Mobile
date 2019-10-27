@@ -79,8 +79,8 @@ public class RegisterActivity extends AppCompatActivity {
                     else
                         switch (roleId) {
                             case 1:
-                                firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
-                                //registerEducator();
+                                //firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+                                registerEducator();
                                 break;
                             case 2:
                                 registerStudent();
@@ -105,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD(str);
                 if (!str.contains("exists")) {
-//                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
                     finish();
                     Toasty.success(context, "Successfully registered.").show();
                 } else{
@@ -226,6 +226,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userid);
+                            //hashMap.put("imageURL", "default");
                             hashMap.put("status", "offline");
                             hashMap.put("search", email.toLowerCase());
 
@@ -233,8 +234,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        progressDialog.hide();
                                         Intent intent = new Intent(context, LoginActivity.class);
+                                        intent.putExtra("ROLE_ID", 1);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();

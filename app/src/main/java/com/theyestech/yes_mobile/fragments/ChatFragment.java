@@ -70,18 +70,15 @@ public class ChatFragment extends Fragment {
                 UserEducator user = dataSnapshot.getValue(UserEducator.class);
                 assert user != null;
                 tv_SignIn.setText(user.getFirsname());
-                if (user.getImage().equals("default")){
-                    Glide.with(context)
-                            .load(R.drawable.ic_educator_profile)
-                            .apply(GlideOptions.getOptions())
-                            .into(profile_image);
-                } else {
+//                if (user.getImage().equals("default")){
+//                    profile_image.setImageResource(R.drawable.ic_educator_profile);
+//                } else {
 
                     Glide.with(context)
                             .load(R.drawable.ic_educator_profile)
                             .apply(GlideOptions.getOptions())
                             .into(profile_image);
-                }
+                //}
             }
 
             @Override

@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ContactListAdapter;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
+import com.theyestech.yes_mobile.adapters.UsersEducatorsAdapter;
 import com.theyestech.yes_mobile.models.ContactList;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.UserEducator;
@@ -42,7 +43,7 @@ public class CurrentContactsFragment extends Fragment {
     private String role;
 
 
-//    private EducatorAdapter educatorAdapter;
+    private UsersEducatorsAdapter usersEducatorsAdapter;
     private ArrayList<UserEducator> mEducators;
 
     private StudentsAdapter studentAdapter;
@@ -59,6 +60,14 @@ public class CurrentContactsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        initializeUI();
+        initializeEducatorUI();
+    }
+
     private void initializeUI(){
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -72,7 +81,7 @@ public class CurrentContactsFragment extends Fragment {
 
     private void initializeEducatorUI() {
 
-        mStudents = new ArrayList<>();
+        mEducators = new ArrayList<>();
 
         readAllEducators();
         etSearch = view.findViewById(R.id.etSearch);
@@ -115,8 +124,8 @@ public class CurrentContactsFragment extends Fragment {
                     }
                 }
 
-                studentAdapter = new StudentsAdapter(getContext(), mStudents);
-                recyclerView.setAdapter(studentAdapter);
+                usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), mEducators, false);
+                recyclerView.setAdapter(usersEducatorsAdapter);
             }
 
             @Override
@@ -147,8 +156,8 @@ public class CurrentContactsFragment extends Fragment {
 
                     }
 
-                    studentAdapter = new StudentsAdapter(getContext(), mStudents);
-                    recyclerView.setAdapter(studentAdapter);
+                    usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), mEducators, false);
+                    recyclerView.setAdapter(usersEducatorsAdapter);
                 }
             }
 
