@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
+import com.theyestech.yes_mobile.adapters.UsersEducatorsAdapter;
 import com.theyestech.yes_mobile.models.Chatlist;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.UserEducator;
@@ -45,7 +46,7 @@ public class CurrentChatFragment extends Fragment {
     private ArrayList<UserEducator> mEducator;
     private ArrayList<Student> mStudent;
 
-    //private EducatorAdapter educatorAdapter ;
+    private UsersEducatorsAdapter usersEducatorsAdapter ;
     private StudentsAdapter studentAdapter;
 
     private ArrayList<Chatlist> educatorsCbatList;
@@ -61,6 +62,7 @@ public class CurrentChatFragment extends Fragment {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_current_chat, container, false);
         initializeUI ();
+        getEducatorChatList();
         return view;
     }
 
@@ -122,8 +124,8 @@ public class CurrentChatFragment extends Fragment {
                         }
                     }
                 }
-                studentAdapter = new StudentsAdapter(getContext(), mStudent);
-                recyclerView.setAdapter(studentAdapter);
+                usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), mEducator, true);
+                recyclerView.setAdapter(usersEducatorsAdapter);
             }
 
             @Override

@@ -18,10 +18,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
@@ -47,11 +49,21 @@ public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final UserEducator userEducator = mEducators.get(i);
-        viewHolder.username.setText(userEducator.getEmail_address());
+        viewHolder.username.setText(userEducator.getEmail(mContext));
+//        if (!UserEducator.getFirstname(mContext).equals("")){
+//            viewHolder.username.setText(UserEducator.getFirstname(mContext));
+//        }
+//        else{
+//            viewHolder.username.setText(UserEducator.getEmail(mContext));
+//        }
+
 //        if (userEducator.getImage().equals("default")){
 //            viewHolder.profile_image.setImageResource(R.drawable.yes_logo);
 //        } else {
-            Glide.with(mContext).load(userEducator.getImage()).into(viewHolder.profile_image);
+        Glide.with(mContext)
+                .load(HttpProvider.getProfileDir() + UserEducator.getImage(mContext))
+                .apply(GlideOptions.getOptions())
+                .into(viewHolder.profile_image);
         //}
 
         if (ischat){

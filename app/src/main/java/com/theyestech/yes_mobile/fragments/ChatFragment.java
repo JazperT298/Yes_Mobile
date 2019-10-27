@@ -69,7 +69,11 @@ public class ChatFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserEducator user = dataSnapshot.getValue(UserEducator.class);
                 assert user != null;
-                tv_SignIn.setText(user.getFirsname());
+                if (!UserEducator.getFirstname(context).equals("")){
+                    tv_SignIn.setText(UserEducator.getFirstname(context));
+                } else{
+                    tv_SignIn.setText(UserEducator.getEmail(context));
+                }
 //                if (user.getImage().equals("default")){
 //                    profile_image.setImageResource(R.drawable.ic_educator_profile);
 //                } else {
