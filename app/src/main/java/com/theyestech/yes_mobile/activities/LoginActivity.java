@@ -234,12 +234,9 @@ public class LoginActivity extends AppCompatActivity {
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
                     userRole.saveRole(context);
-
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-
                     doFirebaseLoginEducator(userEducator);
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -329,6 +326,7 @@ public class LoginActivity extends AppCompatActivity {
     //-----------------------------------------Firebase----------------------------------------//
 
     private void doFirebaseLoginEducator(final UserEducator userEducator) {
+        Debugger.logD("FUCK");
         String txt_email = etEmail.getText().toString();
         String txt_password = etPassword.getText().toString();
 
@@ -348,6 +346,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent intent = new Intent(context, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
+                                Debugger.printO(userEducator);
                             } else {
                                 Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
                             }

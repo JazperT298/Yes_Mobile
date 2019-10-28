@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class CurrentContactsFragment extends Fragment {
 
     private View view;
-    private Context cOntext;
+    private Context context;
     private RecyclerView recyclerView;
     private EditText etSearch;
     private ArrayList<ContactList> contactLists;
@@ -57,6 +57,7 @@ public class CurrentContactsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view=  inflater.inflate(R.layout.fragment_current_contacts, container, false);
+        context = getContext();
         return view;
     }
 
@@ -117,8 +118,6 @@ public class CurrentContactsFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     UserEducator user = snapshot.getValue(UserEducator.class);
 
-                    assert user != null;
-                    assert fuser != null;
                     if (!user.getId().equals(fuser.getUid())){
                         mEducators.add(user);
                     }

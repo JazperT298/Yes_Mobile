@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
@@ -211,11 +212,17 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void logoutUser() {
         if (role.equals(UserRole.Educator())) {
+            //Firebase Logout
+            FirebaseAuth.getInstance().signOut();
+
             UserEducator.clearSession(context);
             UserRole.clearRole(context);
             MainActivity mainActivity = new MainActivity();
             mainActivity.checkEducatorSession();
         } else {
+            //Firebase Logout
+            FirebaseAuth.getInstance().signOut();
+
             UserStudent.clearSession(context);
             UserRole.clearRole(context);
             MainActivity mainActivity = new MainActivity();
