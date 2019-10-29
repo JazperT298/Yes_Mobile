@@ -234,12 +234,15 @@ public class LoginActivity extends AppCompatActivity {
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
                     userRole.saveRole(context);
+                    doFirebaseLoginEducator(userEducator);
 
+<<<<<<< HEAD
+=======
 //                    Intent intent = new Intent(context, MainActivity.class);
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    startActivity(intent);
+>>>>>>> master
 
-                    doFirebaseLoginEducator(userEducator);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -329,6 +332,32 @@ public class LoginActivity extends AppCompatActivity {
     //-----------------------------------------Firebase----------------------------------------//
 
     private void doFirebaseLoginEducator(final UserEducator userEducator) {
+<<<<<<< HEAD
+        Debugger.logD("FUCK");
+        String txt_email = etEmail.getText().toString();
+        String txt_password = etPassword.getText().toString();
+
+        if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
+            Toast.makeText(context, "All fields are required.", Toast.LENGTH_SHORT).show();
+        } else {
+            auth.signInWithEmailAndPassword(txt_email, txt_password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                String firebaseUser = FirebaseAuth.getInstance().getUid();
+
+                                userEducator.setFirebase_token(firebaseUser);
+                                userEducator.saveUserSession(context);
+
+                                Intent intent = new Intent(context, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                Debugger.printO(userEducator);
+                            } else {
+                                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
+                            }
+=======
         auth.signInWithEmailAndPassword(userEducator.getEmail_address(), userEducator.getPassword())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -346,6 +375,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toasty.success(context, "Welcome" + userEducator.getFirsname()).show();
                         } else {
                             Toasty.warning(context, "Authentication failed!").show();
+>>>>>>> master
                         }
                     });
         }
