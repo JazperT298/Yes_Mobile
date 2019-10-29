@@ -234,12 +234,15 @@ public class LoginActivity extends AppCompatActivity {
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
                     userRole.saveRole(context);
+                    doFirebaseLoginEducator(userEducator);
 
+<<<<<<< HEAD
+=======
 //                    Intent intent = new Intent(context, MainActivity.class);
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    startActivity(intent);
+>>>>>>> master
 
-                    doFirebaseLoginEducator(userEducator);
 
                 } catch (Exception e) {
                     e.printStackTrace();
