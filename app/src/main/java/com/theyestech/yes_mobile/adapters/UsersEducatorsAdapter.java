@@ -49,7 +49,7 @@ public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final UserEducator userEducator = mEducators.get(i);
-        viewHolder.username.setText(userEducator.getEmail(mContext));
+        viewHolder.username.setText(UserEducator.getEmail(mContext));
 //        if (!UserEducator.getFirstname(mContext).equals("")){
 //            viewHolder.username.setText(UserEducator.getFirstname(mContext));
 //        }

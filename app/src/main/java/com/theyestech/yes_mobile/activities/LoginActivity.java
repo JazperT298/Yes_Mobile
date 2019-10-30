@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     //Firebase
     FirebaseAuth auth;
 
+    UserEducator userEducator = new UserEducator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        auth = FirebaseAuth.getInstance();
+
         etEmail = findViewById(R.id.et_LoginEmail);
         etPassword = findViewById(R.id.et_LoginPassword);
         btnLogin = findViewById(R.id.btn_LoginSignIn);
@@ -231,17 +234,11 @@ public class LoginActivity extends AppCompatActivity {
                     userEducator.setPosition(user_position);
                     userEducator.saveUserSession(context);
 
+                    doFirebaseLoginEducator(userEducator);
+
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
                     userRole.saveRole(context);
-                    doFirebaseLoginEducator(userEducator);
-
-<<<<<<< HEAD
-=======
-//                    Intent intent = new Intent(context, MainActivity.class);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
->>>>>>> master
 
 
                 } catch (Exception e) {
@@ -332,7 +329,7 @@ public class LoginActivity extends AppCompatActivity {
     //-----------------------------------------Firebase----------------------------------------//
 
     private void doFirebaseLoginEducator(final UserEducator userEducator) {
-<<<<<<< HEAD
+
         Debugger.logD("FUCK");
         String txt_email = etEmail.getText().toString();
         String txt_password = etPassword.getText().toString();
@@ -344,7 +341,8 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
+                                Debugger.logD("isSuccessful");
                                 String firebaseUser = FirebaseAuth.getInstance().getUid();
 
                                 userEducator.setFirebase_token(firebaseUser);
@@ -357,25 +355,6 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
                             }
-=======
-        auth.signInWithEmailAndPassword(userEducator.getEmail_address(), userEducator.getPassword())
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            String firebaseUser = FirebaseAuth.getInstance().getUid();
-
-                            userEducator.setFirebase_token(firebaseUser);
-                            userEducator.saveUserSession(context);
-
-                            Intent intent = new Intent(context, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-
-                            Toasty.success(context, "Welcome" + userEducator.getFirsname()).show();
-                        } else {
-                            Toasty.warning(context, "Authentication failed!").show();
->>>>>>> master
                         }
                     });
         }
