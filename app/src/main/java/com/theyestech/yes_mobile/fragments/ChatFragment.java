@@ -42,20 +42,16 @@ public class ChatFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_chat, container, false);
+        context = getContext();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        context = getContext();
-
-        initializeUI();
+        initializesUI();
     }
-
-
-    public void initializeUI(){
+    public void initializesUI(){
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.view_pager);
         profile_image = view.findViewById(R.id.iv_ProfileEducatorImage);
@@ -78,10 +74,10 @@ public class ChatFragment extends Fragment {
 //                    profile_image.setImageResource(R.drawable.ic_educator_profile);
 //                } else {
 
-                    Glide.with(context)
-                            .load(R.drawable.ic_educator_profile)
-                            .apply(GlideOptions.getOptions())
-                            .into(profile_image);
+                Glide.with(context)
+                        .load(R.drawable.ic_educator_profile)
+                        .apply(GlideOptions.getOptions())
+                        .into(profile_image);
                 //}
             }
 
@@ -129,5 +125,8 @@ public class ChatFragment extends Fragment {
 
 
     }
+
+
+
 
 }
