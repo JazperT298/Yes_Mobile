@@ -1,5 +1,6 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -104,11 +105,14 @@ public class RegisterActivity extends AppCompatActivity {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD(str);
                 if (!str.contains("exists")) {
-                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
-                } else {
+                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString(),etEmail.getText().toString());
+                    finish();
+                    Toasty.success(context, "Successfully registered.").show();
+                } else{
                     etEmail.requestFocus();
                     Toasty.warning(context, str).show();
                 }
+
             }
 
             @Override
@@ -133,7 +137,9 @@ public class RegisterActivity extends AppCompatActivity {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD(str);
                 if (str.equals("success")) {
-//                    firebaseRegisterStudent(etEmail.getText().toString(), etPassword.getText().toString());
+                    //finish();
+//                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+                    Toasty.success(context, "Saved.").show();
                 } else
                     etEmail.requestFocus();
 
@@ -158,33 +164,35 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Firebase Database
-    private void firebaseRegisterStudent(final String email, String password) {
-        ProgressPopup.showProgress(context);
-
+    private void firebaseRegisterStudent(final String username, String email, String password, final ProgressDialog progressDialog) {
+        //final UserSessionEducator userSessionEducator = null;
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        ProgressPopup.hideProgress();
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
-                            //assert firebaseUser != null;
+                            assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
 
                             reference = FirebaseDatabase.getInstance().getReference("Student").child(userid);
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userid);
-                            //hashMap.put("imageURL", "default");
+                            hashMap.put("username", username);
+                            hashMap.put("imageURL", "default");
                             hashMap.put("status", "offline");
-                            hashMap.put("search", email.toLowerCase());
+                            hashMap.put("search", username.toLowerCase());
 
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
+                                    progressDialog.hide();
                                     if (task.isSuccessful()) {
+                                        //openHomeFragment(role);
+//                                        String firebaseUser = FirebaseAuth.getInstance().getCurrentUser().toString();
+//                                        userSessionEducator.setFirebaseToken(firebaseUser);
                                         Intent intent = new Intent(context, LoginActivity.class);
-                                        intent.putExtra("ROLE_ID", 2);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();
@@ -193,6 +201,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
+                            progressDialog.hide();
                             Toasty.warning(context, "Email address already exists.").show();
                         }
                     }
@@ -200,7 +209,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Firebase Database
-    private void firebaseRegisterEducator(final String email, String password) {
+    private void firebaseRegisterEducator(final String email, String password, final String gmail) {
         ProgressPopup.showProgress(context);
 
         auth.createUserWithEmailAndPassword(email, password)
@@ -217,7 +226,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userid);
-                            //hashMap.put("imageURL", "default");
+                            hashMap.put("gmail", gmail.toLowerCase());
                             hashMap.put("status", "offline");
                             hashMap.put("search", email.toLowerCase());
 
@@ -225,11 +234,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Intent intent = new Intent(context, LoginActivity.class);
-                                        intent.putExtra("ROLE_ID", 1);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                        finish();
                                         Toasty.success(context, "Successfully registered.").show();
                                     }
                                 }

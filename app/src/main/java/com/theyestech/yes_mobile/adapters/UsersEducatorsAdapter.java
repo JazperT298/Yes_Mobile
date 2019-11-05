@@ -23,6 +23,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
@@ -49,7 +50,8 @@ public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final UserEducator userEducator = mEducators.get(i);
-        viewHolder.username.setText(UserEducator.getEmail(mContext));
+        viewHolder.username.setText(userEducator.getEmail_address());
+        Debugger.logD(" asd " +userEducator.getEmail_address());
 //        if (!UserEducator.getFirstname(mContext).equals("")){
 //            viewHolder.username.setText(UserEducator.getFirstname(mContext));
 //        }
@@ -61,7 +63,7 @@ public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAd
 //            viewHolder.profile_image.setImageResource(R.drawable.yes_logo);
 //        } else {
         Glide.with(mContext)
-                .load(HttpProvider.getProfileDir() + UserEducator.getImage(mContext))
+                .load(R.drawable.ic_educator_profile)
                 .apply(GlideOptions.getOptions())
                 .into(viewHolder.profile_image);
         //}

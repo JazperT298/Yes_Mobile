@@ -24,6 +24,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ViewPagerAdapter;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 public class ChatFragment extends Fragment {
@@ -64,12 +65,15 @@ public class ChatFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserEducator user = dataSnapshot.getValue(UserEducator.class);
+//                assert user != null;
+//                if (!UserEducator.getFirstname(context).equals("")){
+//                    tv_SignIn.setText(UserEducator.getFirstname(context));
+//                } else{
+//                    tv_SignIn.setText(UserEducator.getEmail(context));
+//                }
                 assert user != null;
-                if (!UserEducator.getFirstname(context).equals("")){
-                    tv_SignIn.setText(UserEducator.getFirstname(context));
-                } else{
-                    tv_SignIn.setText(UserEducator.getEmail(context));
-                }
+                tv_SignIn.setText(user.getEmail_address());
+                Debugger.logD("asdd " + user.getEmail_address());
 //                if (user.getImage().equals("default")){
 //                    profile_image.setImageResource(R.drawable.ic_educator_profile);
 //                } else {

@@ -29,6 +29,7 @@ import com.theyestech.yes_mobile.adapters.UsersEducatorsAdapter;
 import com.theyestech.yes_mobile.models.ContactList;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.util.ArrayList;
 
@@ -149,8 +150,10 @@ public class CurrentContactsFragment extends Fragment {
                         UserEducator educator = snapshot.getValue(UserEducator.class);
 
                         assert educator != null;
+                        assert firebaseUser != null;
                         if (!educator.getId().equals(firebaseUser.getUid())) {
                             mEducators.add(educator);
+                            Debugger.logD("educator " + educator);
                         }
 
                     }

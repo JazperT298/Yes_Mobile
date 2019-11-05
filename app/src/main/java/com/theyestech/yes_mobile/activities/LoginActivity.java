@@ -21,12 +21,12 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.KeyboardHandler;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
+import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -115,9 +115,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
-                String str = new String(responseBody, StandardCharsets.UTF_8);
-
                 try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     String result = jsonObject.getString("result");
@@ -127,17 +126,17 @@ public class LoginActivity extends AppCompatActivity {
                     UserEducator userEducator = new UserEducator();
                     userEducator.setId(user_id);
                     userEducator.setToken(user_token);
+                    Debugger.logD(result);
 
-                    getEducatorDetails(userEducator);
+                    if (result.contains("success"))
+                        getEducatorDetails(userEducator);
+                    else
+                        Toasty.warning(context, result).show();
 
                 } catch (Exception e) {
                     e.printStackTrace();
                     Debugger.logD(e.toString());
                 }
-
-                if (!str.contains("success"))
-                    Toasty.warning(context, "Incorrect username or password.").show();
-
             }
 
             @Override
@@ -202,7 +201,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
-
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
@@ -234,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                     userEducator.setSubj_major(user_subj_major);
                     userEducator.setCurrent_school(user_current_school);
                     userEducator.setPosition(user_position);
-//                    userEducator.saveUserSession(context);
+                    userEducator.saveUserSession(context);
 
                     doFirebaseLoginEducator(userEducator);
 
@@ -242,7 +240,7 @@ public class LoginActivity extends AppCompatActivity {
                     userRole.setUserRole(UserRole.Educator());
                     userRole.saveRole(context);
 
-
+                    Debugger.logD("email " + user_email_address);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -267,7 +265,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
-
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
@@ -305,9 +302,6 @@ public class LoginActivity extends AppCompatActivity {
                     userRole.setUserRole(UserRole.Student());
                     userRole.saveRole(context);
 
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -329,13 +323,12 @@ public class LoginActivity extends AppCompatActivity {
         else
             return false;
     }
-
     //-----------------------------------------Firebase----------------------------------------//
 
     private void doFirebaseLoginEducator(final UserEducator userEducator) {
 
         Debugger.logD("FUCK");
-        String txt_email = etEmail.getText().toString();
+        final String txt_email = etEmail.getText().toString();
         String txt_password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
@@ -349,6 +342,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Debugger.logD("isSuccessful");
                                 String firebaseUser = FirebaseAuth.getInstance().getUid();
 
+                                userEducator.setEmail_address(txt_email);
                                 userEducator.setFirebase_token(firebaseUser);
                                 userEducator.saveUserSession(context);
 
@@ -368,7 +362,7 @@ public class LoginActivity extends AppCompatActivity {
         String txt_email = etEmail.getText().toString();
         String txt_password = etPassword.getText().toString();
 
-        if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
+        if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
             Toast.makeText(context, "All fileds are required", Toast.LENGTH_SHORT).show();
         } else {
 
@@ -376,7 +370,7 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
+                            if (task.isSuccessful()){
                                 String firebaseUser = FirebaseAuth.getInstance().getUid();
                                 KeyboardHandler.closeKeyboard(view, context);
                                 Toasty.success(context, "Success.").show();
