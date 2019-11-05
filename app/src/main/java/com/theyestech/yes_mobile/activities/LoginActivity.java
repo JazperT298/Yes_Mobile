@@ -240,7 +240,7 @@ public class LoginActivity extends AppCompatActivity {
                     userRole.setUserRole(UserRole.Educator());
                     userRole.saveRole(context);
 
-
+                    Debugger.logD("email " + user_email_address);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -302,9 +302,6 @@ public class LoginActivity extends AppCompatActivity {
                     userRole.setUserRole(UserRole.Student());
                     userRole.saveRole(context);
 
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -331,7 +328,7 @@ public class LoginActivity extends AppCompatActivity {
     private void doFirebaseLoginEducator(final UserEducator userEducator) {
 
         Debugger.logD("FUCK");
-        String txt_email = etEmail.getText().toString();
+        final String txt_email = etEmail.getText().toString();
         String txt_password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
@@ -345,6 +342,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Debugger.logD("isSuccessful");
                                 String firebaseUser = FirebaseAuth.getInstance().getUid();
 
+                                userEducator.setEmail_address(txt_email);
                                 userEducator.setFirebase_token(firebaseUser);
                                 userEducator.saveUserSession(context);
 

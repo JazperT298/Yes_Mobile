@@ -105,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD(str);
                 if (!str.contains("exists")) {
-                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString(),etEmail.getText().toString());
                     finish();
                     Toasty.success(context, "Successfully registered.").show();
                 } else{
@@ -209,7 +209,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Firebase Database
-    private void firebaseRegisterEducator(final String email, String password) {
+    private void firebaseRegisterEducator(final String email, String password, final String gmail) {
         ProgressPopup.showProgress(context);
 
         auth.createUserWithEmailAndPassword(email, password)
@@ -226,7 +226,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userid);
-                            //hashMap.put("imageURL", "default");
+                            hashMap.put("gmail", gmail.toLowerCase());
                             hashMap.put("status", "offline");
                             hashMap.put("search", email.toLowerCase());
 
@@ -234,11 +234,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Intent intent = new Intent(context, LoginActivity.class);
-                                        intent.putExtra("ROLE_ID", 1);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                        finish();
                                         Toasty.success(context, "Successfully registered.").show();
                                     }
                                 }

@@ -20,7 +20,8 @@ public class HttpProvider {
 //    private static final String BASE_URL = "http://172.16.61.12/yes_tech/controllerClass/";
 
     //LIVE IP
-//   private static final String BASE_URL = "http://theyestech.com/controllerClass/";
+   //private static final String BASE_URL = "http://theyestech.com/controllerClass/";
+
 
     //MICHAEL IP
 //    private static final String BASE_URL = "http://192.168.1.111/LearningApplication/yes_tech/controllerClass/";

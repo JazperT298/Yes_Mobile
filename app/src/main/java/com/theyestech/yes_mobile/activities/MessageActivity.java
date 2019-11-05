@@ -105,7 +105,7 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // and this
-                startActivity(new Intent(MessageActivity.this, ChatFragment.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                //startActivity(new Intent(MessageActivity.this, ChatFragment.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }
         });
@@ -159,7 +159,7 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserEducator educator = dataSnapshot.getValue(UserEducator.class);
-                username.setText(educator.getFirsname());
+                username.setText(educator.getEmail_address());
                 username.setTextColor(Color.parseColor("#212121"));
 //                if (educator.getImage().equals("default")){
 //                    profile_image.setImageResource(R.mipmap.ic_launcher);
@@ -278,6 +278,7 @@ public class MessageActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                                     if (response.code() == 200){
+                                        assert response.body() != null;
                                         if (response.body().success != 1){
 //                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
                                         }
@@ -534,8 +535,11 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        statusEducator("online");
-        statusStudent("online");
+        if (role.equals("EDUCATOR")){
+            statusEducator("online");
+        }else{
+            statusStudent("online");
+        }
         currentUser(userid);
     }
 
@@ -543,8 +547,11 @@ public class MessageActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         reference.removeEventListener(seenListener);
-        statusEducator("offline");
-        statusStudent("offline");
+        if (role.equals("EDUCATOR")){
+            statusEducator("offline");
+        }else{
+            statusStudent("offline");
+        }
         currentUser("none");
     }
 }
