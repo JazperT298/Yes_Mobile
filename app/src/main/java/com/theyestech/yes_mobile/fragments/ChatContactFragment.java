@@ -27,12 +27,11 @@ import com.theyestech.yes_mobile.adapters.StudentsAdapter;
 import com.theyestech.yes_mobile.adapters.UsersEducatorsAdapter;
 import com.theyestech.yes_mobile.models.ChatContactList;
 import com.theyestech.yes_mobile.models.Student;
-import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.util.ArrayList;
 
-public class CurrentContactsFragment extends Fragment {
+public class ChatContactFragment extends Fragment {
 
     private View view;
     private Context context;
@@ -48,7 +47,7 @@ public class CurrentContactsFragment extends Fragment {
     private StudentsAdapter studentAdapter;
     private ArrayList<Student> mStudents;
 
-    public CurrentContactsFragment() {
+    public ChatContactFragment() {
         // Required empty public constructor
     }
 
@@ -56,7 +55,7 @@ public class CurrentContactsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_current_contacts, container, false);
+        view = inflater.inflate(R.layout.fragment_chat_contact, container, false);
         context = getContext();
         return view;
     }

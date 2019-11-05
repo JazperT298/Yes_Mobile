@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,7 +25,6 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ViewPagerAdapter;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -36,7 +34,6 @@ public class ChatFragment extends Fragment {
     private View view;
 
     private Context context;
-    private ImageView profile_image;
     private TextView tv_SignIn;
 
     private TabLayout tabLayout;
@@ -70,15 +67,9 @@ public class ChatFragment extends Fragment {
     public void initializesUI(){
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.view_pager);
-        profile_image = view.findViewById(R.id.iv_ProfileEducatorImage);
         tv_SignIn = view.findViewById(R.id.tv_SignIn);
 
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-
-        Glide.with(context)
-                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
-                .apply(GlideOptions.getOptions())
-                .into(profile_image);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Educator").child(firebaseUser.getUid());
@@ -125,12 +116,12 @@ public class ChatFragment extends Fragment {
                 }
 
                 if (unread == 0){
-                    viewPagerAdapter.addFragment(new CurrentChatFragment(), "Conversation");
+                    viewPagerAdapter.addFragment(new ChatConversationFragment(), "Conversation");
                 } else {
-                    viewPagerAdapter.addFragment(new CurrentChatFragment(), "("+unread+") Conversation");
+                    viewPagerAdapter.addFragment(new ChatConversationFragment(), "("+unread+") Conversation");
                 }
 
-                viewPagerAdapter.addFragment(new CurrentContactsFragment(), "Contacts");
+                viewPagerAdapter.addFragment(new ChatContactFragment(), "Contacts");
                 viewPager.setAdapter(viewPagerAdapter);
                 tabLayout.setupWithViewPager(viewPager);
             }

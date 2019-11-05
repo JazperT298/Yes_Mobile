@@ -26,18 +26,20 @@ import com.theyestech.yes_mobile.adapters.UsersEducatorsAdapter;
 import com.theyestech.yes_mobile.models.ChatContactList;
 import com.theyestech.yes_mobile.models.Chatlist;
 import com.theyestech.yes_mobile.models.Student;
-import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.notifications.Token;
+import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.util.ArrayList;
 
 
-public class CurrentChatFragment extends Fragment {
+public class ChatConversationFragment extends Fragment {
     private View view;
     private Context context;
     private EditText etSearch;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private String role;
 
     //Firebase
     FirebaseUser fuser;
@@ -51,7 +53,7 @@ public class CurrentChatFragment extends Fragment {
 
     private ArrayList<Chatlist> educatorsCbatList;
     private ArrayList<Chatlist> studentCbatList;
-    public CurrentChatFragment() {
+    public ChatConversationFragment() {
         // Required empty public constructor
     }
 
@@ -60,9 +62,15 @@ public class CurrentChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_current_chat, container, false);
+        view =  inflater.inflate(R.layout.fragment_chat_conversation, container, false);
         initializeUI ();
+
+        context = getContext();
+
+        role = UserRole.getRole(context);
+
         getEducatorChatList();
+
         return view;
     }
 
@@ -74,6 +82,14 @@ public class CurrentChatFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         swipeRefreshLayout.setRefreshing(true);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (role.equals(UserRole.Educator()))
+                    getEducatorChatList();
+            }
+        });
     }
 
     private void getEducatorChatList() {
