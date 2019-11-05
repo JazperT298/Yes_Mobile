@@ -33,6 +33,10 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
     private ArrayList<Topic> topicArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
+    private int[] imageArray;
+    private int currentIndex = 0;
+    private int endIndex;
+
     public TopicsAdapter(Context context, ArrayList<Topic> topicArrayList) {
         this.context = context;
         this.topicArrayList = topicArrayList;
@@ -69,16 +73,20 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
         viewHolder.constraintYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewHolder.ivYes.setImageResource(R.drawable.ic_yes_up);
 
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Do something here
-                        viewHolder.ivYes.setImageResource(R.drawable.ic_yes_selected);
-                        viewHolder.tvYes.setTextColor(context.getResources().getColor(R.color.colorAccent));
-                    }
-                }, 500);
+                imageArray = new int[8];
+                imageArray[0] = R.drawable.ic_yes_02;
+                imageArray[1] = R.drawable.ic_yes_03;
+                imageArray[2] = R.drawable.ic_yes_04;
+                imageArray[3] = R.drawable.ic_yes_05;
+                imageArray[4] = R.drawable.ic_yes_06;
+                imageArray[5] = R.drawable.ic_yes_07;
+                imageArray[6] = R.drawable.ic_yes_08;
+                imageArray[7] = R.drawable.ic_yes_09;
+
+                endIndex = 7;
+
+                nextImage(viewHolder.ivImage);
             }
         });
 
@@ -135,5 +143,19 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
 
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
+    }
+
+    private void nextImage(final ImageView imageView){
+        imageView.setImageResource(imageArray[currentIndex]);
+        currentIndex++;
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something here
+                if (currentIndex < endIndex) {
+                    nextImage(imageView);
+                }
+            }
+        }, 1000);
     }
 }

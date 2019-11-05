@@ -22,18 +22,17 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.ChatContactList;
-import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
-public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAdapter.ViewHolder>{
+public class ChatConversationAndContactAdapter extends RecyclerView.Adapter<ChatConversationAndContactAdapter.ViewHolder>{
     private Context mContext;
     private ArrayList<ChatContactList> chatContactListArrayList;
     private boolean ischat;
 
     String theLastMessage;
-    public UsersEducatorsAdapter(Context context, ArrayList<ChatContactList> chatContactListArrayList, boolean ischats){
+    public ChatConversationAndContactAdapter(Context context, ArrayList<ChatContactList> chatContactListArrayList, boolean ischats){
         this.chatContactListArrayList = chatContactListArrayList;
         mContext = context;
         ischat = ischats;

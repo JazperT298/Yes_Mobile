@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,20 +20,22 @@ import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.NewsfeedCommentActivity;
-import com.theyestech.yes_mobile.activities.SubjectTopicsCommentActivity;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
-public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHolder>{
+public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHolder> {
 
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Newsfeed> newsfeedArrayList;
     private OnClickRecyclerView onClickRecyclerView;
+
+    private int[] imageArray;
+    private int currentIndex = 0;
+    private int endIndex;
 
     public NewsfeedAdapter(Context context, ArrayList<Newsfeed> newsfeedArrayList) {
         this.context = context;
@@ -59,7 +60,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         viewHolder.tvDateTime.setText(newsfeed.getNf_date());
         viewHolder.tvDetails.setText(newsfeed.getNf_details());
 
-        if (newsfeed.getNf_filetype().equals("video")){
+        if (newsfeed.getNf_filetype().equals("video")) {
             viewHolder.videoView.setVideoURI(Uri.parse(HttpProvider.getNewsfeedDir() + newsfeed.getNf_files()));
             viewHolder.videoView.setMediaController(new MediaController(context));
 //            viewHolder.videoView.start();
@@ -90,16 +91,20 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         viewHolder.constraintYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewHolder.ivYes.setImageResource(R.drawable.ic_yes_up);
 
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Do something here
-                        viewHolder.ivYes.setImageResource(R.drawable.ic_yes_selected);
-                        viewHolder.tvYes.setTextColor(context.getResources().getColor(R.color.colorAccent));
-                    }
-                }, 500);
+                imageArray = new int[8];
+                imageArray[0] = R.drawable.ic_yes_02;
+                imageArray[1] = R.drawable.ic_yes_03;
+                imageArray[2] = R.drawable.ic_yes_04;
+                imageArray[3] = R.drawable.ic_yes_05;
+                imageArray[4] = R.drawable.ic_yes_06;
+                imageArray[5] = R.drawable.ic_yes_07;
+                imageArray[6] = R.drawable.ic_yes_08;
+                imageArray[7] = R.drawable.ic_yes_09;
+
+                endIndex = 7;
+
+                nextImage(viewHolder.ivImage);
             }
         });
 
@@ -152,5 +157,19 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
 
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
+    }
+
+    private void nextImage(final ImageView imageView){
+        imageView.setImageResource(imageArray[currentIndex]);
+        currentIndex++;
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something here
+                if (currentIndex < endIndex) {
+                    nextImage(imageView);
+                }
+            }
+        }, 1000);
     }
 }

@@ -26,8 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.MessageAdapter;
-import com.theyestech.yes_mobile.fragments.ChatFragment;
+import com.theyestech.yes_mobile.adapters.ChatMessageAdapter;
 import com.theyestech.yes_mobile.interfaces.APIService;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.Student;
@@ -56,7 +55,7 @@ public class MessageActivity extends AppCompatActivity {
     private String role;
 
     //Array, Adapter, Variables
-    private MessageAdapter messageAdapter;
+    private ChatMessageAdapter messageAdapter;
     private List<Chat> mchat;
     private String userid;
 
@@ -315,7 +314,7 @@ public class MessageActivity extends AppCompatActivity {
                         mchat.add(chat);
                     }
 
-                    messageAdapter = new MessageAdapter(MessageActivity.this, mchat, imageurl);
+                    messageAdapter = new ChatMessageAdapter(MessageActivity.this, mchat, imageurl);
                     recyclerView.setAdapter(messageAdapter);
                 }
             }
@@ -503,7 +502,7 @@ public class MessageActivity extends AppCompatActivity {
                         mchat.add(chat);
                     }
 
-                    messageAdapter = new MessageAdapter(MessageActivity.this, mchat, imageurl);
+                    messageAdapter = new ChatMessageAdapter(MessageActivity.this, mchat, imageurl);
                     recyclerView.setAdapter(messageAdapter);
                 }
             }

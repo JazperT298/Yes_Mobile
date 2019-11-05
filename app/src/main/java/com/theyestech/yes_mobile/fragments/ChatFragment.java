@@ -9,10 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,12 +18,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.ViewPagerAdapter;
+import com.theyestech.yes_mobile.adapters.ChatViewPagerAdapter;
 import com.theyestech.yes_mobile.models.Chat;
-import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
@@ -38,7 +33,7 @@ public class ChatFragment extends Fragment {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ViewPagerAdapter viewPagerAdapter;
+    private ChatViewPagerAdapter viewPagerAdapter;
 
     private String role;
 
@@ -69,7 +64,7 @@ public class ChatFragment extends Fragment {
         viewPager = view.findViewById(R.id.view_pager);
         tv_SignIn = view.findViewById(R.id.tv_SignIn);
 
-        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+        viewPagerAdapter = new ChatViewPagerAdapter(getChildFragmentManager());
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Educator").child(firebaseUser.getUid());

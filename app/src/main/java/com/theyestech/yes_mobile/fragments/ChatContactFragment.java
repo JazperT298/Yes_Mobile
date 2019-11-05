@@ -22,9 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.ContactListAdapter;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
-import com.theyestech.yes_mobile.adapters.UsersEducatorsAdapter;
+import com.theyestech.yes_mobile.adapters.ChatConversationAndContactAdapter;
 import com.theyestech.yes_mobile.models.ChatContactList;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.utils.Debugger;
@@ -37,11 +36,10 @@ public class ChatContactFragment extends Fragment {
     private Context context;
     private RecyclerView recyclerView;
     private EditText etSearch;
-    private ContactListAdapter contactListAdapter;
     private String role;
 
 
-    private UsersEducatorsAdapter usersEducatorsAdapter;
+    private ChatConversationAndContactAdapter usersEducatorsAdapter;
     private ArrayList<ChatContactList> chatContactListArrayList;
 
     private StudentsAdapter studentAdapter;
@@ -123,7 +121,7 @@ public class ChatContactFragment extends Fragment {
                     }
                 }
 
-                usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), chatContactListArrayList, false);
+                usersEducatorsAdapter = new ChatConversationAndContactAdapter(getContext(), chatContactListArrayList, false);
                 recyclerView.setAdapter(usersEducatorsAdapter);
             }
 
@@ -157,7 +155,7 @@ public class ChatContactFragment extends Fragment {
 
                     }
 
-                    usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), chatContactListArrayList, false);
+                    usersEducatorsAdapter = new ChatConversationAndContactAdapter(getContext(), chatContactListArrayList, false);
                     recyclerView.setAdapter(usersEducatorsAdapter);
                 }
             }

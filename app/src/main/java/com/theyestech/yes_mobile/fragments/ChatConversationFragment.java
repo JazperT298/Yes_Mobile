@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
-import com.theyestech.yes_mobile.adapters.UsersEducatorsAdapter;
+import com.theyestech.yes_mobile.adapters.ChatConversationAndContactAdapter;
 import com.theyestech.yes_mobile.models.ChatContactList;
 import com.theyestech.yes_mobile.models.Chatlist;
 import com.theyestech.yes_mobile.models.Student;
@@ -48,7 +48,7 @@ public class ChatConversationFragment extends Fragment {
     private ArrayList<ChatContactList> chatContactListArrayList;
     private ArrayList<Student> mStudent;
 
-    private UsersEducatorsAdapter usersEducatorsAdapter ;
+    private ChatConversationAndContactAdapter usersEducatorsAdapter ;
     private StudentsAdapter studentAdapter;
 
     private ArrayList<Chatlist> educatorsCbatList;
@@ -141,7 +141,7 @@ public class ChatConversationFragment extends Fragment {
                         }
                     }
                 }
-                usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), chatContactListArrayList, true);
+                usersEducatorsAdapter = new ChatConversationAndContactAdapter(getContext(), chatContactListArrayList, true);
                 recyclerView.setAdapter(usersEducatorsAdapter);
             }
 
