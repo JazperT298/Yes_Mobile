@@ -24,13 +24,13 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.QuizzesAdapter;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Quiz;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -73,8 +73,8 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
         subject = getIntent().getParcelableExtra("SUBJECT");
         Debugger.logD("SUBJECT QUIZ: " + subject.getId());
 
-        sType.add("Multiple Choice");
-        sType.add("True or False");
+        sType.add("Multiple");
+        sType.add("TrueOrFalse");
         sType.add("Enumeration");
         sType.add("Identification");
 
@@ -132,6 +132,8 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                 floatingActionButton.setEnabled(true);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
+                Debugger.logD(str);
+
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
 
@@ -148,6 +150,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         String quiz_type = jsonObject.getString("quiz_type");
                         String quiz_item = jsonObject.getString("quiz_item");
                         String quiz_time = jsonObject.getString("quiz_time");
+                        String quiz_image = jsonObject.getString("image");
 
                         Quiz quiz = new Quiz();
                         quiz.setQuiz_id(quiz_id);
@@ -157,6 +160,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         quiz.setQuiz_type(quiz_type);
                         quiz.setQuiz_item(quiz_item);
                         quiz.setQuiz_time(quiz_time);
+                        quiz.setQuiz_image(quiz_image.substring(1));
 
                         quizArrayList.add(quiz);
                     }
@@ -167,10 +171,17 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                     quizzesAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            selectedQuiz = quizArrayList.get(position);
-                            Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
-                            intent.putExtra("QUIZ", selectedQuiz);
-                            startActivity(intent);
+                            if (role.equals(UserRole.Educator())) {
+                                selectedQuiz = quizArrayList.get(position);
+                                Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
+                                intent.putExtra("QUIZ", selectedQuiz);
+                                startActivity(intent);
+                            } else {
+                                selectedQuiz = quizArrayList.get(position);
+                                Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
+                                intent.putExtra("QUIZ", selectedQuiz);
+                                startActivity(intent);
+                            }
                         }
                     });
 
@@ -206,8 +217,10 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
+
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
                 try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     String quiz_id = jsonObject.getString("quiz_id");
@@ -225,10 +238,11 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
 
                     } else
                         Toasty.warning(context, "Failed").show();
+
                     getQuizzesDetails();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Debugger.logD(e.toString());
+                    Debugger.logD("ERROR: " + e.toString());
                 }
             }
 
@@ -257,7 +271,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
         btnSave = dialogView.findViewById(R.id.btn_AddQuizSave);
         ivClose = dialogView.findViewById(R.id.iv_AddQuizClose);
 
-        type = "Multiple Choice";
+        type = "Multiple";
         spType.setItems(sType);
         spType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override

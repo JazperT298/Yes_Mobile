@@ -56,4 +56,8 @@ public class HttpProvider {
         return BASE_URL.replace("controllerClass/", "topic-files/");
     }
 
+    public static String getQuizDir() {
+        return BASE_URL.replace("controllerClass/", "");
+    }
+
 }

@@ -46,7 +46,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
     private String role;
 
     private ImageView ivBack, ivDetails, ivStudents, ivTopics, ivQuizzes, ivDelete;
-    private TextView tvHeader;
+    private TextView tvHeader, tvDetails, tvStudents, tvDelete;
 
     private EditText etName, etDescription;
     private MaterialSpinner spSection, spLevel, spSemester;
@@ -88,6 +88,9 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
     private void initializeUI() {
         tvHeader = findViewById(R.id.tv_SubjectDetailsSHeader);
+        tvDelete = findViewById(R.id.tv_SubjectDetailsDeleteSubject);
+        tvDetails = findViewById(R.id.tv_SubjectDetailsViewDetails);
+        tvStudents = findViewById(R.id.tv_SubjectDetailsViewStudents);
         ivBack = findViewById(R.id.iv_SubjectDetailsBack);
         ivDetails = findViewById(R.id.iv_SubjectDetailsViewDetails);
         ivStudents = findViewById(R.id.iv_SubjectDetailsViewStudents);
@@ -99,9 +102,12 @@ public class SubjectDetailsActivity extends AppCompatActivity {
             ivDetails.setVisibility(View.GONE);
             ivStudents.setVisibility(View.GONE);
             ivDelete.setVisibility(View.GONE);
+            tvDetails.setVisibility(View.GONE);
+            tvStudents.setVisibility(View.GONE);
+            tvDelete.setVisibility(View.GONE);
         }
 
-        tvHeader.setText(subject.getTitle());
+        tvHeader.setText(subject.getTitle() + " - " + subject.getCode());
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override

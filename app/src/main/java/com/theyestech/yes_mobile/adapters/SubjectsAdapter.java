@@ -49,9 +49,8 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
         if(subject.getImage().length() > 5){
             Glide.with(context)
                     .load(HttpProvider.getSubjectDir() + subject.getImage())
-                    .into(viewHolder.ivImage);
-        }
-
+                .into(viewHolder.ivImage);
+    }
     }
 
     @Override

@@ -287,6 +287,7 @@ public class SubjectActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Debugger.logD(e.toString());
                 }
             }
 
@@ -341,25 +342,20 @@ public class SubjectActivity extends AppCompatActivity {
         params.put("stud_token", UserStudent.getToken(context));
         params.put("stud_id", UserStudent.getID(context));
         params.put("subj_code", subjectCode);
+        params.put("subj_id", "");
+        Debugger.logD(UserStudent.getID(context));
 
         HttpProvider.post(context, "controller_student/request_join_subject.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
-                try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
-                    JSONArray jsonArray = new JSONArray(str);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    String result = jsonObject.getString("result");
-                    Debugger.logD(str);
-                    if (result.contains("success")) {
-                        Toasty.success(context, "Saved.").show();
-                    } else
-                        Toasty.warning(context, result).show();
-                    getSectionDetails();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                if (str.contains("success"))
+                    Toasty.success(context, "Request to join sent.").show();
+                else
+                    Toasty.success(context, str).show();
             }
 
             @Override

@@ -12,6 +12,7 @@ public class Quiz implements Parcelable {
     private String quiz_type;
     private String quiz_item;
     private String quiz_time;
+    private String quiz_image;
 
     public Quiz() {
 
@@ -25,6 +26,7 @@ public class Quiz implements Parcelable {
         quiz_type = in.readString();
         quiz_item = in.readString();
         quiz_time = in.readString();
+        quiz_image = in.readString();
     }
 
     public static final Creator<Quiz> CREATOR = new Creator<Quiz>() {
@@ -95,6 +97,14 @@ public class Quiz implements Parcelable {
         this.quiz_time = quiz_time;
     }
 
+    public String getQuiz_image() {
+        return quiz_image;
+    }
+
+    public void setQuiz_image(String quiz_image) {
+        this.quiz_image = quiz_image;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -109,5 +119,6 @@ public class Quiz implements Parcelable {
         dest.writeString(quiz_type);
         dest.writeString(quiz_item);
         dest.writeString(quiz_time);
+        dest.writeString(quiz_image);
     }
 }

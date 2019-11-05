@@ -121,10 +121,10 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 isEdit = false;
                 switch (quizType) {
-                    case "Multiple Choice":
+                    case "Multiple":
                         openAddEditMultipleChoiceDialog();
                         break;
-                    case "True or False":
+                    case "TrueOrFalse":
                         openAddEditTrueOrFalseDialog();
                         break;
                 }
@@ -142,12 +142,14 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         params.put("quiz_id", quiz.getQuiz_id());
         params.put("user_id", UserEducator.getID(context));
 
-        HttpProvider.post(context, "controller_educator/GetQuestionsAndAnswers.php", params, new AsyncHttpResponseHandler() {
+        HttpProvider.post(context, "controller_global/GetQuestionsAndAnswers.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
                 floatingActionButton.setEnabled(true);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                Debugger.logD(str);
 
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);

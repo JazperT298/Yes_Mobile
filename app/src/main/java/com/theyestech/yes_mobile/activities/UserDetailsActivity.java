@@ -105,6 +105,8 @@ public class UserDetailsActivity extends AppCompatActivity {
         btnEditSave = findViewById(R.id.btn_UserDetailsEditSave);
         btnCancel = findViewById(R.id.btn_UserDetailsCancel);
 
+        etEmail.setEnabled(false);
+
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -284,7 +286,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         userEducator.setLastname(etLastname.getText().toString());
         userEducator.setSuffix(etSuffix.getText().toString());
         userEducator.setEmail_address(etEmail.getText().toString());
-        userEducator.setContact_number(etEmail.getText().toString());
+        userEducator.setContact_number(etContactnumber.getText().toString());
         userEducator.setGender(gender);
         userEducator.setImage(UserEducator.getImage(context));
         userEducator.setEducational_attainment(UserEducator.getEducationalAttainment(context));
@@ -306,7 +308,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         userEducator.setLastname(etLastname.getText().toString());
         userEducator.setSuffix(etSuffix.getText().toString());
         userEducator.setEmail_address(etEmail.getText().toString());
-        userEducator.setContact_number(etEmail.getText().toString());
+        userEducator.setContact_number(etContactnumber.getText().toString());
         userEducator.setGender(gender);
         userEducator.setImage(UserEducator.getImage(context));
         userEducator.setEducational_attainment(UserEducator.getEducationalAttainment(context));
@@ -377,7 +379,6 @@ public class UserDetailsActivity extends AppCompatActivity {
         etMiddlename.setEnabled(enable);
         etLastname.setEnabled(enable);
         etSuffix.setEnabled(enable);
-        etEmail.setEnabled(enable);
         etContactnumber.setEnabled(enable);
         rbMale.setEnabled(enable);
         rbFemale.setEnabled(enable);

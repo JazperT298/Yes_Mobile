@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Quiz;
+import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.util.ArrayList;
 
@@ -43,6 +46,12 @@ public class QuizzesAdapter extends RecyclerView.Adapter<QuizzesAdapter.ViewHold
         Quiz quiz = quizArrayList.get(i);
 
         viewHolder.tvTitle.setText(quiz.getQuiz_title());
+
+        Debugger.logD(quiz.getQuiz_image());
+
+        Glide.with(context)
+                .load(HttpProvider.getQuizDir() + quiz.getQuiz_image())
+                .into(viewHolder.ivImage);
 
     }
 

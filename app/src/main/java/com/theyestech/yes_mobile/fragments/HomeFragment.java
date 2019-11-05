@@ -23,6 +23,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.NewNewsfeedActivity;
 import com.theyestech.yes_mobile.activities.ProfileActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
@@ -111,7 +112,7 @@ public class HomeFragment extends Fragment {
         if (role.equals(UserRole.Educator()))
             setEducatorHeader();
         else
-            setStudentHeador();
+            setStudentHeader();
     }
 
     private void setEducatorHeader() {
@@ -126,8 +127,16 @@ public class HomeFragment extends Fragment {
                 .into(ivProfile);
     }
 
-    private void setStudentHeador() {
+    private void setStudentHeader() {
+        if (!UserStudent.getFirstname(context).equals(""))
+            tvFirstname.setText(UserStudent.getFirstname(context));
+        else
+            tvFirstname.setText(UserStudent.getEmail(context));
 
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(ivProfile);
     }
 
     private void getEducatorNewsfeedDetails() {

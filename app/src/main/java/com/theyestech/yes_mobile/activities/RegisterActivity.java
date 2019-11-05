@@ -106,8 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
                 Debugger.logD(str);
                 if (!str.contains("exists")) {
                     firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString(),etEmail.getText().toString());
-                    finish();
-                    Toasty.success(context, "Successfully registered.").show();
+//                    finish();
+//                    Toasty.success(context, "Successfully registered.").show();
                 } else{
                     etEmail.requestFocus();
                     Toasty.warning(context, str).show();
@@ -235,6 +235,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toasty.success(context, "Successfully registered.").show();
+                                        finish();
                                     }
                                 }
                             });

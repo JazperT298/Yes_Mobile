@@ -115,27 +115,39 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
-                try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
-                    JSONArray jsonArray = new JSONArray(str);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    String result = jsonObject.getString("result");
-                    String user_id = jsonObject.getString("user_id");
-                    String user_token = jsonObject.getString("user_token");
 
-                    UserEducator userEducator = new UserEducator();
-                    userEducator.setId(user_id);
-                    userEducator.setToken(user_token);
-                    Debugger.logD(result);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
 
-                    if (result.contains("success"))
+                if (str.contains("success")){
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        String result = jsonObject.getString("result");
+                        String user_id = jsonObject.getString("user_id");
+                        String user_token = jsonObject.getString("user_token");
+
+                        UserEducator userEducator = new UserEducator();
+                        userEducator.setId(user_id);
+                        userEducator.setToken(user_token);
+                        Debugger.logD(result);
+
                         getEducatorDetails(userEducator);
-                    else
-                        Toasty.warning(context, result).show();
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Debugger.logD(e.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Debugger.logD(e.toString());
+                    }
+                } else {
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        String result = jsonObject.getString("result");
+
+                        Toasty.warning(context, result).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Debugger.logD(e.toString());
+                    }
                 }
             }
 
@@ -158,27 +170,39 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
-                try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
-                    JSONArray jsonArray = new JSONArray(str);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    String result = jsonObject.getString("result");
-                    String user_id = jsonObject.getString("user_id");
-                    String user_token = jsonObject.getString("user_token");
 
-                    UserStudent userStudent = new UserStudent();
-                    userStudent.setId(user_id);
-                    userStudent.setToken(user_token);
-                    Debugger.logD(result);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
 
-                    if (result.contains("success"))
+                if (str.contains("success")){
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        String result = jsonObject.getString("result");
+                        String user_id = jsonObject.getString("user_id");
+                        String user_token = jsonObject.getString("user_token");
+
+                        UserStudent userStudent = new UserStudent();
+                        userStudent.setId(user_id);
+                        userStudent.setToken(user_token);
+                        Debugger.logD(result);
+
                         getStudentDetails(userStudent);
-                    else
-                        Toasty.warning(context, result).show();
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Debugger.logD(e.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Debugger.logD(e.toString());
+                    }
+                } else {
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        String result = jsonObject.getString("result");
+
+                        Toasty.warning(context, result).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Debugger.logD(e.toString());
+                    }
                 }
             }
 
@@ -203,9 +227,11 @@ public class LoginActivity extends AppCompatActivity {
                 ProgressPopup.hideProgress();
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
+                    Debugger.logD(str);
                     JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     Debugger.logD(str);
+                    Debugger.logD("awawaw");
                     String user_email_address = jsonObject.getString("user_email_address");
                     String user_firstname = jsonObject.getString("user_firstname");
                     String user_lastname = jsonObject.getString("user_lastname");
@@ -218,6 +244,11 @@ public class LoginActivity extends AppCompatActivity {
                     String user_subj_major = jsonObject.getString("user_subj_major");
                     String user_current_school = jsonObject.getString("user_current_school");
                     String user_position = jsonObject.getString("user_position");
+                    String user_facebook = jsonObject.getString("user_facebook");
+                    String user_instagram = jsonObject.getString("user_instagram");
+                    String user_twitter = jsonObject.getString("user_twitter");
+                    String user_gmail = jsonObject.getString("user_gmail");
+                    String user_motto = jsonObject.getString("user_motto");
 
                     userEducator.setEmail_address(user_email_address);
                     userEducator.setPassword(etPassword.getText().toString());
@@ -232,17 +263,22 @@ public class LoginActivity extends AppCompatActivity {
                     userEducator.setSubj_major(user_subj_major);
                     userEducator.setCurrent_school(user_current_school);
                     userEducator.setPosition(user_position);
-                    userEducator.saveUserSession(context);
-
-                    doFirebaseLoginEducator(userEducator);
+                    userEducator.setFacebook(user_facebook);
+                    userEducator.setInstagram(user_instagram);
+                    userEducator.setTwitter(user_twitter);
+                    userEducator.setGmail(user_gmail);
+                    userEducator.setMotto(user_motto);
 
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
                     userRole.saveRole(context);
 
+                    doFirebaseLoginEducator(userEducator);
+
                     Debugger.logD("email " + user_email_address);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Debugger.logD(e.toString());
                 }
             }
 
@@ -302,6 +338,11 @@ public class LoginActivity extends AppCompatActivity {
                     userRole.setUserRole(UserRole.Student());
                     userRole.saveRole(context);
 
+                    Toasty.success(context, "Success.").show();
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.putExtra("ROLE_ID", 1);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
 
                 } catch (Exception e) {
                     e.printStackTrace();

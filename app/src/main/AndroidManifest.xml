@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.theyestech.yes_mobile">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.MessageActivity"></activity>
+        <activity android:name=".activities.SubjectQuizzesTakeActivity"></activity>
+        <activity android:name=".activities.MessageActivity" />
         <activity android:name=".activities.NewsfeedCommentActivity" />
         <activity android:name=".activities.NewNewsfeedActivity" />
         <activity android:name=".activities.SubjectQuizQuestionsActivity" />
@@ -36,8 +43,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
-            android:name="com.theyestech.yes_mobile.notifications.MyFirebaseIdService"
+            android:name=".notifications.MyFirebaseIdService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -45,7 +53,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.theyestech.yes_mobile.notifications.MyFirebaseMessaging"
+            android:name=".notifications.MyFirebaseMessaging"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -53,11 +61,5 @@
             </intent-filter>
         </service>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

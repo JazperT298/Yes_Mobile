@@ -83,7 +83,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/iv_SubjectDetailsViewQuizzes"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/tv_SubjectDetailsViewDetails"
                 app:srcCompat="@drawable/ic_topic" />
 
             <ImageView
@@ -94,11 +94,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/iv_SubjectDetailsViewTopics"
-                app:layout_constraintTop_toBottomOf="@+id/textView7"
+                app:layout_constraintTop_toBottomOf="@+id/tv_SubjectDetailsViewStudents"
                 app:srcCompat="@drawable/ic_quiz" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/tv_SubjectDetailsViewDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="View Details"
@@ -108,7 +108,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_SubjectDetailsViewDetails" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/tv_SubjectDetailsViewStudents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="View Students"
@@ -148,7 +148,7 @@
                 app:srcCompat="@drawable/ic_delete" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_SubjectDetailsDeleteSubject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"

@@ -20,6 +20,11 @@ public class UserEducator {
     private String subj_major;
     private String current_school;
     private String position;
+    private String facebook;
+    private String instagram;
+    private String twitter;
+    private String gmail;
+    private String motto;
     private String firebase_token;
 
     public String getId() {
@@ -146,108 +151,156 @@ public class UserEducator {
         return firebase_token;
     }
 
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
+    }
+
+    public String getTwitter() {
+        return twitter;
+    }
+
+    public void setTwitter(String twitter) {
+        this.twitter = twitter;
+    }
+
+    public String getGmail() {
+        return gmail;
+    }
+
+    public void setGmail(String gmail) {
+        this.gmail = gmail;
+    }
+
+    public String getMotto() {
+        return motto;
+    }
+
+    public void setMotto(String motto) {
+        this.motto = motto;
+    }
+
     public void setFirebase_token(String firebase_token) {
         this.firebase_token = firebase_token;
     }
 
-    public static String getID(Context context)
-    {
+    public static String getID(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("ID", "");
     }
 
-    public static String getToken(Context context)
-    {
+    public static String getToken(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("TOKEN", "");
     }
 
-    public static String getEmail(Context context)
-    {
+    public static String getEmail(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("EMAIL", "");
     }
 
-    public static String getPassword(Context context)
-    {
+    public static String getPassword(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("PASSWORD", "");
     }
 
-    public static String getFirstname(Context context)
-    {
+    public static String getFirstname(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("FIRST_NAME", "");
     }
 
-    public static String getLastname(Context context)
-    {
+    public static String getLastname(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("LAST_NAME", "");
     }
 
-    public static String getMiddlename(Context context)
-    {
+    public static String getMiddlename(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("MIDDLE_NAME", "");
     }
 
-    public static String getSuffix(Context context)
-    {
+    public static String getSuffix(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("SUFFIX", "");
     }
 
-    public static String getGender(Context context)
-    {
+    public static String getGender(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("GENDER", "");
     }
 
-    public static String getContactNumber(Context context)
-    {
+    public static String getContactNumber(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("CONTACT_NUMBER", "");
     }
 
-    public static String getImage(Context context)
-    {
+    public static String getImage(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("IMAGE", "");
     }
 
-    public static String getEducationalAttainment(Context context)
-    {
+    public static String getEducationalAttainment(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("EDUCATIONAL_ATTAINMENT", "");
     }
 
-    public static String getSubjectMajor(Context context)
-    {
+    public static String getSubjectMajor(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("SUBJECT_MAJOR", "");
     }
 
-    public static String getCurrentSchool(Context context)
-    {
+    public static String getCurrentSchool(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("CURRENT_SCHOOL", "");
     }
 
-    public static String getPosition(Context context)
-    {
+    public static String getPosition(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("POSITION", "");
     }
 
-    public static String getFirebaseToken(Context context)
-    {
+    public static String getFacebook(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("FACEBOOK", "");
+    }
+
+    public static String getInstragram(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("INSTAGRAM", "");
+    }
+
+    public static String getTwitter(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("TWITTER", "");
+    }
+
+    public static String getGmail(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("GMAIL", "");
+    }
+
+    public static String getMotto(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("MOTTO", "");
+    }
+
+    public static String getFirebaseToken(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("FIREBASE_TOKEN", "");
     }
 
-    public boolean saveUserSession(Context context)
-    {
+    public boolean saveUserSession(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("ID", id);
@@ -265,6 +318,11 @@ public class UserEducator {
         editor.putString("SUBJECT_MAJOR", subj_major);
         editor.putString("CURRENT_SCHOOL", current_school);
         editor.putString("POSITION", position);
+        editor.putString("FACEBOOK", facebook);
+        editor.putString("INSTAGRAM", instagram);
+        editor.putString("TWIITER", twitter);
+        editor.putString("GMAIL", gmail);
+        editor.putString("MOTTO", motto);
         editor.putString("FIREBASE_TOKEN", firebase_token);
         return editor.commit();
     }
