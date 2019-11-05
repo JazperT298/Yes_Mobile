@@ -1,7 +1,6 @@
 package com.theyestech.yes_mobile.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -26,7 +25,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ContactListAdapter;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
 import com.theyestech.yes_mobile.adapters.UsersEducatorsAdapter;
-import com.theyestech.yes_mobile.models.ContactList;
+import com.theyestech.yes_mobile.models.ChatContactList;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
@@ -39,16 +38,16 @@ public class CurrentContactsFragment extends Fragment {
     private Context context;
     private RecyclerView recyclerView;
     private EditText etSearch;
-    private ArrayList<ContactList> contactLists;
     private ContactListAdapter contactListAdapter;
     private String role;
 
 
     private UsersEducatorsAdapter usersEducatorsAdapter;
-    private ArrayList<UserEducator> mEducators;
+    private ArrayList<ChatContactList> chatContactListArrayList;
 
     private StudentsAdapter studentAdapter;
-    private  ArrayList<Student> mStudents;
+    private ArrayList<Student> mStudents;
+
     public CurrentContactsFragment() {
         // Required empty public constructor
     }
@@ -57,7 +56,7 @@ public class CurrentContactsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view=  inflater.inflate(R.layout.fragment_current_contacts, container, false);
+        view = inflater.inflate(R.layout.fragment_current_contacts, container, false);
         context = getContext();
         return view;
     }
@@ -70,8 +69,8 @@ public class CurrentContactsFragment extends Fragment {
         initializeEducatorUI();
     }
 
-    private void initializeUI(){
-        recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+    private void initializeUI() {
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -83,7 +82,7 @@ public class CurrentContactsFragment extends Fragment {
 
     private void initializeEducatorUI() {
 
-        mEducators = new ArrayList<>();
+        chatContactListArrayList = new ArrayList<>();
 
         readAllEducators();
         etSearch = view.findViewById(R.id.etSearch);
@@ -105,26 +104,27 @@ public class CurrentContactsFragment extends Fragment {
         });
 
     }
+
     private void searchAllEducators(String s) {
 
         final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
         Query query = FirebaseDatabase.getInstance().getReference("Educator").orderByChild("search")
                 .startAt(s)
-                .endAt(s+"\uf8ff");
+                .endAt(s + "\uf8ff");
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mEducators.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    UserEducator user = snapshot.getValue(UserEducator.class);
+                chatContactListArrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ChatContactList chatContactList = snapshot.getValue(ChatContactList.class);
 
-                    if (!user.getId().equals(fuser.getUid())){
-                        mEducators.add(user);
+                    if (!chatContactList.getId().equals(fuser.getUid())) {
+                        chatContactListArrayList.add(chatContactList);
                     }
                 }
 
-                usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), mEducators, false);
+                usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), chatContactListArrayList, false);
                 recyclerView.setAdapter(usersEducatorsAdapter);
             }
 
@@ -145,20 +145,20 @@ public class CurrentContactsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (etSearch.getText().toString().equals("")) {
-                    mEducators.clear();
+                    chatContactListArrayList.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        UserEducator educator = snapshot.getValue(UserEducator.class);
+                        ChatContactList chatContactList = snapshot.getValue(ChatContactList.class);
 
-                        assert educator != null;
+                        assert chatContactList != null;
                         assert firebaseUser != null;
-                        if (!educator.getId().equals(firebaseUser.getUid())) {
-                            mEducators.add(educator);
-                            Debugger.logD("educator " + educator);
+                        if (!chatContactList.getId().equals(firebaseUser.getUid())) {
+                            chatContactListArrayList.add(chatContactList);
+                            Debugger.logD("educator " + chatContactList);
                         }
 
                     }
 
-                    usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), mEducators, false);
+                    usersEducatorsAdapter = new UsersEducatorsAdapter(getContext(), chatContactListArrayList, false);
                     recyclerView.setAdapter(usersEducatorsAdapter);
                 }
             }
@@ -197,23 +197,24 @@ public class CurrentContactsFragment extends Fragment {
         });
 
     }
+
     private void searchAllStudent(String s) {
 
         final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
         Query query = FirebaseDatabase.getInstance().getReference("Student").orderByChild("search")
                 .startAt(s)
-                .endAt(s+"\uf8ff");
+                .endAt(s + "\uf8ff");
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mStudents.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Student student = snapshot.getValue(Student.class);
 
                     assert student != null;
                     assert fuser != null;
-                    if (!student.getUser_id().equals(fuser.getUid())){
+                    if (!student.getUser_id().equals(fuser.getUid())) {
                         mStudents.add(student);
                     }
                 }

@@ -18,24 +18,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 import com.theyestech.yes_mobile.models.Chat;
+import com.theyestech.yes_mobile.models.ChatContactList;
 import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
 public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAdapter.ViewHolder>{
     private Context mContext;
-    private ArrayList<UserEducator> mEducators;
+    private ArrayList<ChatContactList> chatContactListArrayList;
     private boolean ischat;
 
     String theLastMessage;
-    public UsersEducatorsAdapter(Context context, ArrayList<UserEducator> educators, boolean ischats){
-        mEducators = educators;
+    public UsersEducatorsAdapter(Context context, ArrayList<ChatContactList> chatContactListArrayList, boolean ischats){
+        this.chatContactListArrayList = chatContactListArrayList;
         mContext = context;
         ischat = ischats;
     }
@@ -49,9 +48,9 @@ public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        final UserEducator userEducator = mEducators.get(i);
+        final ChatContactList chatContactList = chatContactListArrayList.get(i);
 
-        viewHolder.username.setText(userEducator.getGmail());
+        viewHolder.username.setText(chatContactList.getGmail());
 
         Glide.with(mContext)
                 .load(R.drawable.ic_educator_profile)
@@ -60,7 +59,7 @@ public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAd
         //}
 
         if (ischat){
-            lastMessage(userEducator.getId(), viewHolder.last_msg);
+            lastMessage(chatContactList.getId(), viewHolder.last_msg);
         } else {
             viewHolder.last_msg.setVisibility(View.GONE);
         }
@@ -85,7 +84,7 @@ public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAd
 //                bundle.putString("ROLE", role);
                 Intent intent = new Intent(mContext, MessageActivity.class);
                 intent.putExtra("ROLE", role);
-                intent.putExtra("userid", userEducator.getId());
+                intent.putExtra("userid", chatContactList.getId());
                 mContext.startActivity(intent);
             }
         });
@@ -93,7 +92,7 @@ public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAd
 
     @Override
     public int getItemCount() {
-        return mEducators.size();
+        return chatContactListArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
