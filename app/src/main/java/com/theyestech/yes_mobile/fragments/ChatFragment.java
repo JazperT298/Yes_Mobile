@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,12 +21,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ViewPagerAdapter;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
+import com.theyestech.yes_mobile.utils.UserRole;
 
 public class ChatFragment extends Fragment {
 
@@ -37,9 +41,14 @@ public class ChatFragment extends Fragment {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ViewPagerAdapter viewPagerAdapter;
+
+    private String role;
+
     //Firebase
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_chat, container, false);
@@ -50,52 +59,63 @@ public class ChatFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        role = UserRole.getRole(context);
+
         initializesUI();
+
+        ProgressPopup.showProgress(context);
     }
+
     public void initializesUI(){
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.view_pager);
         profile_image = view.findViewById(R.id.iv_ProfileEducatorImage);
         tv_SignIn = view.findViewById(R.id.tv_SignIn);
 
+        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(profile_image);
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Educator").child(firebaseUser.getUid());
 
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserEducator user = dataSnapshot.getValue(UserEducator.class);
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                UserEducator user = dataSnapshot.getValue(UserEducator.class);
+////                assert user != null;
+////                if (!UserEducator.getFirstname(context).equals("")){
+////                    tv_SignIn.setText(UserEducator.getFirstname(context));
+////                } else{
+////                    tv_SignIn.setText(UserEducator.getEmail(context));
+////                }
 //                assert user != null;
-//                if (!UserEducator.getFirstname(context).equals("")){
-//                    tv_SignIn.setText(UserEducator.getFirstname(context));
-//                } else{
-//                    tv_SignIn.setText(UserEducator.getEmail(context));
-//                }
-                assert user != null;
-                tv_SignIn.setText(user.getEmail_address());
-                Debugger.logD("asdd " + user.getEmail_address());
-//                if (user.getImage().equals("default")){
-//                    profile_image.setImageResource(R.drawable.ic_educator_profile);
-//                } else {
-
-                Glide.with(context)
-                        .load(R.drawable.ic_educator_profile)
-                        .apply(GlideOptions.getOptions())
-                        .into(profile_image);
-                //}
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+////                tv_SignIn.setText(user.getEmail_address());
+//                Debugger.logD("asdd " + user.getEmail_address());
+////                if (user.getImage().equals("default")){
+////                    profile_image.setImageResource(R.drawable.ic_educator_profile);
+////                } else {
+//
+//
+//                //}
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+                ProgressPopup.hideProgress();
+
                 int unread = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
@@ -105,17 +125,14 @@ public class ChatFragment extends Fragment {
                 }
 
                 if (unread == 0){
-                    viewPagerAdapter.addFragment(new CurrentChatFragment(), "Chats");
+                    viewPagerAdapter.addFragment(new CurrentChatFragment(), "Conversation");
                 } else {
-                    viewPagerAdapter.addFragment(new CurrentChatFragment(), "("+unread+") Chats");
+                    viewPagerAdapter.addFragment(new CurrentChatFragment(), "("+unread+") Conversation");
                 }
 
                 viewPagerAdapter.addFragment(new CurrentContactsFragment(), "Contacts");
-
                 viewPager.setAdapter(viewPagerAdapter);
-
                 tabLayout.setupWithViewPager(viewPager);
-
             }
 
             @Override
@@ -123,9 +140,6 @@ public class ChatFragment extends Fragment {
 
             }
         });
-
-
-
 
 
     }

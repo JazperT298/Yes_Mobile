@@ -50,18 +50,9 @@ public class UsersEducatorsAdapter extends RecyclerView.Adapter<UsersEducatorsAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final UserEducator userEducator = mEducators.get(i);
-        viewHolder.username.setText(userEducator.getEmail_address());
-        Debugger.logD(" asd " +userEducator.getEmail_address());
-//        if (!UserEducator.getFirstname(mContext).equals("")){
-//            viewHolder.username.setText(UserEducator.getFirstname(mContext));
-//        }
-//        else{
-//            viewHolder.username.setText(UserEducator.getEmail(mContext));
-//        }
 
-//        if (userEducator.getImage().equals("default")){
-//            viewHolder.profile_image.setImageResource(R.drawable.yes_logo);
-//        } else {
+        viewHolder.username.setText(userEducator.getGmail());
+
         Glide.with(mContext)
                 .load(R.drawable.ic_educator_profile)
                 .apply(GlideOptions.getOptions())

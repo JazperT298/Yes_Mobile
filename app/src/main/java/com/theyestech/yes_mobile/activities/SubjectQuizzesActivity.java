@@ -91,6 +91,9 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.fab_SubjectQuizAdd);
         emptyIndicator = findViewById(R.id.view_Empty);
 
+        if (!role.equals(UserRole.Educator()))
+            floatingActionButton.setVisibility(View.GONE);
+
         swipeRefreshLayout.setRefreshing(true);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +181,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 selectedQuiz = quizArrayList.get(position);
-                                Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
+                                Intent intent = new Intent(context, SubjectQuizzesTakeActivity.class);
                                 intent.putExtra("QUIZ", selectedQuiz);
                                 startActivity(intent);
                             }

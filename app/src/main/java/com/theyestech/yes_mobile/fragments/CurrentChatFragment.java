@@ -72,6 +72,8 @@ public class CurrentChatFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     private void getEducatorChatList() {

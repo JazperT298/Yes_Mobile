@@ -73,7 +73,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView"
-                app:srcCompat="@drawable/ic_update" />
+                app:srcCompat="@drawable/ic_details" />
 
             <ImageView
                 android:id="@+id/iv_ProfileEducatorSubjects"
@@ -97,14 +97,14 @@
                 app:srcCompat="@drawable/ic_section" />
 
             <ImageView
-                android:id="@+id/iv_ProfileEducatorVideos"
+                android:id="@+id/iv_ProfileEducatorNotes"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorSubjects"
                 app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorSubjects"
                 app:layout_constraintTop_toBottomOf="@+id/textView12"
-                app:srcCompat="@drawable/ic_video" />
+                app:srcCompat="@drawable/ic_notes" />
 
             <TextView
                 android:id="@+id/tv_ProfileEducatorEmail"
@@ -165,11 +165,11 @@
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Videos"
+                android:text="Notes"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorVideos"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorVideos"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorVideos" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorNotes"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorNotes"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorNotes" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cardView"
@@ -265,52 +265,52 @@
             </android.support.v7.widget.CardView>
 
             <ImageView
-                android:id="@+id/iv_ProfileEducatorAssessment"
+                android:id="@+id/iv_ProfileEducatorRewards"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorSections"
                 app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorSections"
                 app:layout_constraintTop_toBottomOf="@+id/textView13"
-                app:srcCompat="@drawable/ic_assessment" />
+                app:srcCompat="@drawable/ic_rewards" />
 
             <ImageView
-                android:id="@+id/iv_ProfileEducatorAnnouncement"
+                android:id="@+id/iv_ProfileEducatorConnections"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorVideos"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorVideos"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorNotes"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorNotes"
                 app:layout_constraintTop_toBottomOf="@+id/textView14"
-                app:srcCompat="@drawable/ic_announcement" />
+                app:srcCompat="@drawable/ic_connections" />
 
             <TextView
                 android:id="@+id/textView15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Assessment"
+                android:text="Rewards"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorAssessment"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorAssessment"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorAssessment" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorRewards"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorRewards"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorRewards" />
 
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Announcement"
+                android:text="Connections"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorAnnouncement"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorAnnouncement"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorAnnouncement" />
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorConnections"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorConnections"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorConnections" />
 
             <ImageView
                 android:id="@+id/iv_ProfileEducatorLogout"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorAnnouncement"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorAssessment"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorConnections"
+                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorRewards"
                 app:layout_constraintTop_toBottomOf="@+id/textView15"
                 app:srcCompat="@drawable/ic_logout" />
 

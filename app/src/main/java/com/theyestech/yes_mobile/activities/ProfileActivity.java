@@ -55,9 +55,9 @@ public class ProfileActivity extends AppCompatActivity {
         ivDetailsEducator = findViewById(R.id.iv_ProfileEducatorDetails);
         ivSubjectsEducator = findViewById(R.id.iv_ProfileEducatorSubjects);
         ivSectionsEducator = findViewById(R.id.iv_ProfileEducatorSections);
-        ivVideosEducator = findViewById(R.id.iv_ProfileEducatorVideos);
-        ivAssessmentsEducator = findViewById(R.id.iv_ProfileEducatorAssessment);
-        ivAnnouncementsEducator = findViewById(R.id.iv_ProfileEducatorAnnouncement);
+        ivVideosEducator = findViewById(R.id.iv_ProfileEducatorNotes);
+        ivAssessmentsEducator = findViewById(R.id.iv_ProfileEducatorRewards);
+        ivAnnouncementsEducator = findViewById(R.id.iv_ProfileEducatorConnections);
         ivLogoutEducator = findViewById(R.id.iv_ProfileEducatorLogout);
         tvFullnameEducator = findViewById(R.id.tv_ProfileEducatorFullname);
         tvEmailEducator = findViewById(R.id.tv_ProfileEducatorEmail);
