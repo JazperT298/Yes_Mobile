@@ -29,6 +29,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ChatMessageAdapter;
 import com.theyestech.yes_mobile.interfaces.APIService;
 import com.theyestech.yes_mobile.models.Chat;
+import com.theyestech.yes_mobile.models.ChatContactList;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.notifications.Client;
@@ -36,6 +37,7 @@ import com.theyestech.yes_mobile.notifications.Data;
 import com.theyestech.yes_mobile.notifications.MyResponse;
 import com.theyestech.yes_mobile.notifications.Sender;
 import com.theyestech.yes_mobile.notifications.Token;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,17 +159,23 @@ public class MessageActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserEducator educator = dataSnapshot.getValue(UserEducator.class);
-                username.setText(educator.getEmail_address());
+                ChatContactList chatContactList = dataSnapshot.getValue(ChatContactList.class);
+                username.setText(chatContactList.getGmail());
                 username.setTextColor(Color.parseColor("#212121"));
 //                if (educator.getImage().equals("default")){
 //                    profile_image.setImageResource(R.mipmap.ic_launcher);
 //                } else {
                     //and this
-                    Glide.with(getApplicationContext()).load(educator.getImage()).into(profile_image);
+                Glide.with(getApplicationContext())
+                        .load(R.drawable.ic_educator_profile)
+                        .apply(GlideOptions.getOptions())
+                        .into(profile_image);
                 //}
 
-                readEducatorMessages(fuser.getUid(), userid, educator.getImage());
+                readEducatorMessages(fuser.getUid(), userid, String.valueOf(Glide.with(getApplicationContext())
+                        .load(R.drawable.ic_educator_profile)
+                        .apply(GlideOptions.getOptions())
+                        .into(profile_image)));
             }
 
             @Override

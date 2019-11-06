@@ -56,8 +56,13 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageAdapter.
 
         holder.show_message.setText(chat.getMessage());
 
+//        Glide.with(mContext)
+//                .load(HttpProvider.getProfileDir() + UserEducator.getImage(mContext))
+//                .apply(GlideOptions.getOptions())
+//                .into(holder.profile_image);
+
         Glide.with(mContext)
-                .load(HttpProvider.getProfileDir() + UserEducator.getImage(mContext))
+                .load(R.drawable.ic_educator_profile)
                 .apply(GlideOptions.getOptions())
                 .into(holder.profile_image);
 
