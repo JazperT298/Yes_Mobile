@@ -26,7 +26,7 @@ public class MyFirebaseIdService extends FirebaseInstanceIdService {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.FCM_TOKEN),recent_token);
-        editor.commit();
+        editor.apply();
     }
 
     private void updateToken(String refreshToken) {
@@ -34,6 +34,7 @@ public class MyFirebaseIdService extends FirebaseInstanceIdService {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token = new Token(refreshToken);
+        assert firebaseUser != null;
         reference.child(firebaseUser.getUid()).setValue(token);
     }
 }

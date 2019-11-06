@@ -79,6 +79,7 @@ public class MessageActivity extends AppCompatActivity {
 
         Intent extras = getIntent();
         Bundle bundle = extras.getExtras();
+        assert bundle != null;
         role = bundle.getString("ROLE");
 
     }
@@ -253,9 +254,10 @@ public class MessageActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserEducator user = dataSnapshot.getValue(UserEducator.class);
+                ChatContactList chatContactList = dataSnapshot.getValue(ChatContactList.class);
                 if (notify) {
-                    sendEducatorNotifiaction(receiver, user.getFirsname(), msg);
+                    assert chatContactList != null;
+                    sendEducatorNotifiaction(receiver, chatContactList.getGmail(), msg);
                 }
                 notify = false;
             }
@@ -317,6 +319,7 @@ public class MessageActivity extends AppCompatActivity {
                 mchat.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
+                    assert chat != null;
                     if (chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||
                             chat.getReceiver().equals(userid) && chat.getSender().equals(myid)){
                         mchat.add(chat);
@@ -542,11 +545,11 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (role.equals("EDUCATOR")){
+        //if (role.equals("EDUCATOR")){
             statusEducator("online");
-        }else{
-            statusStudent("online");
-        }
+//        }else{
+//            statusStudent("online");
+//        }
         currentUser(userid);
     }
 
@@ -554,11 +557,11 @@ public class MessageActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         reference.removeEventListener(seenListener);
-        if (role.equals("EDUCATOR")){
+//        if (role.equals("EDUCATOR")){
             statusEducator("offline");
-        }else{
-            statusStudent("offline");
-        }
+//        }else{
+//            statusStudent("offline");
+//        }
         currentUser("none");
     }
 }

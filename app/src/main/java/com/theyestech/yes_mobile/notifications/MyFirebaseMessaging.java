@@ -18,9 +18,10 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 
+import java.util.Objects;
+
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -33,7 +34,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        assert sented != null;
         if (firebaseUser != null && sented.equals(firebaseUser.getUid())){
+            assert currentUser != null;
             if (!currentUser.equals(user)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     sendOreoNotification(remoteMessage);
@@ -80,12 +83,16 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
+        String role = "EDUCATOR";
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
+        assert user != null;
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
         Intent intent = new Intent(this, MessageActivity.class);
+        //intent.putExtra("ROLE", role);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
+        bundle.putString("ROLE", role);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -110,12 +117,15 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-
+        String role = "EDUCATOR";
         RemoteMessage.Notification notification = remoteMessage.getNotification();
+        assert user != null;
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
         Intent intent = new Intent(this, MessageActivity.class);
+        //intent.putExtra("ROLE", role);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
+        bundle.putString("ROLE", role);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
