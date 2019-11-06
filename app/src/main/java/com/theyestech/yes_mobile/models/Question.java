@@ -11,32 +11,32 @@ public class Question {
     private ArrayList<Answer> answers;
 
     public static class Answer {
-        private String answer_id;
-        private String answer_value;
-        private String answer_isCorrect;
+        private String choice_id;
+        private String choice_value;
+        private String choice_isCorrect;
 
-        public String getAnswer_id() {
-            return answer_id;
+        public String getChoice_id() {
+            return choice_id;
         }
 
-        public void setAnswer_id(String answer_id) {
-            this.answer_id = answer_id;
+        public void setChoice_id(String choice_id) {
+            this.choice_id = choice_id;
         }
 
-        public String getAnswer_value() {
-            return answer_value;
+        public String getChoice_value() {
+            return choice_value;
         }
 
-        public void setAnswer_value(String answer_value) {
-            this.answer_value = answer_value;
+        public void setChoice_value(String choice_value) {
+            this.choice_value = choice_value;
         }
 
-        public String getAnswer_isCorrect() {
-            return answer_isCorrect;
+        public String getChoice_isCorrect() {
+            return choice_isCorrect;
         }
 
-        public void setAnswer_isCorrect(String answer_isCorrect) {
-            this.answer_isCorrect = answer_isCorrect;
+        public void setChoice_isCorrect(String choice_isCorrect) {
+            this.choice_isCorrect = choice_isCorrect;
         }
     }
 

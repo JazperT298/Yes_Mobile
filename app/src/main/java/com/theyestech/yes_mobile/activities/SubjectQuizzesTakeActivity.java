@@ -10,6 +10,6 @@ public class SubjectQuizzesTakeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subject_quizzes_take);
+        setContentView(R.layout.activity_subject_quizzes_take_multiple_choice);
     }
 }

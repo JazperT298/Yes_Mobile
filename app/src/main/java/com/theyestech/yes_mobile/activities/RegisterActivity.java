@@ -80,7 +80,8 @@ public class RegisterActivity extends AppCompatActivity {
                         switch (roleId) {
                             case 1:
                                 //firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
-                                registerEducator();
+//                                registerEducator();
+                                firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
                                 break;
                             case 2:
                                 registerStudent();
@@ -105,14 +106,14 @@ public class RegisterActivity extends AppCompatActivity {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD(str);
                 if (!str.contains("exists")) {
-                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString(),etEmail.getText().toString());
-//                    finish();
+//                    firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
+                    finish();
 //                    Toasty.success(context, "Successfully registered.").show();
+                    Toasty.success(context, "Successfully registered.").show();
                 } else{
                     etEmail.requestFocus();
                     Toasty.warning(context, str).show();
                 }
-
             }
 
             @Override
@@ -209,7 +210,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Firebase Database
-    private void firebaseRegisterEducator(final String email, String password, final String gmail) {
+    private void firebaseRegisterEducator(final String email, String password) {
         ProgressPopup.showProgress(context);
 
         auth.createUserWithEmailAndPassword(email, password)
@@ -226,7 +227,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userid);
-                            hashMap.put("gmail", gmail.toLowerCase());
+                            hashMap.put("gmail", email.toLowerCase());
                             hashMap.put("status", "offline");
                             hashMap.put("search", email.toLowerCase());
 
@@ -234,8 +235,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toasty.success(context, "Successfully registered.").show();
-                                        finish();
+//                                        Toasty.success(context, "Successfully registered.").show();
+                                        registerEducator();
+//                                        finish();
                                     }
                                 }
                             });

@@ -171,14 +171,14 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                         JSONArray jsonArray1 = new JSONArray(answers);
                         for (int j = 0; j <= jsonArray1.length() - 1; j++) {
                             JSONObject jsonObject1 = jsonArray1.getJSONObject(j);
-                            String answer_id = jsonObject1.getString("answer_id");
-                            String answer_value = jsonObject1.getString("answer_value");
-                            String answer_isCorrect = jsonObject1.getString("answer_isCorrect");
+                            String choice_id = jsonObject1.getString("choice_id");
+                            String choice_value = jsonObject1.getString("choice_value");
+                            String choice_isCorrect = jsonObject1.getString("choice_isCorrect");
 
                             Question.Answer answer = new Question.Answer();
-                            answer.setAnswer_id(answer_id);
-                            answer.setAnswer_value(answer_value);
-                            answer.setAnswer_isCorrect(answer_isCorrect);
+                            answer.setChoice_id(choice_id);
+                            answer.setChoice_value(choice_value);
+                            answer.setChoice_isCorrect(choice_isCorrect);
 
                             answerArrayList.add(answer);
                         }
@@ -258,7 +258,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                     String result = jsonObject.getString("result");
                     if (result.contains("added")) {
                         Toasty.success(context, "Saved.").show();
-
+                    } else if (result.contains("updated")) {
+                        Toasty.success(context, "Updated.").show();
                     } else
                         Toasty.warning(context, "Failed").show();
                     getQuestionDetails();
@@ -285,10 +286,10 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
                     switch (quizType) {
-                        case "Multiple Choice":
+                        case "Multiple":
                             openAddEditMultipleChoiceDialog();
                             break;
-                        case "True or False":
+                        case "TrueOrFalse":
                             openAddEditTrueOrFalseDialog();
                             break;
                     }
@@ -435,17 +436,17 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
 
         if (isEdit) {
             etQuestion.setText(selectedQuestion.getQuestion_value());
-            etChoice1.setText(selectedQuestion.getAnswers().get(0).getAnswer_value());
-            etChoice2.setText(selectedQuestion.getAnswers().get(1).getAnswer_value());
-            etChoice3.setText(selectedQuestion.getAnswers().get(2).getAnswer_value());
-            etChoice4.setText(selectedQuestion.getAnswers().get(3).getAnswer_value());
-            if (selectedQuestion.getQuestion_correct_answer().equalsIgnoreCase("A"))
+            etChoice1.setText(selectedQuestion.getAnswers().get(0).getChoice_value());
+            etChoice2.setText(selectedQuestion.getAnswers().get(1).getChoice_value());
+            etChoice3.setText(selectedQuestion.getAnswers().get(2).getChoice_value());
+            etChoice4.setText(selectedQuestion.getAnswers().get(3).getChoice_value());
+            if (selectedQuestion.getQuestion_correct_answer().equals(etChoice1.getText().toString()))
                 rbChoice1.setChecked(true);
-            else if (selectedQuestion.getQuestion_correct_answer().equalsIgnoreCase("B"))
+            else if (selectedQuestion.getQuestion_correct_answer().equals(etChoice2.getText().toString()))
                 rbChoice2.setChecked(true);
-            else if (selectedQuestion.getQuestion_correct_answer().equalsIgnoreCase("C"))
+            else if (selectedQuestion.getQuestion_correct_answer().equals(etChoice3.getText().toString()))
                 rbChoice3.setChecked(true);
-            else if (selectedQuestion.getQuestion_correct_answer().equalsIgnoreCase("D"))
+            else if (selectedQuestion.getQuestion_correct_answer().equals(etChoice4.getText().toString()))
                 rbChoice4.setChecked(true);
             tvQuizHeader.setText("Edit Question");
         } else {
