@@ -49,11 +49,10 @@
             android:id="@+id/tv_HomeFirstname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:text="Vanne"
             android:textColor="@android:color/primary_text_light_nodisable"
             android:textSize="18sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/iv_HomeProfile"
             app:layout_constraintStart_toEndOf="@+id/iv_HomeProfile"
             app:layout_constraintTop_toTopOf="parent" />

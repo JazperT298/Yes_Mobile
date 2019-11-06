@@ -34,7 +34,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
     private OnClickRecyclerView onClickRecyclerView;
 
     private int[] imageArray;
-    private int currentIndex = 0;
+    private int currentIndex;
     private int endIndex;
 
     public TopicsAdapter(Context context, ArrayList<Topic> topicArrayList) {
@@ -85,8 +85,9 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                 imageArray[7] = R.drawable.ic_yes_09;
 
                 endIndex = 7;
+                currentIndex = 0;
 
-                nextImage(viewHolder.ivImage);
+                nextImage(viewHolder.ivYes);
             }
         });
 
@@ -152,7 +153,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
             @Override
             public void run() {
                 //Do something here
-                if (currentIndex < endIndex) {
+                if (currentIndex <= endIndex) {
                     nextImage(imageView);
                 }
             }

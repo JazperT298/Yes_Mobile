@@ -55,8 +55,6 @@ public class ChatFragment extends Fragment {
         role = UserRole.getRole(context);
 
         initializesUI();
-
-        ProgressPopup.showProgress(context);
     }
 
     public void initializesUI(){
@@ -100,8 +98,6 @@ public class ChatFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ProgressPopup.hideProgress();
-
                 int unread = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
