@@ -62,8 +62,6 @@ public class ChatFragment extends Fragment {
         viewPager = view.findViewById(R.id.view_pager);
         tv_SignIn = view.findViewById(R.id.tv_SignIn);
 
-        viewPagerAdapter = new ChatViewPagerAdapter(getChildFragmentManager());
-
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Educator").child(firebaseUser.getUid());
 
@@ -98,9 +96,11 @@ public class ChatFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                viewPagerAdapter = new ChatViewPagerAdapter(getChildFragmentManager());
                 int unread = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
+                    assert chat != null;
                     if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
                         unread++;
                     }

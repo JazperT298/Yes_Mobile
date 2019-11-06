@@ -46,26 +46,26 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             }
         }
 
-        String title = remoteMessage.getNotification().getTitle();
-        String message = remoteMessage.getNotification().getBody();
-
-        Bundle b=new Bundle();
-        b.putString("title",title);
-        b.putString("message",message);
-        Intent intent = new Intent(this,Notification.class);
-        intent.putExtra("notificationData", "This is the message from the notification.");
-        intent.putExtras(b);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_ONE_SHOT);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-        notificationBuilder.setContentTitle(title);
-        notificationBuilder.setContentText(message);
-        notificationBuilder.setSmallIcon(android.R.drawable.ic_lock_idle_alarm);
-        notificationBuilder.setAutoCancel(true);
-        notificationBuilder.setContentIntent(pendingIntent);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0,notificationBuilder.build());
+//        String title = Objects.requireNonNull(remoteMessage.getNotification()).getTitle();
+//        String message = remoteMessage.getNotification().getBody();
+//
+//        Bundle b=new Bundle();
+//        b.putString("title",title);
+//        b.putString("message",message);
+//        Intent intent = new Intent(this,Notification.class);
+//        intent.putExtra("notificationData", "This is the message from the notification.");
+//        intent.putExtras(b);
+//
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_ONE_SHOT);
+//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+//        notificationBuilder.setContentTitle(title);
+//        notificationBuilder.setContentText(message);
+//        notificationBuilder.setSmallIcon(android.R.drawable.ic_lock_idle_alarm);
+//        notificationBuilder.setAutoCancel(true);
+//        notificationBuilder.setContentIntent(pendingIntent);
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.notify(0,notificationBuilder.build());
 
         //Notification for student
 //        String CHANNEL_ID = "myChannelID1";
