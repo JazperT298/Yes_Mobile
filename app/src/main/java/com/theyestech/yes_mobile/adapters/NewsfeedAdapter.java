@@ -1,6 +1,8 @@
 package com.theyestech.yes_mobile.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
@@ -17,14 +19,26 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
+import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.NewsfeedCommentActivity;
+import com.theyestech.yes_mobile.fragments.HomeFragment;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
+import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.GlideOptions;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
+import com.theyestech.yes_mobile.utils.UserRole;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
+import es.dmoral.toasty.Toasty;
 
 public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHolder> {
 
@@ -32,13 +46,15 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
     private LayoutInflater layoutInflater;
     private ArrayList<Newsfeed> newsfeedArrayList;
     private OnClickRecyclerView onClickRecyclerView;
+    private String role;
 
     private int[] imageArray;
     private int currentIndex;
     private int endIndex;
 
-    public NewsfeedAdapter(Context context, ArrayList<Newsfeed> newsfeedArrayList) {
+    public NewsfeedAdapter(Context context, ArrayList<Newsfeed> newsfeedArrayList, String role) {
         this.context = context;
+        this.role = role;
         this.newsfeedArrayList = newsfeedArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
@@ -59,6 +75,12 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         viewHolder.tvFullname.setText(newsfeed.getNf_fullname());
         viewHolder.tvDateTime.setText(newsfeed.getNf_date());
         viewHolder.tvDetails.setText(newsfeed.getNf_details());
+
+
+        if (role.equals(UserRole.Educator())) {
+            if (!newsfeed.getNf_user_token().equals(UserEducator.getToken(context)))
+                viewHolder.ivDelete.setVisibility(View.GONE);
+        }
 
         if (newsfeed.getNf_filetype().equals("video")) {
             viewHolder.videoView.setVideoURI(Uri.parse(HttpProvider.getNewsfeedDir() + newsfeed.getNf_files()));
@@ -85,6 +107,13 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 intent.putExtra("NEWSFEED_ID", newsfeed.getNf_id());
                 intent.putExtra("NEWSFEED_TOKEN", newsfeed.getNf_token());
                 context.startActivity(intent);
+            }
+        });
+
+        viewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDeleteDialog(newsfeed);
             }
         });
 
@@ -118,7 +147,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivImage, ivProfile, ivType, ivYes;
+        private ImageView ivImage, ivProfile, ivType, ivYes, ivDelete;
         private TextView tvDetails, tvFullname, tvDateTime, tvYes;
         private VideoView videoView;
         private ConstraintLayout constraintYes, constraintComment;
@@ -135,6 +164,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
             tvDateTime = view.findViewById(R.id.tv_ListrowHomeDateTime);
             tvYes = view.findViewById(R.id.tv_ListrowHomeYes);
             ivYes = view.findViewById(R.id.iv_ListrowHomeYes);
+            ivDelete = view.findViewById(R.id.iv_ListrowHomeDelete);
             constraintYes = view.findViewById(R.id.constraint_ListrowHomeYes);
             constraintComment = view.findViewById(R.id.constraint_ListrowHomeComments);
 
@@ -160,7 +190,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         this.onClickRecyclerView = onClickRecyclerView;
     }
 
-    private void nextImage(final ImageView imageView){
+    private void nextImage(final ImageView imageView) {
         imageView.setImageResource(imageArray[currentIndex]);
         currentIndex++;
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -172,5 +202,49 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 }
             }
         }, 20);
+    }
+
+    private void openDeleteDialog(final Newsfeed newsfeed) {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Delete")
+                .setIcon(R.drawable.ic_logout)
+                .setMessage("Are you sure you want to delete?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteNewsfeed(newsfeed);
+                    }
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
+    }
+
+    private void deleteNewsfeed(Newsfeed newsfeed) {
+//        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("postId", newsfeed.getNf_id());
+
+        HttpProvider.post(context, "controller_global/DeletePostById.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                if (str.contains("deleted")) {
+                    Toasty.success(context, "Deleted.").show();
+//                    HomeFragment homeFragment = new HomeFragment();
+//                    homeFragment.getEducatorNewsfeedDetails();
+                } else
+                    Toasty.warning(context, "Something went wrong.").show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 }

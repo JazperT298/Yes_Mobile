@@ -139,7 +139,7 @@ public class HomeFragment extends Fragment {
                 .into(ivProfile);
     }
 
-    private void getEducatorNewsfeedDetails() {
+    public void getEducatorNewsfeedDetails() {
         newsfeedArrayList.clear();
 
         swipeRefreshLayout.setRefreshing(true);
@@ -185,14 +185,11 @@ public class HomeFragment extends Fragment {
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
-                    newsfeedAdapter = new NewsfeedAdapter(context, newsfeedArrayList);
+                    newsfeedAdapter = new NewsfeedAdapter(context, newsfeedArrayList, role);
                     newsfeedAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position) {
                             selectedNewsfeed = newsfeedArrayList.get(position);
-//                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
-//                            intent.putExtra("TOPIC", topic);
-//                            startActivity(intent);
                         }
                     });
 

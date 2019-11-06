@@ -15,7 +15,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/bg_gradient"
+            android:padding="8dp"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/MenuStyle">
 
@@ -25,14 +26,12 @@
                 android:layout_height="35dp" />
 
             <TextView
+                android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/username"
-                android:textSize="18sp"
-                android:layout_marginLeft="25dp"
-                android:textColor="#fff"
-                android:textStyle="bold"
-                android:layout_marginStart="25dp" />
+                android:layout_marginStart="16dp"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -46,29 +45,30 @@
         android:layout_above="@id/bottom"/>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:padding="5dp"
         android:id="@+id/bottom"
-        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content">
+        android:background="@android:color/white"
+        android:padding="8dp">
 
         <EditText
+            android:id="@+id/text_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/text_send"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/btn_send"
             android:background="@android:color/transparent"
             android:hint="Type a message..."
-            android:layout_toLeftOf="@id/btn_send"
-            android:layout_centerVertical="true"/>
+            android:textSize="18sp" />
 
         <ImageButton
+            android:id="@+id/btn_send"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/ic_action_name"
-            android:id="@+id/btn_send"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_action_name" />
 
     </RelativeLayout>
 

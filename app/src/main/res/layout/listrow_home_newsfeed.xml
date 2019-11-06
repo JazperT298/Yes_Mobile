@@ -64,12 +64,21 @@
 
                 <ImageView
                     android:id="@+id/iv_ListrowHomeType"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_ListrowHomeDateTime"
+                    app:layout_constraintStart_toEndOf="@+id/tv_ListrowHomeDateTime"
+                    app:layout_constraintTop_toTopOf="@+id/tv_ListrowHomeDateTime"
+                    app:srcCompat="@drawable/ic_gallery" />
+
+                <ImageView
+                    android:id="@+id/iv_ListrowHomeDelete"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_gallery" />
+                    app:srcCompat="@drawable/ic_delete" />
 
             </android.support.constraint.ConstraintLayout>
 

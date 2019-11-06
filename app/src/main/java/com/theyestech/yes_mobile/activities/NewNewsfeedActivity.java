@@ -135,7 +135,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                     Toasty.success(context, "Saved.").show();
                     finish();
                 } else
-                    Toasty.warning(context, "Failed").show();
+                    Toasty.warning(context, "Failed.").show();
             }
 
             @Override
