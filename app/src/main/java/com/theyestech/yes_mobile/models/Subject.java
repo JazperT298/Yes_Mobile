@@ -15,6 +15,8 @@ public class Subject implements Parcelable {
     private String school_year;
     private String image;
     private String code;
+    private String user_firstname;
+    private String user_lastname;
 
 
     private Subject(Parcel in) {
@@ -28,6 +30,8 @@ public class Subject implements Parcelable {
         school_year = in.readString();
         image = in.readString();
         code = in.readString();
+        user_firstname = in.readString();
+        user_lastname = in.readString();
     }
 
     public static final Creator<Subject> CREATOR = new Creator<Subject>() {
@@ -126,6 +130,22 @@ public class Subject implements Parcelable {
         this.code = code;
     }
 
+    public String getUser_firstname() {
+        return user_firstname;
+    }
+
+    public void setUser_firstname(String user_firstname) {
+        this.user_firstname = user_firstname;
+    }
+
+    public String getUser_lastname() {
+        return user_lastname;
+    }
+
+    public void setUser_lastname(String user_lastname) {
+        this.user_lastname = user_lastname;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -143,5 +163,7 @@ public class Subject implements Parcelable {
         dest.writeString(school_year);
         dest.writeString(image);
         dest.writeString(code);
+        dest.writeString(user_firstname);
+        dest.writeString(user_lastname);
     }
 }

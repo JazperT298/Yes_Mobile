@@ -107,7 +107,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
             tvDelete.setVisibility(View.GONE);
         }
 
-        tvHeader.setText(subject.getTitle() + " - " + subject.getCode());
+        tvHeader.setText(subject.getTitle());
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override

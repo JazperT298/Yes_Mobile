@@ -118,12 +118,15 @@ public class NewNewsfeedActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
         params.put("nf_details", etDetails.getText().toString());
-        try {
-            params.put("nf_file", myFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Debugger.logD(e.toString());
-        }
+        if (myFile != null) {
+            try {
+                params.put("nf_file", myFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Debugger.logD(e.toString());
+            }
+        } else
+            params.put("nf_file", "");
 
         HttpProvider.post(context, "controller_educator/upload_post.php", params, new AsyncHttpResponseHandler() {
             @Override

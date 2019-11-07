@@ -26,9 +26,11 @@ import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
+import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -157,7 +159,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 if (role.equals(UserRole.Educator()))
                     setEducatorFieldsData();
                 else
-                    updateStudentDetails();
+                    setStudentFieldsData();
 
                 setFieldsMode(false);
                 btnCancel.setVisibility(View.GONE);
@@ -310,7 +312,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         userEducator.setEmail_address(etEmail.getText().toString());
         userEducator.setContact_number(etContactnumber.getText().toString());
         userEducator.setGender(gender);
-        userEducator.setImage(UserEducator.getImage(context));
+        userEducator.setImage(UserStudent.getImage(context));
         userEducator.setEducational_attainment(UserEducator.getEducationalAttainment(context));
         userEducator.setSubj_major(UserEducator.getSubjectMajor(context));
         userEducator.setCurrent_school(UserEducator.getCurrentSchool(context));
@@ -406,7 +408,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
                     if (jsonObject.getString("result").contains("success")) {
                         Toasty.success(context, "Saved.").show();
-                        updateEducatorSession();
+                        getEducatorDetails();
                     } else
                         Toasty.error(context, "Saving failed.").show();
 
@@ -442,7 +444,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
                     if (jsonObject.getString("result").contains("success")) {
                         Toasty.success(context, "Saved.").show();
-                        updateEducatorSession();
+                        getStudentDetails();
                     } else
                         Toasty.error(context, "Saving failed.").show();
 
@@ -459,6 +461,146 @@ public class UserDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void getEducatorDetails() {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_id", UserEducator.getID(context));
+
+        HttpProvider.post(context, "controller_global/get_user_details.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    Debugger.logD(str);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String user_id = jsonObject.getString("user_id");
+                    String user_token = jsonObject.getString("user_token");
+                    String user_email_address = jsonObject.getString("user_email_address");
+                    String user_password = jsonObject.getString("user_password");
+                    String user_firstname = jsonObject.getString("user_firstname");
+                    String user_lastname = jsonObject.getString("user_lastname");
+                    String user_middlename = jsonObject.getString("user_middlename");
+                    String user_suffixes = jsonObject.getString("user_suffixes");
+                    String user_gender = jsonObject.getString("user_gender");
+                    String user_contact_number = jsonObject.getString("user_contact_number");
+                    String user_image = jsonObject.getString("user_image");
+                    String user_educational_attainment = jsonObject.getString("user_educational_attainment");
+                    String user_subj_major = jsonObject.getString("user_subj_major");
+                    String user_current_school = jsonObject.getString("user_current_school");
+                    String user_position = jsonObject.getString("user_position");
+                    String user_facebook = jsonObject.getString("user_facebook");
+                    String user_instagram = jsonObject.getString("user_instagram");
+                    String user_twitter = jsonObject.getString("user_twitter");
+                    String user_gmail = jsonObject.getString("user_gmail");
+                    String user_motto = jsonObject.getString("user_motto");
+
+                    UserEducator userEducator = new UserEducator();
+                    userEducator.setId(user_id);
+                    userEducator.setToken(user_token);
+                    userEducator.setEmail_address(user_email_address);
+                    userEducator.setPassword(user_password);
+                    userEducator.setFirsname(user_firstname);
+                    userEducator.setLastname(user_lastname);
+                    userEducator.setMiddlename(user_middlename);
+                    userEducator.setSuffix(user_suffixes);
+                    userEducator.setGender(user_gender);
+                    userEducator.setContact_number(user_contact_number);
+                    userEducator.setImage(user_image);
+                    userEducator.setEducational_attainment(user_educational_attainment);
+                    userEducator.setSubj_major(user_subj_major);
+                    userEducator.setCurrent_school(user_current_school);
+                    userEducator.setPosition(user_position);
+                    userEducator.setFacebook(user_facebook);
+                    userEducator.setInstagram(user_instagram);
+                    userEducator.setTwitter(user_twitter);
+                    userEducator.setGmail(user_gmail);
+                    userEducator.setMotto(user_motto);
+                    userEducator.saveUserSession(context);
+
+                    setEducatorFieldsData();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Debugger.logD(e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void getStudentDetails() {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("user_token", UserStudent.getToken(context));
+        params.put("user_id", UserStudent.getID(context));
+
+        HttpProvider.post(context, "controller_global/get_user_details.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    Debugger.logD(str);
+                    String user_id = jsonObject.getString("user_id");
+                    String user_token = jsonObject.getString("user_token");
+                    String user_email_address = jsonObject.getString("user_email_address");
+                    String user_password = jsonObject.getString("user_password");
+                    String user_firstname = jsonObject.getString("user_firstname");
+                    String user_lastname = jsonObject.getString("user_lastname");
+                    String user_middlename = jsonObject.getString("user_middlename");
+                    String user_suffixes = jsonObject.getString("user_suffixes");
+                    String user_gender = jsonObject.getString("user_gender");
+                    String user_contact_number = jsonObject.getString("user_contact_number");
+                    String user_image = jsonObject.getString("user_image");
+                    String user_educational_attainment = jsonObject.getString("user_educational_attainment");
+                    String user_subj_major = jsonObject.getString("user_subj_major");
+                    String user_current_school = jsonObject.getString("user_current_school");
+                    String user_position = jsonObject.getString("user_position");
+
+                    UserStudent userStudent = new UserStudent();
+                    userStudent.setToken(user_token);
+                    userStudent.setId(user_id);
+                    userStudent.setEmail_address(user_email_address);
+                    userStudent.setPassword(user_password);
+                    userStudent.setFirsname(user_firstname);
+                    userStudent.setLastname(user_lastname);
+                    userStudent.setMiddlename(user_middlename);
+                    userStudent.setSuffix(user_suffixes);
+                    userStudent.setGender(user_gender);
+                    userStudent.setContact_number(user_contact_number);
+                    userStudent.setImage(user_image);
+                    userStudent.setEducational_attainment(user_educational_attainment);
+                    userStudent.setSubj_major(user_subj_major);
+                    userStudent.setCurrent_school(user_current_school);
+                    userStudent.setPosition(user_position);
+                    userStudent.saveUserSession(context);
+
+                    setStudentFieldsData();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -481,22 +623,21 @@ public class UserDetailsActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IMAGE_PICK_GALLERY_CODE) {
                 selectedFile = data.getData();
-                Glide.with(context)
-                        .load(selectedFile)
-                        .apply(GlideOptions.getOptions())
-                        .into(ivProfile);
-
-                Uri selectedImage = data.getData();
 
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-                Cursor cursor = context.getContentResolver().query(selectedImage,
+                Cursor cursor = context.getContentResolver().query(selectedFile,
                         filePathColumn, null, null, null);
                 cursor.moveToFirst();
 
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 selectedFilePath = cursor.getString(columnIndex);
                 myFile = new File(selectedFilePath);
+
+                Glide.with(context)
+                        .load(myFile)
+                        .apply(GlideOptions.getOptions())
+                        .into(ivProfile);
 
                 if (role.equals(UserRole.Educator())) {
                     try {

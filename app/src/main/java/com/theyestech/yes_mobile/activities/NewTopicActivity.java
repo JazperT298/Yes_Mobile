@@ -25,10 +25,10 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.io.File;
@@ -128,12 +128,16 @@ public class NewTopicActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("topic_details", etDetails.getText().toString());
         params.put("subj_id", subject.getId());
-        try {
-            params.put("topic_file", myFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Debugger.logD(e.toString());
-        }
+
+        if (myFile != null) {
+            try {
+                params.put("topic_file", myFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Debugger.logD(e.toString());
+            }
+        } else
+            params.put("topic_file", "");
 
         HttpProvider.post(context, "controller_educator/upload_topic.php", params, new AsyncHttpResponseHandler() {
             @Override
