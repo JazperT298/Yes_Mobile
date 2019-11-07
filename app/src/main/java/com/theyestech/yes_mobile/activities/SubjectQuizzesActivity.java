@@ -28,6 +28,7 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Quiz;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -65,13 +66,14 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
     private String title, items, time, type;
     private ArrayList<String> sType = new ArrayList<>();
 
+    private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject_quizzes);
 
         subject = getIntent().getParcelableExtra("SUBJECT");
-        Debugger.logD("SUBJECT QUIZ: " + subject.getId());
 
         sType.add("Multiple");
         sType.add("TrueOrFalse");
@@ -80,6 +82,11 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
 
         context = this;
         role = UserRole.getRole(context);
+
+        if (role.equals(UserRole.Educator()))
+            userId = UserEducator.getID(context);
+        else
+            userId = UserStudent.getID(context);
 
         initializeUI();
     }
@@ -125,7 +132,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
         floatingActionButton.setEnabled(false);
 
         RequestParams params = new RequestParams();
-        params.put("teach_id", UserEducator.getID(context));
+        params.put("user_id", userId);
         params.put("subj_id", subject.getId());
 
         HttpProvider.post(context, "controller_educator/get_quizzes_subject.php", params, new AsyncHttpResponseHandler() {
@@ -174,17 +181,10 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                     quizzesAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            if (role.equals(UserRole.Educator())) {
-                                selectedQuiz = quizArrayList.get(position);
-                                Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
-                                intent.putExtra("QUIZ", selectedQuiz);
-                                startActivity(intent);
-                            } else {
-                                selectedQuiz = quizArrayList.get(position);
-                                Intent intent = new Intent(context, SubjectQuizzesTakeActivity.class);
-                                intent.putExtra("QUIZ", selectedQuiz);
-                                startActivity(intent);
-                            }
+                            selectedQuiz = quizArrayList.get(position);
+                            Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
+                            intent.putExtra("QUIZ", selectedQuiz);
+                            startActivity(intent);
                         }
                     });
 

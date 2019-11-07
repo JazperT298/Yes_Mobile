@@ -30,6 +30,7 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Question;
 import com.theyestech.yes_mobile.models.Quiz;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -75,6 +76,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
     private ArrayList<String> choicesArrayList = new ArrayList<>();
     private ArrayList<Integer> isCorrectArrayList = new ArrayList<>();
 
+    private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +87,11 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
 
         context = this;
         role = UserRole.getRole(context);
+
+        if (role.equals(UserRole.Educator()))
+            userId = UserEducator.getID(context);
+        else
+            userId = UserStudent.getID(context);
 
         initializeUI();
 
@@ -140,7 +148,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
         params.put("quiz_id", quiz.getQuiz_id());
-        params.put("user_id", UserEducator.getID(context));
+        params.put("user_id", userId);
 
         HttpProvider.post(context, "controller_global/GetQuestionsAndAnswers.php", params, new AsyncHttpResponseHandler() {
             @Override
