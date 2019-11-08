@@ -3,6 +3,7 @@ package com.theyestech.yes_mobile.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -108,6 +109,11 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.fab_QuizQuestions);
         emptyIndicator = findViewById(R.id.view_Empty);
 
+        if (role.equals(UserRole.Student())) {
+            swipeRefreshLayout.setEnabled(false);
+            floatingActionButton.setVisibility(View.GONE);
+        }
+
         swipeRefreshLayout.setRefreshing(true);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -155,9 +161,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
                 floatingActionButton.setEnabled(true);
-                String str = new String(responseBody, StandardCharsets.UTF_8);
 
-                Debugger.logD(str);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
@@ -202,13 +207,20 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
-                    questionsAdapter = new QuestionsAdapter(context, questionArrayList);
+                    questionsAdapter = new QuestionsAdapter(context, questionArrayList, role);
                     questionsAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position) {
                             selectedQuestion = questionArrayList.get(position);
-                            isEdit = true;
-                            selectAction();
+
+                            if (role.equals(UserRole.Student())){
+                                Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
+//                                intent.putExtra("QUIZ", selectedQuestion);
+                                startActivity(intent);
+                            } else {
+                                isEdit = true;
+                                selectAction();
+                            }
                         }
                     });
 
@@ -561,7 +573,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    private void deleteQuizQuestion(){
+    private void deleteQuizQuestion() {
         ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
@@ -618,5 +630,12 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         super.onResume();
 
         getQuestionDetails();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
     }
 }

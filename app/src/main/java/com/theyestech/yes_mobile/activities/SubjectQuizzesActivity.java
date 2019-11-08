@@ -2,6 +2,7 @@ package com.theyestech.yes_mobile.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -140,15 +141,13 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
                 floatingActionButton.setEnabled(true);
-                String str = new String(responseBody, StandardCharsets.UTF_8);
 
-                Debugger.logD(str);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
 
                 try {
-
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("QUIZ: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
@@ -161,6 +160,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         String quiz_item = jsonObject.getString("quiz_item");
                         String quiz_time = jsonObject.getString("quiz_time");
                         String quiz_image = jsonObject.getString("image");
+                        String quiz_done = jsonObject.getString("quiz_done");
 
                         Quiz quiz = new Quiz();
                         quiz.setQuiz_id(quiz_id);
@@ -171,20 +171,25 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         quiz.setQuiz_item(quiz_item);
                         quiz.setQuiz_time(quiz_time);
                         quiz.setQuiz_image(quiz_image.substring(1));
+                        quiz.setQuiz_done(quiz_done);
 
                         quizArrayList.add(quiz);
                     }
 
                     recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
                     recyclerView.setHasFixedSize(true);
-                    quizzesAdapter = new QuizzesAdapter(context, quizArrayList);
+                    quizzesAdapter = new QuizzesAdapter(context, quizArrayList, role);
                     quizzesAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position) {
                             selectedQuiz = quizArrayList.get(position);
-                            Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
-                            intent.putExtra("QUIZ", selectedQuiz);
-                            startActivity(intent);
+                            if (role.equals(UserRole.Student()))
+                                openTakQuizDialog();
+                            else {
+                                Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
+                                intent.putExtra("QUIZ", selectedQuiz);
+                                startActivity(intent);
+                            }
                         }
                     });
 
@@ -317,6 +322,24 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
 
         b.show();
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    private void openTakQuizDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Take Quiz")
+                .setIcon(R.drawable.ic_quiz)
+                .setMessage("Are you sure you want to take quiz?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
+                        intent.putExtra("QUIZ", selectedQuiz);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
     }
 
     @Override

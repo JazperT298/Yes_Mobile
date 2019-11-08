@@ -2,30 +2,31 @@ package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Question;
+import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.util.ArrayList;
 
-public class QuestionsAdapter  extends  RecyclerView.Adapter<QuestionsAdapter.ViewHolder>{
+public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.ViewHolder> {
 
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Question> questionArrayList;
     private OnClickRecyclerView onClickRecyclerView;
+    private String role;
 
-    public QuestionsAdapter(Context context, ArrayList<Question> questionArrayList) {
+    public QuestionsAdapter(Context context, ArrayList<Question> questionArrayList, String role) {
         this.context = context;
+        this.role = role;
         this.questionArrayList = questionArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
@@ -43,9 +44,12 @@ public class QuestionsAdapter  extends  RecyclerView.Adapter<QuestionsAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Question question = questionArrayList.get(i);
 
-        viewHolder.tvQuestion.setText("Question: " + question.getQuestion_value());
-        viewHolder.tvAnswer.setText("Answer: " + question.getQuestion_correct_answer());
+        viewHolder.tvQuestion.setText(String.format("Question: %s", question.getQuestion_value()));
 
+        if (role.equals(UserRole.Educator()))
+            viewHolder.tvAnswer.setText(String.format("Answer: %s", question.getQuestion_correct_answer()));
+        else
+            viewHolder.tvAnswer.setText("Not Answered");
     }
 
     @Override
