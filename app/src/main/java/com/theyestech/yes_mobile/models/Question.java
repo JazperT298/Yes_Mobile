@@ -8,6 +8,7 @@ public class Question {
     private String question_quiz_id;
     private String question_value;
     private String question_correct_answer;
+    private String question_is_answered;
     private ArrayList<Answer> answers;
 
     public static class Answer {
@@ -70,6 +71,14 @@ public class Question {
 
     public void setQuestion_correct_answer(String question_correct_answer) {
         this.question_correct_answer = question_correct_answer;
+    }
+
+    public String getQuestion_is_answered() {
+        return question_is_answered;
+    }
+
+    public void setQuestion_is_answered(String question_is_answered) {
+        this.question_is_answered = question_is_answered;
     }
 
     public ArrayList<Answer> getAnswers() {

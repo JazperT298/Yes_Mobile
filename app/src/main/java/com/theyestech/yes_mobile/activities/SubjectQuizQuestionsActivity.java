@@ -3,7 +3,6 @@ package com.theyestech.yes_mobile.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -77,8 +76,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
     private ArrayList<String> choicesArrayList = new ArrayList<>();
     private ArrayList<Integer> isCorrectArrayList = new ArrayList<>();
 
-    private String userId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,16 +86,10 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         context = this;
         role = UserRole.getRole(context);
 
-        if (role.equals(UserRole.Educator()))
-            userId = UserEducator.getID(context);
-        else
-            userId = UserStudent.getID(context);
-
         initializeUI();
 
         tvHeader.setText(quiz.getQuiz_title());
         quizType = quiz.getQuiz_type();
-
     }
 
     private void initializeUI() {
@@ -108,11 +99,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rv_QuizQuestions);
         floatingActionButton = findViewById(R.id.fab_QuizQuestions);
         emptyIndicator = findViewById(R.id.view_Empty);
-
-        if (role.equals(UserRole.Student())) {
-            swipeRefreshLayout.setEnabled(false);
-            floatingActionButton.setVisibility(View.GONE);
-        }
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -154,7 +140,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
         params.put("quiz_id", quiz.getQuiz_id());
-        params.put("user_id", userId);
+        params.put("user_id", UserEducator.getID(context));
 
         HttpProvider.post(context, "controller_global/GetQuestionsAndAnswers.php", params, new AsyncHttpResponseHandler() {
             @Override
@@ -212,15 +198,8 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position) {
                             selectedQuestion = questionArrayList.get(position);
-
-                            if (role.equals(UserRole.Student())){
-                                Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
-//                                intent.putExtra("QUIZ", selectedQuestion);
-                                startActivity(intent);
-                            } else {
-                                isEdit = true;
-                                selectAction();
-                            }
+                            isEdit = true;
+                            selectAction();
                         }
                     });
 
@@ -572,6 +551,34 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         b.show();
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
+
+//    private void submitAnswer() {
+//        ProgressPopup.showProgress(context);
+//
+//        RequestParams params = new RequestParams();
+//        params.put("user_id", userId);
+//        params.put("question_id", selectedQuestion.getQuestion_id());
+//        params.put("quiz_id", selectedQuestion.getQuestion_quiz_id());
+//        params.put("selectedAnswer", answer);
+//
+//        HttpProvider.post(context, "controller_student/SubmitQuizAnswer.php", params, new AsyncHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                ProgressPopup.hideProgress();
+//                String str = new String(responseBody, StandardCharsets.UTF_8);
+//                if (str.contains("success")) {
+//                    Toasty.success(context, "Submitted").show();
+//                } else
+//                    Toasty.warning(context, "Failed").show();
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                ProgressPopup.hideProgress();
+//                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+//            }
+//        });
+//    }
 
     private void deleteQuizQuestion() {
         ProgressPopup.showProgress(context);

@@ -44,12 +44,16 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Question question = questionArrayList.get(i);
 
-        viewHolder.tvQuestion.setText(String.format("Question: %s", question.getQuestion_value()));
+        viewHolder.tvQuestion.setText(String.format("#%d: %s", i + 1, question.getQuestion_value()));
 
         if (role.equals(UserRole.Educator()))
             viewHolder.tvAnswer.setText(String.format("Answer: %s", question.getQuestion_correct_answer()));
-        else
-            viewHolder.tvAnswer.setText("Not Answered");
+        else {
+            if (question.getQuestion_is_answered().equals("false"))
+                viewHolder.tvAnswer.setText("Not Answered");
+            else
+                viewHolder.tvAnswer.setText("Answered");
+        }
     }
 
     @Override

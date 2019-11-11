@@ -184,7 +184,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         public void onItemClick(View view, int position) {
                             selectedQuiz = quizArrayList.get(position);
                             if (role.equals(UserRole.Student()))
-                                openTakQuizDialog();
+                                openTakeQuizDialog();
                             else {
                                 Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
                                 intent.putExtra("QUIZ", selectedQuiz);
@@ -324,7 +324,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    private void openTakQuizDialog() {
+    private void openTakeQuizDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Take Quiz")
                 .setIcon(R.drawable.ic_quiz)
@@ -332,7 +332,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
+                        Intent intent = new Intent(context, SubjectQuizzesTakeActivity.class);
                         intent.putExtra("QUIZ", selectedQuiz);
                         startActivity(intent);
                     }

@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         params.put("login_s_email_address", UserStudent.getEmail(context));
         params.put("login_s_password", UserStudent.getPassword(context));
 
-        HttpProvider.post(context, "controller_educator/login_as_educator_class.php", params, new AsyncHttpResponseHandler() {
+        HttpProvider.post(context, "controller_student/login_as_student_class.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
