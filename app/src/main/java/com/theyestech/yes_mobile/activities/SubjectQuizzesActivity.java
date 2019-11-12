@@ -68,6 +68,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
     private ArrayList<String> sType = new ArrayList<>();
 
     private String userId;
+    private String quizType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +143,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
                 floatingActionButton.setEnabled(true);
 
-                String str = new String(responseBody, StandardCharsets.UTF_8);
+                final String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
@@ -183,9 +184,14 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position) {
                             selectedQuiz = quizArrayList.get(position);
-                            if (role.equals(UserRole.Student()))
-                                openTakeQuizDialog();
-                            else {
+                            if (role.equals(UserRole.Student())) {
+                                if (selectedQuiz.getQuiz_done().equals("false")) {
+                                    quizType = selectedQuiz.getQuiz_type();
+                                    openTakeQuizDialog();
+                                } else {
+                                    viewQuizAnswers();
+                                }
+                            } else {
                                 Intent intent = new Intent(context, SubjectQuizQuestionsActivity.class);
                                 intent.putExtra("QUIZ", selectedQuiz);
                                 startActivity(intent);
@@ -262,6 +268,12 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
         });
     }
 
+    private void viewQuizAnswers() {
+        Intent intent = new Intent(context, SubjectQuizzesTakeAnswersActivity.class);
+        intent.putExtra("QUIZ", selectedQuiz);
+        startActivity(intent);
+    }
+
     private void openAddQuizDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
@@ -334,6 +346,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(context, SubjectQuizzesTakeActivity.class);
                         intent.putExtra("QUIZ", selectedQuiz);
+                        intent.putExtra("QUIZ_TYPE", quizType);
                         startActivity(intent);
                     }
                 })

@@ -30,7 +30,6 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Question;
 import com.theyestech.yes_mobile.models.Quiz;
 import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -551,34 +550,6 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
         b.show();
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
-
-//    private void submitAnswer() {
-//        ProgressPopup.showProgress(context);
-//
-//        RequestParams params = new RequestParams();
-//        params.put("user_id", userId);
-//        params.put("question_id", selectedQuestion.getQuestion_id());
-//        params.put("quiz_id", selectedQuestion.getQuestion_quiz_id());
-//        params.put("selectedAnswer", answer);
-//
-//        HttpProvider.post(context, "controller_student/SubmitQuizAnswer.php", params, new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                ProgressPopup.hideProgress();
-//                String str = new String(responseBody, StandardCharsets.UTF_8);
-//                if (str.contains("success")) {
-//                    Toasty.success(context, "Submitted").show();
-//                } else
-//                    Toasty.warning(context, "Failed").show();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                ProgressPopup.hideProgress();
-//                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
-//            }
-//        });
-//    }
 
     private void deleteQuizQuestion() {
         ProgressPopup.showProgress(context);

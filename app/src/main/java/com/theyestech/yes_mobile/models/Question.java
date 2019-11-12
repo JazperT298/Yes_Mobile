@@ -15,6 +15,7 @@ public class Question {
         private String choice_id;
         private String choice_value;
         private String choice_isCorrect;
+        private String selected_answer;
 
         public String getChoice_id() {
             return choice_id;
@@ -38,6 +39,14 @@ public class Question {
 
         public void setChoice_isCorrect(String choice_isCorrect) {
             this.choice_isCorrect = choice_isCorrect;
+        }
+
+        public String getSelected_answer() {
+            return selected_answer;
+        }
+
+        public void setSelected_answer(String selected_answer) {
+            this.selected_answer = selected_answer;
         }
     }
 
