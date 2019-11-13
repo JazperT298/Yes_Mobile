@@ -47,15 +47,17 @@ public class QuizQuestionAnswerAdapter extends RecyclerView.Adapter<QuizQuestion
 
         if (quizType.equals("Multiple")) {
             viewHolder.rb1.setText(question.getAnswers().get(0).getChoice_value());
+            if ((question.getAnswers().get(0).getSelected_answer().equals("1")))
+                viewHolder.rb1.setChecked(true);
             viewHolder.rb2.setText(question.getAnswers().get(1).getChoice_value());
+            if ((question.getAnswers().get(1).getSelected_answer().equals("1")))
+                viewHolder.rb1.setChecked(true);
             viewHolder.rb3.setText(question.getAnswers().get(2).getChoice_value());
+            if ((question.getAnswers().get(2).getSelected_answer().equals("1")))
+                viewHolder.rb1.setChecked(true);
             viewHolder.rb4.setText(question.getAnswers().get(3).getChoice_value());
-        }
-
-        for (Question.Answer answer : question.getAnswers()) {
-            if (answer.getSelected_answer().equals("1")) {
-
-            }
+            if ((question.getAnswers().get(3).getSelected_answer().equals("1")))
+                viewHolder.rb1.setChecked(true);
         }
     }
 

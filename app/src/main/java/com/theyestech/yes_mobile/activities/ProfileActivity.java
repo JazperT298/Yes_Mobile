@@ -12,13 +12,28 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.JsonArray;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+
+import cz.msebera.android.httpclient.Header;
+import es.dmoral.toasty.Toasty;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -28,7 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     //Educator widgets
     private ImageView ivProfileEducator, ivBackEducator, ivDetailsEducator, ivSubjectsEducator, ivSectionsEducator, ivVideosEducator, ivAssessmentsEducator, ivAnnouncementsEducator, ivLogoutEducator;
-    private TextView tvFullnameEducator, tvEmailEducator, tvPostCountEducator, tvSubjectCountEducator, tvSectionCountEducator;
+    private TextView tvFullnameEducator, tvEmailEducator, tvPostCountEducator, tvSubjectCountEducator, tvStudentCountEducator;
 
     //Student widgets
     private ImageView ivProfileStudent, ivBackStudent, ivDetailsStudent, ivSubjectsStudent, ivEducatorsStudent, ivStickersStudent, ivLogoutStudent;
@@ -63,7 +78,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvEmailEducator = findViewById(R.id.tv_ProfileEducatorEmail);
         tvPostCountEducator = findViewById(R.id.tv_ProfileEducatorPosts);
         tvSubjectCountEducator = findViewById(R.id.tv_ProfileEducatorSubjects);
-        tvSectionCountEducator = findViewById(R.id.tv_ProfileEducatorSections);
+        tvStudentCountEducator = findViewById(R.id.tv_ProfileEducatorStudents);
 
         ivBackEducator.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,21 +192,57 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setEducatorDetails() {
-        tvFullnameEducator.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context));
+        tvFullnameEducator.setText(String.format("%s %s", UserEducator.getFirstname(context), UserEducator.getLastname(context)));
         tvEmailEducator.setText(UserEducator.getEmail(context));
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
                 .apply(GlideOptions.getOptions())
                 .into(ivProfileEducator);
+
+        getEducatorSubjectsAndStudentsCount();
     }
 
     private void setStudentDetails() {
-        tvFullnameStudent.setText(UserStudent.getFirstname(context) + " " + UserStudent.getLastname(context));
+        tvFullnameStudent.setText(String.format("%s %s", UserStudent.getFirstname(context), UserStudent.getLastname(context)));
         tvEmailStudent.setText(UserStudent.getEmail(context));
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
                 .apply(GlideOptions.getOptions())
                 .into(ivProfileStudent);
+    }
+
+    private void getEducatorSubjectsAndStudentsCount(){
+
+
+        RequestParams params = new RequestParams();
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_id", UserEducator.getID(context));
+
+        HttpProvider.post(context, "controller_educator/CountSubjectsAndStudents.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String student_count = jsonObject.getString("student_count");
+                    String subject_count = jsonObject.getString("subject_count");
+
+                    tvStudentCountEducator.setText(student_count);
+                    tvSubjectCountEducator.setText(subject_count);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Debugger.logD(e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 
     private void openLogoutDialog() {

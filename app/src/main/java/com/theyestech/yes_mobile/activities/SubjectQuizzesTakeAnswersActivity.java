@@ -36,7 +36,6 @@ public class SubjectQuizzesTakeAnswersActivity extends AppCompatActivity {
 
     private ImageView ivBack;
     private TextView tvHeader, tvScore;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
 
     private ArrayList<Question> questionArrayList = new ArrayList<>();
@@ -58,15 +57,9 @@ public class SubjectQuizzesTakeAnswersActivity extends AppCompatActivity {
         ivBack = findViewById(R.id.iv_TakeQuizAnswersBack);
         tvHeader = findViewById(R.id.tv_TakeQuizAnswersHeader);
         tvScore = findViewById(R.id.tv_TakeQuizAnswersScore);
-        swipeRefreshLayout = findViewById(R.id.swipe_TakeQuizAnswers);
         recyclerView = findViewById(R.id.rv_TakeQuizAnswers);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getAnswers();
-            }
-        });
+        tvHeader.setText(quiz.getQuiz_title());
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,8 +74,6 @@ public class SubjectQuizzesTakeAnswersActivity extends AppCompatActivity {
     private void getAnswers() {
         questionArrayList.clear();
 
-        swipeRefreshLayout.setRefreshing(true);
-
         RequestParams params = new RequestParams();
         params.put("quiz_id", quiz.getQuiz_id());
         params.put("user_id", UserStudent.getID(context));
@@ -90,7 +81,6 @@ public class SubjectQuizzesTakeAnswersActivity extends AppCompatActivity {
         HttpProvider.post(context, "controller_student/GetStudentAnswers.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                swipeRefreshLayout.setRefreshing(false);
 
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
@@ -139,7 +129,7 @@ public class SubjectQuizzesTakeAnswersActivity extends AppCompatActivity {
                         questionArrayList.add(question);
                     }
 
-                    tvScore.setText("Score: " + overAllScore + "/" + totalScore);
+                    tvScore.setText(String.format("Score: %s/%s", totalScore, overAllScore));
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
@@ -155,7 +145,6 @@ public class SubjectQuizzesTakeAnswersActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                swipeRefreshLayout.setRefreshing(false);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
