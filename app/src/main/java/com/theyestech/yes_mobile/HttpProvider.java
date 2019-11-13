@@ -14,10 +14,10 @@ public class HttpProvider {
     //private static final String BASE_URL = "http://127.0.0.1/yes/api/api/student/";
 
     //OFFICE IP
-    private static final String BASE_URL = "http://192.168.168.13/yes_tech/controllerClass/";
+//    private static final String BASE_URL = "http://192.168.168.13/yes_tech/controllerClass/";
 
     //MY IP
-//    private static final String BASE_URL = "http://192.168.137.1/yes_tech/controllerClass/";
+    private static final String BASE_URL = "http://192.168.254.112/yes_tech/controllerClass/";
 
     //LIVE IP
    //private static final String BASE_URL = "http://theyestech.com/controllerClass/";

@@ -457,6 +457,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 choice1 = etChoice1.getText().toString();
                 answer = choice1;
+                isCorrectArrayList.clear();
                 isCorrectArrayList.add(1);
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
@@ -469,6 +470,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 choice2 = etChoice2.getText().toString();
                 answer = choice2;
+                isCorrectArrayList.clear();
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(1);
                 isCorrectArrayList.add(0);
@@ -481,6 +483,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 choice3 = etChoice3.getText().toString();
                 answer = choice3;
+                isCorrectArrayList.clear();
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(1);
@@ -493,6 +496,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 choice4 = etChoice4.getText().toString();
                 answer = choice4;
+                isCorrectArrayList.clear();
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
                 isCorrectArrayList.add(0);
