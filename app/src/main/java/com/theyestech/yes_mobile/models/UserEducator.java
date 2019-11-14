@@ -25,6 +25,10 @@ public class UserEducator {
     private String twitter;
     private String gmail;
     private String motto;
+    private String user_activation;
+    private String user_role;
+    private String validated;
+    private String connection;
     private String firebase_token;
 
     public String getId() {
@@ -191,6 +195,38 @@ public class UserEducator {
         this.motto = motto;
     }
 
+    public String getUser_activation() {
+        return user_activation;
+    }
+
+    public void setUser_activation(String user_activation) {
+        this.user_activation = user_activation;
+    }
+
+    public String getUser_role() {
+        return user_role;
+    }
+
+    public void setUser_role(String user_role) {
+        this.user_role = user_role;
+    }
+
+    public String getValidated() {
+        return validated;
+    }
+
+    public void setValidated(String validated) {
+        this.validated = validated;
+    }
+
+    public String getConnection() {
+        return connection;
+    }
+
+    public void setConnection(String connection) {
+        this.connection = connection;
+    }
+
     public void setFirebase_token(String firebase_token) {
         this.firebase_token = firebase_token;
     }
@@ -295,6 +331,26 @@ public class UserEducator {
         return settings.getString("MOTTO", "");
     }
 
+    public static String getActivation(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("ACTIVATION", "");
+    }
+
+    public static String getRole(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("ROLE", "");
+    }
+
+    public static String getValidated(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("VALIDATED", "");
+    }
+
+    public static String getConnection(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("CONNECTION", "");
+    }
+
     public static String getFirebaseToken(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("FIREBASE_TOKEN", "");
@@ -323,6 +379,10 @@ public class UserEducator {
         editor.putString("TWIITER", twitter);
         editor.putString("GMAIL", gmail);
         editor.putString("MOTTO", motto);
+        editor.putString("ACTIVATION", user_activation);
+        editor.putString("ROLE", user_role);
+        editor.putString("VALIDATED", validated);
+        editor.putString("CONNECTION", connection);
         editor.putString("FIREBASE_TOKEN", firebase_token);
         return editor.commit();
     }

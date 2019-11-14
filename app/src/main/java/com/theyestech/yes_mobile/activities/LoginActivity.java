@@ -249,6 +249,10 @@ public class LoginActivity extends AppCompatActivity {
                     String user_twitter = jsonObject.getString("user_twitter");
                     String user_gmail = jsonObject.getString("user_gmail");
                     String user_motto = jsonObject.getString("user_motto");
+                    String user_activation = jsonObject.getString("user_activation");
+                    String user_role = jsonObject.getString("user_role");
+                    String validated = jsonObject.getString("validated");
+                    String connection = jsonObject.getString("connection");
 
                     userEducator.setEmail_address(user_email_address);
                     userEducator.setPassword(etPassword.getText().toString());
@@ -268,6 +272,10 @@ public class LoginActivity extends AppCompatActivity {
                     userEducator.setTwitter(user_twitter);
                     userEducator.setGmail(user_gmail);
                     userEducator.setMotto(user_motto);
+                    userEducator.setUser_activation(user_activation);
+                    userEducator.setUser_role(user_role);
+                    userEducator.setValidated(validated);
+                    userEducator.setConnection(connection);
 
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
