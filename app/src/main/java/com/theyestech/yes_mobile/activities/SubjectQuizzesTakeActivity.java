@@ -215,7 +215,7 @@ public class SubjectQuizzesTakeActivity extends AppCompatActivity {
 
         selectedQuestion = questionArrayList.get(questionCounter);
 
-        tvMultipleHeader.setText("#" + (questionCounter + 1));
+        tvMultipleHeader.setText(String.format("#%d", questionCounter + 1));
         tvMultipleQuestion.setText(selectedQuestion.getQuestion_value());
         rbMultiple1.setText(selectedQuestion.getAnswers().get(0).getChoice_value());
         rbMultiple2.setText(selectedQuestion.getAnswers().get(1).getChoice_value());
