@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.JsonArray;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -23,7 +22,6 @@ import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -33,7 +31,6 @@ import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
 
 import cz.msebera.android.httpclient.Header;
-import es.dmoral.toasty.Toasty;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -42,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String role;
 
     //Educator widgets
-    private ImageView ivProfileEducator, ivBackEducator, ivDetailsEducator, ivSubjectsEducator, ivSectionsEducator, ivVideosEducator, ivAssessmentsEducator, ivAnnouncementsEducator, ivLogoutEducator;
+    private ImageView ivProfileEducator, ivBackEducator, ivDetailsEducator, ivSubjectsEducator, ivSectionsEducator, ivNotesEducator, ivAssessmentsEducator, ivAnnouncementsEducator, ivLogoutEducator;
     private TextView tvFullnameEducator, tvEmailEducator, tvPostCountEducator, tvSubjectCountEducator, tvStudentCountEducator;
 
     //Student widgets
@@ -70,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
         ivDetailsEducator = findViewById(R.id.iv_ProfileEducatorDetails);
         ivSubjectsEducator = findViewById(R.id.iv_ProfileEducatorSubjects);
         ivSectionsEducator = findViewById(R.id.iv_ProfileEducatorSections);
-        ivVideosEducator = findViewById(R.id.iv_ProfileEducatorNotes);
+        ivNotesEducator = findViewById(R.id.iv_ProfileEducatorNotes);
         ivAssessmentsEducator = findViewById(R.id.iv_ProfileEducatorRewards);
         ivAnnouncementsEducator = findViewById(R.id.iv_ProfileEducatorConnections);
         ivLogoutEducator = findViewById(R.id.iv_ProfileEducatorLogout);
@@ -111,7 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        ivVideosEducator.setOnClickListener(new View.OnClickListener() {
+        ivNotesEducator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

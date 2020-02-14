@@ -7,6 +7,7 @@
         android:centerColor="#3584A7"
         android:startColor="#30D2BE"
         android:type="linear"
+        android:centerX="50"
         android:angle="45"/>
 
 </shape>
