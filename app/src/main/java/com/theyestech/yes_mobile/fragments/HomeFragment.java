@@ -74,8 +74,8 @@ public class HomeFragment extends Fragment {
 
     private void initializeUI() {
         ivProfile = view.findViewById(R.id.iv_HomeProfile);
-        ivSearch = view.findViewById(R.id.iv_HomeSearch);
-        ivNewPost = view.findViewById(R.id.iv_HomeNewPost);
+//        ivSearch = view.findViewById(R.id.iv_HomeSearch);
+//        ivNewPost = view.findViewById(R.id.iv_HomeNewPost);
         tvFirstname = view.findViewById(R.id.tv_HomeFirstname);
         swipeRefreshLayout = view.findViewById(R.id.swipe_Home);
         recyclerView = view.findViewById(R.id.rv_Home);
@@ -101,13 +101,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ivNewPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, NewNewsfeedActivity.class);
-                startActivity(intent);
-            }
-        });
+//        ivNewPost.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, NewNewsfeedActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         if (role.equals(UserRole.Educator()))
             setEducatorHeader();

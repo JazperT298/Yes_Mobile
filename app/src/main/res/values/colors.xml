@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#30D2BE</color>
-<!--    <color name="colorPrimaryDark">#473B7B</color>-->
-    <color name="colorPrimaryDark">#30D2BE</color>
-    <color name="colorAccent">#3584A7</color>
+<!--    <color name="colorPrimary">#30D2BE</color>-->
+<!--    <color name="colorPrimaryDark">#30D2BE</color>-->
+<!--    <color name="colorAccent">#3584A7</color>-->
+
+    <color name="colorPrimary">#27ae60</color>
+    <color name="colorPrimaryDark">#27ae60</color>
+    <color name="colorAccent">#27ae60</color>
+
+    <color name="color1">#2ecc71</color>
+    <color name="color2">#27ae60</color>
+    <color name="color3">#16a085</color>
+
+    <color name="colorTurquoise">#1abc9c</color>
+    <color name="colorEmerland">#2ecc71</color>
+    <color name="colorPeterriver">#3498db</color>
+    <color name="colorAmethyst">#9b59b6</color>
+    <color name="colorCarrot">#e67e22</color>
+    <color name="colorAlizarin">#e74c3c</color>
+    <color name="colorMidnightblue">#2c3e50</color>
+
+    <color name="colorWhite">#ffffff</color>
 </resources>
