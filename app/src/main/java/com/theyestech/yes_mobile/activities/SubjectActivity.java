@@ -114,18 +114,16 @@ public class SubjectActivity extends AppCompatActivity {
             }
         });
 
+        Debugger.logD("ROLE " + UserRole.getRole(context));
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sId.isEmpty())
-                    Toasty.warning(context, "Add section before creating subject.").show();
+                if (role.equals(UserRole.Educator()))
+                    openAddSubjectDialog();
                 else {
-                    if (role.equals(UserRole.Educator()))
-                        openAddSubjectDialog();
-                    else {
-                        Intent intent = new Intent(context, SubjectSearchActivity.class);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(context, SubjectSearchActivity.class);
+                    startActivity(intent);
                 }
             }
         });

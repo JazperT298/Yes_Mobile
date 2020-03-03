@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.NewNewsfeedActivity;
 import com.theyestech.yes_mobile.activities.ProfileActivity;
+import com.theyestech.yes_mobile.activities.SubjectActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
@@ -45,8 +47,9 @@ public class HomeFragment extends Fragment {
 
     private String role;
 
-    private ImageView ivProfile, ivSearch, ivNewPost;
+    private ImageView ivProfile;
     private TextView tvFirstname;
+    private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ConstraintLayout emptyIndicator;
@@ -77,9 +80,74 @@ public class HomeFragment extends Fragment {
 //        ivSearch = view.findViewById(R.id.iv_HomeSearch);
 //        ivNewPost = view.findViewById(R.id.iv_HomeNewPost);
         tvFirstname = view.findViewById(R.id.tv_HomeFirstname);
+        cvSubjects = view.findViewById(R.id.cv_Home_Subjects);
+        cvNotes = view.findViewById(R.id.cv_Home_Notes);
+        cvConnections = view.findViewById(R.id.cv_Home_Connections);
+        cvNewsfeeds = view.findViewById(R.id.cv_Home_Newsfeeds);
+        cvVideoLab = view.findViewById(R.id.cv_Home_VideoLab);
+        cvYestechCourse = view.findViewById(R.id.cv_Home_YestechCourse);
+        cvMyVideos = view.findViewById(R.id.cv_Home_MyVideos);
         swipeRefreshLayout = view.findViewById(R.id.swipe_Home);
         recyclerView = view.findViewById(R.id.rv_Home);
         emptyIndicator = view.findViewById(R.id.view_Empty);
+
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cvSubjects.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SubjectActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cvNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        cvConnections.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        cvNewsfeeds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        cvVideoLab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        cvYestechCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        cvMyVideos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         swipeRefreshLayout.setRefreshing(false);
 
@@ -93,13 +161,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ivProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
+
 
 //        ivNewPost.setOnClickListener(new View.OnClickListener() {
 //            @Override
