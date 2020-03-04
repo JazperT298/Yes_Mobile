@@ -10,6 +10,7 @@
         android:id="@+id/constraintLayout12"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPeterriver"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_back" />
+            app:srcCompat="@drawable/ic_back_white" />
 
         <TextView
             android:id="@+id/textView23"
@@ -31,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="New Topic"
-            android:textColor="@android:color/primary_text_light_nodisable"
+            android:textColor="@color/colorWhite"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_NewTopicBack"
@@ -116,7 +117,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_gallery" />
+            app:srcCompat="@drawable/ic_topics_images" />
 
         <ImageView
             android:id="@+id/iv_NewTopicSend"
@@ -126,7 +127,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_send" />
+            app:srcCompat="@drawable/ic_topics_send" />
 
         <ImageView
             android:id="@+id/iv_NewTopicAttach"
@@ -136,7 +137,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_NewTopicGallery"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_attach" />
+            app:srcCompat="@drawable/ic_topics_attachment" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

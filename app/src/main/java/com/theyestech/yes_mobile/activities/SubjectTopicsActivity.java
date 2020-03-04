@@ -2,6 +2,7 @@ package com.theyestech.yes_mobile.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -62,6 +65,12 @@ public class SubjectTopicsActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPeterriver));
+        }
+
         ivBack = findViewById(R.id.iv_SubjectTopicsBack);
         swipeRefreshLayout = findViewById(R.id.swipe_SubjectTopics);
         recyclerView = findViewById(R.id.rv_SubjectTopics);

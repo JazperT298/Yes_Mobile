@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.activities;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -68,6 +71,12 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPeterriver));
+        }
+
         ivBack = findViewById(R.id.iv_TopicCommentBack);
         ivSend = findViewById(R.id.iv_TopicCommentSend);
         swipeRefreshLayout = findViewById(R.id.swipe_TopicComment);
@@ -118,7 +127,6 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
         params.put("topic_id", topicId);
-        Debugger.logD(topicId);
 
         HttpProvider.post(context, "controller_educator/get_topic_comments.php", params, new AsyncHttpResponseHandler() {
             @Override
