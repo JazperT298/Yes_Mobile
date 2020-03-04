@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -75,6 +78,12 @@ public class SubjectStudentsActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorSunflower));
+        }
+
         ivBack = findViewById(R.id.iv_SubjectStudentsBack);
         swipeRefreshLayout = findViewById(R.id.swipe_SubjectStudents);
         recyclerView = findViewById(R.id.rv_SubjectStudents);
@@ -119,13 +128,13 @@ public class SubjectStudentsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
+
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
 
                 try {
-
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("STUDENTS: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
@@ -141,6 +150,8 @@ public class SubjectStudentsActivity extends AppCompatActivity {
                         String user_gender = jsonObject.getString("user_gender");
                         String user_contact_number = jsonObject.getString("user_contact_number");
                         String user_image = jsonObject.getString("user_image");
+                        String user_activation = jsonObject.getString("user_activation");
+                        String validated = jsonObject.getString("validated");
 
                         Student student = new Student();
                         student.setUser_id(user_id);
@@ -154,6 +165,8 @@ public class SubjectStudentsActivity extends AppCompatActivity {
                         student.setUser_gender(user_gender);
                         student.setUser_contact_number(user_contact_number);
                         student.setUser_image(user_image);
+                        student.setUser_activiation(user_activation);
+                        student.setUser_validated(validated);
 
                         studentArrayList.add(student);
                     }
@@ -176,6 +189,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Debugger.logD(e.toString());
                 }
             }
 

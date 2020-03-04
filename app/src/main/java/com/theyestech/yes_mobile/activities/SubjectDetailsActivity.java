@@ -108,13 +108,13 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         cvAwards = findViewById(R.id.cv_SubjectDetails_ViewAwards);
         cvAssessment = findViewById(R.id.cv_SubjectDetails_ViewAssessment);
 
+        tvHeader.setText(subject.getTitle());
 
         if (!role.equals(UserRole.Educator())) {
             cvDetails.setVisibility(View.GONE);
             cvStudents.setVisibility(View.GONE);
+            cvAssessment.setVisibility(View.GONE);
         }
-
-        tvHeader.setText(subject.getTitle());
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override

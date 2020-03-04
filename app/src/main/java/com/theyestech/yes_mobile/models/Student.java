@@ -12,6 +12,8 @@ public class Student {
     private String user_gender;
     private String user_contact_number;
     private String user_image;
+    private String user_activiation;
+    private String user_validated;
 
     public Student() {
 
@@ -103,5 +105,21 @@ public class Student {
 
     public void setUser_image(String user_image) {
         this.user_image = user_image;
+    }
+
+    public String getUser_activiation() {
+        return user_activiation;
+    }
+
+    public void setUser_activiation(String user_activiation) {
+        this.user_activiation = user_activiation;
+    }
+
+    public String getUser_validated() {
+        return user_validated;
+    }
+
+    public void setUser_validated(String user_validated) {
+        this.user_validated = user_validated;
     }
 }
