@@ -6,10 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,25 +49,26 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
     private String role;
 
-    private ImageView ivBack, ivDetails, ivStudents, ivTopics, ivQuizzes, ivDelete;
-    private TextView tvHeader, tvDetails, tvStudents, tvDelete;
+    private ImageView ivBack;
+    private TextView tvHeader;
+    private CardView cvDetails, cvStudents, cvTopics, cvQuiz, cvStickers, cvAwards, cvAssessment;
 
-    private EditText etName, etDescription;
+    private EditText etName, etDescription, etSection;
     private MaterialSpinner spSection, spLevel, spSemester;
     private TextView tvHeaderDialog;
     private Button btnSave;
     private ImageView ivClose;
 
     private Subject subject;
-
-    private ArrayList<Section> sectionArrayList = new ArrayList<>();
-
-    private ArrayList<String> sName = new ArrayList<>();
-    private ArrayList<String> sId = new ArrayList<>();
+//
+//    private ArrayList<Section> sectionArrayList = new ArrayList<>();
+//
+//    private ArrayList<String> sName = new ArrayList<>();
+//    private ArrayList<String> sId = new ArrayList<>();
     private ArrayList<String> sLevel = new ArrayList<>();
     private ArrayList<String> sSemester = new ArrayList<>();
 
-    private String name = "", description = "", sectionId = "", level = "", semester = "", schoolYear = "";
+    private String name = "", description = "", section = "", level = "", semester = "", schoolYear = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,24 +92,26 @@ public class SubjectDetailsActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorAlizarin));
+        }
+
         tvHeader = findViewById(R.id.tv_SubjectDetailsSHeader);
-        tvDelete = findViewById(R.id.tv_SubjectDetailsDeleteSubject);
-        tvDetails = findViewById(R.id.tv_SubjectDetailsViewDetails);
-        tvStudents = findViewById(R.id.tv_SubjectDetailsViewStudents);
         ivBack = findViewById(R.id.iv_SubjectDetailsBack);
-        ivDetails = findViewById(R.id.iv_SubjectDetailsViewDetails);
-        ivStudents = findViewById(R.id.iv_SubjectDetailsViewStudents);
-        ivTopics = findViewById(R.id.iv_SubjectDetailsViewTopics);
-        ivQuizzes = findViewById(R.id.iv_SubjectDetailsViewQuizzes);
-        ivDelete = findViewById(R.id.iv_SubjectDetailsDeleteSubject);
+        cvDetails = findViewById(R.id.cv_SubjectDetails_ViewDetails);
+        cvStudents = findViewById(R.id.cv_SubjectDetails_ViewStudents);
+        cvTopics = findViewById(R.id.cv_SubjectDetails_ViewTopics);
+        cvQuiz = findViewById(R.id.cv_SubjectDetails_ViewQuizzes);
+        cvStickers = findViewById(R.id.cv_SubjectDetails_ViewStickers);
+        cvAwards = findViewById(R.id.cv_SubjectDetails_ViewAwards);
+        cvAssessment = findViewById(R.id.cv_SubjectDetails_ViewAssessment);
+
 
         if (!role.equals(UserRole.Educator())) {
-            ivDetails.setVisibility(View.GONE);
-            ivStudents.setVisibility(View.GONE);
-            ivDelete.setVisibility(View.GONE);
-            tvDetails.setVisibility(View.GONE);
-            tvStudents.setVisibility(View.GONE);
-            tvDelete.setVisibility(View.GONE);
+            cvDetails.setVisibility(View.GONE);
+            cvStudents.setVisibility(View.GONE);
         }
 
         tvHeader.setText(subject.getTitle());
@@ -116,15 +123,15 @@ public class SubjectDetailsActivity extends AppCompatActivity {
             }
         });
 
-        ivDetails.setOnClickListener(new View.OnClickListener() {
+        cvDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSectionDetails();
+//                getSectionDetails();
                 openAddSubjectDialog();
             }
         });
 
-        ivStudents.setOnClickListener(new View.OnClickListener() {
+        cvStudents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SubjectStudentsActivity.class);
@@ -133,7 +140,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
             }
         });
 
-        ivTopics.setOnClickListener(new View.OnClickListener() {
+        cvTopics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SubjectTopicsActivity.class);
@@ -142,7 +149,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
             }
         });
 
-        ivQuizzes.setOnClickListener(new View.OnClickListener() {
+        cvQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SubjectQuizzesActivity.class);
@@ -150,19 +157,12 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        ivDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDeleteDialog();
-            }
-        });
     }
 
     private void getSectionDetails() {
-        sectionArrayList.clear();
-        sName.clear();
-        sId.clear();
+//        sectionArrayList.clear();
+//        sName.clear();
+//        sId.clear();
 
         ProgressPopup.showProgress(context);
 
@@ -191,10 +191,10 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                         section.setSchool_year(section_year);
                         section.setUser_id(user_id);
 
-                        sName.add(section_name);
-                        sId.add(section_id);
-
-                        sectionArrayList.add(section);
+//                        sName.add(section_name);
+//                        sId.add(section_id);
+//
+//                        sectionArrayList.add(section);
                     }
 
                 } catch (Exception e) {
@@ -218,6 +218,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
         etName = dialogView.findViewById(R.id.et_AddEditSubjectName);
         etDescription = dialogView.findViewById(R.id.et_AddEditSubjectDescription);
+        etSection = dialogView.findViewById(R.id.et_AddEditSubjectSection);
 //        spSection = dialogView.findViewById(R.id.sp_AddEditSubjectSection);
         spLevel = dialogView.findViewById(R.id.sp_AddEditSubjectLevel);
         spSemester = dialogView.findViewById(R.id.sp_AddEditSubjectSemester);
@@ -231,13 +232,13 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
         setSubjectDetailsField();
 
-        spSection.setItems(sName);
-        spSection.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                sectionId = sId.get(position);
-            }
-        });
+////        spSection.setItems(sName);
+//        spSection.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+//                section = sId.get(position);
+//            }
+//        });
 
         spLevel.setItems(sLevel);
         spLevel.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
@@ -324,7 +325,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                     tvHeader.setText(name);
                     subject.setTitle(name);
                     subject.setDescription(description);
-                    subject.setSection_id(sectionId);
+                    subject.setSection(section);
                     subject.setLevel(level);
                     subject.setSemester(semester);
                     setSubjectDetailsField();
@@ -343,13 +344,14 @@ public class SubjectDetailsActivity extends AppCompatActivity {
     private void setSubjectDetailsField() {
         etName.setText(subject.getTitle());
         etDescription.setText(subject.getDescription());
-        spSection.post(new Runnable() {
-            @Override
-            public void run() {
-                spSection.setSelectedIndex(sId.indexOf(subject.getSection_id()));
-                sectionId = sId.get(spSection.getSelectedIndex());
-            }
-        });
+        etSection.setText(subject.getSection());
+//        spSection.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                spSection.setSelectedIndex(sId.indexOf(subject.getSection_id()));
+//                section = sId.get(spSection.getSelectedIndex());
+//            }
+//        });
         spLevel.post(new Runnable() {
             @Override
             public void run() {
@@ -367,21 +369,5 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    private void openDeleteDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(context)
-                .setTitle("Delete")
-                .setIcon(R.drawable.ic_delete)
-                .setMessage("Are you sure you want to delete?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                        logoutUser();
-                    }
-                })
-                .setNegativeButton("NO", null)
-                .create();
-        dialog.show();
     }
 }

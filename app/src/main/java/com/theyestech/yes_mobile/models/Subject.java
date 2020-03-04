@@ -8,7 +8,7 @@ public class Subject implements Parcelable {
     private String id;
     private String level;
     private String user_id;
-    private String section_id;
+    private String section;
     private String title;
     private String description;
     private String semester;
@@ -23,7 +23,7 @@ public class Subject implements Parcelable {
         id = in.readString();
         level = in.readString();
         user_id = in.readString();
-        section_id = in.readString();
+        section = in.readString();
         title = in.readString();
         description = in.readString();
         semester = in.readString();
@@ -74,12 +74,12 @@ public class Subject implements Parcelable {
         this.user_id = user_id;
     }
 
-    public String getSection_id() {
-        return section_id;
+    public String getSection() {
+        return section;
     }
 
-    public void setSection_id(String section_id) {
-        this.section_id = section_id;
+    public void setSection(String section) {
+        this.section = section;
     }
 
     public String getTitle() {
@@ -164,7 +164,7 @@ public class Subject implements Parcelable {
         dest.writeString(id);
         dest.writeString(level);
         dest.writeString(user_id);
-        dest.writeString(section_id);
+        dest.writeString(section);
         dest.writeString(title);
         dest.writeString(description);
         dest.writeString(semester);

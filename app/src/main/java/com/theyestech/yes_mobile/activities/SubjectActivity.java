@@ -98,7 +98,7 @@ public class SubjectActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#e74c3c"));
+            window.setStatusBarColor(getResources().getColor(R.color.colorAlizarin));
         }
 
         ivBack = findViewById(R.id.iv_SubjectsBack);
@@ -168,7 +168,7 @@ public class SubjectActivity extends AppCompatActivity {
                         String subj_id = jsonObject.getString("subj_id");
                         String subj_level = jsonObject.getString("subj_level");
                         String user_id = jsonObject.getString("user_id");
-                        String section_id = jsonObject.getString("subj_section");
+                        String subj_section = jsonObject.getString("subj_section");
                         String subj_title = jsonObject.getString("subj_title");
                         String subj_description = jsonObject.getString("subj_description");
                         String subj_semester = jsonObject.getString("subj_semester");
@@ -181,7 +181,7 @@ public class SubjectActivity extends AppCompatActivity {
                         subject.setId(subj_id);
                         subject.setLevel(subj_level);
                         subject.setUser_id(user_id);
-                        subject.setSection_id(section_id);
+                        subject.setSection(subj_section);
                         subject.setTitle(subj_title);
                         subject.setDescription(subj_description);
                         subject.setSemester(subj_semester);
@@ -264,7 +264,7 @@ public class SubjectActivity extends AppCompatActivity {
                         subject.setId(subj_id);
                         subject.setLevel(subj_level);
                         subject.setUser_id(user_id);
-                        subject.setSection_id(section_id);
+                        subject.setSection(section_id);
                         subject.setTitle(subj_title);
                         subject.setDescription(subj_description);
                         subject.setSemester(subj_semester);

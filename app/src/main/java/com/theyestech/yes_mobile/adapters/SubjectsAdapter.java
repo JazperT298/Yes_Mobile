@@ -1,6 +1,8 @@
 package com.theyestech.yes_mobile.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -91,7 +93,7 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
             ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    openDeleteDialog();
                 }
             });
         }
@@ -99,5 +101,21 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
 
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
+    }
+
+    private void openDeleteDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Delete")
+                .setIcon(R.drawable.ic_subjects_delete)
+                .setMessage("Are you sure you want to delete?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        logoutUser();
+                    }
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
     }
 }
