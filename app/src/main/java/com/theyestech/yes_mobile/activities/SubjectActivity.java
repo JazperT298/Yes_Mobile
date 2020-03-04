@@ -6,15 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,7 +31,6 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.SubjectsAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Section;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
@@ -63,14 +66,10 @@ public class SubjectActivity extends AppCompatActivity {
     private SubjectsAdapter subjectsAdapter;
     private Subject selectedSubject = new Subject();
 
-    private ArrayList<Section> sectionArrayList = new ArrayList<>();
-
-    private ArrayList<String> sName = new ArrayList<>();
-    private ArrayList<String> sId = new ArrayList<>();
     private ArrayList<String> sLevel = new ArrayList<>();
     private ArrayList<String> sSemester = new ArrayList<>();
 
-    private String name = "", description = "", sectionId = "", level = "", semester = "", schoolYear = "";
+    private String name = "", description = "", section = "", level = "", semester = "", schoolYear = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +94,13 @@ public class SubjectActivity extends AppCompatActivity {
 
     @SuppressLint("RestrictedApi")
     private void initializeUI() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.parseColor("#e74c3c"));
+        }
+
         ivBack = findViewById(R.id.iv_SubjectsBack);
         swipeRefreshLayout = findViewById(R.id.swipe_Subjects);
         recyclerView = findViewById(R.id.rv_Subjects);
@@ -114,8 +120,6 @@ public class SubjectActivity extends AppCompatActivity {
             }
         });
 
-        Debugger.logD("ROLE " + UserRole.getRole(context));
-
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +138,6 @@ public class SubjectActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     private void getEducatorSubjectDetails() {
@@ -152,27 +155,27 @@ public class SubjectActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
                 floatingActionButton.setEnabled(true);
+
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
 
                 try {
-
                     JSONArray jsonArray = new JSONArray(str);
-                    Debugger.logD("SUBJECTS: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String subj_id = jsonObject.getString("subj_id");
                         String subj_level = jsonObject.getString("subj_level");
                         String user_id = jsonObject.getString("user_id");
-                        String section_id = jsonObject.getString("section_id");
+                        String section_id = jsonObject.getString("subj_section");
                         String subj_title = jsonObject.getString("subj_title");
                         String subj_description = jsonObject.getString("subj_description");
                         String subj_semester = jsonObject.getString("subj_semester");
                         String subj_school_year = jsonObject.getString("subj_school_year");
                         String subj_file = jsonObject.getString("subj_file");
                         String subj_code = jsonObject.getString("subj_code");
+                        String studentCount = jsonObject.getString("studentCount");
 
                         Subject subject = new Subject();
                         subject.setId(subj_id);
@@ -185,11 +188,12 @@ public class SubjectActivity extends AppCompatActivity {
                         subject.setSchool_year(subj_school_year);
                         subject.setImage(subj_file);
                         subject.setCode(subj_code);
+                        subject.setStud_count(studentCount);
 
                         subjectArrayList.add(subject);
                     }
 
-                    recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
                     subjectsAdapter = new SubjectsAdapter(context, subjectArrayList);
                     subjectsAdapter.setClickListener(new OnClickRecyclerView() {
@@ -311,7 +315,7 @@ public class SubjectActivity extends AppCompatActivity {
         params.put("subj_title", name);
         params.put("subj_description", description);
         params.put("subj_level", level);
-        params.put("section_id", sectionId);
+        params.put("subj_section", section);
         params.put("subj_semester", semester);
         params.put("subj_school_year", schoolYear);
         params.put("subj_file", "");
@@ -321,11 +325,11 @@ public class SubjectActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                Debugger.logD(str);
                 if (str.contains("success")) {
                     Toasty.success(context, "Saved.").show();
                 } else
                     Toasty.warning(context, "Failed").show();
+
                 getEducatorSubjectDetails();
             }
 
@@ -337,68 +341,20 @@ public class SubjectActivity extends AppCompatActivity {
         });
     }
 
-    private void getSectionDetails() {
-        sectionArrayList.clear();
-        sName.clear();
-        sId.clear();
-
-        RequestParams params = new RequestParams();
-        params.put("teach_token", UserEducator.getToken(context));
-        params.put("teach_id", UserEducator.getID(context));
-
-        HttpProvider.post(context, "controller_educator/get_sections.php", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
-                    JSONArray jsonArray = new JSONArray(str);
-                    Debugger.logD("SECTION: " + jsonArray);
-                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String section_id = jsonObject.getString("section_id");
-                        String section_name = jsonObject.getString("section_name");
-                        String section_year = jsonObject.getString("section_year");
-                        String user_id = jsonObject.getString("user_id");
-
-                        Section section = new Section();
-                        section.setId(section_id);
-                        section.setName(section_name);
-                        section.setSchool_year(section_year);
-                        section.setUser_id(user_id);
-
-                        sName.add(section_name);
-                        sId.add(section_id);
-
-                        sectionArrayList.add(section);
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Debugger.logD("SECTION: " + e.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
-            }
-        });
-    }
-
     private void openAddSubjectDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_add_edit_subject, null);
-        final EditText etName, etDescription;
-        final MaterialSpinner spSection, spLevel, spSemester;
+        final EditText etName, etDescription, etSection;
+        final MaterialSpinner spLevel, spSemester;
         final TextView tvHeader;
         final Button btnSave;
         final ImageView ivClose;
 
         etName = dialogView.findViewById(R.id.et_AddEditSubjectName);
         etDescription = dialogView.findViewById(R.id.et_AddEditSubjectDescription);
-        spSection = dialogView.findViewById(R.id.sp_AddEditSubjectSection);
+        etSection = dialogView.findViewById(R.id.et_AddEditSubjectSection);
         spLevel = dialogView.findViewById(R.id.sp_AddEditSubjectLevel);
         spSemester = dialogView.findViewById(R.id.sp_AddEditSubjectSemester);
         tvHeader = dialogView.findViewById(R.id.tv_AddEditSubjectHeader);
@@ -407,16 +363,7 @@ public class SubjectActivity extends AppCompatActivity {
 
         spSemester.setVisibility(View.GONE);
 
-        sectionId = sId.get(0);
         level = sLevel.get(0);
-
-        spSection.setItems(sName);
-        spSection.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                sectionId = sId.get(position);
-            }
-        });
 
         spLevel.setItems(sLevel);
         spLevel.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
@@ -460,6 +407,7 @@ public class SubjectActivity extends AppCompatActivity {
                 name = etName.getText().toString();
                 description = etDescription.getText().toString();
                 schoolYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+                section = etSection.getText().toString();
 
                 if (name.isEmpty())
                     Toasty.warning(context, "Please input subject name.").show();
@@ -491,7 +439,5 @@ public class SubjectActivity extends AppCompatActivity {
             getEducatorSubjectDetails();
         else
             getStudentSubjectDetails();
-
-        getSectionDetails();
     }
 }

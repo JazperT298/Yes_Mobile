@@ -17,7 +17,7 @@ public class Subject implements Parcelable {
     private String code;
     private String user_firstname;
     private String user_lastname;
-
+    private String stud_count;
 
     private Subject(Parcel in) {
         id = in.readString();
@@ -144,6 +144,14 @@ public class Subject implements Parcelable {
 
     public void setUser_lastname(String user_lastname) {
         this.user_lastname = user_lastname;
+    }
+
+    public String getStud_count() {
+        return stud_count;
+    }
+
+    public void setStud_count(String stud_count) {
+        this.stud_count = stud_count;
     }
 
     @Override

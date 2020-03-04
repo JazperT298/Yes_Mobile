@@ -6,16 +6,16 @@ import android.preference.PreferenceManager;
 
 public class UserRole {
     public static String Student() {
-        return "STUDENT";
+        return "2";
     }
 
     public static String Educator() {
-        return "EDUCATOR";
+        return "1";
     }
 
     private String userRole;
 
-    public UserRole(){
+    public UserRole() {
 
     }
 
@@ -27,14 +27,12 @@ public class UserRole {
         this.userRole = userRole;
     }
 
-    public static String getRole(Context context)
-    {
+    public static String getRole(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("ROLE", "");
     }
 
-    public boolean saveRole(Context context)
-    {
+    public boolean saveRole(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("ROLE", userRole);

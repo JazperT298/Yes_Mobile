@@ -21,17 +21,16 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.activities.NewNewsfeedActivity;
 import com.theyestech.yes_mobile.activities.ProfileActivity;
 import com.theyestech.yes_mobile.activities.SubjectActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
-import com.theyestech.yes_mobile.models.UserStudent;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -48,7 +47,7 @@ public class HomeFragment extends Fragment {
     private String role;
 
     private ImageView ivProfile;
-    private TextView tvFirstname;
+    private TextView tvFirstname, tvEducationalAttainment, tvSubjectMajor, tvCurrentSchool, tvSchoolPosition;
     private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
@@ -80,6 +79,10 @@ public class HomeFragment extends Fragment {
 //        ivSearch = view.findViewById(R.id.iv_HomeSearch);
 //        ivNewPost = view.findViewById(R.id.iv_HomeNewPost);
         tvFirstname = view.findViewById(R.id.tv_HomeFirstname);
+        tvEducationalAttainment = view.findViewById(R.id.tv_Home_EducationalAttainment);
+        tvSubjectMajor = view.findViewById(R.id.tv_Home_SubjectMajor);
+        tvCurrentSchool = view.findViewById(R.id.tv_Home_CurrentSchool);
+        tvSchoolPosition = view.findViewById(R.id.tv_Home_SchoolPosition);
         cvSubjects = view.findViewById(R.id.cv_Home_Subjects);
         cvNotes = view.findViewById(R.id.cv_Home_Notes);
         cvConnections = view.findViewById(R.id.cv_Home_Connections);
@@ -162,7 +165,6 @@ public class HomeFragment extends Fragment {
         });
 
 
-
 //        ivNewPost.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -178,9 +180,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void setEducatorHeader() {
-        if (!UserEducator.getFirstname(context).equals(""))
-            tvFirstname.setText(UserEducator.getFirstname(context));
-        else
+        if (!UserEducator.getFirstname(context).isEmpty()) {
+            tvFirstname.setText(String.format("%s %s", UserEducator.getFirstname(context), UserEducator.getLastname(context)));
+            tvEducationalAttainment.setText(UserEducator.getEducationalAttainment(context));
+            tvSubjectMajor.setText(UserEducator.getSubjectMajor(context));
+            tvCurrentSchool.setText(UserEducator.getCurrentSchool(context));
+            tvSchoolPosition.setText(UserEducator.getPosition(context));
+        } else
             tvFirstname.setText(UserEducator.getEmail(context));
 
         Glide.with(context)
@@ -191,7 +197,7 @@ public class HomeFragment extends Fragment {
 
     private void setStudentHeader() {
         if (!UserStudent.getFirstname(context).equals(""))
-            tvFirstname.setText(UserStudent.getFirstname(context));
+            tvFirstname.setText(String.format("%s %s", UserStudent.getFirstname(context), UserStudent.getLastname(context)));
         else
             tvFirstname.setText(UserStudent.getEmail(context));
 

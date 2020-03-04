@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Vanne"
+                    android:text="Vanne Marsmyle"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView16"
@@ -62,7 +62,7 @@
                     app:layout_constraintTop_toTopOf="@+id/imageView16" />
 
                 <TextView
-                    android:id="@+id/textView33"
+                    android:id="@+id/tv_Home_StudentsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="100 Students"
@@ -104,7 +104,7 @@
                     app:srcCompat="@drawable/ic_dashboard_posts" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/tv_Home_PostsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -117,7 +117,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/imageView10" />
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/tv_Home_SubjectsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="100 Subjects"
@@ -159,7 +159,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView35"
+                        android:id="@+id/textView4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -169,33 +169,77 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView34" />
 
                     <TextView
-                        android:id="@+id/textView37"
+                        android:id="@+id/textView7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Subject Major:"
-                        app:layout_constraintStart_toStartOf="@+id/textView35"
-                        app:layout_constraintTop_toBottomOf="@+id/textView35" />
+                        app:layout_constraintStart_toStartOf="@+id/textView4"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_Home_EducationalAttainment" />
 
                     <TextView
-                        android:id="@+id/textView39"
+                        android:id="@+id/textView33"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Current School:"
-                        app:layout_constraintStart_toStartOf="@+id/textView37"
-                        app:layout_constraintTop_toBottomOf="@+id/textView37" />
+                        app:layout_constraintStart_toStartOf="@+id/textView7"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_Home_SubjectMajor" />
 
                     <TextView
-                        android:id="@+id/textView46"
+                        android:id="@+id/textView35"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:text="School Position:"
+                        app:layout_constraintStart_toStartOf="@+id/textView33"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_Home_CurrentSchool" />
+
+                    <TextView
+                        android:id="@+id/tv_Home_EducationalAttainment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Educational Attainment:"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView4"
+                        app:layout_constraintTop_toTopOf="@+id/textView4" />
+
+                    <TextView
+                        android:id="@+id/tv_Home_SubjectMajor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Subject Major:"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView7"
+                        app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+                    <TextView
+                        android:id="@+id/tv_Home_CurrentSchool"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Current School:"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView33"
+                        app:layout_constraintTop_toTopOf="@+id/textView33" />
+
+                    <TextView
+                        android:id="@+id/tv_Home_SchoolPosition"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="16dp"
                         android:text="School Position:"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/textView39"
-                        app:layout_constraintTop_toBottomOf="@+id/textView39" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView35"
+                        app:layout_constraintTop_toTopOf="@+id/textView35" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </android.support.v7.widget.CardView>
 

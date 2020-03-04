@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Subject;
+import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.util.ArrayList;
 
@@ -45,12 +47,16 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
         Subject subject = subjectArrayList.get(i);
 
         viewHolder.tvName.setText(subject.getTitle());
+        viewHolder.tvCode.setText(subject.getCode());
+        viewHolder.tvSchoolYear.setText(subject.getSchool_year());
+        viewHolder.tvStudents.setText(subject.getStud_count());
 
-        if(subject.getImage().length() > 5){
-            Glide.with(context)
-                    .load(HttpProvider.getSubjectDir() + subject.getImage())
-                .into(viewHolder.ivImage);
-    }
+
+//        if (subject.getImage().length() > 5) {
+//            Glide.with(context)
+//                    .load(HttpProvider.getSubjectDir() + subject.getImage())
+//                    .into(viewHolder.ivImage);
+//        }
     }
 
     @Override
@@ -60,22 +66,32 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivImage;
-        private TextView tvName;
-        private CardView cardView;
+        private ImageView ivDelete;
+        private TextView tvName, tvCode, tvSchoolYear, tvStudents;
+        private Button btnManage;
 
         public ViewHolder(View view) {
             super(view);
 
-            ivImage = view.findViewById(R.id.iv_ListrowSubjectsImage);
+            ivDelete = view.findViewById(R.id.iv_ListrowSubjectsDelete);
             tvName = view.findViewById(R.id.tv_ListrowSubjectsName);
-            cardView = view.findViewById(R.id.cv_ListrowSubjects);
+            tvCode = view.findViewById(R.id.tv_ListrowSubjectsSchoolCode);
+            tvSchoolYear = view.findViewById(R.id.tv_ListrowSubjectsSchoolYear);
+            tvStudents = view.findViewById(R.id.tv_ListrowSubjectsStudentsEnrolled);
+            btnManage = view.findViewById(R.id.btn_ListrowSubjectsManage);
 
-            cardView.setOnClickListener(new View.OnClickListener() {
+            btnManage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
                         onClickRecyclerView.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+            ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                 }
             });
         }

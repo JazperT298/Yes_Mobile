@@ -218,7 +218,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
         etName = dialogView.findViewById(R.id.et_AddEditSubjectName);
         etDescription = dialogView.findViewById(R.id.et_AddEditSubjectDescription);
-        spSection = dialogView.findViewById(R.id.sp_AddEditSubjectSection);
+//        spSection = dialogView.findViewById(R.id.sp_AddEditSubjectSection);
         spLevel = dialogView.findViewById(R.id.sp_AddEditSubjectLevel);
         spSemester = dialogView.findViewById(R.id.sp_AddEditSubjectSemester);
         tvHeaderDialog = dialogView.findViewById(R.id.tv_AddEditSubjectHeader);
