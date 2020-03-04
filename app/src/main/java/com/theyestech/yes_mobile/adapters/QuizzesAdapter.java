@@ -50,7 +50,7 @@ public class QuizzesAdapter extends RecyclerView.Adapter<QuizzesAdapter.ViewHold
         viewHolder.tvTitle.setText(quiz.getQuiz_title());
 
         if (role.equals(UserRole.Educator()))
-            viewHolder.btnTakeView.setText("View Details");
+            viewHolder.btnTakeView.setText("Manage");
         else {
             if (quiz.getQuiz_done().contains("true"))
                 viewHolder.btnTakeView.setText("View Answers");
