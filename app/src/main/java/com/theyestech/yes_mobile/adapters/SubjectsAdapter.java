@@ -52,13 +52,6 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
         viewHolder.tvCode.setText(subject.getCode());
         viewHolder.tvSchoolYear.setText(subject.getSchool_year());
         viewHolder.tvStudents.setText(subject.getStud_count());
-
-
-//        if (subject.getImage().length() > 5) {
-//            Glide.with(context)
-//                    .load(HttpProvider.getSubjectDir() + subject.getImage())
-//                    .into(viewHolder.ivImage);
-//        }
     }
 
     @Override

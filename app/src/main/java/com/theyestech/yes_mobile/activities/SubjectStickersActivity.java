@@ -1,14 +1,17 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,7 +25,6 @@ import com.theyestech.yes_mobile.adapters.StickersAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Stickers;
 import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
@@ -31,9 +33,9 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
-import es.dmoral.toasty.Toasty;
 
 public class SubjectStickersActivity extends AppCompatActivity {
 
@@ -69,7 +71,7 @@ public class SubjectStickersActivity extends AppCompatActivity {
 
         ivBack = findViewById(R.id.iv_SubjectStickersBack);
         swipeRefreshLayout = findViewById(R.id.swipe_Stickers);
-        recyclerView = findViewById(R.id.rv_Stickers);
+        recyclerView = findViewById(R.id.rv_DialogSendToStudent);
         emptyIndicator = findViewById(R.id.view_Empty);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -127,7 +129,8 @@ public class SubjectStickersActivity extends AppCompatActivity {
                     stickersAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Toasty.success(context, "Sent.").show();
+//                            Toasty.success(context, "Sent.").show();
+                            openSendStickerDialog();
                         }
                     });
 
@@ -145,5 +148,18 @@ public class SubjectStickersActivity extends AppCompatActivity {
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
+    }
+
+    private void openSendStickerDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_send_sticker_to_student, null);
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 }
