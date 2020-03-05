@@ -157,6 +157,14 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        cvStickers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SubjectStickersActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getSectionDetails() {
