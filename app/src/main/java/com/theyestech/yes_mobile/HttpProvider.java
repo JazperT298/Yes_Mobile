@@ -68,4 +68,8 @@ public class HttpProvider {
         return BASE_URL.replace("controllerClass/", "");
     }
 
+    public static String getStickerDir() {
+        return BASE_URL.replace("controllerClass/", "img/");
+    }
+
 }

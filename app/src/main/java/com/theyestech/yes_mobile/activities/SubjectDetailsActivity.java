@@ -49,7 +49,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
     private String role;
 
-    private ImageView ivBack;
+    private ImageView ivBack, ivClose;
     private TextView tvHeader;
     private CardView cvDetails, cvStudents, cvTopics, cvQuiz, cvStickers, cvAwards, cvAssessment;
 
@@ -57,7 +57,6 @@ public class SubjectDetailsActivity extends AppCompatActivity {
     private MaterialSpinner spSection, spLevel, spSemester;
     private TextView tvHeaderDialog;
     private Button btnSave;
-    private ImageView ivClose;
 
     private Subject subject;
 //
