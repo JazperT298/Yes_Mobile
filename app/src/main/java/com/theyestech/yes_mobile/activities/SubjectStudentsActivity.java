@@ -25,12 +25,12 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -212,20 +212,23 @@ public class SubjectStudentsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
+
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
+
                     JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     String result = jsonObject.getString("result");
-                    Debugger.logD(str);
+
                     if (result.contains("success")) {
-                        Toasty.success(context, "Saved.").show();
+                        Toasty.success(context, "Added").show();
                     } else
-                        Toasty.warning(context, result).show();
+                        Toasty.warning(context, "No student found").show();
+
                     getStudentDetails();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Debugger.logD("STUDENT: " + e.toString());
                 }
             }
 

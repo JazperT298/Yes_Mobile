@@ -3,6 +3,8 @@ package com.theyestech.yes_mobile.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -11,11 +13,16 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -35,6 +42,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
@@ -157,8 +165,6 @@ public class NotesActivity extends AppCompatActivity {
                         notesArrayList.add(notes);
                     }
 
-                    Debugger.printO(notesArrayList);
-
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
                     notesAdapter = new NotesAdapter(context, notesArrayList);
@@ -191,18 +197,22 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
-    private void deleteNote(){
+    private void deleteNote() {
         ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
         params.put("notes_id", selectedNote.getId());
         params.put("user_id", userId);
+        params.put("user_token", userToken);
 
         HttpProvider.post(context, "controller_global/DeleteUserNotes.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
                 String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                Debugger.logD(str);
+
                 if (str.contains("success")) {
                     Toasty.success(context, "Deleted").show();
                 } else
@@ -219,11 +229,26 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
-    private void openAddNoteDialog(){
+    private void openAddNoteDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_add_note, null);
+        final EditText etName, etDescription, etSection;
+        final MaterialSpinner spLevel, spSemester;
+        final TextView tvHeader;
+        final Button btnSave;
+        final ImageView ivClose;
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    private void openDeleteNoteDialog(){
+    private void openDeleteNoteDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")
                 .setIcon(R.drawable.ic_note_delete)
