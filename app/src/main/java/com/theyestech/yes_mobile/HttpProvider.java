@@ -72,4 +72,8 @@ public class HttpProvider {
         return BASE_URL.replace("controllerClass/", "img/");
     }
 
+    public static String getNotesDir() {
+        return BASE_URL.replace("controllerClass/", "notes-files/");
+    }
+
 }

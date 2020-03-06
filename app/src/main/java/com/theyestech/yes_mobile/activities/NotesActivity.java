@@ -23,6 +23,7 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Notes;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
@@ -49,6 +50,7 @@ public class NotesActivity extends AppCompatActivity {
 
     private ArrayList<Notes> notesArrayList = new ArrayList<>();
     private NotesAdapter notesAdapter;
+    private Notes selectedNotes = new Notes();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +94,7 @@ public class NotesActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                openAddNoteDialog();
             }
         });
 
@@ -122,6 +124,8 @@ public class NotesActivity extends AppCompatActivity {
 
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
+                Debugger.logD(str);
+
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
 
@@ -129,7 +133,7 @@ public class NotesActivity extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(str);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String notes_id = jsonObject.getString("notesAdapter");
+                        String notes_id = jsonObject.getString("notes_id");
                         String notes_userId = jsonObject.getString("notes_userId");
                         String notes_title = jsonObject.getString("notes_title");
                         String notes_url = jsonObject.getString("notes_url");
@@ -149,12 +153,16 @@ public class NotesActivity extends AppCompatActivity {
                         notesArrayList.add(notes);
                     }
 
+                    Debugger.printO(notesArrayList);
+
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
                     notesAdapter = new NotesAdapter(context, notesArrayList);
                     notesAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
+                            selectedNotes = notesArrayList.get(position);
+
                             if (fromButton == 1) {
 
                             } else if (fromButton == 2) {
@@ -177,5 +185,9 @@ public class NotesActivity extends AppCompatActivity {
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
+    }
+
+    private void openAddNoteDialog(){
+
     }
 }

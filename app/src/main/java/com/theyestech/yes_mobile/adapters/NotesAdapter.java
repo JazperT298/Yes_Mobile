@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Notes;
@@ -40,7 +42,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        Notes note = notesArrayList.get(i);
 
+        Glide.with(context)
+                .load(HttpProvider.getNotesDir() + note.getFile())
+                .into(viewHolder.ivImage);
+        viewHolder.tvTitle.setText(note.getTitle());
     }
 
     @Override
