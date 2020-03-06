@@ -46,6 +46,7 @@ import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
@@ -164,7 +165,7 @@ public class SubjectActivity extends AppCompatActivity {
 
                 try {
                     JSONArray jsonArray = new JSONArray(str);
-                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                    for (int i = 0 ; i <= jsonArray.length() - 1; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String subj_id = jsonObject.getString("subj_id");
                         String subj_level = jsonObject.getString("subj_level");
@@ -193,6 +194,8 @@ public class SubjectActivity extends AppCompatActivity {
 
                         subjectArrayList.add(subject);
                     }
+
+                    Collections.reverse(subjectArrayList);
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);

@@ -172,6 +172,15 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        cvAssessment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SubjectAssessmentsQuizActivity.class);
+                intent.putExtra("SUBJECT", subject);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getSectionDetails() {
