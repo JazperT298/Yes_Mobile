@@ -1,26 +1,31 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.AssessmentQuizAdapter;
-import com.theyestech.yes_mobile.adapters.QuizzesAdapter;
+import com.theyestech.yes_mobile.adapters.AssessmentsAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
+import com.theyestech.yes_mobile.models.Assessment;
 import com.theyestech.yes_mobile.models.Quiz;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
@@ -33,6 +38,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -48,6 +54,9 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
     private ArrayList<Quiz> quizArrayList = new ArrayList<>();
     private AssessmentQuizAdapter assessmentQuizAdapter;
     private Quiz selectedQuiz = new Quiz();
+
+    private ArrayList<Assessment> assessmentArrayList = new ArrayList<>();
+    private AssessmentsAdapter assessmentsAdapter;
 
     private Subject subject;
 
@@ -148,6 +157,7 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
                             selectedQuiz = quizArrayList.get(position);
+                            getStudentAssessment();
                         }
                     });
 
@@ -166,5 +176,90 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
+    }
+
+    private void getStudentAssessment() {
+        assessmentArrayList.clear();
+
+        swipeRefreshLayout.setRefreshing(true);
+
+        RequestParams params = new RequestParams();
+        params.put("quizId", selectedQuiz.getQuiz_id());
+
+        HttpProvider.post(context, "controller_educator/GetQuizAssessment.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                swipeRefreshLayout.setRefreshing(false);
+
+                final String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                if (str.equals(""))
+                    emptyIndicator.setVisibility(View.VISIBLE);
+
+                try {
+                    JSONArray jsonArray = new JSONArray(str);
+                    Debugger.logD("ASSESSMENT: " + jsonArray);
+                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String user_fullname = jsonObject.getString("user_fullname");
+                        String totalScore = jsonObject.getString("totalScore");
+                        String overAllScore = jsonObject.getString("overAllScore");
+                        String percentage = jsonObject.getString("percentage");
+
+                        Assessment assessment = new Assessment();
+                        assessment.setFullname(user_fullname);
+                        assessment.setTotalScore(totalScore);
+                        assessment.setOverAllScore(overAllScore);
+                        assessment.setPercentage(percentage);
+
+                        assessmentArrayList.add(assessment);
+                    }
+
+                    openAssessmentStudentsDialog();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Debugger.logD(e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                swipeRefreshLayout.setRefreshing(false);
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void openAssessmentStudentsDialog() {
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_view_assessment, null);
+
+        ImageView ivClose = dialogView.findViewById(R.id.iv_ViewAssessmentClose);
+        TextView tvHeader = dialogView.findViewById(R.id.tv_ViewAssessmentHeader);
+        RecyclerView recyclerView = dialogView.findViewById(R.id.rv_ViewAssessment);
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+        tvHeader.setText(selectedQuiz.getQuiz_title());
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setHasFixedSize(true);
+        assessmentsAdapter = new AssessmentsAdapter(context, assessmentArrayList);
+        recyclerView.setAdapter(assessmentsAdapter);
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.hide();
+            }
+        });
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 }

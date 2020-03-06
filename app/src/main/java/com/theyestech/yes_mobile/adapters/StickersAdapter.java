@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Stickers;
+import com.theyestech.yes_mobile.models.Sticker;
 
 import java.util.ArrayList;
 
@@ -21,12 +21,12 @@ public class StickersAdapter extends RecyclerView.Adapter<StickersAdapter.ViewHo
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Stickers> stickersArrayList;
+    private ArrayList<Sticker> stickerArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public StickersAdapter(Context context, ArrayList<Stickers> stickersArrayList) {
+    public StickersAdapter(Context context, ArrayList<Sticker> stickerArrayList) {
         this.context = context;
-        this.stickersArrayList = stickersArrayList;
+        this.stickerArrayList = stickerArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -41,7 +41,7 @@ public class StickersAdapter extends RecyclerView.Adapter<StickersAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Stickers sticker = stickersArrayList.get(i);
+        Sticker sticker = stickerArrayList.get(i);
 
         Glide.with(context)
                 .load(HttpProvider.getStickerDir() + sticker.getName())
@@ -50,7 +50,7 @@ public class StickersAdapter extends RecyclerView.Adapter<StickersAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return stickersArrayList.size();
+        return stickerArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

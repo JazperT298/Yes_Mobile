@@ -1,6 +1,6 @@
 package com.theyestech.yes_mobile.models;
 
-public class Stickers {
+public class Sticker {
 
     private String id;
     private String name;

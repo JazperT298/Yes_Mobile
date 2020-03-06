@@ -23,7 +23,7 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.StickersAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Stickers;
+import com.theyestech.yes_mobile.models.Sticker;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -47,7 +47,7 @@ public class SubjectStickersActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ConstraintLayout emptyIndicator;
 
-    private ArrayList<Stickers> stickersArrayList = new ArrayList<>();
+    private ArrayList<Sticker> stickerArrayList = new ArrayList<>();
     private StickersAdapter stickersAdapter;
 
     @Override
@@ -92,7 +92,7 @@ public class SubjectStickersActivity extends AppCompatActivity {
     }
 
     private void getAllStickers() {
-        stickersArrayList.clear();
+        stickerArrayList.clear();
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -116,16 +116,16 @@ public class SubjectStickersActivity extends AppCompatActivity {
                         String sticker_id = jsonObject.getString("sticker_id");
                         String sticker_name = jsonObject.getString("sticker_name");
 
-                        Stickers stickers = new Stickers();
-                        stickers.setId(sticker_id);
-                        stickers.setName(sticker_name);
+                        Sticker sticker = new Sticker();
+                        sticker.setId(sticker_id);
+                        sticker.setName(sticker_name);
 
-                        stickersArrayList.add(stickers);
+                        stickerArrayList.add(sticker);
                     }
 
                     recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
                     recyclerView.setHasFixedSize(true);
-                    stickersAdapter = new StickersAdapter(context, stickersArrayList);
+                    stickersAdapter = new StickersAdapter(context, stickerArrayList);
                     stickersAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
