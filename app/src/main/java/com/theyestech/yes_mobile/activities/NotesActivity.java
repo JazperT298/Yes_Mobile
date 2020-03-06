@@ -1,6 +1,8 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -25,6 +27,7 @@ import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -34,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import es.dmoral.toasty.Toasty;
 
 public class NotesActivity extends AppCompatActivity {
 
@@ -50,7 +54,7 @@ public class NotesActivity extends AppCompatActivity {
 
     private ArrayList<Notes> notesArrayList = new ArrayList<>();
     private NotesAdapter notesAdapter;
-    private Notes selectedNotes = new Notes();
+    private Notes selectedNote = new Notes();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,12 +165,12 @@ public class NotesActivity extends AppCompatActivity {
                     notesAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
-                            selectedNotes = notesArrayList.get(position);
+                            selectedNote = notesArrayList.get(position);
 
                             if (fromButton == 1) {
 
                             } else if (fromButton == 2) {
-
+                                openDeleteNoteDialog();
                             }
                         }
                     });
@@ -187,7 +191,51 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
+    private void deleteNote(){
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("notes_id", selectedNote.getId());
+        params.put("user_id", userId);
+
+        HttpProvider.post(context, "controller_global/DeleteUserNotes.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                if (str.contains("success")) {
+                    Toasty.success(context, "Deleted").show();
+                } else
+                    Toasty.warning(context, "Failed").show();
+
+                getAllNotes();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
     private void openAddNoteDialog(){
 
+    }
+
+    private void openDeleteNoteDialog(){
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Delete")
+                .setIcon(R.drawable.ic_note_delete)
+                .setMessage("Are you sure you want to delete \n" + selectedNote.getTitle() + "?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteNote();
+                    }
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
     }
 }

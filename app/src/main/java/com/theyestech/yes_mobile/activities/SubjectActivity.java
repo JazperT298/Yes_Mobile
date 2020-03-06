@@ -360,7 +360,7 @@ public class SubjectActivity extends AppCompatActivity {
                 ProgressPopup.hideProgress();
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 if (str.contains("success")) {
-                    Toasty.success(context, "Saved.").show();
+                    Toasty.success(context, "Deleted").show();
                 } else
                     Toasty.warning(context, "Failed").show();
 
@@ -469,7 +469,7 @@ public class SubjectActivity extends AppCompatActivity {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")
                 .setIcon(R.drawable.ic_subjects_delete)
-                .setMessage("Are you sure you want to delete?")
+                .setMessage("Are you sure you want to delete \n" + selectedSubject.getTitle() + "?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
