@@ -193,7 +193,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                     quizzesAdapter = new QuizzesAdapter(context, quizArrayList, role);
                     quizzesAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
                             selectedQuiz = quizArrayList.get(position);
                             if (role.equals(UserRole.Student())) {
                                 if (selectedQuiz.getQuiz_done().equals("false")) {

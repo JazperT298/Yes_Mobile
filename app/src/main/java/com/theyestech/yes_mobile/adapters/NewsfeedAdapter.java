@@ -22,16 +22,13 @@ import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
-import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.NewsfeedCommentActivity;
-import com.theyestech.yes_mobile.fragments.HomeFragment;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.nio.charset.StandardCharsets;
@@ -172,7 +169,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
-                        onClickRecyclerView.onItemClick(v, getAdapterPosition());
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
                 }
             });
 
@@ -180,7 +177,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
-                        onClickRecyclerView.onItemClick(v, getAdapterPosition());
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
                 }
             });
         }

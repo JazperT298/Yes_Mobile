@@ -128,7 +128,7 @@ public class SubjectStickersActivity extends AppCompatActivity {
                     stickersAdapter = new StickersAdapter(context, stickersArrayList);
                     stickersAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
 //                            Toasty.success(context, "Sent.").show();
                             openSendStickerDialog();
                         }

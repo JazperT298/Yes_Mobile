@@ -79,14 +79,15 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
-                        onClickRecyclerView.onItemClick(v, getAdapterPosition());
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
                 }
             });
 
             ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openDeleteDialog();
+                    if (onClickRecyclerView != null)
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 2);
                 }
             });
         }
@@ -94,21 +95,5 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
 
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
-    }
-
-    private void openDeleteDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(context)
-                .setTitle("Delete")
-                .setIcon(R.drawable.ic_subjects_delete)
-                .setMessage("Are you sure you want to delete?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                        logoutUser();
-                    }
-                })
-                .setNegativeButton("NO", null)
-                .create();
-        dialog.show();
     }
 }

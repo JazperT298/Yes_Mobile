@@ -77,7 +77,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
-                        onClickRecyclerView.onItemClick(v, getAdapterPosition());
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
                 }
             });
         }

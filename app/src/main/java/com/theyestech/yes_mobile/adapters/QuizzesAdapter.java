@@ -84,7 +84,7 @@ public class QuizzesAdapter extends RecyclerView.Adapter<QuizzesAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
-                        onClickRecyclerView.onItemClick(v, getAdapterPosition());
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
                 }
             });
         }

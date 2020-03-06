@@ -21,6 +21,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.activities.NotesActivity;
 import com.theyestech.yes_mobile.activities.ProfileActivity;
 import com.theyestech.yes_mobile.activities.SubjectActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
@@ -113,7 +114,8 @@ public class HomeFragment extends Fragment {
         cvNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, NotesActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -256,7 +258,7 @@ public class HomeFragment extends Fragment {
                     newsfeedAdapter = new NewsfeedAdapter(context, newsfeedArrayList, role);
                     newsfeedAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
                             selectedNewsfeed = newsfeedArrayList.get(position);
                         }
                     });

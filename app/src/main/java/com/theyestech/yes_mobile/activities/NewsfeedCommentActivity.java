@@ -163,7 +163,7 @@ public class NewsfeedCommentActivity extends AppCompatActivity {
                     commentsAdapter = new NewsfeedCommentsAdapter(context, commentArrayList);
                     commentsAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
 //                            selectedComment = commentArrayList.get(position);
 //                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
 //                            intent.putExtra("SUBJECT", selectedComment);

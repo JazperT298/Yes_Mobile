@@ -156,7 +156,7 @@ public class SubjectSearchActivity extends AppCompatActivity {
                     subjectSearchAdapter = new SubjectSearchAdapter(context, subjectArrayList);
                     subjectSearchAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
                             selectedSubject = subjectArrayList.get(position);
                             sendRequest();
                         }

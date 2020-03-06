@@ -204,7 +204,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
                     questionsAdapter = new QuestionsAdapter(context, questionArrayList, role);
                     questionsAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
                             selectedQuestion = questionArrayList.get(position);
                             isEdit = true;
                             selectAction();

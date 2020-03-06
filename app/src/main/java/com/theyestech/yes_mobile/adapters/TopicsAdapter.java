@@ -128,7 +128,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
-                        onClickRecyclerView.onItemClick(v, getAdapterPosition());
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
                 }
             });
 
@@ -136,7 +136,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
-                        onClickRecyclerView.onItemClick(v, getAdapterPosition());
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 2);
                 }
             });
         }

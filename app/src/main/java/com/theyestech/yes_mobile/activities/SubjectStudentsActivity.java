@@ -176,7 +176,7 @@ public class SubjectStudentsActivity extends AppCompatActivity {
                     studentAdapter = new StudentsAdapter(context, studentArrayList);
                     studentAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
 //                            student = studentArrayList.get(position);
 //                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
 //                            intent.putExtra("STUDENT", student);

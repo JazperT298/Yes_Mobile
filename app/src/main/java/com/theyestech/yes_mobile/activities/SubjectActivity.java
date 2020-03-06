@@ -3,6 +3,7 @@ package com.theyestech.yes_mobile.activities;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -198,11 +199,16 @@ public class SubjectActivity extends AppCompatActivity {
                     subjectsAdapter = new SubjectsAdapter(context, subjectArrayList);
                     subjectsAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
                             selectedSubject = subjectArrayList.get(position);
-                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
-                            intent.putExtra("SUBJECT", selectedSubject);
-                            startActivity(intent);
+
+                            if (fromButton == 1) {
+                                Intent intent = new Intent(context, SubjectDetailsActivity.class);
+                                intent.putExtra("SUBJECT", selectedSubject);
+                                startActivity(intent);
+                            } else if (fromButton == 2) {
+                                openDeleteDialog();
+                            }
                         }
                     });
 
@@ -280,7 +286,7 @@ public class SubjectActivity extends AppCompatActivity {
                     subjectsAdapter = new SubjectsAdapter(context, subjectArrayList);
                     subjectsAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
                             selectedSubject = subjectArrayList.get(position);
                             Intent intent = new Intent(context, SubjectDetailsActivity.class);
                             intent.putExtra("SUBJECT", selectedSubject);
@@ -321,6 +327,34 @@ public class SubjectActivity extends AppCompatActivity {
         params.put("subj_file", "");
 
         HttpProvider.post(context, "controller_educator/add_subjects.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                if (str.contains("success")) {
+                    Toasty.success(context, "Saved.").show();
+                } else
+                    Toasty.warning(context, "Failed").show();
+
+                getEducatorSubjectDetails();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void deleteSubject() {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("subj_id", selectedSubject.getId());
+
+        HttpProvider.post(context, "controller_educator/DeleteSubjectById.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
@@ -429,6 +463,22 @@ public class SubjectActivity extends AppCompatActivity {
 
         b.show();
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    private void openDeleteDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Delete")
+                .setIcon(R.drawable.ic_subjects_delete)
+                .setMessage("Are you sure you want to delete?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteSubject();
+                    }
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
     }
 
     @Override

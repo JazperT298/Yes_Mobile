@@ -145,7 +145,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
                     topicsAdapter = new TopicsAdapter(context, topicArrayList);
                     topicsAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
                             selectedTopic = topicArrayList.get(position);
 //                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
 //                            intent.putExtra("TOPIC", topic);

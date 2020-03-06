@@ -149,7 +149,7 @@ public class SectionActivity extends AppCompatActivity {
                     sectionsAdapter = new SectionsAdapter(context, sectionArrayList);
                     sectionsAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
-                        public void onItemClick(View view, int position) {
+                        public void onItemClick(View view, int position, int fromButton) {
                             selectedSection = sectionArrayList.get(position);
                             isEdit = true;
                             openAddEditSectionDialog();
