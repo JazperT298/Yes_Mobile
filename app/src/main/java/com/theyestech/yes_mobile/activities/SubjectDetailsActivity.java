@@ -164,6 +164,14 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        cvAwards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SubjectAwardsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getSectionDetails() {
