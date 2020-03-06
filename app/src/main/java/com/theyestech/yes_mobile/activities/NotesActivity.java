@@ -42,6 +42,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
@@ -138,7 +139,7 @@ public class NotesActivity extends AppCompatActivity {
 
                 Debugger.logD(str);
 
-                if (str.equals(""))
+                if (str.equals("") || str.contains("No notes available"))
                     emptyIndicator.setVisibility(View.VISIBLE);
 
                 try {
@@ -165,6 +166,8 @@ public class NotesActivity extends AppCompatActivity {
                         notesArrayList.add(notes);
                     }
 
+                    Collections.reverse(notesArrayList);
+
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
                     notesAdapter = new NotesAdapter(context, notesArrayList);
@@ -180,7 +183,7 @@ public class NotesActivity extends AppCompatActivity {
                             }
                         }
                     });
-//
+
                     recyclerView.setAdapter(notesAdapter);
                     emptyIndicator.setVisibility(View.GONE);
 

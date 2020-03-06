@@ -46,8 +46,24 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         switch (note.getType()) {
             case "pdf":
                 Glide.with(context)
-                .load(R.drawable.ic_note_pdf)
-                .into(viewHolder.ivImage);
+                        .load(R.drawable.ic_note_pdf)
+                        .into(viewHolder.ivImage);
+                break;
+            case "word":
+                Glide.with(context)
+                        .load(R.drawable.ic_note_word)
+                        .into(viewHolder.ivImage);
+                break;
+            case "excel":
+                Glide.with(context)
+                        .load(R.drawable.ic_note_excel)
+                        .into(viewHolder.ivImage);
+                break;
+            case "powerpoint":
+                Glide.with(context)
+                        .load(R.drawable.ic_note_powerpoint)
+                        .into(viewHolder.ivImage);
+                break;
         }
 
         viewHolder.tvTitle.setText(note.getTitle());
