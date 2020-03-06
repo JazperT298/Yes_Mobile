@@ -2,6 +2,7 @@ package com.theyestech.yes_mobile.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -192,7 +193,7 @@ public class NewTopicActivity extends AppCompatActivity {
 
     private void selectAction() {
         String items[] = {" Image ", " Video ", " Cancel "};
-        android.support.v7.app.AlertDialog.Builder dialog = new android.support.v7.app.AlertDialog.Builder(context);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Select action");
         dialog.setItems(items, new DialogInterface.OnClickListener() {
             @Override

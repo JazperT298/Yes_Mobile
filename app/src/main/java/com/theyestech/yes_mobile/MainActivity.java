@@ -3,29 +3,22 @@ package com.theyestech.yes_mobile;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.activities.StartActivity;
+import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
-import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;

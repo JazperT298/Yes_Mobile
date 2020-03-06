@@ -1,6 +1,8 @@
 package com.theyestech.yes_mobile.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,13 +19,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.NotesActivity;
-import com.theyestech.yes_mobile.activities.ProfileActivity;
+import com.theyestech.yes_mobile.activities.StartActivity;
 import com.theyestech.yes_mobile.activities.SubjectActivity;
+import com.theyestech.yes_mobile.activities.UserDetailsActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
@@ -57,6 +61,8 @@ public class HomeFragment extends Fragment {
     private ArrayList<Newsfeed> newsfeedArrayList = new ArrayList<>();
     private NewsfeedAdapter newsfeedAdapter;
     private Newsfeed selectedNewsfeed = new Newsfeed();
+
+    private String selectionTitle;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -98,8 +104,9 @@ public class HomeFragment extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ProfileActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(context, ProfileActivity.class);
+//                startActivity(intent);
+                selectAction();
             }
         });
 
@@ -159,10 +166,10 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (role.equals(UserRole.Educator()))
-                    getEducatorNewsfeedDetails();
-                else
-                    getStudentNewsfeedDetails();
+//                if (role.equals(UserRole.Educator()))
+//                    getEducatorNewsfeedDetails();
+//                else
+//                    getStudentNewsfeedDetails();
             }
         });
 
@@ -188,6 +195,7 @@ public class HomeFragment extends Fragment {
             tvSubjectMajor.setText(UserEducator.getSubjectMajor(context));
             tvCurrentSchool.setText(UserEducator.getCurrentSchool(context));
             tvSchoolPosition.setText(UserEducator.getPosition(context));
+            selectionTitle = "Educator";
         } else
             tvFirstname.setText(UserEducator.getEmail(context));
 
@@ -198,15 +206,35 @@ public class HomeFragment extends Fragment {
     }
 
     private void setStudentHeader() {
-        if (!UserStudent.getFirstname(context).equals(""))
+        if (!UserStudent.getFirstname(context).equals("")) {
             tvFirstname.setText(String.format("%s %s", UserStudent.getFirstname(context), UserStudent.getLastname(context)));
-        else
+            selectionTitle = "Student";
+        } else
             tvFirstname.setText(UserStudent.getEmail(context));
 
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
                 .apply(GlideOptions.getOptions())
                 .into(ivProfile);
+    }
+
+    private void selectAction() {
+        String items[] = {" Manage Account ", " Logout "};
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle(selectionTitle);
+        dialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    Intent intent = new Intent(context, UserDetailsActivity.class);
+                    startActivity(intent);
+                }
+                if (which == 1) {
+                    openLogoutDialog();
+                }
+            }
+        });
+        dialog.create().show();
     }
 
     public void getEducatorNewsfeedDetails() {
@@ -285,13 +313,55 @@ public class HomeFragment extends Fragment {
 
     }
 
+    private void logoutUser() {
+        if (role.equals(UserRole.Educator())) {
+            //Firebase Logout
+            FirebaseAuth.getInstance().signOut();
+
+            UserEducator.clearSession(context);
+            UserRole.clearRole(context);
+//            MainActivity mainActivity = new MainActivity();
+//            mainActivity.checkEducatorSession();
+            Intent intent = new Intent(context, StartActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        } else {
+            //Firebase Logout
+            FirebaseAuth.getInstance().signOut();
+
+            UserStudent.clearSession(context);
+            UserRole.clearRole(context);
+//            MainActivity mainActivity = new MainActivity();
+//            mainActivity.checkStudentSession();
+            Intent intent = new Intent(context, StartActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        }
+    }
+
+    private void openLogoutDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Logout")
+                .setIcon(R.drawable.ic_dashboard_logout)
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        logoutUser();
+                    }
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
 
-        if (UserRole.getRole(context).equals(UserRole.Educator()))
-            getEducatorNewsfeedDetails();
-        else
-            getStudentNewsfeedDetails();
+//        if (UserRole.getRole(context).equals(UserRole.Educator()))
+//            getEducatorNewsfeedDetails();
+//        else
+//            getStudentNewsfeedDetails();
     }
 }
