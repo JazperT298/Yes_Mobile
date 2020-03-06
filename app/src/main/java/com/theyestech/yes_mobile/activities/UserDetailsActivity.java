@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -14,6 +15,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -53,7 +56,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     private String role;
 
-    private ImageView ivProfile, ivBack;
+    private ImageView ivProfile, ivBack, ivCamera;
     private EditText etFirstname, etMiddlename, etLastname, etSuffix, etEmail, etContactnumber;
     private RadioButton rbMale, rbFemale;
     private RadioGroup radioGroup;
@@ -92,8 +95,15 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorNephritis));
+        }
+
         tvHeader = findViewById(R.id.tv_UserDetailsHeader);
         ivProfile = findViewById(R.id.iv_UserDetailsImage);
+        ivCamera = findViewById(R.id.iv_UserDetailsCamera);
         ivBack = findViewById(R.id.iv_UserDetailsBack);
         etFirstname = findViewById(R.id.et_UserDetailsFirstname);
         etMiddlename = findViewById(R.id.et_UserDetailsMiddlename);
@@ -148,7 +158,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                     else
                         updateStudentDetails();
 
-                    btnCancel.setVisibility(View.GONE);
+                    btnCancel.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -338,10 +348,10 @@ public class UserDetailsActivity extends AppCompatActivity {
                 radioGroup.check(R.id.rb_UserDetailsFemale);
         }
 
-        if (role.equals(UserRole.Educator()))
-            tvHeader.setText("Educator Details");
-        else
-            tvHeader.setText("Student Details");
+//        if (role.equals(UserRole.Educator()))
+//            tvHeader.setText("Educator Details");
+//        else
+//            tvHeader.setText("Student Details");
 
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
@@ -384,6 +394,14 @@ public class UserDetailsActivity extends AppCompatActivity {
         etContactnumber.setEnabled(enable);
         rbMale.setEnabled(enable);
         rbFemale.setEnabled(enable);
+        ivProfile.setEnabled(enable);
+
+        if (enable){
+            ivCamera.setImageResource(R.drawable.ic_user_details_camera);
+        }
+        else{
+            ivCamera.setImageResource(R.drawable.ic_user_details_camera_disable);
+        }
 
         etFirstname.requestFocus();
         btnEditSave.setText(enable ? "Save" : "Edit");
