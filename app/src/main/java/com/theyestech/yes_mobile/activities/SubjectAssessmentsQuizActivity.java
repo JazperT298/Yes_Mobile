@@ -193,9 +193,6 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
 
                 final String str = new String(responseBody, StandardCharsets.UTF_8);
 
-                if (str.equals(""))
-                    emptyIndicator.setVisibility(View.VISIBLE);
-
                 try {
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("ASSESSMENT: " + jsonArray);
@@ -215,12 +212,12 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
                         assessmentArrayList.add(assessment);
                     }
 
-                    openAssessmentStudentsDialog();
-
                 } catch (Exception e) {
                     e.printStackTrace();
                     Debugger.logD(e.toString());
                 }
+
+                openAssessmentStudentsDialog();
             }
 
             @Override
@@ -232,7 +229,6 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
     }
 
     private void openAssessmentStudentsDialog() {
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
         LayoutInflater inflater = getLayoutInflater();
@@ -241,11 +237,15 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
         ImageView ivClose = dialogView.findViewById(R.id.iv_ViewAssessmentClose);
         TextView tvHeader = dialogView.findViewById(R.id.tv_ViewAssessmentHeader);
         RecyclerView recyclerView = dialogView.findViewById(R.id.rv_ViewAssessment);
+        ConstraintLayout eIndicator = dialogView.findViewById(R.id.view_Empty);
 
         dialogBuilder.setView(dialogView);
         final AlertDialog b = dialogBuilder.create();
 
         tvHeader.setText(selectedQuiz.getQuiz_title());
+
+        if (assessmentArrayList.size() <= 0)
+            eIndicator.setVisibility(View.VISIBLE);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
