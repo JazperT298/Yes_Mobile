@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
     private String role;
 
     private ImageView ivProfile;
-    private TextView tvFirstname, tvEducationalAttainment, tvSubjectMajor, tvCurrentSchool, tvSchoolPosition;
+    private TextView tvEmail, tvEducationalAttainment;
     private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
@@ -85,11 +85,8 @@ public class HomeFragment extends Fragment {
         ivProfile = view.findViewById(R.id.iv_HomeProfile);
 //        ivSearch = view.findViewById(R.id.iv_HomeSearch);
 //        ivNewPost = view.findViewById(R.id.iv_HomeNewPost);
-        tvFirstname = view.findViewById(R.id.tv_HomeFirstname);
+        tvEmail = view.findViewById(R.id.tv_HomeEmail);
         tvEducationalAttainment = view.findViewById(R.id.tv_Home_EducationalAttainment);
-        tvSubjectMajor = view.findViewById(R.id.tv_Home_SubjectMajor);
-        tvCurrentSchool = view.findViewById(R.id.tv_Home_CurrentSchool);
-        tvSchoolPosition = view.findViewById(R.id.tv_Home_SchoolPosition);
         cvSubjects = view.findViewById(R.id.cv_Home_Subjects);
         cvNotes = view.findViewById(R.id.cv_Home_Notes);
         cvConnections = view.findViewById(R.id.cv_Home_Connections);
@@ -189,15 +186,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void setEducatorHeader() {
-        if (!UserEducator.getFirstname(context).isEmpty()) {
-            tvFirstname.setText(String.format("%s %s", UserEducator.getFirstname(context), UserEducator.getLastname(context)));
-            tvEducationalAttainment.setText(UserEducator.getEducationalAttainment(context));
-            tvSubjectMajor.setText(UserEducator.getSubjectMajor(context));
-            tvCurrentSchool.setText(UserEducator.getCurrentSchool(context));
-            tvSchoolPosition.setText(UserEducator.getPosition(context));
-            selectionTitle = "Educator";
-        } else
-            tvFirstname.setText(UserEducator.getEmail(context));
+        tvEmail.setText(UserEducator.getEmail(context));
+        tvEducationalAttainment.setText(UserEducator.getEducationalAttainment(context));
+
+        selectionTitle = "Educator";
 
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
@@ -207,10 +199,10 @@ public class HomeFragment extends Fragment {
 
     private void setStudentHeader() {
         if (!UserStudent.getFirstname(context).equals("")) {
-            tvFirstname.setText(String.format("%s %s", UserStudent.getFirstname(context), UserStudent.getLastname(context)));
+            tvEmail.setText(String.format("%s %s", UserStudent.getFirstname(context), UserStudent.getLastname(context)));
             selectionTitle = "Student";
         } else
-            tvFirstname.setText(UserStudent.getEmail(context));
+            tvEmail.setText(UserStudent.getEmail(context));
 
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
@@ -219,7 +211,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void selectAction() {
-        String items[] = {" Manage Account ", " Logout "};
+        String[] items = {" Profile ", " Logout "};
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle(selectionTitle);
         dialog.setItems(items, new DialogInterface.OnClickListener() {
