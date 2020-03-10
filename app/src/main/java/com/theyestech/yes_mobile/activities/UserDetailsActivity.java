@@ -2,7 +2,9 @@ package com.theyestech.yes_mobile.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -122,12 +124,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!checkStoragePermission()) {
-                    requestStoragePermission();
-                } else {
-                    selectedFilePath = "";
-                    pickImageGallery();
-                }
+                selectAction();
             }
         });
 
@@ -183,6 +180,28 @@ public class UserDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void selectAction() {
+        String[] items = {" View ", " Change "};
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("Photo");
+        dialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+
+                } else if (which == 1){
+                    if (!checkStoragePermission()) {
+                        requestStoragePermission();
+                    } else {
+                        selectedFilePath = "";
+                        pickImageGallery();
+                    }
+                }
+            }
+        });
+        dialog.create().show();
     }
 
     private void requestStoragePermission() {

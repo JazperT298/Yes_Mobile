@@ -71,11 +71,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:text="Basic Information"
+                android:text="Information"
                 android:textColor="@color/colorNephritis"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_UserDetailsImage" />
 
@@ -214,10 +212,10 @@
                 android:textColor="@color/colorNephritis"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rg_UserDetails" />
+                app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsMotto" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/et_UserDetailsEducationalAttainment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -233,7 +231,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView61" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/et_UserDetailsSubjectMajor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -242,12 +240,12 @@
                 android:hint="Subject Major"
                 android:inputType="textPersonName"
                 android:padding="12dp"
-                app:layout_constraintEnd_toEndOf="@+id/editText"
-                app:layout_constraintStart_toStartOf="@+id/editText"
-                app:layout_constraintTop_toBottomOf="@+id/editText" />
+                app:layout_constraintEnd_toEndOf="@+id/et_UserDetailsEducationalAttainment"
+                app:layout_constraintStart_toStartOf="@+id/et_UserDetailsEducationalAttainment"
+                app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsEducationalAttainment" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/et_UserDetailsCurrentSchool"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -256,12 +254,12 @@
                 android:hint="Current School"
                 android:inputType="textPersonName"
                 android:padding="12dp"
-                app:layout_constraintEnd_toEndOf="@+id/editText2"
-                app:layout_constraintStart_toStartOf="@+id/editText2"
-                app:layout_constraintTop_toBottomOf="@+id/editText2" />
+                app:layout_constraintEnd_toEndOf="@+id/et_UserDetailsSubjectMajor"
+                app:layout_constraintStart_toStartOf="@+id/et_UserDetailsSubjectMajor"
+                app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsSubjectMajor" />
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/et_UserDetailsSchoolPosition"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -270,9 +268,9 @@
                 android:hint="School Position"
                 android:inputType="textPersonName"
                 android:padding="12dp"
-                app:layout_constraintEnd_toEndOf="@+id/editText3"
-                app:layout_constraintStart_toStartOf="@+id/editText3"
-                app:layout_constraintTop_toBottomOf="@+id/editText3" />
+                app:layout_constraintEnd_toEndOf="@+id/et_UserDetailsCurrentSchool"
+                app:layout_constraintStart_toStartOf="@+id/et_UserDetailsCurrentSchool"
+                app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsCurrentSchool" />
 
             <Button
                 android:id="@+id/btn_UserDetailsEditSave"
@@ -288,7 +286,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText4" />
+                app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsSchoolPosition" />
 
             <Button
                 android:id="@+id/btn_UserDetailsCancel"
@@ -317,6 +315,20 @@
                 app:layout_constraintStart_toEndOf="@+id/iv_UserDetailsImage"
                 app:layout_constraintTop_toBottomOf="@+id/iv_UserDetailsImage"
                 app:srcCompat="@drawable/ic_user_details_camera" />
+
+            <EditText
+                android:id="@+id/et_UserDetailsMotto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_edittext"
+                android:ems="10"
+                android:hint="Motto"
+                android:inputType="textPersonName"
+                android:padding="12dp"
+                app:layout_constraintEnd_toEndOf="@+id/rg_UserDetails"
+                app:layout_constraintStart_toStartOf="@+id/rg_UserDetails"
+                app:layout_constraintTop_toBottomOf="@+id/rg_UserDetails" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
