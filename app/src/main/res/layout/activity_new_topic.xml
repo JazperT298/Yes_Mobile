@@ -10,7 +10,7 @@
         android:id="@+id/constraintLayout12"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPeterriver"
+        android:background="@color/colorPrimaryDark"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -117,7 +117,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_topics_images" />
+            app:srcCompat="@drawable/ic_image_colored" />
 
         <ImageView
             android:id="@+id/iv_NewTopicSend"
@@ -127,7 +127,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_topics_send" />
+            app:srcCompat="@drawable/ic_send_colored" />
 
         <ImageView
             android:id="@+id/iv_NewTopicAttach"
@@ -137,7 +137,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_NewTopicGallery"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_topics_attachment" />
+            app:srcCompat="@drawable/ic_attachment_colored" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

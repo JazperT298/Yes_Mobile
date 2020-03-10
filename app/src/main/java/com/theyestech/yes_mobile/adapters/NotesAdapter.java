@@ -76,7 +76,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView ivImage;
+        public ImageView ivImage, ivDelete;
         public TextView tvTitle;
         public Button btnOpen, btnDelete;
 
@@ -85,7 +85,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
             ivImage = view.findViewById(R.id.iv_ListrowNotesImage);
             tvTitle = view.findViewById(R.id.tv_ListrowNotesTitle);
-            btnDelete = view.findViewById(R.id.btn_ListrowNotesDelete);
+            ivDelete = view.findViewById(R.id.iv_ListrowNotesDelete);
             btnOpen = view.findViewById(R.id.btn_ListrowNotesOpen);
 
             btnOpen.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +96,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                 }
             });
 
-            btnDelete.setOnClickListener(new View.OnClickListener() {
+            ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)

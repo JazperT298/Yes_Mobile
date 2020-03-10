@@ -2,6 +2,7 @@ package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -63,7 +64,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.ViewHo
 
         private ImageView ivImage;
         private TextView tvName, tvEmail;
-        private CardView cardView;
+        private ConstraintLayout constraintLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -71,9 +72,9 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.ViewHo
             ivImage = view.findViewById(R.id.iv_ListrowSubjectStudentsProfile);
             tvName = view.findViewById(R.id.tv_ListrowSubjectStudentsFullname);
             tvEmail = view.findViewById(R.id.tv_ListrowSubjectStudentsEmail);
-            cardView = view.findViewById(R.id.cv_ListrowSubjectStudents);
+            constraintLayout = view.findViewById(R.id.constraint_ListrowStudents);
 
-            cardView.setOnClickListener(new View.OnClickListener() {
+            constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)

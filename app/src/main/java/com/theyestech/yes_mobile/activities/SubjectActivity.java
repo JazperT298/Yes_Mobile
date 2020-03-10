@@ -97,11 +97,11 @@ public class SubjectActivity extends AppCompatActivity {
     @SuppressLint("RestrictedApi")
     private void initializeUI() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorAlizarin));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(getResources().getColor(R.color.colorAlizarin));
+//        }
 
         ivBack = findViewById(R.id.iv_SubjectsBack);
         swipeRefreshLayout = findViewById(R.id.swipe_Subjects);
@@ -471,7 +471,7 @@ public class SubjectActivity extends AppCompatActivity {
     private void openDeleteDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")
-                .setIcon(R.drawable.ic_subjects_delete)
+                .setIcon(R.drawable.ic_delete_colored)
                 .setMessage("Are you sure you want to delete \n" + selectedSubject.getTitle() + "?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override

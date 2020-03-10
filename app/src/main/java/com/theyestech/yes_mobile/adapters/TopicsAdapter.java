@@ -157,6 +157,6 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                     nextImage(imageView);
                 }
             }
-        }, 1000);
+        }, 20);
     }
 }

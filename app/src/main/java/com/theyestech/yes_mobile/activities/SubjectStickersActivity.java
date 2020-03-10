@@ -10,7 +10,9 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -63,11 +65,11 @@ public class SubjectStickersActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorMidnightblue));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(getResources().getColor(R.color.colorMidnightblue));
+//        }
 
         ivBack = findViewById(R.id.iv_SubjectStickersBack);
         swipeRefreshLayout = findViewById(R.id.swipe_Stickers);
@@ -123,7 +125,7 @@ public class SubjectStickersActivity extends AppCompatActivity {
                         stickerArrayList.add(sticker);
                     }
 
-                    recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
                     stickersAdapter = new StickersAdapter(context, stickerArrayList);
                     stickersAdapter.setClickListener(new OnClickRecyclerView() {

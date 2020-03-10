@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.theyestech.yes_mobile.R;
@@ -44,7 +45,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Question question = questionArrayList.get(i);
 
-        viewHolder.tvQuestion.setText(String.format("#%d: %s", i + 1, question.getQuestion_value()));
+        viewHolder.tvQuestion.setText(String.format("#%d %s", i + 1, question.getQuestion_value()));
 
         if (role.equals(UserRole.Educator()))
             viewHolder.tvAnswer.setText(String.format("Answer: %s", question.getQuestion_correct_answer()));
@@ -64,16 +65,16 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvQuestion, tvAnswer;
-        private CardView cardView;
+        private ImageView imageView;
 
         public ViewHolder(View view) {
             super(view);
 
             tvQuestion = view.findViewById(R.id.tv_SubjectQuizQuestion);
             tvAnswer = view.findViewById(R.id.tv_SubjectQuizQuestionAnswer);
-            cardView = view.findViewById(R.id.cv_SubjectQuizQuestions);
+            imageView = view.findViewById(R.id.iv_SubjectQuizOption);
 
-            cardView.setOnClickListener(new View.OnClickListener() {
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)

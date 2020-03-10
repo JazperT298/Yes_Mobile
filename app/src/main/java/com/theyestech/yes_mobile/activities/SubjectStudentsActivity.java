@@ -78,11 +78,11 @@ public class SubjectStudentsActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorSunflower));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(getResources().getColor(R.color.colorSunflower));
+//        }
 
         ivBack = findViewById(R.id.iv_SubjectStudentsBack);
         swipeRefreshLayout = findViewById(R.id.swipe_SubjectStudents);

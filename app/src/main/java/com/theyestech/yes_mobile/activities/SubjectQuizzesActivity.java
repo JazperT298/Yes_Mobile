@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,11 +100,11 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
 
     @SuppressLint("RestrictedApi")
     private void initializeUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorNephritis));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(getResources().getColor(R.color.colorNephritis));
+//        }
 
         ivBack = findViewById(R.id.iv_SubjectQuizBack);
         swipeRefreshLayout = findViewById(R.id.swipe_Quiz);
@@ -188,7 +189,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
                         quizArrayList.add(quiz);
                     }
 
-                    recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
                     quizzesAdapter = new QuizzesAdapter(context, quizArrayList, role);
                     quizzesAdapter.setClickListener(new OnClickRecyclerView() {

@@ -95,11 +95,11 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorNephritis));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(getResources().getColor(R.color.colorNephritis));
+//        }
 
         ivBack = findViewById(R.id.iv_QuizQuestionsBack);
         tvHeader = findViewById(R.id.tv_QuizQuestionsTitle);
@@ -602,7 +602,7 @@ public class SubjectQuizQuestionsActivity extends AppCompatActivity {
     private void openDeleteDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")
-                .setIcon(R.drawable.ic_delete)
+                .setIcon(R.drawable.ic_delete_colored)
                 .setMessage("Are you sure you want to delete question?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override

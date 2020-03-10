@@ -10,7 +10,7 @@
         android:id="@+id/constraintLayout5"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorAlizarin"
+        android:background="@color/colorPrimaryDark"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -130,7 +130,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_dashboard_students_colored" />
+                        app:srcCompat="@drawable/ic_students_white" />
 
                     <TextView
                         android:id="@+id/textView39"

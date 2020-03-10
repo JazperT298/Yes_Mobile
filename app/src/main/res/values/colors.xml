@@ -20,6 +20,7 @@
     <color name="colorAlizarin">#e74c3c</color>
     <color name="colorMidnightblue">#2c3e50</color>
     <color name="colorSunflower">#f1c40f</color>
+    <color name="colorCloud">#ecf0f1</color>
 
     <color name="colorWhite">#ffffff</color>
 </resources>

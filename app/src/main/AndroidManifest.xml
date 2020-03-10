@@ -33,7 +33,6 @@
         <activity android:name=".activities.NewTopicActivity" />
         <activity android:name=".activities.SubjectTopicsActivity" />
         <activity android:name=".activities.SubjectStudentsActivity" />
-        <activity android:name=".activities.SectionActivity" />
         <activity android:name=".activities.SubjectDetailsActivity" />
         <activity android:name=".activities.SubjectActivity" />
         <activity android:name=".activities.UserDetailsActivity" />

@@ -77,11 +77,11 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorAmethyst));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(getResources().getColor(R.color.colorAmethyst));
+//        }
 
         ivBack = findViewById(R.id.iv_NotesBack);
         swipeRefreshLayout = findViewById(R.id.swipe_Notes);
@@ -254,7 +254,7 @@ public class NotesActivity extends AppCompatActivity {
     private void openDeleteNoteDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")
-                .setIcon(R.drawable.ic_note_delete)
+                .setIcon(R.drawable.ic_delete_colored)
                 .setMessage("Are you sure you want to delete \n" + selectedNote.getTitle() + "?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override

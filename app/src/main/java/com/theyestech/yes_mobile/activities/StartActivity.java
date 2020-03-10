@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.utils.UserRole;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -33,7 +34,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, LoginActivity.class);
-                intent.putExtra("ROLE_ID", 1);
+                intent.putExtra("ROLE_ID", UserRole.Educator());
                 startActivity(intent);
             }
         });
@@ -42,7 +43,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, LoginActivity.class);
-                intent.putExtra("ROLE_ID", 2);
+                intent.putExtra("ROLE_ID", UserRole.Student());
                 startActivity(intent);
             }
         });

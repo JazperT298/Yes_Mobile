@@ -10,7 +10,7 @@
         android:id="@+id/constraintLayout14"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPeterriver"
+        android:background="@color/colorPrimaryDark"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +106,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_topics_send" />
+            app:srcCompat="@drawable/ic_send_colored" />
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
