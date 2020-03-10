@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String role;
 
     //Educator widgets
-    private ImageView ivProfileEducator, ivBackEducator, ivDetailsEducator, ivSubjectsEducator, ivSectionsEducator, ivNotesEducator, ivAssessmentsEducator, ivAnnouncementsEducator, ivLogoutEducator;
+    private ImageView ivProfileEducator, ivBackEducator, ivDetailsEducator, ivSubjectsEducator, ivNotesEducator, ivAssessmentsEducator, ivAnnouncementsEducator, ivLogoutEducator;
     private TextView tvFullnameEducator, tvEmailEducator, tvPostCountEducator, tvSubjectCountEducator, tvStudentCountEducator;
 
     //Student widgets
@@ -66,7 +66,6 @@ public class ProfileActivity extends AppCompatActivity {
         ivBackEducator = findViewById(R.id.iv_ProfileEducatorBack);
         ivDetailsEducator = findViewById(R.id.iv_ProfileEducatorDetails);
         ivSubjectsEducator = findViewById(R.id.iv_ProfileEducatorSubjects);
-        ivSectionsEducator = findViewById(R.id.iv_ProfileEducatorSections);
         ivNotesEducator = findViewById(R.id.iv_ProfileEducatorNotes);
         ivAssessmentsEducator = findViewById(R.id.iv_ProfileEducatorRewards);
         ivAnnouncementsEducator = findViewById(R.id.iv_ProfileEducatorConnections);
@@ -96,14 +95,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SubjectActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        ivSectionsEducator.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, SectionActivity.class);
                 startActivity(intent);
             }
         });

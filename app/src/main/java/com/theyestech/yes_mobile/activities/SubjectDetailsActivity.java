@@ -46,7 +46,6 @@ import es.dmoral.toasty.Toasty;
 public class SubjectDetailsActivity extends AppCompatActivity {
 
     private Context context;
-
     private String role;
 
     private ImageView ivBack, ivClose;
@@ -59,11 +58,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
     private Button btnSave;
 
     private Subject subject;
-//
-//    private ArrayList<Section> sectionArrayList = new ArrayList<>();
-//
-//    private ArrayList<String> sName = new ArrayList<>();
-//    private ArrayList<String> sId = new ArrayList<>();
+
     private ArrayList<String> sLevel = new ArrayList<>();
     private ArrayList<String> sSemester = new ArrayList<>();
 
