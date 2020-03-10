@@ -70,7 +70,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/tv_ListrowHomeDateTime"
                     app:layout_constraintStart_toEndOf="@+id/tv_ListrowHomeDateTime"
                     app:layout_constraintTop_toTopOf="@+id/tv_ListrowHomeDateTime"
-                    app:srcCompat="@drawable/ic_gallery" />
+                    app:srcCompat="@drawable/ic_image_colored" />
 
                 <ImageView
                     android:id="@+id/iv_ListrowHomeDelete"
@@ -78,7 +78,7 @@
                     android:layout_height="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_delete" />
+                    app:srcCompat="@drawable/ic_delete_colored" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -103,7 +103,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_ListrowHomeDetails"
-                app:srcCompat="@drawable/ic_home_new_post" />
+                app:srcCompat="@drawable/ic_new_post_colored" />
 
             <VideoView
                 android:id="@+id/vv_ListrowHomeVideo"
@@ -197,7 +197,7 @@
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_comment" />
+                    app:srcCompat="@drawable/ic_comments_colored" />
 
                 <TextView
                     android:id="@+id/textView31"

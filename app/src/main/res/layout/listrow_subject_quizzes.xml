@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline13"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_quiz" />
+        app:srcCompat="@drawable/ic_quizzes_colored" />
 
     <TextView
         android:id="@+id/tv_ListrowQuizTitle"

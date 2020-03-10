@@ -29,7 +29,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_subject" />
+                app:srcCompat="@drawable/ic_subjects_colored" />
 
             <ImageView
                 android:id="@+id/imageView12"
@@ -75,7 +75,7 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView13"
-                app:srcCompat="@drawable/ic_school_year" />
+                app:srcCompat="@drawable/ic_school_year_colored" />
 
             <TextView
                 android:id="@+id/tv_ListrowSubjectsSearchSchoolYear"

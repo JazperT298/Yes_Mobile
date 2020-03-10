@@ -84,17 +84,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/iv_ProfileEducatorDetails"
                 app:layout_constraintTop_toBottomOf="@+id/cardView"
-                app:srcCompat="@drawable/ic_subject" />
-
-            <ImageView
-                android:id="@+id/iv_ProfileEducatorSections"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorDetails"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorDetails"
-                app:layout_constraintTop_toBottomOf="@+id/textView11"
-                app:srcCompat="@drawable/ic_section" />
+                app:srcCompat="@drawable/ic_subjects_colored" />
 
             <ImageView
                 android:id="@+id/iv_ProfileEducatorNotes"
@@ -104,7 +94,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorSubjects"
                 app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorSubjects"
                 app:layout_constraintTop_toBottomOf="@+id/textView12"
-                app:srcCompat="@drawable/ic_notes" />
+                app:srcCompat="@drawable/ic_notes_colored" />
 
             <TextView
                 android:id="@+id/tv_ProfileEducatorEmail"
@@ -157,9 +147,8 @@
                 android:layout_height="wrap_content"
                 android:text="Sections"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorSections"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorSections"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorSections" />
+                tools:layout_editor_absoluteX="101dp"
+                tools:layout_editor_absoluteY="409dp" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -269,10 +258,9 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorSections"
-                app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorSections"
                 app:layout_constraintTop_toBottomOf="@+id/textView13"
-                app:srcCompat="@drawable/ic_rewards" />
+                app:srcCompat="@drawable/ic_rewards"
+                tools:layout_editor_absoluteX="104dp" />
 
             <ImageView
                 android:id="@+id/iv_ProfileEducatorConnections"
@@ -312,7 +300,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/iv_ProfileEducatorConnections"
                 app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorRewards"
                 app:layout_constraintTop_toBottomOf="@+id/textView15"
-                app:srcCompat="@drawable/ic_logout" />
+                app:srcCompat="@drawable/ic_logout_colored" />
 
             <TextView
                 android:id="@+id/textView17"

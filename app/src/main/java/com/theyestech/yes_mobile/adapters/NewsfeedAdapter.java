@@ -204,7 +204,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
     private void openDeleteDialog(final Newsfeed newsfeed) {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")
-                .setIcon(R.drawable.ic_logout)
+                .setIcon(R.drawable.ic_logout_colored)
                 .setMessage("Are you sure you want to delete?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override

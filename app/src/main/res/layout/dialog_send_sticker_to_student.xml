@@ -51,7 +51,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_close" />
+                    app:srcCompat="@drawable/ic_close_white" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <android.support.v7.widget.RecyclerView

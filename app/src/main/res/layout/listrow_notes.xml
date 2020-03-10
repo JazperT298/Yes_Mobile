@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline14"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_notes" />
+        app:srcCompat="@drawable/ic_notes_colored" />
 
     <TextView
         android:id="@+id/tv_ListrowNotesTitle"

@@ -351,7 +351,7 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
     private void openTakeQuizDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Take Quiz")
-                .setIcon(R.drawable.ic_quiz)
+                .setIcon(R.drawable.ic_quizzes_colored)
                 .setMessage("Are you sure you want to take quiz?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override

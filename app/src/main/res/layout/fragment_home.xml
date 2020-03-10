@@ -143,7 +143,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/textView7"
                         app:layout_constraintStart_toStartOf="@+id/textView7"
                         app:layout_constraintTop_toTopOf="@+id/imageView11"
-                        app:srcCompat="@drawable/ic_dashboard_students_colored" />
+                        app:srcCompat="@drawable/ic_students_colored" />
 
                     <ImageView
                         android:id="@+id/imageView11"
@@ -153,7 +153,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/textView4"
                         app:layout_constraintStart_toStartOf="@+id/textView4"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_dashboard_subjects_colored" />
+                        app:srcCompat="@drawable/ic_subjects_colored" />
 
                     <ImageView
                         android:id="@+id/imageView15"
@@ -162,7 +162,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/textView33"
                         app:layout_constraintStart_toStartOf="@+id/textView33"
                         app:layout_constraintTop_toTopOf="@+id/imageView10"
-                        app:srcCompat="@drawable/ic_dashboard_topics_colored" />
+                        app:srcCompat="@drawable/ic_topics_colored" />
 
                     <TextView
                         android:id="@+id/textView4"
@@ -238,7 +238,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_dashboard_subjects" />
+                        app:srcCompat="@drawable/ic_subjects_white" />
 
                     <TextView
                         android:id="@+id/textView47"
@@ -298,7 +298,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_dashboard_notes" />
+                        app:srcCompat="@drawable/ic_notes_white" />
 
                     <TextView
                         android:id="@+id/textView48"
@@ -359,7 +359,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_dashboard_connections" />
+                        app:srcCompat="@drawable/ic_connections_white" />
 
                     <TextView
                         android:id="@+id/textView49"
@@ -419,7 +419,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_dashboard_posts" />
+                        app:srcCompat="@drawable/ic_posts_white" />
 
                     <TextView
                         android:id="@+id/textView50"
@@ -479,7 +479,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_dashboard_videos" />
+                        app:srcCompat="@drawable/ic_videos_white" />
 
                     <TextView
                         android:id="@+id/textView51"
@@ -542,7 +542,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_dashboard_videos" />
+                        app:srcCompat="@drawable/ic_videos_white" />
 
                     <TextView
                         android:id="@+id/textView52"
@@ -604,7 +604,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_dashboard_videos" />
+                        app:srcCompat="@drawable/ic_videos_white" />
 
                     <TextView
                         android:id="@+id/textView53"

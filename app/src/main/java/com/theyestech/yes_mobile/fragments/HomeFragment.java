@@ -336,7 +336,7 @@ public class HomeFragment extends Fragment {
     private void openLogoutDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Logout")
-                .setIcon(R.drawable.ic_dashboard_logout)
+                .setIcon(R.drawable.ic_logout_colored)
                 .setMessage("Are you sure you want to logout?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override

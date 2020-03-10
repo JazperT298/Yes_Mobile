@@ -248,7 +248,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView41"
-                app:srcCompat="@drawable/ic_subject" />
+                app:srcCompat="@drawable/ic_subjects_colored" />
 
             <TextView
                 android:id="@+id/textView44"
@@ -268,7 +268,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView44"
-                app:srcCompat="@drawable/ic_logout" />
+                app:srcCompat="@drawable/ic_logout_colored" />
 
             <TextView
                 android:id="@+id/textView45"

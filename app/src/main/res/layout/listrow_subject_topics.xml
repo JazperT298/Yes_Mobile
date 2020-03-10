@@ -96,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_ListrowSubjectTopicsDetails"
-        app:srcCompat="@drawable/ic_topic" />
+        app:srcCompat="@drawable/ic_topics_colored" />
 
     <TextView
         android:id="@+id/tv_ListrowSubjectTopicsDetails"

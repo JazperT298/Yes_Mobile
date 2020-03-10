@@ -84,7 +84,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_subjects_details" />
+                        app:srcCompat="@drawable/ic_details_white" />
 
                     <TextView
                         android:id="@+id/textView37"
@@ -177,7 +177,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_subjects_topics" />
+                        app:srcCompat="@drawable/ic_topics_white" />
 
                     <TextView
                         android:id="@+id/textView46"
@@ -223,7 +223,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_subjects_quiz" />
+                        app:srcCompat="@drawable/ic_quiz_white" />
 
                     <TextView
                         android:id="@+id/textView54"
@@ -270,7 +270,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_subjects_stickers" />
+                        app:srcCompat="@drawable/ic_stickers_white" />
 
                     <TextView
                         android:id="@+id/textView9"
@@ -316,7 +316,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_subjects_awards" />
+                        app:srcCompat="@drawable/ic_awards_white" />
 
                     <TextView
                         android:id="@+id/textView18"
@@ -363,7 +363,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_subjects_assessment" />
+                        app:srcCompat="@drawable/ic_assessment_white" />
 
                     <TextView
                         android:id="@+id/textView55"
