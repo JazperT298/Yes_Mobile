@@ -197,39 +197,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout38"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/textView81"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorNephritis"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="User Information"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view12"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/colorCloud"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/textView81"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="User Information"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintTop_toBottomOf="@+id/textView81" />
 
                 <ImageView
                     android:id="@+id/imageView44"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout38"
-                    app:srcCompat="@drawable/ic_user_full_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/view12"
+                    app:srcCompat="@drawable/ic_user_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoFullname"
@@ -247,7 +247,7 @@
                     android:layout_height="30dp"
                     app:layout_constraintStart_toStartOf="@+id/imageView44"
                     app:layout_constraintTop_toBottomOf="@+id/imageView44"
-                    app:srcCompat="@drawable/ic_user_gender" />
+                    app:srcCompat="@drawable/ic_gender_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoGender"
@@ -265,7 +265,7 @@
                     android:layout_height="30dp"
                     app:layout_constraintStart_toStartOf="@+id/imageView45"
                     app:layout_constraintTop_toBottomOf="@+id/imageView45"
-                    app:srcCompat="@drawable/ic_user_phone" />
+                    app:srcCompat="@drawable/ic_phone_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoPhone"
@@ -283,7 +283,7 @@
                     android:layout_height="30dp"
                     app:layout_constraintStart_toStartOf="@+id/imageView43"
                     app:layout_constraintTop_toBottomOf="@+id/imageView43"
-                    app:srcCompat="@drawable/ic_user_email" />
+                    app:srcCompat="@drawable/ic_email_colroed" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoEmail"
@@ -301,7 +301,7 @@
                     android:layout_height="30dp"
                     app:layout_constraintStart_toStartOf="@+id/imageView46"
                     app:layout_constraintTop_toBottomOf="@+id/imageView46"
-                    app:srcCompat="@drawable/ic_user_motto" />
+                    app:srcCompat="@drawable/ic_motto_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoMotto"
@@ -336,39 +336,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout39"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorNephritis"
+                <TextView
+                    android:id="@+id/textView86"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="User Background"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view13"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/colorCloud"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/textView86"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="User Background"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintTop_toBottomOf="@+id/textView86" />
 
                 <ImageView
                     android:id="@+id/imageView47"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout39"
-                    app:srcCompat="@drawable/ic_user_education_attainment" />
+                    app:layout_constraintTop_toBottomOf="@+id/view13"
+                    app:srcCompat="@drawable/ic_educational_attainment_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoEducationalAttainment"
@@ -388,7 +388,7 @@
                     android:layout_height="30dp"
                     app:layout_constraintStart_toStartOf="@+id/imageView47"
                     app:layout_constraintTop_toBottomOf="@+id/imageView47"
-                    app:srcCompat="@drawable/ic_user_subject_major" />
+                    app:srcCompat="@drawable/ic_subjects_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoSubjectMajor"
@@ -406,7 +406,7 @@
                     android:layout_height="30dp"
                     app:layout_constraintStart_toStartOf="@+id/imageView48"
                     app:layout_constraintTop_toBottomOf="@+id/imageView48"
-                    app:srcCompat="@drawable/ic_user_current_school" />
+                    app:srcCompat="@drawable/ic_current_school_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoCurrentSchool"
@@ -428,7 +428,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/imageView49"
                     app:layout_constraintTop_toBottomOf="@+id/imageView49"
-                    app:srcCompat="@drawable/ic_user_school_position" />
+                    app:srcCompat="@drawable/ic_school_position_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoSchoolPosition"
@@ -460,36 +460,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout40"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorNephritis">
+                <TextView
+                    android:id="@+id/textView92"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Social Accounts"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/textView92"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="Social Accounts"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:id="@+id/view14"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/colorCloud"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView92" />
 
                 <ImageView
                     android:id="@+id/imageView52"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout40"
-                    app:srcCompat="@drawable/ic_user_facebook" />
+                    app:layout_constraintTop_toBottomOf="@+id/view14"
+                    app:srcCompat="@drawable/ic_facebook_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoFacebook"
@@ -507,7 +510,7 @@
                     android:layout_height="30dp"
                     app:layout_constraintStart_toStartOf="@+id/imageView52"
                     app:layout_constraintTop_toBottomOf="@+id/imageView52"
-                    app:srcCompat="@drawable/ic_user_twitter" />
+                    app:srcCompat="@drawable/ic_twitter_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoTwitter"
@@ -527,7 +530,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/imageView53"
                     app:layout_constraintTop_toBottomOf="@+id/imageView53"
-                    app:srcCompat="@drawable/ic_user_instagram" />
+                    app:srcCompat="@drawable/ic_instagram_colored" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoInstagram"
