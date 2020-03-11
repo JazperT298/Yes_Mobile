@@ -34,7 +34,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, LoginActivity.class);
-                intent.putExtra("ROLE_ID", UserRole.Educator());
+                intent.putExtra("ROLE", UserRole.Educator());
                 startActivity(intent);
             }
         });
@@ -43,7 +43,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, LoginActivity.class);
-                intent.putExtra("ROLE_ID", UserRole.Student());
+                intent.putExtra("ROLE", UserRole.Student());
                 startActivity(intent);
             }
         });

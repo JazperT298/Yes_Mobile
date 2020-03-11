@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private Button btnLogin;
 
-    private int roleId;
+    private String role;
     //Firebase
     FirebaseAuth auth;
 
@@ -58,7 +58,8 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent extras = getIntent();
         Bundle bundle = extras.getExtras();
-        roleId = bundle.getInt("ROLE_ID");
+        assert bundle != null;
+        role = bundle.getString("ROLE");
 
         context = this;
 
@@ -82,11 +83,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (!etEmail.getText().toString().contains("@"))
                         Toasty.warning(context, "Invalid email.").show();
                     else
-                        switch (roleId) {
-                            case 1:
+                        switch (role) {
+                            case "1":
                                 loginEducator();
+                                Debugger.logD("LOGIN");
                                 break;
-                            case 2:
+                            case "2":
                                 loginStudent();
                                 break;
                         }
@@ -98,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RegisterActivity.class);
-                intent.putExtra("ROLE_ID", roleId);
+                intent.putExtra("ROLE_ID", role);
                 startActivity(intent);
             }
         });
