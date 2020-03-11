@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.activities.NewMessageActivity;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -51,6 +53,7 @@ public class ChatFragment extends Fragment {
     private SwipeRefreshLayout swipeConversation, swipeContacts;
     private RecyclerView rvConversation, rvContacts;
     private ConstraintLayout emptyIndicator;
+    private FloatingActionButton floatingActionButton;
 
     private String role;
     private String path;
@@ -92,6 +95,7 @@ public class ChatFragment extends Fragment {
         rvConversation = view.findViewById(R.id.rv_ChatConversation);
         rvContacts = view.findViewById(R.id.rv_ChatContacts);
         emptyIndicator = view.findViewById(R.id.view_EmptyChat);
+        floatingActionButton = view.findViewById(R.id.fab_ChatConversationNew);
 
         if (role.equals(UserRole.Educator()))
             setEducatorHeader();
@@ -99,12 +103,13 @@ public class ChatFragment extends Fragment {
         firebaseUser = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference(path).child(firebaseUser.getUid());
 
+        displayConversation();
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getPosition() == 0){
-                    swipeConversation.setVisibility(View.VISIBLE);
-                    swipeContacts.setVisibility(View.GONE);
+                    displayConversation();
                 }
                 else{
                     swipeConversation.setVisibility(View.GONE);
@@ -120,6 +125,15 @@ public class ChatFragment extends Fragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
+            }
+        });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NewMessageActivity.class);
+                startActivity(intent);
+//                Toasty.success(context, "NEW").show();
             }
         });
 
@@ -190,6 +204,13 @@ public class ChatFragment extends Fragment {
                 .into(ivProfile);
     }
 
+    private void displayConversation(){
+        swipeConversation.setVisibility(View.VISIBLE);
+        swipeContacts.setVisibility(View.GONE);
+
+        swipeConversation.setRefreshing(true);
+    }
+
     private void checkFirebaseLogin() {
         if (firebaseAuth.getCurrentUser() == null) {
             openWelcomeChatDialog();
@@ -242,6 +263,8 @@ public class ChatFragment extends Fragment {
         final String email = UserEducator.getEmail(context).toLowerCase();
         String password = UserEducator.getPassword(context);
         final String search = UserEducator.getLastname(context).toLowerCase();
+        final String role = UserRole.getRole(context);
+        final String photoName = UserEducator.getImage(context);
 
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -253,13 +276,15 @@ public class ChatFragment extends Fragment {
                             assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
 
-                            databaseReference = FirebaseDatabase.getInstance().getReference(path).child(userid);
+                            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userid);
                             hashMap.put("email", email);
                             hashMap.put("status", "offline");
                             hashMap.put("search", search);
+                            hashMap.put("role", role);
+                            hashMap.put("photoName", photoName);
 
                             databaseReference.setValue(hashMap);
 
