@@ -110,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                     finish();
 //                    Toasty.success(context, "Successfully registered.").show();
                     Toasty.success(context, "Successfully registered.").show();
-                } else{
+                } else {
                     etEmail.requestFocus();
                     Toasty.warning(context, str).show();
                 }
@@ -220,7 +220,7 @@ public class RegisterActivity extends AppCompatActivity {
                         ProgressPopup.hideProgress();
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
-                            //assert firebaseUser != null;
+                            assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
 
                             reference = FirebaseDatabase.getInstance().getReference("Educator").child(userid);

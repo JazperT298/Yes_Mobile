@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -29,7 +28,6 @@ import com.theyestech.yes_mobile.activities.ConnectionActivity;
 import com.theyestech.yes_mobile.activities.NotesActivity;
 import com.theyestech.yes_mobile.activities.StartActivity;
 import com.theyestech.yes_mobile.activities.SubjectActivity;
-import com.theyestech.yes_mobile.activities.UserDetailsActivity;
 import com.theyestech.yes_mobile.activities.UserProfileActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
@@ -99,7 +97,7 @@ public class HomeFragment extends Fragment {
         cvMyVideos = view.findViewById(R.id.cv_Home_MyVideos);
         swipeRefreshLayout = view.findViewById(R.id.swipe_Home);
         recyclerView = view.findViewById(R.id.rv_Home);
-        emptyIndicator = view.findViewById(R.id.view_Empty);
+        emptyIndicator = view.findViewById(R.id.view_EmptyRecord);
 
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override

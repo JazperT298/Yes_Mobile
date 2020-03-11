@@ -66,7 +66,7 @@ public class SubjectSearchActivity extends AppCompatActivity {
         ivSearch = findViewById(R.id.iv_SubjectSearchSearch);
         etSearch = findViewById(R.id.et_SubjectSearchSearch);
         recyclerView = findViewById(R.id.rv_SubjectSearch);
-        emptyIndicator = findViewById(R.id.view_Empty);
+        emptyIndicator = findViewById(R.id.view_EmptyRecord);
 
         etSearch.requestFocus();
 

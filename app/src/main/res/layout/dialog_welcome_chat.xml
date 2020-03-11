@@ -7,8 +7,10 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="500dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,9 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50121653" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout37"
-                android:layout_width="match_parent"
+                android:id="@+id/constraintLayout38"
+                android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPrimaryDark"
                 android:padding="8dp"
@@ -30,11 +39,11 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/tv_ViewAssessmentHeader"
+                    android:id="@+id/textView72"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Assessment"
+                    android:text="Welcome"
                     android:textColor="@color/colorWhite"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +51,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/iv_ViewAssessmentClose"
+                    android:id="@+id/iv_DialogWelcomeChatClose"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="8dp"
@@ -52,24 +61,44 @@
                     app:srcCompat="@drawable/ic_close_white" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <include
-                layout="@layout/indicator_empty_record"
+            <TextView
+                android:id="@+id/textView74"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:visibility="gone"
+                android:text="Welcome to chat."
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/imageView40"
+                app:layout_constraintStart_toStartOf="@+id/imageView40"
+                app:layout_constraintTop_toBottomOf="@+id/imageView40" />
+
+            <ImageView
+                android:id="@+id/imageView40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout37" />
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout38"
+                app:srcCompat="@drawable/ic_chat_colored" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_ViewAssessment"
+            <Button
+                android:id="@+id/btn_DialogWelcomeChatContinue"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/button_fill_gradient_bg"
+                android:text="Continue"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout37" />
+                app:layout_constraintStart_toStartOf="@+id/guideline16"
+                app:layout_constraintTop_toBottomOf="@+id/textView74" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
 </android.support.constraint.ConstraintLayout>

@@ -77,7 +77,7 @@ public class SectionActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_Sections);
         recyclerView = findViewById(R.id.rv_Sections);
         floatingActionButton = findViewById(R.id.fab_SectionsAdd);
-        emptyIndicator = findViewById(R.id.view_Empty);
+        emptyIndicator = findViewById(R.id.view_EmptyRecord);
 
         swipeRefreshLayout.setRefreshing(true);
 

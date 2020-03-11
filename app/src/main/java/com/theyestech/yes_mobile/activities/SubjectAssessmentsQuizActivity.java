@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,8 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,7 +81,7 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
         ivBack = findViewById(R.id.iv_SubjectAssessmentQuizBack);
         swipeRefreshLayout = findViewById(R.id.swipe_AssessmentQuiz);
         recyclerView = findViewById(R.id.rv_AssessmentQuiz);
-        emptyIndicator = findViewById(R.id.view_Empty);
+        emptyIndicator = findViewById(R.id.view_EmptyRecord);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -237,7 +234,7 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
         ImageView ivClose = dialogView.findViewById(R.id.iv_ViewAssessmentClose);
         TextView tvHeader = dialogView.findViewById(R.id.tv_ViewAssessmentHeader);
         RecyclerView recyclerView = dialogView.findViewById(R.id.rv_ViewAssessment);
-        ConstraintLayout eIndicator = dialogView.findViewById(R.id.view_Empty);
+        ConstraintLayout eIndicator = dialogView.findViewById(R.id.view_EmptyRecord);
 
         dialogBuilder.setView(dialogView);
         final AlertDialog b = dialogBuilder.create();

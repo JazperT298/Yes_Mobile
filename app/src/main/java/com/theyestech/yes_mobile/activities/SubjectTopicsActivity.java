@@ -2,7 +2,6 @@ package com.theyestech.yes_mobile.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,8 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -75,7 +72,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_SubjectTopics);
         recyclerView = findViewById(R.id.rv_SubjectTopics);
         floatingActionButton = findViewById(R.id.fab_SubjectTopicsAdd);
-        emptyIndicator = findViewById(R.id.view_Empty);
+        emptyIndicator = findViewById(R.id.view_EmptyRecord);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override

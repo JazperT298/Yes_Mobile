@@ -1,7 +1,6 @@
 package com.theyestech.yes_mobile.activities;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -82,7 +79,7 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_TopicComment);
         recyclerView = findViewById(R.id.rv_TopicComment);
         etComment = findViewById(R.id.et_TopicCommentComment);
-        emptyIndicator = findViewById(R.id.view_Empty);
+        emptyIndicator = findViewById(R.id.view_EmptyRecord);
 
         swipeRefreshLayout.setRefreshing(true);
 

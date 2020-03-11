@@ -104,7 +104,7 @@ public class SubjectActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_Subjects);
         recyclerView = findViewById(R.id.rv_Subjects);
         floatingActionButton = findViewById(R.id.fab_SubjectsAdd);
-        emptyIndicator = findViewById(R.id.view_Empty);
+        emptyIndicator = findViewById(R.id.view_EmptyRecord);
 
         if (!role.equals(UserRole.Educator()))
             floatingActionButton.setImageResource(R.drawable.ic_search_colored);

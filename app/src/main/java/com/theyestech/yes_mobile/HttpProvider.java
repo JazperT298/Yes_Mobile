@@ -21,15 +21,12 @@ public class HttpProvider {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public static void getLogin(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        client.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        client.addHeader("User-Agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-        client.setEnableRedirects(true);
-        client.get(context, getAbsoluteUrl(url), params, responseHandler);
-    }
+//    public static void post(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+//        client.post(context, getAbsoluteUrl(url), params, responseHandler);
+//    }
 
     public static void post(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        client.post(context, getAbsoluteUrl(url), params, responseHandler);
+        client.post(context, getAbsoluteUrl(url), null, params, null, responseHandler);
     }
 
     public static void postLogin(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {

@@ -75,7 +75,7 @@ public class NewsfeedCommentActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_NewsfeedComment);
         recyclerView = findViewById(R.id.rv_NewsfeedComment);
         etComment = findViewById(R.id.et_NewsfeedCommentComment);
-        emptyIndicator = findViewById(R.id.view_Empty);
+        emptyIndicator = findViewById(R.id.view_EmptyRecord);
 
         swipeRefreshLayout.setRefreshing(true);
 

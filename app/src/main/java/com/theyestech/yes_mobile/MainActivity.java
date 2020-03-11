@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-                loginEducator();
+//                loginEducator();
             }
         } else {
             Intent intent = new Intent(context, StartActivity.class);

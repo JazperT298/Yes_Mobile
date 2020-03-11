@@ -116,7 +116,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_ListrowHomeDetails" />
 
             <View
-                android:id="@+id/view"
+                android:id="@+id/view_EmptyChat"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="16dp"
@@ -142,7 +142,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/constraint_ListrowHomeComments"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view">
+                app:layout_constraintTop_toBottomOf="@+id/view_EmptyChat">
 
                 <ImageView
                     android:id="@+id/iv_ListrowHomeYes"
@@ -184,7 +184,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/constraint_ListrowHomeYes"
-                app:layout_constraintTop_toBottomOf="@+id/view">
+                app:layout_constraintTop_toBottomOf="@+id/view_EmptyChat">
 
                 <ImageView
                     android:id="@+id/imageView6"

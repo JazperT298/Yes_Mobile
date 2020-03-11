@@ -402,7 +402,6 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Debugger.logD("isSuccessful");
                                 String firebaseUser = FirebaseAuth.getInstance().getUid();
 
                                 userEducator.setEmail_address(txt_email);
