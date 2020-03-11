@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,7 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.activities.NewMessageActivity;
+import com.theyestech.yes_mobile.activities.NewConversationActivity;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -131,7 +130,7 @@ public class ChatFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, NewMessageActivity.class);
+                Intent intent = new Intent(context, NewConversationActivity.class);
                 startActivity(intent);
 //                Toasty.success(context, "NEW").show();
             }

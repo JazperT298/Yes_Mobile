@@ -21,19 +21,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 import com.theyestech.yes_mobile.models.Chat;
-import com.theyestech.yes_mobile.models.ChatContactList;
+import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
 public class ChatConversationAndContactAdapter extends RecyclerView.Adapter<ChatConversationAndContactAdapter.ViewHolder>{
     private Context mContext;
-    private ArrayList<ChatContactList> chatContactListArrayList;
+    private ArrayList<Contact> contactListArray;
     private boolean ischat;
 
     String theLastMessage;
-    public ChatConversationAndContactAdapter(Context context, ArrayList<ChatContactList> chatContactListArrayList, boolean ischats){
-        this.chatContactListArrayList = chatContactListArrayList;
+    public ChatConversationAndContactAdapter(Context context, ArrayList<Contact> contactListArray, boolean ischats){
+        this.contactListArray = contactListArray;
         mContext = context;
         ischat = ischats;
     }
@@ -47,9 +47,9 @@ public class ChatConversationAndContactAdapter extends RecyclerView.Adapter<Chat
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        final ChatContactList chatContactList = chatContactListArrayList.get(i);
+        final Contact contact = contactListArray.get(i);
 
-        viewHolder.username.setText(chatContactList.getGmail());
+        viewHolder.username.setText(contact.getEmail());
 
         Glide.with(mContext)
                 .load(R.drawable.ic_educator_profile)
@@ -58,7 +58,7 @@ public class ChatConversationAndContactAdapter extends RecyclerView.Adapter<Chat
         //}
 
         if (ischat){
-            lastMessage(chatContactList.getId(), viewHolder.last_msg);
+            lastMessage(contact.getId(), viewHolder.last_msg);
         } else {
             viewHolder.last_msg.setVisibility(View.GONE);
         }
@@ -83,7 +83,7 @@ public class ChatConversationAndContactAdapter extends RecyclerView.Adapter<Chat
 //                bundle.putString("ROLE", role);
                 Intent intent = new Intent(mContext, MessageActivity.class);
                 intent.putExtra("ROLE", role);
-                intent.putExtra("userid", chatContactList.getId());
+                intent.putExtra("userid", contact.getId());
                 mContext.startActivity(intent);
             }
         });
@@ -91,7 +91,7 @@ public class ChatConversationAndContactAdapter extends RecyclerView.Adapter<Chat
 
     @Override
     public int getItemCount() {
-        return chatContactListArrayList.size();
+        return contactListArray.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

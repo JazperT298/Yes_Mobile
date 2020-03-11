@@ -23,7 +23,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
 import com.theyestech.yes_mobile.adapters.ChatConversationAndContactAdapter;
-import com.theyestech.yes_mobile.models.ChatContactList;
+import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.Chatlist;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.notifications.Token;
@@ -45,7 +45,7 @@ public class ChatConversationFragment extends Fragment {
     FirebaseUser fuser;
     DatabaseReference reference;
 
-    private ArrayList<ChatContactList> chatContactListArrayList;
+    private ArrayList<Contact> contactListArray;
     private ArrayList<Student> mStudent;
 
     private ChatConversationAndContactAdapter usersEducatorsAdapter ;
@@ -127,21 +127,21 @@ public class ChatConversationFragment extends Fragment {
     }
 
     private void educatorChatList() {
-        chatContactListArrayList = new ArrayList<>();
+        contactListArray = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("Educator");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                chatContactListArrayList.clear();
+                contactListArray.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    ChatContactList chatContactList = snapshot.getValue(ChatContactList.class);
+                    Contact contact = snapshot.getValue(Contact.class);
                     for (Chatlist chatlist : educatorsCbatList){
-                        if (chatContactList.getId().equals(chatlist.getId())){
-                            chatContactListArrayList.add(chatContactList);
+                        if (contact.getId().equals(chatlist.getId())){
+                            contactListArray.add(contact);
                         }
                     }
                 }
-                usersEducatorsAdapter = new ChatConversationAndContactAdapter(getContext(), chatContactListArrayList, true);
+                usersEducatorsAdapter = new ChatConversationAndContactAdapter(getContext(), contactListArray, true);
                 recyclerView.setAdapter(usersEducatorsAdapter);
             }
 

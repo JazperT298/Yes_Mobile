@@ -29,9 +29,8 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ChatMessageAdapter;
 import com.theyestech.yes_mobile.interfaces.APIService;
 import com.theyestech.yes_mobile.models.Chat;
-import com.theyestech.yes_mobile.models.ChatContactList;
+import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.Student;
-import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.notifications.Client;
 import com.theyestech.yes_mobile.notifications.Data;
 import com.theyestech.yes_mobile.notifications.MyResponse;
@@ -160,8 +159,8 @@ public class MessageActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ChatContactList chatContactList = dataSnapshot.getValue(ChatContactList.class);
-                username.setText(chatContactList.getGmail());
+                Contact contact = dataSnapshot.getValue(Contact.class);
+                username.setText(contact.getEmail());
                 username.setTextColor(Color.parseColor("#212121"));
 //                if (educator.getImage().equals("default")){
 //                    profile_image.setImageResource(R.mipmap.ic_launcher);
@@ -254,10 +253,10 @@ public class MessageActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ChatContactList chatContactList = dataSnapshot.getValue(ChatContactList.class);
+                Contact contact = dataSnapshot.getValue(Contact.class);
                 if (notify) {
-                    assert chatContactList != null;
-                    sendEducatorNotifiaction(receiver, chatContactList.getGmail(), msg);
+                    assert contact != null;
+                    sendEducatorNotifiaction(receiver, contact.getEmail(), msg);
                 }
                 notify = false;
             }

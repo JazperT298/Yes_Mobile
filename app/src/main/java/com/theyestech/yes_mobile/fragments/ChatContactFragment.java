@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
 import com.theyestech.yes_mobile.adapters.ChatConversationAndContactAdapter;
-import com.theyestech.yes_mobile.models.ChatContactList;
+import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.utils.Debugger;
 
@@ -40,7 +40,7 @@ public class ChatContactFragment extends Fragment {
 
 
     private ChatConversationAndContactAdapter usersEducatorsAdapter;
-    private ArrayList<ChatContactList> chatContactListArrayList;
+    private ArrayList<Contact> contactListArray;
 
     private StudentsAdapter studentAdapter;
     private ArrayList<Student> mStudents;
@@ -79,7 +79,7 @@ public class ChatContactFragment extends Fragment {
 
     private void initializeEducatorUI() {
 
-        chatContactListArrayList = new ArrayList<>();
+        contactListArray = new ArrayList<>();
 
         readAllEducators();
         etSearch = view.findViewById(R.id.etSearch);
@@ -112,16 +112,16 @@ public class ChatContactFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                chatContactListArrayList.clear();
+                contactListArray.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    ChatContactList chatContactList = snapshot.getValue(ChatContactList.class);
+                    Contact contact = snapshot.getValue(Contact.class);
 
-                    if (!chatContactList.getId().equals(fuser.getUid())) {
-                        chatContactListArrayList.add(chatContactList);
+                    if (!contact.getId().equals(fuser.getUid())) {
+                        contactListArray.add(contact);
                     }
                 }
 
-                usersEducatorsAdapter = new ChatConversationAndContactAdapter(getContext(), chatContactListArrayList, false);
+                usersEducatorsAdapter = new ChatConversationAndContactAdapter(getContext(), contactListArray, false);
                 recyclerView.setAdapter(usersEducatorsAdapter);
             }
 
@@ -142,20 +142,20 @@ public class ChatContactFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (etSearch.getText().toString().equals("")) {
-                    chatContactListArrayList.clear();
+                    contactListArray.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        ChatContactList chatContactList = snapshot.getValue(ChatContactList.class);
+                        Contact contact = snapshot.getValue(Contact.class);
 
-                        assert chatContactList != null;
+                        assert contact != null;
                         assert firebaseUser != null;
-                        if (!chatContactList.getId().equals(firebaseUser.getUid())) {
-                            chatContactListArrayList.add(chatContactList);
-                            Debugger.logD("educator " + chatContactList);
+                        if (!contact.getId().equals(firebaseUser.getUid())) {
+                            contactListArray.add(contact);
+                            Debugger.logD("educator " + contact);
                         }
 
                     }
 
-                    usersEducatorsAdapter = new ChatConversationAndContactAdapter(getContext(), chatContactListArrayList, false);
+                    usersEducatorsAdapter = new ChatConversationAndContactAdapter(getContext(), contactListArray, false);
                     recyclerView.setAdapter(usersEducatorsAdapter);
                 }
             }
