@@ -287,7 +287,7 @@ public class LoginActivity extends AppCompatActivity {
                     userRole.saveRole(context);
 
 //                    userEducator.setEmail_address(txt_email);
-//                    userEducator.setFirebase_token(firebaseUser);
+////                    userEducator.setFirebase_token(firebaseUser);
                     userEducator.saveUserSession(context);
 
                     Intent intent = new Intent(context, MainActivity.class);
@@ -404,7 +404,6 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 String firebaseUser = FirebaseAuth.getInstance().getUid();
 
-                                userEducator.setEmail_address(txt_email);
                                 userEducator.setFirebase_token(firebaseUser);
                                 userEducator.saveUserSession(context);
 

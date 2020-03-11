@@ -7,9 +7,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +26,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.ChatViewPagerAdapter;
-import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -49,9 +47,10 @@ public class ChatFragment extends Fragment {
 
     private TextView tvHeader;
     private ImageView ivProfile;
-
     private TabLayout tabLayout;
-    private ChatViewPagerAdapter viewPagerAdapter;
+    private SwipeRefreshLayout swipeConversation, swipeContacts;
+    private RecyclerView rvConversation, rvContacts;
+    private ConstraintLayout emptyIndicator;
 
     private String role;
     private String path;
@@ -88,20 +87,41 @@ public class ChatFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout_Chat);
         tvHeader = view.findViewById(R.id.tv_ChatHeader);
         ivProfile = view.findViewById(R.id.iv_ChatProfile);
+        swipeConversation = view.findViewById(R.id.swipe_ChatConversation);
+        swipeContacts = view.findViewById(R.id.swipe_ChatContacts);
+        rvConversation = view.findViewById(R.id.rv_ChatConversation);
+        rvContacts = view.findViewById(R.id.rv_ChatContacts);
+        emptyIndicator = view.findViewById(R.id.view_EmptyChat);
+
+        if (role.equals(UserRole.Educator()))
+            setEducatorHeader();
 
         firebaseUser = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference(path).child(firebaseUser.getUid());
 
-        if (!UserEducator.getFirstname(context).equals("")){
-            tvHeader.setText(UserEducator.getFirstname(context));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition() == 0){
+                    swipeConversation.setVisibility(View.VISIBLE);
+                    swipeContacts.setVisibility(View.GONE);
+                }
+                else{
+                    swipeConversation.setVisibility(View.GONE);
+                    swipeContacts.setVisibility(View.VISIBLE);
+                }
+            }
 
-            Glide.with(context)
-                    .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
-                    .apply(GlideOptions.getOptions())
-                    .into(ivProfile);
-        } else{
-            tvHeader.setText(UserEducator.getEmail(context));
-        }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
 //        databaseReference.addValueEventListener(new ValueEventListener() {
 //            @Override
@@ -159,6 +179,15 @@ public class ChatFragment extends Fragment {
 //
 //            }
 //        });
+    }
+
+    private void setEducatorHeader(){
+//        tvHeader.setText(UserEducator.getFirstname(context));
+
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(ivProfile);
     }
 
     private void checkFirebaseLogin() {
