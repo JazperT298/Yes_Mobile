@@ -91,7 +91,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, NewTopicActivity.class);
+                Intent intent = new Intent(context, SubjectNewTopicActivity.class);
                 intent.putExtra("SUBJECT", subject);
                 startActivity(intent);
             }

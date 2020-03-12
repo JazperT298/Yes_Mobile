@@ -31,7 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.activities.NewConversationActivity;
+import com.theyestech.yes_mobile.activities.ChatNewConversationActivity;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -89,18 +89,17 @@ public class ChatFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout_Chat);
         tvHeader = view.findViewById(R.id.tv_ChatHeader);
         ivProfile = view.findViewById(R.id.iv_ChatProfile);
-        swipeConversation = view.findViewById(R.id.swipe_ChatConversation);
+        swipeConversation = view.findViewById(R.id.swipe_ChatThreads);
         swipeContacts = view.findViewById(R.id.swipe_ChatContacts);
-        rvConversation = view.findViewById(R.id.rv_ChatConversation);
+        rvConversation = view.findViewById(R.id.rv_ChatThreads);
         rvContacts = view.findViewById(R.id.rv_ChatContacts);
         emptyIndicator = view.findViewById(R.id.view_EmptyChat);
-        floatingActionButton = view.findViewById(R.id.fab_ChatConversationNew);
+        floatingActionButton = view.findViewById(R.id.fab_ChatThreadNew);
 
         if (role.equals(UserRole.Educator()))
             setEducatorHeader();
 
         firebaseUser = firebaseAuth.getCurrentUser();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         displayConversation();
 
@@ -130,7 +129,7 @@ public class ChatFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, NewConversationActivity.class);
+                Intent intent = new Intent(context, ChatNewConversationActivity.class);
                 startActivity(intent);
 //                Toasty.success(context, "NEW").show();
             }
@@ -261,6 +260,7 @@ public class ChatFragment extends Fragment {
 
         final String email = UserEducator.getEmail(context).toLowerCase();
         String password = UserEducator.getPassword(context);
+        final String fullName = UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context) + " " + UserEducator.getSuffix(context);
         final String search = UserEducator.getLastname(context).toLowerCase();
         final String role = UserRole.getRole(context);
         final String photoName = UserEducator.getImage(context);
@@ -271,15 +271,16 @@ public class ChatFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         ProgressPopup.hideProgress();
                         if (task.isSuccessful()) {
-                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                            firebaseUser = firebaseAuth.getCurrentUser();
                             assert firebaseUser != null;
-                            String userid = firebaseUser.getUid();
+                            String userId = firebaseUser.getUid();
 
-                            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+                            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
                             HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("id", userid);
+                            hashMap.put("id", userId);
                             hashMap.put("email", email);
+                            hashMap.put("fullName", fullName);
                             hashMap.put("status", "offline");
                             hashMap.put("search", search);
                             hashMap.put("role", role);

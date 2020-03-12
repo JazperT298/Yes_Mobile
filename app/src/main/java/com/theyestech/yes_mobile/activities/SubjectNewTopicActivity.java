@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -17,8 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -42,7 +39,7 @@ import java.nio.charset.StandardCharsets;
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
 
-public class NewTopicActivity extends AppCompatActivity {
+public class SubjectNewTopicActivity extends AppCompatActivity {
 
     private Context context;
 
@@ -66,7 +63,7 @@ public class NewTopicActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_topic);
+        setContentView(R.layout.activity_subject_new_topic);
 
         subject = getIntent().getParcelableExtra("SUBJECT");
 

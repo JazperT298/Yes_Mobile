@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.NewConversationActivity" />
+        <activity android:name=".activities.ChatConversationActivity" />
+        <activity android:name=".activities.ChatNewConversationActivity" />
         <activity android:name=".activities.ConnectionActivity" />
         <activity android:name=".activities.UserProfileActivity" />
         <activity android:name=".activities.SubjectAssessmentsQuizActivity" />
@@ -32,7 +33,7 @@
         <activity android:name=".activities.SubjectQuizQuestionsActivity" />
         <activity android:name=".activities.SubjectQuizzesActivity" />
         <activity android:name=".activities.SubjectTopicsCommentActivity" />
-        <activity android:name=".activities.NewTopicActivity" />
+        <activity android:name=".activities.SubjectNewTopicActivity" />
         <activity android:name=".activities.SubjectTopicsActivity" />
         <activity android:name=".activities.SubjectStudentsActivity" />
         <activity android:name=".activities.SubjectDetailsActivity" />

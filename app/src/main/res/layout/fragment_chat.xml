@@ -9,7 +9,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,18 +21,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="Chat"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
             android:id="@+id/imageView41"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:src="@drawable/bg_profile_round"
             app:layout_constraintBottom_toBottomOf="@+id/iv_ChatProfile"
             app:layout_constraintEnd_toEndOf="@+id/iv_ChatProfile"
@@ -41,11 +41,9 @@
 
         <ImageView
             android:id="@+id/iv_ChatProfile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +72,7 @@
             android:id="@+id/tabItem_Conversation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Conversation">
+            android:text="Threads">
 
         </android.support.design.widget.TabItem>
 
@@ -88,7 +86,7 @@
     </android.support.design.widget.TabLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_ChatConversation"
+        android:id="@+id/swipe_ChatThreads"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -111,7 +109,7 @@
                 tools:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_ChatConversation"
+                android:id="@+id/rv_ChatThreads"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -122,7 +120,7 @@
             </android.support.v7.widget.RecyclerView>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab_ChatConversationNew"
+                android:id="@+id/fab_ChatThreadNew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
