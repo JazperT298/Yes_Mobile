@@ -100,7 +100,7 @@ public class ChatFragment extends Fragment {
             setEducatorHeader();
 
         firebaseUser = firebaseAuth.getCurrentUser();
-        databaseReference = FirebaseDatabase.getInstance().getReference(path).child(firebaseUser.getUid());
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         displayConversation();
 

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -93,6 +94,17 @@ public class NewConversationActivity extends AppCompatActivity {
 
             }
         });
+
+        etSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object item = parent.getItemAtPosition(position);
+                if (item instanceof Contact){
+                    Contact contact = (Contact) item;
+                    etSearch.setText(contact.getFullName());
+                }
+            }
+        });
     }
 
     private void searchContacts(String text){
@@ -108,6 +120,8 @@ public class NewConversationActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Contact contact = snapshot.getValue(Contact.class);
 
+                    assert contact != null;
+                    assert firebaseUser != null;
                     if (!contact.getId().equals(firebaseUser.getUid())) {
                         contactArrayList.add(contact);
                     }
