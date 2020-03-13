@@ -259,6 +259,11 @@ public class LoginActivity extends AppCompatActivity {
                     String validated = jsonObject.getString("validated");
                     String connection = jsonObject.getString("connection");
 
+                    if (user_gender.equals("1"))
+                        user_gender = "Male";
+                    else
+                        user_gender = "Female";
+
                     userEducator.setEmail_address(user_email_address);
                     userEducator.setPassword(etPassword.getText().toString());
                     userEducator.setFirsname(user_firstname);

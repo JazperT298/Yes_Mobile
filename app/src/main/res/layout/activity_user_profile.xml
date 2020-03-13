@@ -91,21 +91,27 @@
 
                 <TextView
                     android:id="@+id/tv_UserProfileFullname"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="Vanne Marsmyle Pagapong"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_UserProfileImage"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_UserProfileEmail"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="marsmylepagapong13@gmail.com"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/tv_UserProfileFullname"
                     app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileFullname" />
 
@@ -233,11 +239,14 @@
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoFullname"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="Vanne Marsmyle Pagapong"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView44"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView44"
                     app:layout_constraintTop_toTopOf="@+id/imageView44" />
 
@@ -254,6 +263,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:singleLine="true"
                     android:text="Male"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView45"
                     app:layout_constraintStart_toEndOf="@+id/imageView45"
@@ -269,11 +279,14 @@
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoPhone"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="09759897742"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView43"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView43"
                     app:layout_constraintTop_toTopOf="@+id/imageView43" />
 
@@ -287,11 +300,14 @@
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoEmail"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="marsmylepagapong13@gmail.com"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView46"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView46"
                     app:layout_constraintTop_toTopOf="@+id/imageView46" />
 
@@ -308,7 +324,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -376,6 +392,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="Bachelor of Science in Information Technology"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView47"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -392,11 +409,14 @@
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoSubjectMajor"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="Programming"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView48"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView48"
                     app:layout_constraintTop_toTopOf="@+id/imageView48" />
 
@@ -414,6 +434,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="Phinma-Cagayan de Oro College"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView49"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -432,11 +453,14 @@
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoSchoolPosition"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="Faculty"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView50"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView50"
                     app:layout_constraintTop_toTopOf="@+id/imageView50" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -496,11 +520,14 @@
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoFacebook"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="facebook.com"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView52"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView52"
                     app:layout_constraintTop_toTopOf="@+id/imageView52" />
 
@@ -514,11 +541,14 @@
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoTwitter"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="twitter.com"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView53"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView53"
                     app:layout_constraintTop_toTopOf="@+id/imageView53" />
 
@@ -534,11 +564,14 @@
 
                 <TextView
                     android:id="@+id/tv_UserProfileInfoInstagram"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:singleLine="true"
                     android:text="instragam.com"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView54"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView54"
                     app:layout_constraintTop_toTopOf="@+id/imageView54" />
 

@@ -1,11 +1,14 @@
 package com.theyestech.yes_mobile.models;
 
+import java.util.Date;
+
 public class ChatThread {
 
     public String id;
     public boolean isSeen;
     public String participant1;
     public String participant2;
+    public Date lastMessageDateCreated;
 
     public String getId() {
         return id;
@@ -37,5 +40,13 @@ public class ChatThread {
 
     public void setParticipant2(String participant2) {
         this.participant2 = participant2;
+    }
+
+    public Date getLastMessageDateCreated() {
+        return lastMessageDateCreated;
+    }
+
+    public void setLastMessageDateCreated(Date lastMessageDateCreated) {
+        this.lastMessageDateCreated = lastMessageDateCreated;
     }
 }
