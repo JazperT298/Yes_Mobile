@@ -8,7 +8,9 @@ public class ChatThread {
     public boolean isSeen;
     public String participant1;
     public String participant2;
+    public String lastMessage;
     public Date lastMessageDateCreated;
+    public Contact contact;
 
     public String getId() {
         return id;
@@ -48,5 +50,21 @@ public class ChatThread {
 
     public void setLastMessageDateCreated(Date lastMessageDateCreated) {
         this.lastMessageDateCreated = lastMessageDateCreated;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 }

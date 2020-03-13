@@ -33,7 +33,7 @@
             android:id="@+id/imageView41"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/bg_profile_round"
+            android:src="@drawable/bg_profile_round_white"
             app:layout_constraintBottom_toBottomOf="@+id/iv_ChatProfile"
             app:layout_constraintEnd_toEndOf="@+id/iv_ChatProfile"
             app:layout_constraintStart_toStartOf="@+id/iv_ChatProfile"

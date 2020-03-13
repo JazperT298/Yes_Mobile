@@ -38,7 +38,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/iv_HomeProfile"
                     app:layout_constraintStart_toStartOf="@+id/iv_HomeProfile"
                     app:layout_constraintTop_toTopOf="@+id/iv_HomeProfile"
-                    app:srcCompat="@drawable/bg_profile_round" />
+                    app:srcCompat="@drawable/bg_profile_round_white" />
 
                 <ImageView
                     android:id="@+id/iv_HomeProfile"

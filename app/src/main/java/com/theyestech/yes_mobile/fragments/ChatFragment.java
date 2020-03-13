@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,9 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.ChatNewConversationActivity;
+import com.theyestech.yes_mobile.adapters.ChatThreadsAdapter;
+import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
+import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
@@ -43,7 +47,6 @@ import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -57,13 +60,12 @@ public class ChatFragment extends Fragment {
     private TextView tvHeader;
     private ImageView ivProfile;
     private TabLayout tabLayout;
-    private SwipeRefreshLayout swipeConversation, swipeContacts;
-    private RecyclerView rvConversation, rvContacts;
+    private SwipeRefreshLayout swipThreads, swipeContacts;
+    private RecyclerView rvThreads, rvContacts;
     private ConstraintLayout emptyIndicator;
     private FloatingActionButton floatingActionButton;
 
     private String role;
-    private String path;
 
     //Firebase
     private FirebaseUser firebaseUser;
@@ -72,6 +74,10 @@ public class ChatFragment extends Fragment {
 
     private ArrayList<Contact> contactArrayList = new ArrayList<>();
     private boolean isDoneFetching = false;
+
+    private ArrayList<ChatThread> threadArrayList = new ArrayList<>();
+    private ChatThreadsAdapter chatThreadsAdapter;
+    private ChatThread selectedThread = new ChatThread();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -86,11 +92,6 @@ public class ChatFragment extends Fragment {
 
         role = UserRole.getRole(context);
 
-        if (role.equals(UserRole.Educator()))
-            path = "Educator";
-        else
-            path = "Student";
-
         firebaseAuth = FirebaseAuth.getInstance();
 
         checkFirebaseLogin();
@@ -100,9 +101,9 @@ public class ChatFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout_Chat);
         tvHeader = view.findViewById(R.id.tv_ChatHeader);
         ivProfile = view.findViewById(R.id.iv_ChatProfile);
-        swipeConversation = view.findViewById(R.id.swipe_ChatThreads);
+        swipThreads = view.findViewById(R.id.swipe_ChatThreads);
         swipeContacts = view.findViewById(R.id.swipe_ChatContacts);
-        rvConversation = view.findViewById(R.id.rv_ChatThreads);
+        rvThreads = view.findViewById(R.id.rv_ChatThreads);
         rvContacts = view.findViewById(R.id.rv_ChatContacts);
         emptyIndicator = view.findViewById(R.id.view_EmptyChat);
         floatingActionButton = view.findViewById(R.id.fab_ChatThreadNew);
@@ -112,17 +113,15 @@ public class ChatFragment extends Fragment {
 
         firebaseUser = firebaseAuth.getCurrentUser();
 
-        displayConversation();
-
-        getAllContacts();
+        displayConversationView();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
-                    displayConversation();
+                    displayConversationView();
                 } else {
-                    swipeConversation.setVisibility(View.GONE);
+                    swipThreads.setVisibility(View.GONE);
                     swipeContacts.setVisibility(View.VISIBLE);
                 }
             }
@@ -134,19 +133,6 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isDoneFetching) {
-                    Intent intent = new Intent(context, ChatNewConversationActivity.class);
-                    intent.putParcelableArrayListExtra("CONTACTARRAYLIST", contactArrayList);
-                    startActivity(intent);
-                } else
-                    OkayClosePopup.showDialog(context, "Loading contacts.", "Close");
 
             }
         });
@@ -218,11 +204,34 @@ public class ChatFragment extends Fragment {
                 .into(ivProfile);
     }
 
-    private void displayConversation() {
-        swipeConversation.setVisibility(View.VISIBLE);
+    private void displayConversationView() {
+        swipThreads.setVisibility(View.VISIBLE);
         swipeContacts.setVisibility(View.GONE);
+        emptyIndicator.setVisibility(View.GONE);
 
-        swipeConversation.setRefreshing(true);
+        swipThreads.setRefreshing(true);
+
+        getAllContacts();
+
+        swipThreads.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAllContacts();
+            }
+        });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isDoneFetching) {
+                    Intent intent = new Intent(context, ChatNewConversationActivity.class);
+                    intent.putParcelableArrayListExtra("CONTACTARRAYLIST", contactArrayList);
+                    startActivity(intent);
+                } else
+                    OkayClosePopup.showDialog(context, "Loading contacts.", "Close");
+
+            }
+        });
     }
 
     private void checkFirebaseLogin() {
@@ -333,6 +342,68 @@ public class ChatFragment extends Fragment {
                 }
 
                 isDoneFetching = true;
+                getAllThreads();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getAllThreads() {
+        DatabaseReference threadsRef = FirebaseDatabase.getInstance().getReference("Threads");
+        threadsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                threadArrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ChatThread chatThread = snapshot.getValue(ChatThread.class);
+                    assert chatThread != null;
+                    if (chatThread.getParticipant1().equals(firebaseUser.getUid())){
+                        for (Contact contact : contactArrayList){
+                            if (chatThread.getParticipant2().equals(contact.getId())){
+                                chatThread.setContact(contact);
+                                break;
+                            }
+                        }
+                        threadArrayList.add(chatThread);
+                    } else if (chatThread.getParticipant2().equals(firebaseUser.getUid())){
+                        for (Contact contact : contactArrayList){
+                            if (chatThread.getParticipant2().equals(contact.getId())){
+                                chatThread.setContact(contact);
+                                break;
+                            }
+                        }
+                        threadArrayList.add(chatThread);
+                    }
+                }
+
+                rvThreads.setLayoutManager(new LinearLayoutManager(context));
+                rvThreads.setHasFixedSize(true);
+                chatThreadsAdapter = new ChatThreadsAdapter(context, threadArrayList);
+                chatThreadsAdapter.setClickListener(new OnClickRecyclerView() {
+                    @Override
+                    public void onItemClick(View view, int position, int fromButton) {
+                        selectedThread = threadArrayList.get(position);
+
+                        if (fromButton == 1) {
+
+                        } else if (fromButton == 2) {
+
+                        }
+                    }
+                });
+                rvThreads.setAdapter(chatThreadsAdapter);
+
+                if (threadArrayList.isEmpty())
+                    emptyIndicator.setVisibility(View.VISIBLE);
+
+                swipThreads.setRefreshing(false);
+
+                Debugger.printO(threadArrayList);
+                Debugger.logD(String.valueOf(threadArrayList.size()));
             }
 
             @Override

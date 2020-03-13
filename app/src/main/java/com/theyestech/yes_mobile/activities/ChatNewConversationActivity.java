@@ -3,7 +3,6 @@ package com.theyestech.yes_mobile.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -90,7 +89,7 @@ public class ChatNewConversationActivity extends AppCompatActivity {
         etSearch = findViewById(R.id.et_NewConversationSearch);
         etMessage = findViewById(R.id.et_NewConversationMessage);
 
-        contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_contacts_dropdown, contactArrayList);
+        contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_chat_contacts_dropdown, contactArrayList);
         etSearch.setAdapter(contactDropdownAdapter);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +118,7 @@ public class ChatNewConversationActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchContacts(charSequence.toString().toLowerCase());
+                contactDropdownAdapter.getFilter().filter(charSequence);
             }
 
             @Override
@@ -144,39 +143,6 @@ public class ChatNewConversationActivity extends AppCompatActivity {
                 KeyboardHandler.closeKeyboard(etSearch, context);
             }
         });
-    }
-
-    private void searchContacts(String text) {
-//        Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("search")
-//                .startAt(text)
-//                .endAt(text + "\uf8ff");
-//
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                contactArrayList.clear();
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Contact contact = snapshot.getValue(Contact.class);
-//                    assert contact != null;
-//                    assert firebaseUser != null;
-//                    if (!contact.getId().equals(firebaseUser.getUid())) {
-//                        contactArrayList.add(contact);
-//                    }
-//                }
-//
-//                contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_contacts_dropdown, contactArrayList);
-//                etSearch.setAdapter(contactDropdownAdapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-//        contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_contacts_dropdown, contactArrayList);
-//        etSearch.setAdapter(contactDropdownAdapter);
-        contactDropdownAdapter.getFilter().filter(text);
     }
 
     private void createNewThread() {
