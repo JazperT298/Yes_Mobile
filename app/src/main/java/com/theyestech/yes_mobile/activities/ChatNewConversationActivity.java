@@ -3,6 +3,7 @@ package com.theyestech.yes_mobile.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -19,12 +20,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ContactDropdownAdapter;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.KeyboardHandler;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -69,6 +70,10 @@ public class ChatNewConversationActivity extends AppCompatActivity {
 
         context = this;
 
+        contactArrayList = getIntent().getParcelableArrayListExtra("CONTACTARRAYLIST");
+
+        Debugger.printO(contactArrayList);
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
@@ -84,6 +89,9 @@ public class ChatNewConversationActivity extends AppCompatActivity {
         ivSend = findViewById(R.id.iv_NewConversationSend);
         etSearch = findViewById(R.id.et_NewConversationSearch);
         etMessage = findViewById(R.id.et_NewConversationMessage);
+
+        contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_contacts_dropdown, contactArrayList);
+        etSearch.setAdapter(contactDropdownAdapter);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,32 +147,36 @@ public class ChatNewConversationActivity extends AppCompatActivity {
     }
 
     private void searchContacts(String text) {
-        Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("search")
-                .startAt(text)
-                .endAt(text + "\uf8ff");
+//        Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("search")
+//                .startAt(text)
+//                .endAt(text + "\uf8ff");
+//
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                contactArrayList.clear();
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    Contact contact = snapshot.getValue(Contact.class);
+//                    assert contact != null;
+//                    assert firebaseUser != null;
+//                    if (!contact.getId().equals(firebaseUser.getUid())) {
+//                        contactArrayList.add(contact);
+//                    }
+//                }
+//
+//                contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_contacts_dropdown, contactArrayList);
+//                etSearch.setAdapter(contactDropdownAdapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                contactArrayList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Contact contact = snapshot.getValue(Contact.class);
-                    assert contact != null;
-                    assert firebaseUser != null;
-                    if (!contact.getId().equals(firebaseUser.getUid())) {
-                        contactArrayList.add(contact);
-                    }
-                }
-
-                contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_contacts_dropdown, contactArrayList);
-                etSearch.setAdapter(contactDropdownAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_contacts_dropdown, contactArrayList);
+//        etSearch.setAdapter(contactDropdownAdapter);
+        contactDropdownAdapter.getFilter().filter(text);
     }
 
     private void createNewThread() {
@@ -255,7 +267,7 @@ public class ChatNewConversationActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ChatThread chatThread = snapshot.getValue(ChatThread.class);
                     assert chatThread != null;
-                    if (chatThread.getParticipant1().equals(senderId) || chatThread.getParticipant2().equals(senderId)){
+                    if (chatThread.getParticipant1().equals(senderId) || chatThread.getParticipant2().equals(senderId)) {
                         Intent intent = new Intent(context, ChatConversationActivity.class);
                         startActivity(intent);
                     }

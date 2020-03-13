@@ -1,6 +1,9 @@
 package com.theyestech.yes_mobile.models;
 
-public class Contact {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Contact implements Parcelable {
 
     private String email;
     private String id;
@@ -9,6 +12,32 @@ public class Contact {
     private String role;
     private String search;
     private String status;
+
+    public Contact(){
+
+    }
+
+    public Contact(Parcel in) {
+        email = in.readString();
+        id = in.readString();
+        fullName = in.readString();
+        photoName = in.readString();
+        role = in.readString();
+        search = in.readString();
+        status = in.readString();
+    }
+
+    public static final Creator<Contact> CREATOR = new Creator<Contact>() {
+        @Override
+        public Contact createFromParcel(Parcel in) {
+            return new Contact(in);
+        }
+
+        @Override
+        public Contact[] newArray(int size) {
+            return new Contact[size];
+        }
+    };
 
     public String getEmail() {
         return email;
@@ -64,5 +93,21 @@ public class Contact {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(email);
+        dest.writeString(id);
+        dest.writeString(fullName);
+        dest.writeString(photoName);
+        dest.writeString(role);
+        dest.writeString(search);
+        dest.writeString(status);
     }
 }

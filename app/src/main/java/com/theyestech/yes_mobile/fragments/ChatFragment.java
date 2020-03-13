@@ -26,17 +26,25 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.ChatNewConversationActivity;
+import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
+import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -61,6 +69,9 @@ public class ChatFragment extends Fragment {
     private FirebaseUser firebaseUser;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
+
+    private ArrayList<Contact> contactArrayList = new ArrayList<>();
+    private boolean isDoneFetching = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -103,13 +114,14 @@ public class ChatFragment extends Fragment {
 
         displayConversation();
 
+        getAllContacts();
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition() == 0){
+                if (tab.getPosition() == 0) {
                     displayConversation();
-                }
-                else{
+                } else {
                     swipeConversation.setVisibility(View.GONE);
                     swipeContacts.setVisibility(View.VISIBLE);
                 }
@@ -129,9 +141,13 @@ public class ChatFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ChatNewConversationActivity.class);
-                startActivity(intent);
-//                Toasty.success(context, "NEW").show();
+                if (isDoneFetching) {
+                    Intent intent = new Intent(context, ChatNewConversationActivity.class);
+                    intent.putParcelableArrayListExtra("CONTACTARRAYLIST", contactArrayList);
+                    startActivity(intent);
+                } else
+                    OkayClosePopup.showDialog(context, "Loading contacts.", "Close");
+
             }
         });
 
@@ -152,7 +168,7 @@ public class ChatFragment extends Fragment {
 //                } else {
 
 
-                //}
+        //}
 //            }
 //
 //            @Override
@@ -193,7 +209,7 @@ public class ChatFragment extends Fragment {
 //        });
     }
 
-    private void setEducatorHeader(){
+    private void setEducatorHeader() {
 //        tvHeader.setText(UserEducator.getFirstname(context));
 
         Glide.with(context)
@@ -202,7 +218,7 @@ public class ChatFragment extends Fragment {
                 .into(ivProfile);
     }
 
-    private void displayConversation(){
+    private void displayConversation() {
         swipeConversation.setVisibility(View.VISIBLE);
         swipeContacts.setVisibility(View.GONE);
 
@@ -281,7 +297,7 @@ public class ChatFragment extends Fragment {
                             hashMap.put("id", userId);
                             hashMap.put("email", email);
                             hashMap.put("fullName", fullName);
-                            hashMap.put("status", "offline");
+                            hashMap.put("status", "online");
                             hashMap.put("search", search);
                             hashMap.put("role", role);
                             hashMap.put("photoName", photoName);
@@ -298,5 +314,31 @@ public class ChatFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private void getAllContacts() {
+        contactArrayList.clear();
+
+        DatabaseReference contactsRef = FirebaseDatabase.getInstance().getReference("Users");
+        contactsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Contact contact = snapshot.getValue(Contact.class);
+                    assert contact != null;
+                    assert firebaseUser != null;
+                    if (!contact.getId().equals(firebaseUser.getUid())) {
+                        contactArrayList.add(contact);
+                    }
+                }
+
+                isDoneFetching = true;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

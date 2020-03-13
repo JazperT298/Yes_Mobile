@@ -24,7 +24,6 @@ public class ContactDropdownAdapter extends ArrayAdapter {
     private ArrayList<Contact> contactArrayList;
     private Context context;
     private int itemLayout;
-
     private ListFilter listFilter = new ListFilter();
     private ArrayList<Contact> allContactArrayList;
 
@@ -100,7 +99,7 @@ public class ContactDropdownAdapter extends ArrayAdapter {
                 ArrayList<Contact> matchValues = new ArrayList<>();
 
                 for (Contact contact : allContactArrayList) {
-                    if (contact.getSearch().toLowerCase().startsWith(searchStrLowerCase)) {
+                    if (contact.getFullName().toLowerCase().contains(searchStrLowerCase)) {
                         matchValues.add(contact);
                     }
                 }

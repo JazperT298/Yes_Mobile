@@ -44,6 +44,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
@@ -309,27 +310,21 @@ public class HomeFragment extends Fragment {
 
     private void logoutUser() {
         if (role.equals(UserRole.Educator())) {
-            //Firebase Logout
             FirebaseAuth.getInstance().signOut();
 
             UserEducator.clearSession(context);
             UserRole.clearRole(context);
-//            MainActivity mainActivity = new MainActivity();
-//            mainActivity.checkEducatorSession();
             Intent intent = new Intent(context, StartActivity.class);
             startActivity(intent);
-            getActivity().finish();
+            Objects.requireNonNull(getActivity()).finish();
         } else {
-            //Firebase Logout
             FirebaseAuth.getInstance().signOut();
 
             UserStudent.clearSession(context);
             UserRole.clearRole(context);
-//            MainActivity mainActivity = new MainActivity();
-//            mainActivity.checkStudentSession();
             Intent intent = new Intent(context, StartActivity.class);
             startActivity(intent);
-            getActivity().finish();
+            Objects.requireNonNull(getActivity()).finish();
         }
     }
 
