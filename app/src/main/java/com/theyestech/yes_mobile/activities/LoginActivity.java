@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,17 +15,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
-import com.theyestech.yes_mobile.utils.KeyboardHandler;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
-import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -46,15 +50,16 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
 
     private String role;
-    //Firebase
-    FirebaseAuth auth;
 
-    UserEducator userEducator = new UserEducator();
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+//        firebaseAuth.signOut();
 
         Intent extras = getIntent();
         Bundle bundle = extras.getExtras();
@@ -67,8 +72,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        auth = FirebaseAuth.getInstance();
-
         etEmail = findViewById(R.id.et_LoginEmail);
         etPassword = findViewById(R.id.et_LoginPassword);
         btnLogin = findViewById(R.id.btn_LoginSignIn);
@@ -86,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
                         switch (role) {
                             case "1":
                                 loginEducator();
-                                Debugger.logD("LOGIN");
                                 break;
                             case "2":
                                 loginStudent();
@@ -291,15 +293,15 @@ public class LoginActivity extends AppCompatActivity {
                     userRole.setUserRole(UserRole.Educator());
                     userRole.saveRole(context);
 
-//                    userEducator.setEmail_address(txt_email);
-////                    userEducator.setFirebase_token(firebaseUser);
                     userEducator.saveUserSession(context);
 
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-
-//                    doFirebaseLoginEducator(userEducator);
+                    if (firebaseAuth.getCurrentUser() == null) {
+                        doFirebaseLoginEducator(userEducator);
+                    } else {
+                        Intent intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -395,60 +397,54 @@ public class LoginActivity extends AppCompatActivity {
     //-----------------------------------------Firebase----------------------------------------//
 
     private void doFirebaseLoginEducator(final UserEducator userEducator) {
+        final String email = userEducator.getEmail_address();
+        String password = userEducator.getPassword();
 
-        final String txt_email = etEmail.getText().toString();
-        String txt_password = etPassword.getText().toString();
-
-        if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
-            Toast.makeText(context, "All fields are required.", Toast.LENGTH_SHORT).show();
-        } else {
-            auth.signInWithEmailAndPassword(txt_email, txt_password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                String firebaseUser = FirebaseAuth.getInstance().getUid();
-
-                                userEducator.setFirebase_token(firebaseUser);
-                                userEducator.saveUserSession(context);
-
-                                Intent intent = new Intent(context, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
-                            }
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                            assert firebaseUser != null;
+                            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                            usersRef.child("status").setValue("online");
+                            Intent intent = new Intent(context, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
                         }
-                    });
-        }
+                    }
+                });
     }
 
     private void doFirebaseLoginStudent() {
-        String txt_email = etEmail.getText().toString();
-        String txt_password = etPassword.getText().toString();
-
-        if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
-            Toast.makeText(context, "All fileds are required", Toast.LENGTH_SHORT).show();
-        } else {
-
-            auth.signInWithEmailAndPassword(txt_email, txt_password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                String firebaseUser = FirebaseAuth.getInstance().getUid();
-                                KeyboardHandler.closeKeyboard(view, context);
-                                Toasty.success(context, "Success.").show();
-                                Intent intent = new Intent(context, MainActivity.class);
-                                intent.putExtra("ROLE_ID", 1);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-//                                finish();
-                            } else {
-                                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
+//        String txt_email = etEmail.getText().toString();
+//        String txt_password = etPassword.getText().toString();
+//
+//        if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
+//            Toast.makeText(context, "All fileds are required", Toast.LENGTH_SHORT).show();
+//        } else {
+//
+//            auth.signInWithEmailAndPassword(txt_email, txt_password)
+//                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<AuthResult> task) {
+//                            if (task.isSuccessful()) {
+//                                String firebaseUser = FirebaseAuth.getInstance().getUid();
+//                                KeyboardHandler.closeKeyboard(view, context);
+//                                Toasty.success(context, "Success.").show();
+//                                Intent intent = new Intent(context, MainActivity.class);
+//                                intent.putExtra("ROLE_ID", 1);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                startActivity(intent);
+////                                finish();
+//                            } else {
+//                                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//        }
     }
 }

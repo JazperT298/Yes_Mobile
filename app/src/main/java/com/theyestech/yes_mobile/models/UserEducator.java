@@ -29,7 +29,6 @@ public class UserEducator {
     private String user_role;
     private String validated;
     private String connection;
-    private String firebase_token;
 
     public String getId() {
         return id;
@@ -151,10 +150,6 @@ public class UserEducator {
         this.position = position;
     }
 
-    public String getFirebase_token() {
-        return firebase_token;
-    }
-
     public String getFacebook() {
         return facebook;
     }
@@ -225,10 +220,6 @@ public class UserEducator {
 
     public void setConnection(String connection) {
         this.connection = connection;
-    }
-
-    public void setFirebase_token(String firebase_token) {
-        this.firebase_token = firebase_token;
     }
 
     public static String getID(Context context) {
@@ -351,11 +342,6 @@ public class UserEducator {
         return settings.getString("CONNECTION", "");
     }
 
-    public static String getFirebaseToken(Context context) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        return settings.getString("FIREBASE_TOKEN", "");
-    }
-
     public boolean saveUserSession(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
@@ -383,7 +369,6 @@ public class UserEducator {
         editor.putString("ROLE", user_role);
         editor.putString("VALIDATED", validated);
         editor.putString("CONNECTION", connection);
-        editor.putString("FIREBASE_TOKEN", firebase_token);
         return editor.commit();
     }
 

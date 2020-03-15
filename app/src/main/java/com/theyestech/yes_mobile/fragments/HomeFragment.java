@@ -20,6 +20,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -47,7 +50,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
-
     private View view;
     private Context context;
 
@@ -66,6 +68,9 @@ public class HomeFragment extends Fragment {
 
     private String selectionTitle;
 
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -79,6 +84,9 @@ public class HomeFragment extends Fragment {
 
         context = getContext();
         role = UserRole.getRole(context);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
 
         initializeUI();
     }
@@ -310,7 +318,12 @@ public class HomeFragment extends Fragment {
 
     private void logoutUser() {
         if (role.equals(UserRole.Educator())) {
-            FirebaseAuth.getInstance().signOut();
+
+            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            assert firebaseUser != null;
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+            usersRef.child("status").setValue("offline");
+            firebaseAuth.signOut();
 
             UserEducator.clearSession(context);
             UserRole.clearRole(context);
