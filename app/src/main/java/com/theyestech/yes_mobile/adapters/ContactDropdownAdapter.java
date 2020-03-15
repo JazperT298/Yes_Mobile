@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.models.Contact;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class ContactDropdownAdapter extends ArrayAdapter {
 
     @Override
     public int getCount() {
+        assert contactArrayList != null;
         return contactArrayList.size();
     }
 
