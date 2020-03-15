@@ -2,10 +2,13 @@ package com.theyestech.yes_mobile.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,11 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -59,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         firebaseAuth = FirebaseAuth.getInstance();
-//        firebaseAuth.signOut();
 
         Intent extras = getIntent();
         Bundle bundle = extras.getExtras();
@@ -72,6 +71,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
         etEmail = findViewById(R.id.et_LoginEmail);
         etPassword = findViewById(R.id.et_LoginPassword);
         btnLogin = findViewById(R.id.btn_LoginSignIn);
@@ -296,7 +302,7 @@ public class LoginActivity extends AppCompatActivity {
                     userEducator.saveUserSession(context);
 
                     if (firebaseAuth.getCurrentUser() == null) {
-                        doFirebaseLoginEducator(userEducator);
+                        doFirebaseLogin(userEducator.getEmail_address(), userEducator.getPassword());
                     } else {
                         Intent intent = new Intent(context, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -394,12 +400,8 @@ public class LoginActivity extends AppCompatActivity {
         else
             return false;
     }
-    //-----------------------------------------Firebase----------------------------------------//
 
-    private void doFirebaseLoginEducator(final UserEducator userEducator) {
-        final String email = userEducator.getEmail_address();
-        String password = userEducator.getPassword();
-
+    private void doFirebaseLogin(String email, String password) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -409,6 +411,7 @@ public class LoginActivity extends AppCompatActivity {
                             assert firebaseUser != null;
                             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
                             usersRef.child("status").setValue("online");
+
                             Intent intent = new Intent(context, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -417,34 +420,5 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    private void doFirebaseLoginStudent() {
-//        String txt_email = etEmail.getText().toString();
-//        String txt_password = etPassword.getText().toString();
-//
-//        if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
-//            Toast.makeText(context, "All fileds are required", Toast.LENGTH_SHORT).show();
-//        } else {
-//
-//            auth.signInWithEmailAndPassword(txt_email, txt_password)
-//                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if (task.isSuccessful()) {
-//                                String firebaseUser = FirebaseAuth.getInstance().getUid();
-//                                KeyboardHandler.closeKeyboard(view, context);
-//                                Toasty.success(context, "Success.").show();
-//                                Intent intent = new Intent(context, MainActivity.class);
-//                                intent.putExtra("ROLE_ID", 1);
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                startActivity(intent);
-////                                finish();
-//                            } else {
-//                                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
-//        }
     }
 }

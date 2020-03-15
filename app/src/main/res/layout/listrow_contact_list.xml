@@ -20,7 +20,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="8dp"
-            android:src="@drawable/yes_logo"
+            android:src="@drawable/logo_yestech"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
