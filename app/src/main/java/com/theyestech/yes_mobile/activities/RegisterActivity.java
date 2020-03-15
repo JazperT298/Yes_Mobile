@@ -3,12 +3,17 @@ package com.theyestech.yes_mobile.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,7 +41,9 @@ public class RegisterActivity extends AppCompatActivity {
     private Context context;
 
     private EditText etEmail, etPassword, etConfirmPassword;
-    private Button btnSave;
+    private FloatingActionButton floatingActionButton;
+    private ImageView ivBack;
+    private CheckBox checkBox;
 
     private int roleId;
 
@@ -59,14 +66,30 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
+        ivBack = findViewById(R.id.iv_RegisterBack);
         etEmail = findViewById(R.id.et_RegisterEmail);
         etPassword = findViewById(R.id.et_RegisterPassword);
         etConfirmPassword = findViewById(R.id.et_RegisterConfirmPassword);
-        btnSave = findViewById(R.id.btn_RegisterSave);
+        checkBox = findViewById(R.id.cb_RegisterTermsAndConditions);
+        floatingActionButton = findViewById(R.id.fab_RegisterSave);
 
         auth = FirebaseAuth.getInstance();
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (fieldsAreEmpty())
@@ -76,7 +99,9 @@ public class RegisterActivity extends AppCompatActivity {
                         Toasty.warning(context, "Invalid email.").show();
                     else if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString()))
                         Toasty.warning(context, "Password didn't match.").show();
-                    else
+                    else if (!checkBox.isChecked()) {
+                        Toasty.warning(context, "Please check Terms and Conditions.").show();
+                    } else {
                         switch (roleId) {
                             case 1:
                                 //firebaseRegisterEducator(etEmail.getText().toString(), etPassword.getText().toString());
@@ -87,6 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 registerStudent();
                                 break;
                         }
+                    }
                 }
             }
         });

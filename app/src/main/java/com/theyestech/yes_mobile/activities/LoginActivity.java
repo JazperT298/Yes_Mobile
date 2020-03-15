@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,9 +46,10 @@ public class LoginActivity extends AppCompatActivity {
     private View view;
     private Context context;
 
-    private TextView tvSignUp;
+    private TextView tvSignUp, tvForgorPassword;
     private EditText etEmail, etPassword;
-    private Button btnLogin;
+    private ImageView ivBack;
+    private FloatingActionButton floatingActionButton;
 
     private String role;
 
@@ -78,12 +80,21 @@ public class LoginActivity extends AppCompatActivity {
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
+        ivBack = findViewById(R.id.iv_LoginBack);
         etEmail = findViewById(R.id.et_LoginEmail);
         etPassword = findViewById(R.id.et_LoginPassword);
-        btnLogin = findViewById(R.id.btn_LoginSignIn);
+        floatingActionButton = findViewById(R.id.fab_LoginSignIn);
         tvSignUp = findViewById(R.id.tv_LoginSignUp);
+        tvForgorPassword = findViewById(R.id.tv_LoginForgotPassword);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (fieldsAreEmpty())
@@ -110,6 +121,13 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, RegisterActivity.class);
                 intent.putExtra("ROLE_ID", role);
                 startActivity(intent);
+            }
+        });
+
+        tvForgorPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

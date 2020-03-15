@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -59,16 +60,26 @@ public class ChatThreadsAdapter extends RecyclerView.Adapter<ChatThreadsAdapter.
         viewHolder.tvName.setText(contact.getFullName().equals("") ? contact.getEmail() : contact.getFullName());
         viewHolder.tvLastMessage.setText(thread.getLastMessage());
         viewHolder.tvDate.setText(date);
+
+        if (!contact.getStatus().equals("online")){
+            viewHolder.ivIsOnline.setVisibility(View.GONE);
+        }
+
+        if (!thread.isSeen){
+            viewHolder.tvName.setTypeface(null, Typeface.BOLD);
+            viewHolder.tvLastMessage.setTypeface(null, Typeface.BOLD);
+            viewHolder.tvDate.setTypeface(null, Typeface.BOLD);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return threadArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView ivProfile, ivReadUnread;
+        ImageView ivProfile, ivIsOnline;
         TextView tvName, tvLastMessage, tvDate;
         ConstraintLayout constraintLayout;
 
@@ -76,7 +87,7 @@ public class ChatThreadsAdapter extends RecyclerView.Adapter<ChatThreadsAdapter.
             super(view);
 
             ivProfile = view.findViewById(R.id.iv_ListrowChatThreadProfile);
-            ivReadUnread = view.findViewById(R.id.iv_ListrowChatThreadReadUnread);
+            ivIsOnline = view.findViewById(R.id.iv_ListrowChatThreadIsOnline);
             tvName = view.findViewById(R.id.tv_ListrowChatThreadName);
             tvLastMessage = view.findViewById(R.id.tv_ListrowChatThreadLastMessage);
             tvDate = view.findViewById(R.id.tv_ListrowChatThreadDate);

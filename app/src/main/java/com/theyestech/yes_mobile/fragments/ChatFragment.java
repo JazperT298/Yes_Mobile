@@ -41,7 +41,6 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -60,7 +59,7 @@ public class ChatFragment extends Fragment {
     private TextView tvHeader;
     private ImageView ivProfile;
     private TabLayout tabLayout;
-    private SwipeRefreshLayout swipThreads, swipeContacts;
+    private SwipeRefreshLayout swipeThreads, swipeContacts;
     private RecyclerView rvThreads, rvContacts;
     private ConstraintLayout emptyIndicator;
     private FloatingActionButton floatingActionButton;
@@ -101,7 +100,7 @@ public class ChatFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout_Chat);
         tvHeader = view.findViewById(R.id.tv_ChatHeader);
         ivProfile = view.findViewById(R.id.iv_ChatProfile);
-        swipThreads = view.findViewById(R.id.swipe_ChatThreads);
+        swipeThreads = view.findViewById(R.id.swipe_ChatThreads);
         swipeContacts = view.findViewById(R.id.swipe_ChatContacts);
         rvThreads = view.findViewById(R.id.rv_ChatThreads);
         rvContacts = view.findViewById(R.id.rv_ChatContacts);
@@ -115,13 +114,15 @@ public class ChatFragment extends Fragment {
 
         displayConversationView();
 
+        getAllContacts();
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
                     displayConversationView();
                 } else {
-                    swipThreads.setVisibility(View.GONE);
+                    swipeThreads.setVisibility(View.GONE);
                     swipeContacts.setVisibility(View.VISIBLE);
                 }
             }
@@ -196,8 +197,6 @@ public class ChatFragment extends Fragment {
     }
 
     private void setEducatorHeader() {
-//        tvHeader.setText(UserEducator.getFirstname(context));
-
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
                 .apply(GlideOptions.getOptions())
@@ -205,15 +204,11 @@ public class ChatFragment extends Fragment {
     }
 
     private void displayConversationView() {
-        swipThreads.setVisibility(View.VISIBLE);
+        swipeThreads.setVisibility(View.VISIBLE);
         swipeContacts.setVisibility(View.GONE);
         emptyIndicator.setVisibility(View.GONE);
 
-        swipThreads.setRefreshing(true);
-
-        getAllContacts();
-
-        swipThreads.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeThreads.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getAllContacts();
@@ -326,6 +321,7 @@ public class ChatFragment extends Fragment {
     }
 
     private void getAllContacts() {
+        swipeThreads.setRefreshing(true);
         contactArrayList.clear();
 
         DatabaseReference contactsRef = FirebaseDatabase.getInstance().getReference("Users");
@@ -371,7 +367,7 @@ public class ChatFragment extends Fragment {
                         threadArrayList.add(chatThread);
                     } else if (chatThread.getParticipant2().equals(firebaseUser.getUid())){
                         for (Contact contact : contactArrayList){
-                            if (chatThread.getParticipant2().equals(contact.getId())){
+                            if (chatThread.getParticipant1().equals(contact.getId())) {
                                 chatThread.setContact(contact);
                                 break;
                             }
@@ -400,10 +396,7 @@ public class ChatFragment extends Fragment {
                 if (threadArrayList.isEmpty())
                     emptyIndicator.setVisibility(View.VISIBLE);
 
-                swipThreads.setRefreshing(false);
-
-                Debugger.printO(threadArrayList);
-                Debugger.logD(String.valueOf(threadArrayList.size()));
+                swipeThreads.setRefreshing(false);
             }
 
             @Override
