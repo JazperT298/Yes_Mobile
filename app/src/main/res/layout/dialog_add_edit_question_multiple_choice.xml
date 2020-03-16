@@ -73,6 +73,7 @@
                 android:hint="Question"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout23" />
@@ -123,6 +124,7 @@
                 android:hint="Choice 1"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/rg_QuizMultipleChoice"
                 app:layout_constraintTop_toBottomOf="@+id/et_QuizMultipleChoiceQuestion" />
@@ -139,6 +141,7 @@
                 android:hint="Choice 2"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/rg_QuizMultipleChoice"
                 app:layout_constraintTop_toBottomOf="@+id/et_QuizMultipleChoice1" />
@@ -155,6 +158,7 @@
                 android:hint="Choice 3"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/rg_QuizMultipleChoice"
                 app:layout_constraintTop_toBottomOf="@+id/et_QuizMultipleChoice2" />
@@ -171,6 +175,7 @@
                 android:hint="Choice 4"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/rg_QuizMultipleChoice"
                 app:layout_constraintTop_toBottomOf="@+id/et_QuizMultipleChoice3" />

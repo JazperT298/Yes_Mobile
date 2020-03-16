@@ -66,6 +66,7 @@
                 android:hint="Name"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
@@ -82,6 +83,7 @@
                 android:hint="Description(Optional)"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_AddEditSubjectName" />
@@ -96,6 +98,7 @@
                 android:hint="Section"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/et_AddEditSubjectDescription"
                 app:layout_constraintStart_toStartOf="@+id/et_AddEditSubjectDescription"
                 app:layout_constraintTop_toBottomOf="@+id/et_AddEditSubjectDescription" />
