@@ -1,5 +1,6 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -12,9 +13,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -50,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private ImageView ivBack;
     private FloatingActionButton floatingActionButton;
+    ProgressBar progressBar;
 
     private String role;
 
@@ -86,6 +91,10 @@ public class LoginActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.fab_LoginSignIn);
         tvSignUp = findViewById(R.id.tv_LoginSignUp);
         tvForgorPassword = findViewById(R.id.tv_LoginForgotPassword);
+        progressBar = findViewById(R.id.progress_LoginLoading);
+
+        Sprite doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,8 +141,20 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("RestrictedApi")
+    private void accessingServer(boolean isAccessing) {
+        etEmail.setEnabled(!isAccessing);
+        etPassword.setEnabled(!isAccessing);
+        tvForgorPassword.setEnabled(!isAccessing);
+        tvSignUp.setEnabled(!isAccessing);
+        floatingActionButton.setVisibility(isAccessing ? View.GONE : View.VISIBLE);
+        progressBar.setVisibility(isAccessing ? View.VISIBLE : View.GONE);
+    }
+
     private void loginEducator() {
-        ProgressPopup.showProgress(context);
+//        ProgressPopup.showProgress(context);
+
+        accessingServer(true);
 
         RequestParams params = new RequestParams();
         params.put("login_e_email_address", etEmail.getText().toString());
@@ -142,8 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         HttpProvider.postLogin(context, "controller_educator/login_as_educator_class.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                ProgressPopup.hideProgress();
-
+//                ProgressPopup.hideProgress();
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 if (str.isEmpty()) {
@@ -184,7 +204,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                ProgressPopup.hideProgress();
+//                ProgressPopup.hideProgress();
+                accessingServer(false);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
@@ -246,7 +267,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getEducatorDetails(final UserEducator userEducator) {
-        ProgressPopup.showProgress(context);
+//        ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
         params.put("user_token", userEducator.getToken());
@@ -255,7 +276,7 @@ public class LoginActivity extends AppCompatActivity {
         HttpProvider.post(context, "controller_global/get_user_details.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                ProgressPopup.hideProgress();
+//                ProgressPopup.hideProgress();
 
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
@@ -335,7 +356,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                ProgressPopup.hideProgress();
+//                ProgressPopup.hideProgress();
+                accessingServer(false);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
@@ -429,7 +451,7 @@ public class LoginActivity extends AppCompatActivity {
                             assert firebaseUser != null;
                             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
                             usersRef.child("status").setValue("online");
-
+                            
                             Intent intent = new Intent(context, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);

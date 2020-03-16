@@ -320,10 +320,11 @@ public class HomeFragment extends Fragment {
         if (role.equals(UserRole.Educator())) {
 
             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-            assert firebaseUser != null;
-            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-            usersRef.child("status").setValue("offline");
-            firebaseAuth.signOut();
+            if (firebaseUser != null){
+                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                usersRef.child("status").setValue("offline");
+                firebaseAuth.signOut();
+            }
 
             UserEducator.clearSession(context);
             UserRole.clearRole(context);
