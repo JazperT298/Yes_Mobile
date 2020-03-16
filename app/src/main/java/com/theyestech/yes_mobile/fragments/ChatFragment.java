@@ -400,6 +400,7 @@ public class ChatFragment extends Fragment {
                         if (fromButton == 1) {
                             Intent intent = new Intent(context, ChatConversationActivity.class);
                             intent.putExtra("CONTACT", selectedContact);
+                            intent.putExtra("THREADID", selectedThread.getId());
                             startActivity(intent);
                         } else if (fromButton == 2) {
 
