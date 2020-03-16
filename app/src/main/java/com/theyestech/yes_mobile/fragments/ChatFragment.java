@@ -1,5 +1,6 @@
 package com.theyestech.yes_mobile.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -35,7 +37,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.activities.ChatConversationActivity;
 import com.theyestech.yes_mobile.activities.ChatNewConversationActivity;
+import com.theyestech.yes_mobile.activities.SubjectDetailsActivity;
 import com.theyestech.yes_mobile.adapters.ChatThreadsAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.ChatThread;
@@ -63,6 +67,7 @@ public class ChatFragment extends Fragment {
     private RecyclerView rvThreads, rvContacts;
     private ConstraintLayout emptyIndicator;
     private FloatingActionButton floatingActionButton;
+    private ProgressBar progressBar;
 
     private String role;
 
@@ -106,6 +111,7 @@ public class ChatFragment extends Fragment {
         rvContacts = view.findViewById(R.id.rv_ChatContacts);
         emptyIndicator = view.findViewById(R.id.view_EmptyChat);
         floatingActionButton = view.findViewById(R.id.fab_ChatThreadNew);
+        progressBar = view.findViewById(R.id.progress_ChatThreads);
 
         if (role.equals(UserRole.Educator()))
             setEducatorHeader();
@@ -196,6 +202,12 @@ public class ChatFragment extends Fragment {
 //        });
     }
 
+    @SuppressLint("RestrictedApi")
+    private void accessingServer(boolean isAccessing) {
+        floatingActionButton.setVisibility(isAccessing ? View.GONE : View.VISIBLE);
+        progressBar.setVisibility(isAccessing ? View.VISIBLE : View.GONE);
+    }
+
     private void setEducatorHeader() {
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
@@ -208,22 +220,21 @@ public class ChatFragment extends Fragment {
         swipeContacts.setVisibility(View.GONE);
         emptyIndicator.setVisibility(View.GONE);
 
+        swipeThreads.setRefreshing(true);
+
         swipeThreads.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getAllContacts();
+                getAllThreads();
             }
         });
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isDoneFetching) {
-                    Intent intent = new Intent(context, ChatNewConversationActivity.class);
-                    intent.putParcelableArrayListExtra("CONTACTARRAYLIST", contactArrayList);
-                    startActivity(intent);
-                } else
-                    OkayClosePopup.showDialog(context, "Loading contacts.", "Close");
+                Intent intent = new Intent(context, ChatNewConversationActivity.class);
+                intent.putParcelableArrayListExtra("CONTACTARRAYLIST", contactArrayList);
+                startActivity(intent);
 
             }
         });
@@ -321,7 +332,7 @@ public class ChatFragment extends Fragment {
     }
 
     private void getAllContacts() {
-        swipeThreads.setRefreshing(true);
+        accessingServer(true);
         contactArrayList.clear();
 
         DatabaseReference contactsRef = FirebaseDatabase.getInstance().getReference("Users");
@@ -337,13 +348,13 @@ public class ChatFragment extends Fragment {
                     }
                 }
 
-                isDoneFetching = true;
+                accessingServer(false);
                 getAllThreads();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                accessingServer(false);
             }
         });
     }
@@ -353,20 +364,21 @@ public class ChatFragment extends Fragment {
         threadsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                swipeThreads.setRefreshing(false);
                 threadArrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ChatThread chatThread = snapshot.getValue(ChatThread.class);
                     assert chatThread != null;
-                    if (chatThread.getParticipant1().equals(firebaseUser.getUid())){
-                        for (Contact contact : contactArrayList){
-                            if (chatThread.getParticipant2().equals(contact.getId())){
+                    if (chatThread.getParticipant1().equals(firebaseUser.getUid())) {
+                        for (Contact contact : contactArrayList) {
+                            if (chatThread.getParticipant2().equals(contact.getId())) {
                                 chatThread.setContact(contact);
                                 break;
                             }
                         }
                         threadArrayList.add(chatThread);
-                    } else if (chatThread.getParticipant2().equals(firebaseUser.getUid())){
-                        for (Contact contact : contactArrayList){
+                    } else if (chatThread.getParticipant2().equals(firebaseUser.getUid())) {
+                        for (Contact contact : contactArrayList) {
                             if (chatThread.getParticipant1().equals(contact.getId())) {
                                 chatThread.setContact(contact);
                                 break;
@@ -383,9 +395,12 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, int position, int fromButton) {
                         selectedThread = threadArrayList.get(position);
+                        Contact selectedContact = selectedThread.getContact();
 
                         if (fromButton == 1) {
-
+                            Intent intent = new Intent(context, ChatConversationActivity.class);
+                            intent.putExtra("CONTACT", selectedContact);
+                            startActivity(intent);
                         } else if (fromButton == 2) {
 
                         }
@@ -401,7 +416,7 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                swipeThreads.setRefreshing(false);
             }
         });
     }

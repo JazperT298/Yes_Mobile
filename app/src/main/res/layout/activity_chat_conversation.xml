@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView55"
+            android:id="@+id/iv_ChatConversationBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -26,38 +26,40 @@
             app:srcCompat="@drawable/ic_back_white" />
 
         <TextView
-            android:id="@+id/textView76"
+            android:id="@+id/tv_ChatConversationName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Vanne Marsmyle Pagapong"
             android:textColor="@color/colorWhite"
-            app:layout_constraintBottom_toTopOf="@+id/textView80"
-            app:layout_constraintStart_toEndOf="@+id/imageView55"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/tv_ChatConversationEmail"
+            app:layout_constraintStart_toEndOf="@+id/iv_ChatConversationBack"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            android:id="@+id/textView80"
+            android:id="@+id/tv_ChatConversationEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="marsmylepagapong13@gmail.com"
             android:textColor="@color/colorWhite"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView76"
-            app:layout_constraintTop_toBottomOf="@+id/textView76" />
+            app:layout_constraintStart_toStartOf="@+id/tv_ChatConversationName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ChatConversationName" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_ChatConversation"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout43"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout42">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout42" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout43"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:padding="8dp"
@@ -66,7 +68,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/et_ChatConversationMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -78,12 +80,12 @@
             android:padding="12dp"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView57"
+            app:layout_constraintEnd_toStartOf="@+id/iv_ChatConversationSend"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView57"
+            android:id="@+id/iv_ChatConversationSend"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"

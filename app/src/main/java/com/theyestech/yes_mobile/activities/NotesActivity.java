@@ -26,7 +26,7 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.NotesAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Notes;
+import com.theyestech.yes_mobile.models.Note;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
@@ -58,9 +58,9 @@ public class NotesActivity extends AppCompatActivity {
     private ConstraintLayout emptyIndicator;
     private FloatingActionButton floatingActionButton;
 
-    private ArrayList<Notes> notesArrayList = new ArrayList<>();
+    private ArrayList<Note> noteArrayList = new ArrayList<>();
     private NotesAdapter notesAdapter;
-    private Notes selectedNote = new Notes();
+    private Note selectedNote = new Note();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +119,7 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     private void getAllNotes() {
-        notesArrayList.clear();
+        noteArrayList.clear();
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -151,27 +151,27 @@ public class NotesActivity extends AppCompatActivity {
                         String notes_type = jsonObject.getString("notes_type");
                         String result = jsonObject.getString("result");
 
-                        Notes notes = new Notes();
-                        notes.setId(notes_id);
-                        notes.setUserId(notes_userId);
-                        notes.setTitle(notes_title);
-                        notes.setUrl(notes_url);
-                        notes.setFile(notes_file);
-                        notes.setType(notes_type);
-                        notes.setResult(result);
+                        Note note = new Note();
+                        note.setId(notes_id);
+                        note.setUserId(notes_userId);
+                        note.setTitle(notes_title);
+                        note.setUrl(notes_url);
+                        note.setFile(notes_file);
+                        note.setType(notes_type);
+                        note.setResult(result);
 
-                        notesArrayList.add(notes);
+                        noteArrayList.add(note);
                     }
 
-                    Collections.reverse(notesArrayList);
+                    Collections.reverse(noteArrayList);
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
-                    notesAdapter = new NotesAdapter(context, notesArrayList);
+                    notesAdapter = new NotesAdapter(context, noteArrayList);
                     notesAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
-                            selectedNote = notesArrayList.get(position);
+                            selectedNote = noteArrayList.get(position);
 
                             if (fromButton == 1) {
 

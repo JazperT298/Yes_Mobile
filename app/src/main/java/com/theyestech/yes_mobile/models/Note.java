@@ -1,6 +1,6 @@
 package com.theyestech.yes_mobile.models;
 
-public class Notes {
+public class Note {
     private String id;
     private String userId;
     private String title;

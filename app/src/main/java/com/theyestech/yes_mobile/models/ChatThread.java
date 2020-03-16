@@ -1,8 +1,11 @@
 package com.theyestech.yes_mobile.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
-public class ChatThread {
+public class ChatThread implements Parcelable {
 
     public String id;
     public boolean isSeen;
@@ -11,6 +14,31 @@ public class ChatThread {
     public String lastMessage;
     public Date lastMessageDateCreated;
     public Contact contact;
+
+    protected ChatThread(Parcel in) {
+        id = in.readString();
+        isSeen = in.readByte() != 0;
+        participant1 = in.readString();
+        participant2 = in.readString();
+        lastMessage = in.readString();
+        contact = in.readParcelable(Contact.class.getClassLoader());
+    }
+
+    public ChatThread(){
+
+    }
+
+    public static final Creator<ChatThread> CREATOR = new Creator<ChatThread>() {
+        @Override
+        public ChatThread createFromParcel(Parcel in) {
+            return new ChatThread(in);
+        }
+
+        @Override
+        public ChatThread[] newArray(int size) {
+            return new ChatThread[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -66,5 +94,20 @@ public class ChatThread {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeByte((byte) (isSeen ? 1 : 0));
+        dest.writeString(participant1);
+        dest.writeString(participant2);
+        dest.writeString(lastMessage);
+        dest.writeParcelable(contact, flags);
     }
 }

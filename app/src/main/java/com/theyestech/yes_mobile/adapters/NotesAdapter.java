@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Notes;
+import com.theyestech.yes_mobile.models.Note;
 
 import java.util.ArrayList;
 
@@ -21,12 +21,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Notes> notesArrayList;
+    private ArrayList<Note> noteArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public NotesAdapter(Context context, ArrayList<Notes> notesArrayList) {
+    public NotesAdapter(Context context, ArrayList<Note> noteArrayList) {
         this.context = context;
-        this.notesArrayList = notesArrayList;
+        this.noteArrayList = noteArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -41,7 +41,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Notes note = notesArrayList.get(i);
+        Note note = noteArrayList.get(i);
 
         switch (note.getType()) {
             case "pdf":
@@ -71,7 +71,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return notesArrayList.size();
+        return noteArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
