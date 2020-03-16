@@ -152,8 +152,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginEducator() {
-//        ProgressPopup.showProgress(context);
-
         accessingServer(true);
 
         RequestParams params = new RequestParams();
@@ -204,7 +202,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                ProgressPopup.hideProgress();
                 accessingServer(false);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
@@ -267,8 +264,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getEducatorDetails(final UserEducator userEducator) {
-//        ProgressPopup.showProgress(context);
-
         RequestParams params = new RequestParams();
         params.put("user_token", userEducator.getToken());
         params.put("user_id", userEducator.getId());
@@ -276,8 +271,6 @@ public class LoginActivity extends AppCompatActivity {
         HttpProvider.post(context, "controller_global/get_user_details.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                ProgressPopup.hideProgress();
-
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
 
@@ -356,7 +349,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                ProgressPopup.hideProgress();
                 accessingServer(false);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
