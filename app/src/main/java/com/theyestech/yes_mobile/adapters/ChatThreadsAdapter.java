@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
@@ -29,10 +31,16 @@ public class ChatThreadsAdapter extends RecyclerView.Adapter<ChatThreadsAdapter.
     private ArrayList<ChatThread> threadArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+
     public ChatThreadsAdapter(Context context, ArrayList<ChatThread> threadArrayList) {
         this.context = context;
         this.threadArrayList = threadArrayList;
         this.layoutInflater = LayoutInflater.from(context);
+
+        this.firebaseAuth = FirebaseAuth.getInstance();
+        this.firebaseUser = this.firebaseAuth.getCurrentUser();
     }
 
     @NonNull
@@ -65,10 +73,12 @@ public class ChatThreadsAdapter extends RecyclerView.Adapter<ChatThreadsAdapter.
             viewHolder.ivIsOnline.setVisibility(View.GONE);
         }
 
-        if (!thread.isSeen){
-            viewHolder.tvName.setTypeface(null, Typeface.BOLD);
-            viewHolder.tvLastMessage.setTypeface(null, Typeface.BOLD);
-            viewHolder.tvDate.setTypeface(null, Typeface.BOLD);
+        if (!thread.getSenderId().equals(firebaseUser.getUid())){
+            if (!thread.isSeen){
+                viewHolder.tvName.setTypeface(null, Typeface.BOLD);
+                viewHolder.tvLastMessage.setTypeface(null, Typeface.BOLD);
+                viewHolder.tvDate.setTypeface(null, Typeface.BOLD);
+            }
         }
     }
 

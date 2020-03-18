@@ -156,8 +156,8 @@ public class ChatNewConversationActivity extends AppCompatActivity {
 
         HashMap<String, Object> threadHashMap = new HashMap<>();
         threadHashMap.put("id", threadId);
-        threadHashMap.put("participant1", senderId);
-        threadHashMap.put("participant2", receiverId);
+        threadHashMap.put("senderId", senderId);
+        threadHashMap.put("receiverId", receiverId);
         threadHashMap.put("lastMessage", message);
         threadHashMap.put("lastMessageDateCreated", currentDate);
         threadHashMap.put("isSeen", false);
@@ -233,7 +233,7 @@ public class ChatNewConversationActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ChatThread chatThread = snapshot.getValue(ChatThread.class);
                     assert chatThread != null;
-                    if (chatThread.getParticipant1().equals(senderId) || chatThread.getParticipant2().equals(senderId)) {
+                    if (chatThread.getSenderId().equals(senderId) || chatThread.getReceiverId().equals(senderId)) {
                         Intent intent = new Intent(context, ChatConversationActivity.class);
                         startActivity(intent);
                     }

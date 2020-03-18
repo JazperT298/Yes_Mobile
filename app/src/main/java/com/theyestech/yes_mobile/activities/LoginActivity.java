@@ -183,10 +183,12 @@ public class LoginActivity extends AppCompatActivity {
                         getEducatorDetails(userEducator);
 
                     } catch (Exception e) {
+                        accessingServer(false);
                         e.printStackTrace();
                         Debugger.logD(e.toString());
                     }
                 } else {
+                    accessingServer(false);
                     try {
                         JSONArray jsonArray = new JSONArray(str);
                         JSONObject jsonObject = jsonArray.getJSONObject(0);

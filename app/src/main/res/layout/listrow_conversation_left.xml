@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="Mar 16, 2019 | 10:43 PM"
-        android:textSize="12sp"
+        android:textSize="10sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_ChatConversationMessage"

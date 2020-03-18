@@ -39,14 +39,13 @@ import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.ChatConversationActivity;
 import com.theyestech.yes_mobile.activities.ChatNewConversationActivity;
-import com.theyestech.yes_mobile.activities.SubjectDetailsActivity;
 import com.theyestech.yes_mobile.adapters.ChatThreadsAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
@@ -336,7 +335,7 @@ public class ChatFragment extends Fragment {
         contactArrayList.clear();
 
         DatabaseReference contactsRef = FirebaseDatabase.getInstance().getReference("Users");
-        contactsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        contactsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -346,6 +345,8 @@ public class ChatFragment extends Fragment {
                     if (!contact.getId().equals(firebaseUser.getUid())) {
                         contactArrayList.add(contact);
                     }
+
+                    Debugger.logD("CONTACT CHANGED");
                 }
 
                 accessingServer(false);
@@ -361,7 +362,7 @@ public class ChatFragment extends Fragment {
 
     private void getAllThreads() {
         DatabaseReference threadsRef = FirebaseDatabase.getInstance().getReference("Threads");
-        threadsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        threadsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 swipeThreads.setRefreshing(false);
@@ -369,17 +370,18 @@ public class ChatFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ChatThread chatThread = snapshot.getValue(ChatThread.class);
                     assert chatThread != null;
-                    if (chatThread.getParticipant1().equals(firebaseUser.getUid())) {
+                    if (chatThread.getSenderId().equals(firebaseUser.getUid())) {
                         for (Contact contact : contactArrayList) {
-                            if (chatThread.getParticipant2().equals(contact.getId())) {
+                            if (chatThread.getReceiverId().equals(contact.getId())) {
                                 chatThread.setContact(contact);
                                 break;
                             }
                         }
                         threadArrayList.add(chatThread);
-                    } else if (chatThread.getParticipant2().equals(firebaseUser.getUid())) {
+
+                    } else if (chatThread.getReceiverId().equals(firebaseUser.getUid())) {
                         for (Contact contact : contactArrayList) {
-                            if (chatThread.getParticipant1().equals(contact.getId())) {
+                            if (chatThread.getSenderId().equals(contact.getId())) {
                                 chatThread.setContact(contact);
                                 break;
                             }

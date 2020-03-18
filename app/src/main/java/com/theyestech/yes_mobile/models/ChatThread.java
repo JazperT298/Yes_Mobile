@@ -9,8 +9,8 @@ public class ChatThread implements Parcelable {
 
     public String id;
     public boolean isSeen;
-    public String participant1;
-    public String participant2;
+    public String senderId;
+    public String receiverId;
     public String lastMessage;
     public Date lastMessageDateCreated;
     public Contact contact;
@@ -18,8 +18,8 @@ public class ChatThread implements Parcelable {
     protected ChatThread(Parcel in) {
         id = in.readString();
         isSeen = in.readByte() != 0;
-        participant1 = in.readString();
-        participant2 = in.readString();
+        senderId = in.readString();
+        receiverId = in.readString();
         lastMessage = in.readString();
         contact = in.readParcelable(Contact.class.getClassLoader());
     }
@@ -56,20 +56,20 @@ public class ChatThread implements Parcelable {
         isSeen = seen;
     }
 
-    public String getParticipant1() {
-        return participant1;
+    public String getSenderId() {
+        return senderId;
     }
 
-    public void setParticipant1(String participant1) {
-        this.participant1 = participant1;
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
-    public String getParticipant2() {
-        return participant2;
+    public String getReceiverId() {
+        return receiverId;
     }
 
-    public void setParticipant2(String participant2) {
-        this.participant2 = participant2;
+    public void setReceiverId(String receiverId) {
+        this.receiverId = receiverId;
     }
 
     public Date getLastMessageDateCreated() {
@@ -105,8 +105,8 @@ public class ChatThread implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeByte((byte) (isSeen ? 1 : 0));
-        dest.writeString(participant1);
-        dest.writeString(participant2);
+        dest.writeString(senderId);
+        dest.writeString(receiverId);
         dest.writeString(lastMessage);
         dest.writeParcelable(contact, flags);
     }

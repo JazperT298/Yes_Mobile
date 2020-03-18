@@ -22,7 +22,7 @@
         android:id="@+id/tv_ListrowChatThreadName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:text="Vanne Marsmyle Pagapong"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/tv_ListrowChatThreadLastMessage"

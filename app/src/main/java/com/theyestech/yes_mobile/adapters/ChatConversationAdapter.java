@@ -18,6 +18,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.Conversation;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.text.DateFormat;
@@ -26,8 +27,10 @@ import java.util.ArrayList;
 
 public class ChatConversationAdapter extends RecyclerView.Adapter<ChatConversationAdapter.ViewHolder> {
 
-    private static final int MSG_TYPE_SENDER = 0;
-    private static final int MSG_TYPE_RECEIVER = 1;
+    private static final int MSG_TYPE_LEFT = 0;
+    private static final int MSG_TYPE_RIGHT = 1;
+
+    private boolean isFromSender;
 
     private Context context;
     private LayoutInflater layoutInflater;
@@ -46,33 +49,37 @@ public class ChatConversationAdapter extends RecyclerView.Adapter<ChatConversati
 
         this.firebaseAuth = FirebaseAuth.getInstance();
         this.firebaseUser = this.firebaseAuth.getCurrentUser();
+
+        Debugger.printO(conversationArrayList);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         layoutInflater = LayoutInflater.from(context);
-        View view;
-        if (i == MSG_TYPE_SENDER)
-            view = layoutInflater.inflate(R.layout.chat_item_left, viewGroup, false);
-        else
-            view = layoutInflater.inflate(R.layout.chat_item_right, viewGroup, false);
-
-        return new ViewHolder(view);
+        if (i == MSG_TYPE_RIGHT) {
+            View view = layoutInflater.inflate(R.layout.listrow_conversation_right, viewGroup, false);
+            return new ViewHolder(view);
+        } else {
+            View view = layoutInflater.inflate(R.layout.listrow_conversation_left, viewGroup, false);
+            return new ViewHolder(view);
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Conversation conversation = conversationArrayList.get(i);
 
-        DateFormat dateFormat = new SimpleDateFormat("MMM-dd-yy | hh:mm:ss aa");
+        DateFormat dateFormat = new SimpleDateFormat("MMM dd yy | hh:mm aa");
         String date = dateFormat.format(conversation.getMessageDateCreated());
 
-        Glide.with(context)
-                .load(HttpProvider.getProfileDir() + contact.getPhotoName())
-                .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
-                .apply(GlideOptions.getOptions())
-                .into(viewHolder.ivProfile);
+        if (isFromSender){
+            Glide.with(context)
+                    .load(HttpProvider.getProfileDir() + contact.getPhotoName())
+                    .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
+                    .apply(GlideOptions.getOptions())
+                    .into(viewHolder.ivProfile);
+        }
 
         viewHolder.tvMessage.setText(conversation.getMessage());
         viewHolder.tvDateTime.setText(date);
@@ -124,9 +131,11 @@ public class ChatConversationAdapter extends RecyclerView.Adapter<ChatConversati
     @Override
     public int getItemViewType(int position) {
         if (conversationArrayList.get(position).getSenderId().equals(firebaseUser.getUid())) {
-            return MSG_TYPE_RECEIVER;
+            isFromSender = false;
+            return MSG_TYPE_RIGHT;
         } else {
-            return MSG_TYPE_SENDER;
+            isFromSender = true;
+            return MSG_TYPE_LEFT;
         }
     }
 }
