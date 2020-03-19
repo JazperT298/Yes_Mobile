@@ -24,7 +24,6 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ContactDropdownAdapter;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.KeyboardHandler;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -49,8 +48,10 @@ public class ChatNewConversationActivity extends AppCompatActivity {
     private String message;
 
     //Firebase
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference threadRef;
+    private DatabaseReference conversationRef;
 
     private String receiverId;
     private String senderId;
@@ -71,14 +72,14 @@ public class ChatNewConversationActivity extends AppCompatActivity {
 
         contactArrayList = getIntent().getParcelableArrayListExtra("CONTACTARRAYLIST");
 
-        Debugger.printO(contactArrayList);
-
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
         role = UserRole.getRole(context);
 
         doneSelecting = false;
+
+        senderId = firebaseUser.getUid();
 
         initializeUI();
     }
@@ -88,6 +89,8 @@ public class ChatNewConversationActivity extends AppCompatActivity {
         ivSend = findViewById(R.id.iv_NewConversationSend);
         etSearch = findViewById(R.id.et_NewConversationSearch);
         etMessage = findViewById(R.id.et_NewConversationMessage);
+
+        etSearch.requestFocus();
 
         contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_chat_contacts_dropdown, contactArrayList);
         etSearch.setAdapter(contactDropdownAdapter);
@@ -136,7 +139,6 @@ public class ChatNewConversationActivity extends AppCompatActivity {
                     etSearch.setText(selectedContact.getFullName());
                     doneSelecting = true;
 
-                    senderId = firebaseUser.getUid();
                     checkUserThread();
                 }
 
@@ -152,8 +154,7 @@ public class ChatNewConversationActivity extends AppCompatActivity {
         message = etMessage.getText().toString();
         currentDate = Calendar.getInstance().getTime();
 
-        DatabaseReference threadsRef = FirebaseDatabase.getInstance().getReference("Threads").child(threadId);
-
+        threadRef = FirebaseDatabase.getInstance().getReference("Threads").child(threadId);
         HashMap<String, Object> threadHashMap = new HashMap<>();
         threadHashMap.put("id", threadId);
         threadHashMap.put("senderId", senderId);
@@ -161,13 +162,11 @@ public class ChatNewConversationActivity extends AppCompatActivity {
         threadHashMap.put("lastMessage", message);
         threadHashMap.put("lastMessageDateCreated", currentDate);
         threadHashMap.put("isSeen", false);
+        threadRef.setValue(threadHashMap);
 
-        threadsRef.setValue(threadHashMap);
 
         conversationId = UUID.randomUUID().toString() + timeStamp;
-
-        DatabaseReference conversation = FirebaseDatabase.getInstance().getReference("Conversations").child(conversationId);
-
+        conversationRef = FirebaseDatabase.getInstance().getReference("Conversations").child(conversationId);
         HashMap<String, Object> conversationHashMap = new HashMap<>();
         conversationHashMap.put("id", conversationId);
         conversationHashMap.put("threadId", threadId);
@@ -175,8 +174,7 @@ public class ChatNewConversationActivity extends AppCompatActivity {
         conversationHashMap.put("receiverId", receiverId);
         conversationHashMap.put("message", message);
         conversationHashMap.put("messageDateCreated", currentDate);
-
-        conversation.setValue(conversationHashMap);
+        conversationRef.setValue(conversationHashMap);
 
         // add user to chat fragment
 //        final DatabaseReference senderRef = FirebaseDatabase.getInstance().getReference("Conversations")
@@ -226,19 +224,23 @@ public class ChatNewConversationActivity extends AppCompatActivity {
     private void checkUserThread() {
         ProgressPopup.showProgress(context);
 
-        DatabaseReference threadsRef = FirebaseDatabase.getInstance().getReference("Threads");
-        threadsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        threadRef = FirebaseDatabase.getInstance().getReference("Threads");
+        threadRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ChatThread chatThread = snapshot.getValue(ChatThread.class);
                     assert chatThread != null;
-                    if (chatThread.getSenderId().equals(senderId) || chatThread.getReceiverId().equals(senderId)) {
+                    if (chatThread.getSenderId().equals(senderId) && chatThread.getReceiverId().equals(selectedContact.getId())
+                            || chatThread.getReceiverId().equals(senderId) && chatThread.getSenderId().equals(selectedContact.getId())) {
                         Intent intent = new Intent(context, ChatConversationActivity.class);
+                        intent.putExtra("CONTACT", selectedContact);
+                        intent.putExtra("THREAD", chatThread);
                         startActivity(intent);
+//                        ProgressPopup.hideProgress();
+                        finish();
                     }
                 }
-                ProgressPopup.hideProgress();
             }
 
             @Override

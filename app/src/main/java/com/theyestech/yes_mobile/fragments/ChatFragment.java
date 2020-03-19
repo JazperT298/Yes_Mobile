@@ -72,11 +72,14 @@ public class ChatFragment extends Fragment {
 
     //Firebase
     private FirebaseUser firebaseUser;
-    private DatabaseReference databaseReference;
+    private DatabaseReference registerRef;
+    private DatabaseReference userRef;
+    private DatabaseReference threadRef;
     private FirebaseAuth firebaseAuth;
+    private ValueEventListener userListener;
+    private ValueEventListener threadListener;
 
     private ArrayList<Contact> contactArrayList = new ArrayList<>();
-    private boolean isDoneFetching = false;
 
     private ArrayList<ChatThread> threadArrayList = new ArrayList<>();
     private ChatThreadsAdapter chatThreadsAdapter;
@@ -96,6 +99,9 @@ public class ChatFragment extends Fragment {
         role = UserRole.getRole(context);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        userRef = FirebaseDatabase.getInstance().getReference("Users");
+        threadRef = FirebaseDatabase.getInstance().getReference("Threads");
 
         checkFirebaseLogin();
     }
@@ -234,7 +240,6 @@ public class ChatFragment extends Fragment {
                 Intent intent = new Intent(context, ChatNewConversationActivity.class);
                 intent.putParcelableArrayListExtra("CONTACTARRAYLIST", contactArrayList);
                 startActivity(intent);
-
             }
         });
     }
@@ -305,7 +310,7 @@ public class ChatFragment extends Fragment {
                             assert firebaseUser != null;
                             String userId = firebaseUser.getUid();
 
-                            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+                            registerRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userId);
@@ -316,7 +321,7 @@ public class ChatFragment extends Fragment {
                             hashMap.put("role", role);
                             hashMap.put("photoName", photoName);
 
-                            databaseReference.setValue(hashMap);
+                            registerRef.setValue(hashMap);
 
                             if (b != null) {
                                 b.dismiss();
@@ -332,12 +337,11 @@ public class ChatFragment extends Fragment {
 
     private void getAllContacts() {
         accessingServer(true);
-        contactArrayList.clear();
 
-        DatabaseReference contactsRef = FirebaseDatabase.getInstance().getReference("Users");
-        contactsRef.addValueEventListener(new ValueEventListener() {
+        userListener = userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                contactArrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Contact contact = snapshot.getValue(Contact.class);
                     assert contact != null;
@@ -345,8 +349,6 @@ public class ChatFragment extends Fragment {
                     if (!contact.getId().equals(firebaseUser.getUid())) {
                         contactArrayList.add(contact);
                     }
-
-                    Debugger.logD("CONTACT CHANGED");
                 }
 
                 accessingServer(false);
@@ -361,8 +363,7 @@ public class ChatFragment extends Fragment {
     }
 
     private void getAllThreads() {
-        DatabaseReference threadsRef = FirebaseDatabase.getInstance().getReference("Threads");
-        threadsRef.addValueEventListener(new ValueEventListener() {
+        threadListener = threadRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 swipeThreads.setRefreshing(false);
@@ -402,7 +403,7 @@ public class ChatFragment extends Fragment {
                         if (fromButton == 1) {
                             Intent intent = new Intent(context, ChatConversationActivity.class);
                             intent.putExtra("CONTACT", selectedContact);
-                            intent.putExtra("THREADID", selectedThread.getId());
+                            intent.putExtra("THREAD", selectedThread);
                             startActivity(intent);
                         } else if (fromButton == 2) {
 
@@ -422,5 +423,13 @@ public class ChatFragment extends Fragment {
                 swipeThreads.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        userRef.removeEventListener(userListener);
+        threadRef.removeEventListener(threadListener);
     }
 }

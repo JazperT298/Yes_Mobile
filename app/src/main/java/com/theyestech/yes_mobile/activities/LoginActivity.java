@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     private View view;
     private Context context;
 
-    private TextView tvSignUp, tvForgorPassword;
+    private TextView tvSignUp, tvForgotPassword;
     private EditText etEmail, etPassword;
     private ImageView ivBack;
     private FloatingActionButton floatingActionButton;
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_LoginPassword);
         floatingActionButton = findViewById(R.id.fab_LoginSignIn);
         tvSignUp = findViewById(R.id.tv_LoginSignUp);
-        tvForgorPassword = findViewById(R.id.tv_LoginForgotPassword);
+        tvForgotPassword = findViewById(R.id.tv_LoginForgotPassword);
         progressBar = findViewById(R.id.progress_LoginLoading);
 
         Sprite doubleBounce = new DoubleBounce();
@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        tvForgorPassword.setOnClickListener(new View.OnClickListener() {
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
     private void accessingServer(boolean isAccessing) {
         etEmail.setEnabled(!isAccessing);
         etPassword.setEnabled(!isAccessing);
-        tvForgorPassword.setEnabled(!isAccessing);
+        tvForgotPassword.setEnabled(!isAccessing);
         tvSignUp.setEnabled(!isAccessing);
         floatingActionButton.setVisibility(isAccessing ? View.GONE : View.VISIBLE);
         progressBar.setVisibility(isAccessing ? View.VISIBLE : View.GONE);
@@ -331,12 +331,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
-                    userRole.saveRole(context);
-
-                    userEducator.saveUserSession(context);
 
                     if (firebaseAuth.getCurrentUser() == null) {
-                        doFirebaseLogin(userEducator.getEmail_address(), userEducator.getPassword());
+                        doFirebaseLogin(userEducator, userRole);
                     } else {
                         Intent intent = new Intent(context, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -435,7 +432,9 @@ public class LoginActivity extends AppCompatActivity {
             return false;
     }
 
-    private void doFirebaseLogin(String email, String password) {
+    private void doFirebaseLogin(final UserEducator userEducator, final UserRole userRole) {
+        String email = userEducator.getEmail_address();
+        String password = userEducator.getPassword();
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -445,12 +444,15 @@ public class LoginActivity extends AppCompatActivity {
                             assert firebaseUser != null;
                             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
                             usersRef.child("status").setValue("online");
+
+                            userRole.saveRole(context);
+                            userEducator.saveUserSession(context);
                             
                             Intent intent = new Intent(context, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show();
+                            Toasty.warning(context, "Failed to log in, try again later.").show();
                         }
                     }
                 });

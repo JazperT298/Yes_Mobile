@@ -20,8 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ChatConversationAdapter;
-import com.theyestech.yes_mobile.adapters.ChatThreadsAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
+import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.Conversation;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -39,14 +39,16 @@ public class ChatConversationActivity extends AppCompatActivity {
     private String role;
 
     //Firebase
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
-    DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference threadRef;
+    private DatabaseReference conversationRef;
+    private ValueEventListener conversationListener;
 
     private ChatConversationAdapter chatConversationAdapter;
     private Contact contact;
     private ArrayList<Conversation> conversationArrayList = new ArrayList<>();
-    private String threadId;
+    private ChatThread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +61,19 @@ public class ChatConversationActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
 
         contact = getIntent().getParcelableExtra("CONTACT");
-        threadId = getIntent().getStringExtra("THREADID");
+        thread = getIntent().getParcelableExtra("THREAD");
+
+        if (thread.getSenderId().equals(firebaseUser.getUid())){
+            threadRef = FirebaseDatabase.getInstance().getReference("Threads");
+            threadRef.child(thread.getId()).child("isSeen").setValue(true);
+        }
 
         role = UserRole.getRole(context);
 
         initializeUI();
     }
 
-    private void initializeUI(){
+    private void initializeUI() {
         tvName = findViewById(R.id.tv_ChatConversationName);
         tvEmail = findViewById(R.id.tv_ChatConversationEmail);
         ivBack = findViewById(R.id.iv_ChatConversationBack);
@@ -84,23 +91,30 @@ public class ChatConversationActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        ivSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage();
+            }
+        });
     }
 
-    private void setHeader(){
+    private void setHeader() {
         tvName.setText(contact.getFullName());
         tvEmail.setText(contact.getEmail());
     }
 
-    private void getAllConversation(){
-        final DatabaseReference conversationRef = FirebaseDatabase.getInstance().getReference("Conversations");
-        conversationRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void getAllConversation() {
+        conversationRef = FirebaseDatabase.getInstance().getReference("Conversations");
+        conversationListener = conversationRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 conversationArrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Conversation conversation = snapshot.getValue(Conversation.class);
                     assert conversation != null;
-                    if (conversation.getThreadId().equals(threadId)) {
+                    if (conversation.getThreadId().equals(thread.getId())) {
                         conversationArrayList.add(conversation);
                     }
                 }
@@ -123,5 +137,8 @@ public class ChatConversationActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+    }
+
+    private void sendMessage(){
     }
 }
