@@ -386,7 +386,7 @@ public class HomeFragment extends Fragment {
                     tvStatSubjectCount.setText(String.format("%s Subjects", subject_count));
                     tvStatStudentCount.setText(String.format("%s Students", student_count));
 
-                    tvSubjectCount.setText(String.format("%s Subjects", subject_count));
+                    tvSubjectCount.setText(subject_count);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

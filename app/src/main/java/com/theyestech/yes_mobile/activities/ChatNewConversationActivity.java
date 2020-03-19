@@ -237,10 +237,10 @@ public class ChatNewConversationActivity extends AppCompatActivity {
                         intent.putExtra("CONTACT", selectedContact);
                         intent.putExtra("THREAD", chatThread);
                         startActivity(intent);
-//                        ProgressPopup.hideProgress();
                         finish();
                     }
                 }
+                ProgressPopup.hideProgress();
             }
 
             @Override
