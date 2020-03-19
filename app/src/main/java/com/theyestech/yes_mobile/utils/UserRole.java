@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class UserRole {
+
     public static String Student() {
         return "2";
     }

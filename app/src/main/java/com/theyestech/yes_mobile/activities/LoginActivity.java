@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
@@ -54,11 +53,14 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private ImageView ivBack;
     private FloatingActionButton floatingActionButton;
-    ProgressBar progressBar;
+    private ProgressBar progressBar;
 
     private String role;
 
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
+
+    private UserEducator fireBaseEducator;
+    private UserStudent fireBaseStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RegisterActivity.class);
-                intent.putExtra("ROLE_ID", role);
+                intent.putExtra("ROLE", role);
                 startActivity(intent);
             }
         });
@@ -161,7 +163,6 @@ public class LoginActivity extends AppCompatActivity {
         HttpProvider.postLogin(context, "controller_educator/login_as_educator_class.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                ProgressPopup.hideProgress();
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 if (str.isEmpty()) {
@@ -332,13 +333,7 @@ public class LoginActivity extends AppCompatActivity {
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
 
-                    if (firebaseAuth.getCurrentUser() == null) {
-                        doFirebaseLogin(userEducator, userRole);
-                    } else {
-                        Intent intent = new Intent(context, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
+                    tryFirebaseLogin(userEducator, userRole);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -432,9 +427,20 @@ public class LoginActivity extends AppCompatActivity {
             return false;
     }
 
-    private void doFirebaseLogin(final UserEducator userEducator, final UserRole userRole) {
-        String email = userEducator.getEmail_address();
-        String password = userEducator.getPassword();
+    private void tryFirebaseLogin(Object user, final UserRole userRole) {
+        String email;
+        String password;
+
+        if (role.equals(UserRole.Educator())) {
+            fireBaseEducator = (UserEducator) user;
+            email = fireBaseEducator.getEmail_address();
+            password = fireBaseEducator.getPassword();
+        } else {
+            fireBaseStudent = (UserStudent) user;
+            email = fireBaseStudent.getEmail_address();
+            password = fireBaseStudent.getPassword();
+        }
+
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -445,15 +451,17 @@ public class LoginActivity extends AppCompatActivity {
                             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
                             usersRef.child("status").setValue("online");
 
+                            if (role.equals(UserRole.Educator()))
+                                fireBaseEducator.saveUserSession(context);
+                            else
+                                fireBaseStudent.saveUserSession(context);
+
                             userRole.saveRole(context);
-                            userEducator.saveUserSession(context);
-                            
-                            Intent intent = new Intent(context, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        } else {
-                            Toasty.warning(context, "Failed to log in, try again later.").show();
                         }
+
+                        Intent intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                     }
                 });
     }
