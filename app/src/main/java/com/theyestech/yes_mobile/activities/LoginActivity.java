@@ -1,16 +1,21 @@
 package com.theyestech.yes_mobile.activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -41,6 +46,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
@@ -138,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                openAddStudentDialog();
             }
         });
     }
@@ -464,5 +470,65 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+    }
+
+    private void sendForgotPasswordEmail(String email) {
+        RequestParams params = new RequestParams();
+        params.put("email", email);
+
+        HttpProvider.postLogin(context, "controller_global/ForgotPassword.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Toasty.success(context, "Password reset was sent to your email.").show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toasty.error(context, "Failed to send password reset. Please try again.").show();
+            }
+        });
+    }
+
+    private void openAddStudentDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_forgot_password, null);
+        final EditText etEmail;
+        final Button btnSend;
+        final ImageView ivClose;
+
+        etEmail = dialogView.findViewById(R.id.et_ForgotPasswordEmail);
+        btnSend = dialogView.findViewById(R.id.btn_ForgotPasswordSend);
+        ivClose = dialogView.findViewById(R.id.iv_ForgotPasswordClose);
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.hide();
+            }
+        });
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = etEmail.getText().toString();
+
+                if (!email.contains("@")) {
+                    Toasty.warning(context, "Invalid email address.").show();
+                    etEmail.requestFocus();
+                } else {
+                    sendForgotPasswordEmail(etEmail.getText().toString());
+                    b.hide();
+                }
+
+            }
+        });
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 }
