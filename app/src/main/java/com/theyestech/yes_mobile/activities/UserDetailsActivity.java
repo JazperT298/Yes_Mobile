@@ -31,7 +31,6 @@ import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
-import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
@@ -59,11 +58,10 @@ public class UserDetailsActivity extends AppCompatActivity {
     private String role;
 
     private ImageView ivProfile, ivBack, ivCamera;
-    private EditText etFirstname, etMiddlename, etLastname, etSuffix, etEmail, etContactnumber;
+    private EditText etFirstname, etMiddlename, etLastname, etSuffix, etEmail, etContactnumber, etMotto, etEducationalAttainment, etSubjectMajor, etCurrentSchool, etSchoolPosition, etFacebook, etTwitter, etInstagram;
     private RadioButton rbMale, rbFemale;
     private RadioGroup radioGroup;
-    private TextView tvHeader;
-    private Button btnEditSave, btnCancel;
+    private TextView tvEditSave;
 
     private static final int STORAGE_REQUEST_CODE = 400;
     private static final int IMAGE_PICK_GALLERY_CODE = 1000;
@@ -103,21 +101,27 @@ public class UserDetailsActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.colorNephritis));
         }
 
-        tvHeader = findViewById(R.id.tv_UserDetailsHeader);
         ivProfile = findViewById(R.id.iv_UserDetailsImage);
         ivCamera = findViewById(R.id.iv_UserDetailsCamera);
         ivBack = findViewById(R.id.iv_UserDetailsBack);
+        tvEditSave = findViewById(R.id.tv_UserDetailsEditSave);
         etFirstname = findViewById(R.id.et_UserDetailsFirstname);
         etMiddlename = findViewById(R.id.et_UserDetailsMiddlename);
         etLastname = findViewById(R.id.et_UserDetailsLastname);
         etSuffix = findViewById(R.id.et_UserDetailsSuffix);
         etEmail = findViewById(R.id.et_UserDetailsEmail);
         etContactnumber = findViewById(R.id.et_UserDetailsContactnumber);
+        etMotto = findViewById(R.id.et_UserDetailsMotto);
+        etEducationalAttainment = findViewById(R.id.et_UserDetailsEducationalAttainment);
+        etSubjectMajor = findViewById(R.id.et_UserDetailsSubjectMajor);
+        etCurrentSchool = findViewById(R.id.et_UserDetailsCurrentSchool);
+        etSchoolPosition = findViewById(R.id.et_UserDetailsSchoolPosition);
+        etFacebook = findViewById(R.id.et_UserDetailsFacebook);
+        etTwitter = findViewById(R.id.et_UserDetailsTwitter);
+        etInstagram = findViewById(R.id.et_UserDetailsInstagram);
         rbMale = findViewById(R.id.rb_UserDetailsMale);
         rbFemale = findViewById(R.id.rb_UserDetailsFemale);
         radioGroup = findViewById(R.id.rg_UserDetails);
-        btnEditSave = findViewById(R.id.btn_UserDetailsEditSave);
-        btnCancel = findViewById(R.id.btn_UserDetailsCancel);
 
         etEmail.setEnabled(false);
 
@@ -142,35 +146,18 @@ public class UserDetailsActivity extends AppCompatActivity {
             }
         });
 
-        btnEditSave.setOnClickListener(new View.OnClickListener() {
+        tvEditSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isEdit) {
                     setFieldsMode(isEdit);
                     isEdit = false;
-                    btnCancel.setVisibility(View.VISIBLE);
                 } else {
                     if (role.equals(UserRole.Educator()))
                         updateEducatorDetails();
                     else
                         updateStudentDetails();
-
-                    btnCancel.setVisibility(View.INVISIBLE);
                 }
-            }
-        });
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (role.equals(UserRole.Educator()))
-                    setEducatorFieldsData();
-                else
-                    setStudentFieldsData();
-
-                setFieldsMode(false);
-                btnCancel.setVisibility(View.GONE);
-                isEdit = true;
             }
         });
 
@@ -191,7 +178,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
 
-                } else if (which == 1){
+                } else if (which == 1) {
                     if (!checkStoragePermission()) {
                         requestStoragePermission();
                     } else {
@@ -246,7 +233,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                         Toasty.success(context, "Saved.").show();
                         setFieldsMode(isEdit);
                         isEdit = true;
-                        updateEducatorSession();
+//                        updateEducatorSession();
                     } else
                         Toasty.error(context, "Saving failed.").show();
 
@@ -320,10 +307,17 @@ public class UserDetailsActivity extends AppCompatActivity {
         userEducator.setContact_number(etContactnumber.getText().toString());
         userEducator.setGender(gender);
         userEducator.setImage(UserEducator.getImage(context));
-        userEducator.setEducational_attainment(UserEducator.getEducationalAttainment(context));
-        userEducator.setSubj_major(UserEducator.getSubjectMajor(context));
-        userEducator.setCurrent_school(UserEducator.getCurrentSchool(context));
-        userEducator.setPosition(UserEducator.getPosition(context));
+        userEducator.setMotto(etMotto.getText().toString());
+        userEducator.setEducational_attainment(etEducationalAttainment.getText().toString());
+        userEducator.setSubj_major(etSubjectMajor.getText().toString());
+        userEducator.setCurrent_school(etCurrentSchool.getText().toString());
+        userEducator.setPosition(etSchoolPosition.getText().toString());
+        userEducator.setFacebook(etFacebook.getText().toString());
+        userEducator.setTwitter(etTwitter.getText().toString());
+        userEducator.setInstagram(etInstagram.getText().toString());
+
+        UserEducator.clearSession(context);
+
         userEducator.saveUserSession(context);
 
         setEducatorFieldsData();
@@ -358,6 +352,14 @@ public class UserDetailsActivity extends AppCompatActivity {
         etSuffix.setText(UserEducator.getSuffix(context));
         etEmail.setText(UserEducator.getEmail(context));
         etContactnumber.setText(UserEducator.getContactNumber(context));
+        etMotto.setText(UserEducator.getMotto(context));
+        etEducationalAttainment.setText(UserEducator.getEducationalAttainment(context));
+        etSubjectMajor.setText(UserEducator.getSubjectMajor(context));
+        etCurrentSchool.setText(UserEducator.getCurrentSchool(context));
+        etSchoolPosition.setText(UserEducator.getPosition(context));
+        etFacebook.setText(UserEducator.getFacebook(context));
+        etTwitter.setText(UserEducator.getTwitter(context));
+        etInstagram.setText(UserEducator.getInstragram(context));
 
         switch (UserEducator.getGender(context)) {
             case "Male":
@@ -366,11 +368,6 @@ public class UserDetailsActivity extends AppCompatActivity {
             case "Female":
                 radioGroup.check(R.id.rb_UserDetailsFemale);
         }
-
-//        if (role.equals(UserRole.Educator()))
-//            tvHeader.setText("Educator Details");
-//        else
-//            tvHeader.setText("Student Details");
 
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
@@ -394,11 +391,6 @@ public class UserDetailsActivity extends AppCompatActivity {
                 radioGroup.check(R.id.rb_UserDetailsFemale);
         }
 
-        if (role.equals(UserRole.Educator()))
-            tvHeader.setText("Educator Details");
-        else
-            tvHeader.setText("Student Details");
-
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
                 .apply(GlideOptions.getOptions())
@@ -411,19 +403,26 @@ public class UserDetailsActivity extends AppCompatActivity {
         etLastname.setEnabled(enable);
         etSuffix.setEnabled(enable);
         etContactnumber.setEnabled(enable);
+        etMotto.setEnabled(enable);
+        etEducationalAttainment.setEnabled(enable);
+        etSubjectMajor.setEnabled(enable);
+        etCurrentSchool.setEnabled(enable);
+        etSchoolPosition.setEnabled(enable);
+        etFacebook.setEnabled(enable);
+        etTwitter.setEnabled(enable);
+        etInstagram.setEnabled(enable);
         rbMale.setEnabled(enable);
         rbFemale.setEnabled(enable);
         ivProfile.setEnabled(enable);
 
-        if (enable){
+        if (enable) {
             ivCamera.setImageResource(R.drawable.ic_user_details_camera);
-        }
-        else{
+        } else {
             ivCamera.setImageResource(R.drawable.ic_user_details_camera_disable);
         }
 
         etFirstname.requestFocus();
-        btnEditSave.setText(enable ? "Save" : "Edit");
+        tvEditSave.setText(enable ? "Save" : "Edit");
     }
 
     private void updateEducatorProfileImage() throws FileNotFoundException {

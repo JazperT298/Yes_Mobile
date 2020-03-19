@@ -37,6 +37,18 @@
             app:layout_constraintStart_toEndOf="@+id/iv_UserDetailsBack"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_UserDetailsEditSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Edit"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 
     <ScrollView
@@ -89,6 +101,7 @@
                 android:hint="First Name"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +119,7 @@
                 android:hint="Middle Name"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsFirstname" />
@@ -122,6 +136,7 @@
                 android:hint="Last Name"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsMiddlename" />
@@ -138,6 +153,7 @@
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsSuffix" />
@@ -154,6 +170,7 @@
                 android:hint="Contact Number"
                 android:inputType="phone"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsEmail" />
@@ -170,6 +187,7 @@
                 android:hint="Suffix"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsLastname" />
@@ -226,6 +244,7 @@
                 android:hint="Educational Attainment"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView61" />
@@ -240,6 +259,7 @@
                 android:hint="Subject Major"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/et_UserDetailsEducationalAttainment"
                 app:layout_constraintStart_toStartOf="@+id/et_UserDetailsEducationalAttainment"
                 app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsEducationalAttainment" />
@@ -254,6 +274,7 @@
                 android:hint="Current School"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/et_UserDetailsSubjectMajor"
                 app:layout_constraintStart_toStartOf="@+id/et_UserDetailsSubjectMajor"
                 app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsSubjectMajor" />
@@ -268,43 +289,10 @@
                 android:hint="School Position"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/et_UserDetailsCurrentSchool"
                 app:layout_constraintStart_toStartOf="@+id/et_UserDetailsCurrentSchool"
                 app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsCurrentSchool" />
-
-            <Button
-                android:id="@+id/btn_UserDetailsEditSave"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/colorNephritis"
-                android:text="Edit"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsSchoolPosition" />
-
-            <Button
-                android:id="@+id/btn_UserDetailsCancel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="24dp"
-                android:background="@color/colorNephritis"
-                android:text="Cancel"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_UserDetailsEditSave" />
 
             <ImageView
                 android:id="@+id/iv_UserDetailsCamera"
@@ -326,9 +314,69 @@
                 android:hint="Motto"
                 android:inputType="textPersonName"
                 android:padding="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/rg_UserDetails"
                 app:layout_constraintStart_toStartOf="@+id/rg_UserDetails"
                 app:layout_constraintTop_toBottomOf="@+id/rg_UserDetails" />
+
+            <TextView
+                android:id="@+id/textView80"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Social Media"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/et_UserDetailsSchoolPosition"
+                app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsSchoolPosition" />
+
+            <EditText
+                android:id="@+id/et_UserDetailsFacebook"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_edittext"
+                android:ems="10"
+                android:hint="Facebook"
+                android:inputType="textPersonName"
+                android:padding="12dp"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView80"
+                app:layout_constraintTop_toBottomOf="@+id/textView80" />
+
+            <EditText
+                android:id="@+id/et_UserDetailsTwitter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_edittext"
+                android:ems="10"
+                android:hint="Twitter"
+                android:inputType="textPersonName"
+                android:padding="12dp"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_UserDetailsFacebook"
+                app:layout_constraintStart_toStartOf="@+id/et_UserDetailsFacebook"
+                app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsFacebook" />
+
+            <EditText
+                android:id="@+id/et_UserDetailsInstagram"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_edittext"
+                android:ems="10"
+                android:hint="Instagram"
+                android:inputType="textPersonName"
+                android:padding="12dp"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/et_UserDetailsTwitter"
+                app:layout_constraintStart_toStartOf="@+id/et_UserDetailsTwitter"
+                app:layout_constraintTop_toBottomOf="@+id/et_UserDetailsTwitter" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

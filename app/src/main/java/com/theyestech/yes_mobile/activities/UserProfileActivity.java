@@ -45,6 +45,11 @@ public class UserProfileActivity extends AppCompatActivity {
         role = UserRole.getRole(context);
 
         initializeUI();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         if (role.equals(UserRole.Educator())) {
             setEducatorProfile();
@@ -87,7 +92,10 @@ public class UserProfileActivity extends AppCompatActivity {
         ivOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectAction();
+                Intent intent = new Intent(context, UserDetailsActivity.class);
+                startActivity(intent);
+
+//                selectAction();
             }
         });
 

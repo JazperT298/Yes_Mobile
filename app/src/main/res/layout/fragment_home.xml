@@ -139,8 +139,8 @@
                         android:id="@+id/imageView10"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        app:layout_constraintEnd_toEndOf="@+id/textView7"
-                        app:layout_constraintStart_toStartOf="@+id/textView7"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_HomeStatSStudentCount"
+                        app:layout_constraintStart_toStartOf="@+id/tv_HomeStatSStudentCount"
                         app:layout_constraintTop_toTopOf="@+id/imageView11"
                         app:srcCompat="@drawable/ic_students_colored" />
 
@@ -149,8 +149,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="8dp"
-                        app:layout_constraintEnd_toEndOf="@+id/textView4"
-                        app:layout_constraintStart_toStartOf="@+id/textView4"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_HomeStatSubjectCount"
+                        app:layout_constraintStart_toStartOf="@+id/tv_HomeStatSubjectCount"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_subjects_colored" />
 
@@ -158,52 +158,52 @@
                         android:id="@+id/imageView15"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        app:layout_constraintEnd_toEndOf="@+id/textView33"
-                        app:layout_constraintStart_toStartOf="@+id/textView33"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_HomeStatTopicCount"
+                        app:layout_constraintStart_toStartOf="@+id/tv_HomeStatTopicCount"
                         app:layout_constraintTop_toTopOf="@+id/imageView10"
                         app:srcCompat="@drawable/ic_topics_colored" />
 
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/tv_HomeStatSubjectCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:text="100 Subjects"
+                        android:text="0 Subjects"
                         android:textColor="@android:color/black"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textView7"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_HomeStatSStudentCount"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/imageView11" />
 
                     <TextView
-                        android:id="@+id/textView7"
+                        android:id="@+id/tv_HomeStatSStudentCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="100 Students"
+                        android:text="0 Students"
                         android:textColor="@android:color/black"
                         android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView4"
-                        app:layout_constraintEnd_toStartOf="@+id/textView33"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_HomeStatSubjectCount"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_HomeStatTopicCount"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/textView4"
+                        app:layout_constraintStart_toEndOf="@+id/tv_HomeStatSubjectCount"
                         app:layout_constraintTop_toBottomOf="@+id/imageView10" />
 
                     <TextView
-                        android:id="@+id/textView33"
+                        android:id="@+id/tv_HomeStatTopicCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="100 Topics"
+                        android:text="0 Topics"
                         android:textColor="@android:color/black"
                         android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_HomeStatSStudentCount"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/textView7"
+                        app:layout_constraintStart_toEndOf="@+id/tv_HomeStatSStudentCount"
                         app:layout_constraintTop_toBottomOf="@+id/imageView15" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </android.support.v7.widget.CardView>
@@ -253,7 +253,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
                     <TextView
-                        android:id="@+id/textView35"
+                        android:id="@+id/tv_HomeSubjectCount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -313,7 +313,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/imageView8" />
 
                     <TextView
-                        android:id="@+id/textView65"
+                        android:id="@+id/tv_HomeNoteCount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -374,7 +374,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/imageView17" />
 
                     <TextView
-                        android:id="@+id/textView66"
+                        android:id="@+id/tv_HomeConnectionCount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -434,7 +434,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/imageView18" />
 
                     <TextView
-                        android:id="@+id/textView67"
+                        android:id="@+id/tv_HomeNewsfeedCount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -494,7 +494,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/imageView19" />
 
                     <TextView
-                        android:id="@+id/textView68"
+                        android:id="@+id/tv_HomeVideolabCount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -557,7 +557,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/imageView20" />
 
                     <TextView
-                        android:id="@+id/textView69"
+                        android:id="@+id/tv_HomeCourseCount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -619,7 +619,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/imageView21" />
 
                     <TextView
-                        android:id="@+id/textView70"
+                        android:id="@+id/tv_HomeMyvideosCount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"

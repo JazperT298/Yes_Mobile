@@ -308,7 +308,7 @@ public class LoginActivity extends AppCompatActivity {
                     String validated = jsonObject.getString("validated");
                     String connection = jsonObject.getString("connection");
 
-                    if (user_gender.equals("1"))
+                    if (user_gender.equals("2"))
                         user_gender = "Male";
                     else
                         user_gender = "Female";

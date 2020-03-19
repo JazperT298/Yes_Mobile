@@ -201,7 +201,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void getEducatorSubjectsAndStudentsCount(){
 
-
         RequestParams params = new RequestParams();
         params.put("user_token", UserEducator.getToken(context));
         params.put("user_id", UserEducator.getID(context));

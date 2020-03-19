@@ -43,11 +43,14 @@ import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import cz.msebera.android.httpclient.Header;
 
 public class HomeFragment extends Fragment {
     private View view;
@@ -56,7 +59,7 @@ public class HomeFragment extends Fragment {
     private String role;
 
     private ImageView ivProfile;
-    private TextView tvEmail, tvEducationalAttainment;
+    private TextView tvEmail, tvEducationalAttainment, tvStatSubjectCount, tvStatStudentCount, tvStatTopicCount, tvSubjectCount;
     private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
@@ -89,6 +92,8 @@ public class HomeFragment extends Fragment {
         firebaseUser = firebaseAuth.getCurrentUser();
 
         initializeUI();
+
+        getEducatorStatistics();
     }
 
     private void initializeUI() {
@@ -97,6 +102,10 @@ public class HomeFragment extends Fragment {
 //        ivNewPost = view.findViewById(R.id.iv_HomeNewPost);
         tvEmail = view.findViewById(R.id.tv_HomeEmail);
         tvEducationalAttainment = view.findViewById(R.id.tv_Home_EducationalAttainment);
+        tvStatStudentCount = view.findViewById(R.id.tv_HomeStatSStudentCount);
+        tvStatSubjectCount = view.findViewById(R.id.tv_HomeStatSubjectCount);
+        tvStatTopicCount = view.findViewById(R.id.tv_HomeStatTopicCount);
+        tvSubjectCount = view.findViewById(R.id.tv_HomeSubjectCount);
         cvSubjects = view.findViewById(R.id.cv_Home_Subjects);
         cvNotes = view.findViewById(R.id.cv_Home_Notes);
         cvConnections = view.findViewById(R.id.cv_Home_Connections);
@@ -356,6 +365,40 @@ public class HomeFragment extends Fragment {
                 .setNegativeButton("NO", null)
                 .create();
         dialog.show();
+    }
+
+    private void getEducatorStatistics(){
+        RequestParams params = new RequestParams();
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_id", UserEducator.getID(context));
+
+        HttpProvider.post(context, "controller_educator/CountSubjectsAndStudents.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String student_count = jsonObject.getString("student_count");
+                    String subject_count = jsonObject.getString("subject_count");
+
+                    tvStatSubjectCount.setText(String.format("%s Subjects", subject_count));
+                    tvStatStudentCount.setText(String.format("%s Students", student_count));
+
+                    tvSubjectCount.setText(String.format("%s Subjects", subject_count));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Debugger.logD(e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 
     @Override

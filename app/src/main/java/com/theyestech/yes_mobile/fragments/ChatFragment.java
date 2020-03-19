@@ -44,7 +44,6 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -429,7 +428,10 @@ public class ChatFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
-        userRef.removeEventListener(userListener);
-        threadRef.removeEventListener(threadListener);
+        if (userListener != null)
+            userRef.removeEventListener(userListener);
+
+        if (threadListener != null)
+            threadRef.removeEventListener(threadListener);
     }
 }

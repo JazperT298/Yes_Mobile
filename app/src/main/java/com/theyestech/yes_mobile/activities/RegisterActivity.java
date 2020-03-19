@@ -124,7 +124,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 accessingServer(false);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                Debugger.logD(str);
                 if (!str.contains("exists")) {
                     finish();
                     Toasty.success(context, "Successfully registered.").show();
@@ -154,7 +153,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 accessingServer(false);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                Debugger.logD(str);
                 if (str.equals("success")) {
                     finish();
                     Toasty.success(context, "Successfully registered.").show();
