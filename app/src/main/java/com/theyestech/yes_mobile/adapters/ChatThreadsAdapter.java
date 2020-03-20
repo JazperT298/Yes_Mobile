@@ -20,6 +20,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
+import com.theyestech.yes_mobile.utils.DateTimeHandler;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.text.SimpleDateFormat;
@@ -56,8 +57,6 @@ public class ChatThreadsAdapter extends RecyclerView.Adapter<ChatThreadsAdapter.
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         ChatThread thread = threadArrayList.get(i);
         Contact contact = thread.contact;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yy");
-        String date = simpleDateFormat.format(thread.getLastMessageDateCreated());
 
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + contact.getPhotoName())
@@ -67,7 +66,7 @@ public class ChatThreadsAdapter extends RecyclerView.Adapter<ChatThreadsAdapter.
 
         viewHolder.tvName.setText(contact.getFullName().equals("") ? contact.getEmail() : contact.getFullName());
         viewHolder.tvLastMessage.setText(thread.getLastMessage());
-        viewHolder.tvDate.setText(date);
+        viewHolder.tvDate.setText(DateTimeHandler.getMessageDateDisplay(thread.getLastMessageDateCreated()));
 
         if (!contact.getStatus().equals("online")){
             viewHolder.ivIsOnline.setVisibility(View.GONE);

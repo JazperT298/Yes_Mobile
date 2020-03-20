@@ -18,12 +18,15 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.Conversation;
+import com.theyestech.yes_mobile.utils.DateTimeHandler;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ChatConversationAdapter extends RecyclerView.Adapter<ChatConversationAdapter.ViewHolder> {
 
@@ -70,9 +73,6 @@ public class ChatConversationAdapter extends RecyclerView.Adapter<ChatConversati
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Conversation conversation = conversationArrayList.get(i);
 
-        DateFormat dateFormat = new SimpleDateFormat("MMM dd yy | hh:mm aa");
-        String date = dateFormat.format(conversation.getMessageDateCreated());
-
         if (isFromSender){
             Glide.with(context)
                     .load(HttpProvider.getProfileDir() + contact.getPhotoName())
@@ -82,7 +82,7 @@ public class ChatConversationAdapter extends RecyclerView.Adapter<ChatConversati
         }
 
         viewHolder.tvMessage.setText(conversation.getMessage());
-        viewHolder.tvDateTime.setText(date);
+        viewHolder.tvDateTime.setText(DateTimeHandler.getMessageDateDisplay(conversation.getMessageDateCreated()));
 
     }
 
@@ -111,16 +111,6 @@ public class ChatConversationAdapter extends RecyclerView.Adapter<ChatConversati
 //                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
 //                }
 //            });
-
-            tvMessage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (tvDateTime.getVisibility() == View.GONE)
-                        tvDateTime.setVisibility(View.VISIBLE);
-                    else
-                        tvDateTime.setVisibility(View.GONE);
-                }
-            });
         }
     }
 
