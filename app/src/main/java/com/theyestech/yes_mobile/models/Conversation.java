@@ -1,5 +1,6 @@
 package com.theyestech.yes_mobile.models;
 
+import java.util.Comparator;
 import java.util.Date;
 
 public class Conversation {
@@ -58,4 +59,14 @@ public class Conversation {
     public void setThreadId(String threadIdl) {
         this.threadId = threadIdl;
     }
+
+    public static Comparator<Conversation> ConversationComparator = new Comparator<Conversation>() {
+        @Override
+        public int compare(Conversation o1, Conversation o2) {
+            Date dateCreated1 = o1.getMessageDateCreated();
+            Date dateCreated2 = o2.getMessageDateCreated();
+
+            return dateCreated2.compareTo(dateCreated1);
+        }
+    };
 }

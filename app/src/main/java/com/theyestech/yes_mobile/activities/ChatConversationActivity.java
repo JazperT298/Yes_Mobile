@@ -31,6 +31,7 @@ import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
@@ -137,8 +138,11 @@ public class ChatConversationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 message = etMessage.getText().toString();
-                if (!message.isEmpty())
+                if (!message.isEmpty()){
                     sendMessage();
+                    ivSend.setEnabled(false);
+                    ivSend.setImageResource(R.drawable.ic_send_colored_disabled);
+                }
             }
         });
     }
@@ -149,8 +153,8 @@ public class ChatConversationActivity extends AppCompatActivity {
     }
 
     private void getAllConversation() {
-        threadRef = FirebaseDatabase.getInstance().getReference("Conversations");
-        conversationListener = threadRef.addValueEventListener(new ValueEventListener() {
+        conversationRef = FirebaseDatabase.getInstance().getReference("Conversations");
+        conversationListener = conversationRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 conversationArrayList.clear();
@@ -166,6 +170,8 @@ public class ChatConversationActivity extends AppCompatActivity {
                     threadRef = FirebaseDatabase.getInstance().getReference("Threads");
                     threadRef.child(threadId).child("isSeen").setValue(true);
                 }
+
+                Collections.sort(conversationArrayList, Conversation.ConversationComparator);
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
                 linearLayoutManager.setReverseLayout(true);
