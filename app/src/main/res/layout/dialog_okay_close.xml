@@ -28,7 +28,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="24dp"
-                android:background="@color/colorPrimaryDark"
+                android:background="@drawable/button_fill_gradient_bg"
                 android:text="Okay"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"

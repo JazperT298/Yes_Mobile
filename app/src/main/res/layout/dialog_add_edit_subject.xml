@@ -48,7 +48,7 @@
                     android:layout_marginStart="8dp"
                     android:text="Add/Edit Subject"
                     android:textColor="@color/colorWhite"
-                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -24,7 +24,7 @@
             android:layout_marginTop="8dp"
             android:text="Chat"
             android:textColor="@color/colorWhite"
-            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,6 +34,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/bg_profile_round_white"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/iv_ChatProfile"
             app:layout_constraintEnd_toEndOf="@+id/iv_ChatProfile"
             app:layout_constraintStart_toStartOf="@+id/iv_ChatProfile"
@@ -44,6 +45,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

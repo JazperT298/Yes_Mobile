@@ -34,7 +34,7 @@
             android:singleLine="true"
             android:text="Subject Details"
             android:textColor="@color/colorWhite"
-            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_SubjectDetailsBack"
