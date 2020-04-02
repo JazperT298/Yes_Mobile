@@ -176,6 +176,8 @@ public class ChatNewConversationActivity extends AppCompatActivity {
         conversationHashMap.put("messageDateCreated", currentDate);
         conversationRef.setValue(conversationHashMap);
 
+        finish();
+
         // add user to chat fragment
 //        final DatabaseReference senderRef = FirebaseDatabase.getInstance().getReference("Conversations")
 //                .child(senderId)

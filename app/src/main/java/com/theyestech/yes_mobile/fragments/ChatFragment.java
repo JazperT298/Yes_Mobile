@@ -147,63 +147,6 @@ public class ChatFragment extends Fragment {
 
             }
         });
-
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                UserEducator user = dataSnapshot.getValue(UserEducator.class);
-//                assert user != null;
-//                if (!UserEducator.getFirstname(context).equals("")){
-//                    tvHeader.setText(UserEducator.getFirstname(context));
-//                } else{
-//                    tvHeader.setText(UserEducator.getEmail(context));
-//                }
-//                assert user != null;
-//                tv_SignIn.setText(user.getEmail_address());
-//                if (user.getImage().equals("default")){
-//                    profile_image.setImageResource(R.drawable.ic_educator_profile);
-//                } else {
-
-
-        //}
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-//        databaseReference = FirebaseDatabase.getInstance().getReference("Chats");
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                viewPagerAdapter = new ChatViewPagerAdapter(getChildFragmentManager());
-//                int unread = 0;
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-//                    Chat chat = snapshot.getValue(Chat.class);
-//                    assert chat != null;
-//                    if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
-//                        unread++;
-//                    }
-//                }
-//
-//                if (unread == 0){
-//                    viewPagerAdapter.addFragment(new ChatConversationFragment(), "Conversation");
-//                } else {
-//                    viewPagerAdapter.addFragment(new ChatConversationFragment(), "("+unread+") Conversation");
-//                }
-//
-//                viewPagerAdapter.addFragment(new ChatContactFragment(), "Contacts");
-//                viewPager.setAdapter(viewPagerAdapter);
-//                tabLayout.setupWithViewPager(viewPager);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     @SuppressLint("RestrictedApi")
@@ -280,8 +223,7 @@ public class ChatFragment extends Fragment {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (role.equals(UserRole.Educator()))
-                    registerEducatorToFirebase(b);
+                registerUserToFirebase(b);
             }
         });
 
@@ -289,7 +231,7 @@ public class ChatFragment extends Fragment {
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    private void registerEducatorToFirebase(final AlertDialog b) {
+    private void registerUserToFirebase(final AlertDialog b) {
         ProgressPopup.showProgress(context);
 
         final String email = UserEducator.getEmail(context).toLowerCase();

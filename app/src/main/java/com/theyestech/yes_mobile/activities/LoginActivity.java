@@ -218,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginStudent() {
-        ProgressPopup.showProgress(context);
+        accessingServer(true);
 
         RequestParams params = new RequestParams();
         params.put("login_s_email_address", etEmail.getText().toString());
@@ -227,8 +227,6 @@ public class LoginActivity extends AppCompatActivity {
         HttpProvider.post(context, "controller_student/login_as_student_class.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                ProgressPopup.hideProgress();
-
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 if (str.contains("success")) {
@@ -242,15 +240,16 @@ public class LoginActivity extends AppCompatActivity {
                         UserStudent userStudent = new UserStudent();
                         userStudent.setId(user_id);
                         userStudent.setToken(user_token);
-                        Debugger.logD(result);
 
                         getStudentDetails(userStudent);
 
                     } catch (Exception e) {
+                        accessingServer(false);
                         e.printStackTrace();
                         Debugger.logD(e.toString());
                     }
                 } else {
+                    accessingServer(false);
                     try {
                         JSONArray jsonArray = new JSONArray(str);
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
@@ -266,7 +265,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                ProgressPopup.hideProgress();
+                accessingServer(false);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
@@ -356,8 +355,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getStudentDetails(final UserStudent userStudent) {
-        ProgressPopup.showProgress(context);
-
         RequestParams params = new RequestParams();
         params.put("user_token", userStudent.getToken());
         params.put("user_id", userStudent.getId());
@@ -365,8 +362,6 @@ public class LoginActivity extends AppCompatActivity {
         HttpProvider.post(context, "controller_global/get_user_details.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                ProgressPopup.hideProgress();
-
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
 
@@ -403,23 +398,18 @@ public class LoginActivity extends AppCompatActivity {
 
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Student());
-                    userRole.saveRole(context);
 
-                    Toasty.success(context, "Success.").show();
-
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.putExtra("ROLE_ID", 1);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    tryFirebaseLogin(userStudent, userRole);
 
                 } catch (Exception e) {
+                    accessingServer(false);
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                ProgressPopup.hideProgress();
+                accessingServer(false);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
@@ -456,14 +446,16 @@ public class LoginActivity extends AppCompatActivity {
                             assert firebaseUser != null;
                             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
                             usersRef.child("status").setValue("online");
-
-                            if (role.equals(UserRole.Educator()))
-                                fireBaseEducator.saveUserSession(context);
-                            else
-                                fireBaseStudent.saveUserSession(context);
-
-                            userRole.saveRole(context);
                         }
+
+                        if (role.equals(UserRole.Educator()))
+                            fireBaseEducator.saveUserSession(context);
+                        else
+                            fireBaseStudent.saveUserSession(context);
+
+                        userRole.saveRole(context);
+
+                        Debugger.printO(task);
 
                         Intent intent = new Intent(context, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
