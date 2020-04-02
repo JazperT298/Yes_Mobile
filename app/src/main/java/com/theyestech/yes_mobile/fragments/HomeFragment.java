@@ -326,28 +326,24 @@ public class HomeFragment extends Fragment {
     }
 
     private void logoutUser() {
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if (firebaseUser != null){
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+            usersRef.child("status").setValue("offline");
+            firebaseAuth.signOut();
+        }
+
         if (role.equals(UserRole.Educator())) {
-
-            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-            if (firebaseUser != null){
-                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-                usersRef.child("status").setValue("offline");
-                firebaseAuth.signOut();
-            }
-
             UserEducator.clearSession(context);
             UserRole.clearRole(context);
             Intent intent = new Intent(context, StartActivity.class);
             startActivity(intent);
             Objects.requireNonNull(getActivity()).finish();
         } else {
-            FirebaseAuth.getInstance().signOut();
-
             UserStudent.clearSession(context);
             UserRole.clearRole(context);
             Intent intent = new Intent(context, StartActivity.class);
             startActivity(intent);
-            Objects.requireNonNull(getActivity()).finish();
         }
     }
 
