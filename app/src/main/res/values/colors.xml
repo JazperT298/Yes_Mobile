@@ -4,13 +4,13 @@
 <!--    <color name="colorPrimaryDark">#30D2BE</color>-->
 <!--    <color name="colorAccent">#3584A7</color>-->
 
-    <color name="colorPrimary">#27ae60</color>
-    <color name="colorPrimaryDark">#27ae60</color>
-    <color name="colorAccent">#27ae60</color>
+    <color name="colorPrimary">#19c880</color>
+    <color name="colorPrimaryDark">#19c880</color>
+    <color name="colorAccent">#19c880</color>
 
-    <color name="color1">#2ecc71</color>
-    <color name="color2">#27ae60</color>
-    <color name="color3">#16a085</color>
+    <color name="color1">#19c880</color>
+    <color name="color2">#20a46a</color>
+    <color name="color3">#218154</color>
 
     <color name="colorGreensea">#16a085</color>
     <color name="colorNephritis">#27ae60</color>
