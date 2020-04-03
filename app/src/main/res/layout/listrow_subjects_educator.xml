@@ -40,7 +40,7 @@
         app:srcCompat="@drawable/ic_school_year_colored" />
 
     <ImageView
-        android:id="@+id/iv_ListrowSubjectsDelete"
+        android:id="@+id/iv_ListrowSubjectsDeleteEducator"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="16dp"
@@ -50,19 +50,19 @@
         app:srcCompat="@drawable/ic_delete_colored" />
 
     <TextView
-        android:id="@+id/tv_ListrowSubjectsSchoolCode"
+        android:id="@+id/tv_ListrowSubjectsSchoolCodeEducator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:singleLine="true"
         android:text="School Code"
         app:layout_constraintBottom_toBottomOf="@+id/imageView24"
-        app:layout_constraintEnd_toEndOf="@+id/tv_ListrowSubjectsName"
+        app:layout_constraintEnd_toEndOf="@+id/tv_ListrowSubjectsNameEducator"
         app:layout_constraintStart_toEndOf="@+id/imageView24"
         app:layout_constraintTop_toTopOf="@+id/imageView24" />
 
     <TextView
-        android:id="@+id/tv_ListrowSubjectsStudentsEnrolled"
+        android:id="@+id/tv_ListrowSubjectsStudentsEnrolledEducator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -74,7 +74,7 @@
         app:layout_constraintTop_toTopOf="@+id/imageView27" />
 
     <Button
-        android:id="@+id/btn_ListrowSubjectsManage"
+        android:id="@+id/btn_ListrowSubjectsManageEducator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -88,7 +88,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline" />
 
     <TextView
-        android:id="@+id/tv_ListrowSubjectsName"
+        android:id="@+id/tv_ListrowSubjectsNameEducator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -98,12 +98,12 @@
         android:textColor="@android:color/primary_text_light_nodisable"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView22"
-        app:layout_constraintEnd_toStartOf="@+id/iv_ListrowSubjectsDelete"
+        app:layout_constraintEnd_toStartOf="@+id/iv_ListrowSubjectsDeleteEducator"
         app:layout_constraintStart_toEndOf="@+id/imageView22"
         app:layout_constraintTop_toTopOf="@+id/imageView22" />
 
     <TextView
-        android:id="@+id/tv_ListrowSubjectsSchoolYear"
+        android:id="@+id/tv_ListrowSubjectsSchoolYearEducator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -135,6 +135,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_ListrowSubjectsManage" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_ListrowSubjectsManageEducator" />
 
 </android.support.constraint.ConstraintLayout>

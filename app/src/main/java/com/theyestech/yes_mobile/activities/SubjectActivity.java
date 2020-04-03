@@ -1,6 +1,5 @@
 package com.theyestech.yes_mobile.activities;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,7 +26,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.SubjectsAdapter;
+import com.theyestech.yes_mobile.adapters.SubjectsEducatorAdapter;
+import com.theyestech.yes_mobile.adapters.SubjectsStudentAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
@@ -62,7 +62,8 @@ public class SubjectActivity extends AppCompatActivity {
     private ConstraintLayout emptyIndicator;
 
     private ArrayList<Subject> subjectArrayList = new ArrayList<>();
-    private SubjectsAdapter subjectsAdapter;
+    private SubjectsEducatorAdapter subjectsEducatorAdapter;
+    private SubjectsStudentAdapter subjectsStudentAdapter;
     private Subject selectedSubject = new Subject();
 
     private ArrayList<String> sLevel = new ArrayList<>();
@@ -76,6 +77,7 @@ public class SubjectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_subject);
 
         context = this;
+
         role = UserRole.getRole(context);
 
         sLevel.add("Primary Level");
@@ -99,7 +101,7 @@ public class SubjectActivity extends AppCompatActivity {
         emptyIndicator = findViewById(R.id.view_EmptyRecord);
 
         if (!role.equals(UserRole.Educator()))
-            floatingActionButton.setImageResource(R.drawable.ic_search_colored);
+            floatingActionButton.setImageResource(R.drawable.ic_search_white);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -188,8 +190,8 @@ public class SubjectActivity extends AppCompatActivity {
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
-                    subjectsAdapter = new SubjectsAdapter(context, subjectArrayList);
-                    subjectsAdapter.setClickListener(new OnClickRecyclerView() {
+                    subjectsEducatorAdapter = new SubjectsEducatorAdapter(context, subjectArrayList);
+                    subjectsEducatorAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
                             selectedSubject = subjectArrayList.get(position);
@@ -204,7 +206,7 @@ public class SubjectActivity extends AppCompatActivity {
                         }
                     });
 
-                    recyclerView.setAdapter(subjectsAdapter);
+                    recyclerView.setAdapter(subjectsEducatorAdapter);
                     emptyIndicator.setVisibility(View.GONE);
 
                 } catch (Exception e) {
@@ -236,47 +238,50 @@ public class SubjectActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
                 floatingActionButton.setEnabled(true);
+
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
 
                 try {
-
                     JSONArray jsonArray = new JSONArray(str);
-                    Debugger.logD("SUBJECTS: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String subj_id = jsonObject.getString("subj_id");
                         String subj_level = jsonObject.getString("subj_level");
                         String user_id = jsonObject.getString("user_id");
-                        String section_id = jsonObject.getString("section_id");
+                        String subj_section = jsonObject.getString("subj_section");
                         String subj_title = jsonObject.getString("subj_title");
                         String subj_description = jsonObject.getString("subj_description");
                         String subj_semester = jsonObject.getString("subj_semester");
                         String subj_school_year = jsonObject.getString("subj_school_year");
                         String subj_file = jsonObject.getString("subj_file");
                         String subj_code = jsonObject.getString("subj_code");
+                        String user_firstname = jsonObject.getString("user_firstname");
+                        String user_lastname = jsonObject.getString("user_lastname");
 
                         Subject subject = new Subject();
                         subject.setId(subj_id);
                         subject.setLevel(subj_level);
                         subject.setUser_id(user_id);
-                        subject.setSection(section_id);
+                        subject.setSection(subj_section);
                         subject.setTitle(subj_title);
                         subject.setDescription(subj_description);
                         subject.setSemester(subj_semester);
                         subject.setSchool_year(subj_school_year);
                         subject.setImage(subj_file);
                         subject.setCode(subj_code);
+                        subject.setUser_firstname(user_firstname);
+                        subject.setUser_lastname(user_lastname);
 
                         subjectArrayList.add(subject);
                     }
 
-                    recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
-                    subjectsAdapter = new SubjectsAdapter(context, subjectArrayList);
-                    subjectsAdapter.setClickListener(new OnClickRecyclerView() {
+                    subjectsStudentAdapter = new SubjectsStudentAdapter(context, subjectArrayList);
+                    subjectsStudentAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
                             selectedSubject = subjectArrayList.get(position);
@@ -286,7 +291,7 @@ public class SubjectActivity extends AppCompatActivity {
                         }
                     });
 
-                    recyclerView.setAdapter(subjectsAdapter);
+                    recyclerView.setAdapter(subjectsStudentAdapter);
                     emptyIndicator.setVisibility(View.GONE);
 
                 } catch (Exception e) {
