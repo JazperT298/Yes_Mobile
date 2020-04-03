@@ -306,7 +306,7 @@ public class LoginActivity extends AppCompatActivity {
                     String validated = jsonObject.getString("validated");
                     String connection = jsonObject.getString("connection");
 
-                    if (user_gender.equals("2"))
+                    if (user_gender.equals("1"))
                         user_gender = "Male";
                     else
                         user_gender = "Female";
@@ -390,6 +390,11 @@ public class LoginActivity extends AppCompatActivity {
                     String user_role = jsonObject.getString("user_role");
                     String validated = jsonObject.getString("validated");
                     String connection = jsonObject.getString("connection");
+
+                    if (user_gender.equals("1"))
+                        user_gender = "Male";
+                    else
+                        user_gender = "Female";
 
                     userStudent.setEmail_address(user_email_address);
                     userStudent.setPassword(etPassword.getText().toString());

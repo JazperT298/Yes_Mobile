@@ -121,9 +121,9 @@ public class HomeFragment extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, UserProfileActivity.class);
-                startActivity(intent);
-//                selectAction();
+//                Intent intent = new Intent(context, UserProfileActivity.class);
+//                startActivity(intent);
+                selectAction();
             }
         });
 
@@ -219,11 +219,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void setStudentHeader() {
-        if (!UserStudent.getFirstname(context).equals("")) {
-            tvEmail.setText(String.format("%s %s", UserStudent.getFirstname(context), UserStudent.getLastname(context)));
-            selectionTitle = "Student";
-        } else
-            tvEmail.setText(UserStudent.getEmail(context));
+        tvEmail.setText(UserStudent.getEmail(context));
+        tvEducationalAttainment.setText(UserStudent.getEducationalAttainment(context));
+
+        selectionTitle = "Student";
 
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
@@ -247,6 +246,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
         dialog.create().show();
     }
 
@@ -345,6 +345,7 @@ public class HomeFragment extends Fragment {
             UserRole.clearRole(context);
             Intent intent = new Intent(context, StartActivity.class);
             startActivity(intent);
+            Objects.requireNonNull(getActivity()).finish();
         }
     }
 
@@ -396,15 +397,5 @@ public class HomeFragment extends Fragment {
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-//        if (UserRole.getRole(context).equals(UserRole.Educator()))
-//            getEducatorNewsfeedDetails();
-//        else
-//            getStudentNewsfeedDetails();
     }
 }
