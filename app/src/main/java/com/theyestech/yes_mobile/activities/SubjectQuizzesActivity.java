@@ -96,12 +96,6 @@ public class SubjectQuizzesActivity extends AppCompatActivity {
 
     @SuppressLint("RestrictedApi")
     private void initializeUI() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            Window window = getWindow();
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.setStatusBarColor(getResources().getColor(R.color.colorNephritis));
-//        }
-
         ivBack = findViewById(R.id.iv_SubjectQuizBack);
         swipeRefreshLayout = findViewById(R.id.swipe_Quiz);
         recyclerView = findViewById(R.id.rv_Quizzes);

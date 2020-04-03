@@ -20,6 +20,7 @@ import com.theyestech.yes_mobile.models.Quiz;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -72,20 +73,26 @@ public class SubjectQuizzesTakeAnswersActivity extends AppCompatActivity {
     }
 
     private void getAnswers() {
+        ProgressPopup.showProgress(context);
+
         questionArrayList.clear();
 
         RequestParams params = new RequestParams();
         params.put("quiz_id", quiz.getQuiz_id());
         params.put("user_id", UserStudent.getID(context));
 
+        Debugger.logD("PARAMS " + quiz.getQuiz_id() + " " + UserStudent.getID(context));
+
         HttpProvider.post(context, "controller_student/GetStudentAnswers.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
 
                 String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD("ANSWERS" + str);
+                Debugger.printO(statusCode);
 
                 try {
-//                    JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = new JSONObject(str);
                     String data = jsonObject.getString("data");
                     String totalScore = jsonObject.getString("totalScore");
@@ -145,6 +152,7 @@ public class SubjectQuizzesTakeAnswersActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
