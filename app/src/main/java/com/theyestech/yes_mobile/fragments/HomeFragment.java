@@ -59,8 +59,8 @@ public class HomeFragment extends Fragment {
     private String role;
 
     private ImageView ivProfile;
-    private TextView tvEmail, tvEducationalAttainment, tvStatSubjectCount, tvStatStudentCount, tvStatTopicCount, tvSubjectCount;
-    private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos;
+    private TextView tvEmail, tvEducationalAttainment, tvStatSubjectCount, tvStatStudentCount, tvStatTopicCount, tvSubjectCount, tvStatistics;
+    private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos, cvStickers, cvAwards, cvStatistics;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ConstraintLayout emptyIndicator;
@@ -93,8 +93,6 @@ public class HomeFragment extends Fragment {
         firebaseUser = firebaseAuth.getCurrentUser();
 
         initializeUI();
-
-        getEducatorStatistics();
     }
 
     private void initializeUI() {
@@ -107,6 +105,7 @@ public class HomeFragment extends Fragment {
         tvStatSubjectCount = view.findViewById(R.id.tv_HomeStatSubjectCount);
         tvStatTopicCount = view.findViewById(R.id.tv_HomeStatTopicCount);
         tvSubjectCount = view.findViewById(R.id.tv_HomeSubjectCount);
+        tvStatistics = view.findViewById(R.id.tv_HomeStatistics);
         cvSubjects = view.findViewById(R.id.cv_Home_Subjects);
         cvNotes = view.findViewById(R.id.cv_Home_Notes);
         cvConnections = view.findViewById(R.id.cv_Home_Connections);
@@ -114,6 +113,9 @@ public class HomeFragment extends Fragment {
         cvVideoLab = view.findViewById(R.id.cv_Home_VideoLab);
         cvYestechCourse = view.findViewById(R.id.cv_Home_YestechCourse);
         cvMyVideos = view.findViewById(R.id.cv_Home_MyVideos);
+        cvStickers = view.findViewById(R.id.cv_Home_Stickers);
+        cvAwards = view.findViewById(R.id.cv_Home_Awards);
+        cvStatistics = view.findViewById(R.id.cv_Home_Stats);
         swipeRefreshLayout = view.findViewById(R.id.swipe_Home);
         recyclerView = view.findViewById(R.id.rv_Home);
         emptyIndicator = view.findViewById(R.id.view_EmptyRecord);
@@ -179,6 +181,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        cvStickers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        cvAwards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         swipeRefreshLayout.setRefreshing(false);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -200,10 +216,25 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
 
-        if (role.equals(UserRole.Educator()))
+        if (role.equals(UserRole.Educator())) {
             setEducatorHeader();
-        else
+            getEducatorStatistics();
+        } else {
             setStudentHeader();
+            displayStudentAccess();
+        }
+    }
+
+    private void displayStudentAccess(){
+        cvVideoLab.setVisibility(View.GONE);
+        cvConnections.setVisibility(View.GONE);
+        cvYestechCourse.setVisibility(View.GONE);
+        cvMyVideos.setVisibility(View.GONE);
+        cvStatistics.setVisibility(View.GONE);
+        tvStatistics.setVisibility(View.GONE);
+
+        cvStickers.setVisibility(View.VISIBLE);
+        cvAwards.setVisibility(View.VISIBLE);
     }
 
     private void setEducatorHeader() {
