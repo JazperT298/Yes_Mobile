@@ -39,7 +39,6 @@ import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -135,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, RegisterActivity.class);
+                Intent intent = new Intent(context, SignUpActivity.class);
                 intent.putExtra("ROLE", role);
                 startActivity(intent);
             }
@@ -380,6 +379,17 @@ public class LoginActivity extends AppCompatActivity {
                     String user_subj_major = jsonObject.getString("user_subj_major");
                     String user_current_school = jsonObject.getString("user_current_school");
                     String user_position = jsonObject.getString("user_position");
+                    String user_facebook = jsonObject.getString("user_facebook");
+                    String user_instagram = jsonObject.getString("user_instagram");
+                    String user_twitter = jsonObject.getString("user_twitter");
+                    String user_gmail = jsonObject.getString("user_gmail");
+                    String user_motto = jsonObject.getString("user_motto");
+                    String user_activation = jsonObject.getString("user_activation");
+                    String user_nickname = jsonObject.getString("user_nickname");
+                    String user_dreamjob = jsonObject.getString("user_dreamjob");
+                    String user_role = jsonObject.getString("user_role");
+                    String validated = jsonObject.getString("validated");
+                    String connection = jsonObject.getString("connection");
 
                     userStudent.setEmail_address(user_email_address);
                     userStudent.setPassword(etPassword.getText().toString());
@@ -394,6 +404,17 @@ public class LoginActivity extends AppCompatActivity {
                     userStudent.setSubj_major(user_subj_major);
                     userStudent.setCurrent_school(user_current_school);
                     userStudent.setPosition(user_position);
+                    userStudent.setInstagram(user_instagram);
+                    userStudent.setTwitter(user_twitter);
+                    userStudent.setFacebook(user_facebook);
+                    userStudent.setGmail(user_gmail);
+                    userStudent.setMotto(user_motto);
+                    userStudent.setUser_activation(user_activation);
+                    userStudent.setNickname(user_nickname);
+                    userStudent.setDreamjob(user_dreamjob);
+                    userStudent.setUser_role(user_role);
+                    userStudent.setValidated(validated);
+                    userStudent.setConnection(connection);
                     userStudent.saveUserSession(context);
 
                     UserRole userRole = new UserRole();
@@ -516,7 +537,6 @@ public class LoginActivity extends AppCompatActivity {
                     sendForgotPasswordEmail(etEmail.getText().toString());
                     b.hide();
                 }
-
             }
         });
 

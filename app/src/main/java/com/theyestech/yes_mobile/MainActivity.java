@@ -11,29 +11,16 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.activities.StartActivity;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.nio.charset.StandardCharsets;
-
-import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
 
     private Context context;
 
     private String role;
-    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         context = this;
+
         role = UserRole.getRole(context);
-        auth = FirebaseAuth.getInstance();
 
         checkUserRole();
     }
@@ -76,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, StartActivity.class);
                 startActivity(intent);
                 finish();
-            } else {
-//                loginEducator();
             }
         } else {
             Intent intent = new Intent(context, StartActivity.class);
@@ -92,79 +77,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, StartActivity.class);
                 startActivity(intent);
                 finish();
-            } else {
-//                loginStudent();
             }
         } else {
             Intent intent = new Intent(context, StartActivity.class);
             startActivity(intent);
             finish();
         }
-    }
-
-    private void loginStudent() {
-        ProgressPopup.showProgress(context);
-
-        RequestParams params = new RequestParams();
-        params.put("login_s_email_address", UserStudent.getEmail(context));
-        params.put("login_s_password", UserStudent.getPassword(context));
-
-        HttpProvider.post(context, "controller_student/login_as_student_class.php", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                ProgressPopup.hideProgress();
-                try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
-                    JSONArray jsonArray = new JSONArray(str);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    String result = jsonObject.getString("result");
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                ProgressPopup.hideProgress();
-                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
-            }
-        });
-    }
-
-    private void loginEducator() {
-        ProgressPopup.showProgress(context);
-
-        RequestParams params = new RequestParams();
-        params.put("login_e_email_address", UserEducator.getEmail(context));
-        params.put("login_e_password", UserEducator.getPassword(context));
-
-        HttpProvider.post(context, "controller_educator/login_as_educator_class.php", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                ProgressPopup.hideProgress();
-                try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
-                    JSONArray jsonArray = new JSONArray(str);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    String result = jsonObject.getString("result");
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                ProgressPopup.hideProgress();
-                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
-            }
-        });
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 }

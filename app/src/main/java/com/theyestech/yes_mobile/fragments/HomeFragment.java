@@ -86,6 +86,7 @@ public class HomeFragment extends Fragment {
         super.onStart();
 
         context = getContext();
+
         role = UserRole.getRole(context);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -120,9 +121,9 @@ public class HomeFragment extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(context, ProfileActivity.class);
-//                startActivity(intent);
-                selectAction();
+                Intent intent = new Intent(context, UserProfileActivity.class);
+                startActivity(intent);
+//                selectAction();
             }
         });
 
@@ -327,7 +328,7 @@ public class HomeFragment extends Fragment {
 
     private void logoutUser() {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if (firebaseUser != null){
+        if (firebaseUser != null) {
             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
             usersRef.child("status").setValue("offline");
             firebaseAuth.signOut();
@@ -363,7 +364,7 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
-    private void getEducatorStatistics(){
+    private void getEducatorStatistics() {
         RequestParams params = new RequestParams();
         params.put("user_token", UserEducator.getToken(context));
         params.put("user_id", UserEducator.getID(context));

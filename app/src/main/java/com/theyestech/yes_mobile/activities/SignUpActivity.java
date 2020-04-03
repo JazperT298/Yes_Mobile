@@ -19,7 +19,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 
 import java.nio.charset.StandardCharsets;
@@ -27,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
 
-public class RegisterActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     private Context context;
 
@@ -42,7 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_sign_up);
 
         Intent extras = getIntent();
         Bundle bundle = extras.getExtras();
@@ -153,13 +152,13 @@ public class RegisterActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 accessingServer(false);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                if (str.equals("success")) {
+                if (!str.contains("exists")) {
                     finish();
                     Toasty.success(context, "Successfully registered.").show();
-                } else
+                } else {
                     etEmail.requestFocus();
-
-                Toasty.warning(context, str).show();
+                    Toasty.warning(context, str).show();
+                }
             }
 
             @Override

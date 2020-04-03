@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 public class UserStudent {
     private String id;
     private String token;
+    private String code;
     private String email_address;
     private String password;
     private String firsname;
@@ -20,6 +21,17 @@ public class UserStudent {
     private String subj_major;
     private String current_school;
     private String position;
+    private String facebook;
+    private String instagram;
+    private String twitter;
+    private String gmail;
+    private String motto;
+    private String user_activation;
+    private String nickname;
+    private String dreamjob;
+    private String user_role;
+    private String validated;
+    private String connection;
 
     public String getId() {
         return id;
@@ -35,6 +47,14 @@ public class UserStudent {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getEmail_address() {
@@ -141,6 +161,94 @@ public class UserStudent {
         this.position = position;
     }
 
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
+    }
+
+    public String getTwitter() {
+        return twitter;
+    }
+
+    public void setTwitter(String twitter) {
+        this.twitter = twitter;
+    }
+
+    public String getGmail() {
+        return gmail;
+    }
+
+    public void setGmail(String gmail) {
+        this.gmail = gmail;
+    }
+
+    public String getMotto() {
+        return motto;
+    }
+
+    public void setMotto(String motto) {
+        this.motto = motto;
+    }
+
+    public String getUser_activation() {
+        return user_activation;
+    }
+
+    public void setUser_activation(String user_activation) {
+        this.user_activation = user_activation;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getDreamjob() {
+        return dreamjob;
+    }
+
+    public void setDreamjob(String dreamjob) {
+        this.dreamjob = dreamjob;
+    }
+
+    public String getUser_role() {
+        return user_role;
+    }
+
+    public void setUser_role(String user_role) {
+        this.user_role = user_role;
+    }
+
+    public String getValidated() {
+        return validated;
+    }
+
+    public void setValidated(String validated) {
+        this.validated = validated;
+    }
+
+    public String getConnection() {
+        return connection;
+    }
+
+    public void setConnection(String connection) {
+        this.connection = connection;
+    }
+
     public static String getID(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("ID", "");
@@ -149,6 +257,10 @@ public class UserStudent {
     public static String getToken(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getString("TOKEN", "");
+    }
+    public static String getCode(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("CODE", "");
     }
 
     public static String getEmail(Context context) {
@@ -216,11 +328,67 @@ public class UserStudent {
         return settings.getString("POSITION", "");
     }
 
+    public static String getFacebook(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("FACEBOOK", "");
+    }
+
+    public static String getInstragram(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("INSTAGRAM", "");
+    }
+
+    public static String getTwitter(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("TWITTER", "");
+    }
+
+    public static String getGmail(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("GMAIL", "");
+    }
+
+    public static String getMotto(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("MOTTO", "");
+    }
+
+    public static String getActivation(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("ACTIVATION", "");
+    }
+
+    public static String getNickname(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("NICKNAME", "");
+    }
+
+    public static String getDreamJob(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("DREAMJOB", "");
+    }
+
+    public static String getRole(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("ROLE", "");
+    }
+
+    public static String getValidated(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("VALIDATED", "");
+    }
+
+    public static String getConnection(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getString("CONNECTION", "");
+    }
+
     public boolean saveUserSession(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("ID", id);
         editor.putString("TOKEN", token);
+        editor.putString("CODE", code);
         editor.putString("EMAIL", email_address);
         editor.putString("PASSWORD", password);
         editor.putString("FIRST_NAME", firsname);
@@ -234,6 +402,17 @@ public class UserStudent {
         editor.putString("SUBJECT_MAJOR", subj_major);
         editor.putString("CURRENT_SCHOOL", current_school);
         editor.putString("POSITION", position);
+        editor.putString("FACEBOOK", facebook);
+        editor.putString("INSTAGRAM", instagram);
+        editor.putString("TWIITER", twitter);
+        editor.putString("GMAIL", gmail);
+        editor.putString("MOTTO", motto);
+        editor.putString("ACTIVATION", user_activation);
+        editor.putString("NICKNAME", nickname);
+        editor.putString("DREAMJOB", dreamjob);
+        editor.putString("ROLE", user_role);
+        editor.putString("VALIDATED", validated);
+        editor.putString("CONNECTION", connection);
         return editor.commit();
     }
 

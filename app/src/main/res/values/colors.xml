@@ -23,4 +23,5 @@
     <color name="colorCloud">#ecf0f1</color>
 
     <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
 </resources>

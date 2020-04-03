@@ -40,7 +40,7 @@
         <activity android:name=".activities.SubjectActivity" />
         <activity android:name=".activities.UserDetailsActivity" />
         <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.StartActivity" />
 <!--        <activity android:name=".MainActivity" />-->
