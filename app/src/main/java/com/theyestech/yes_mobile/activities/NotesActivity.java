@@ -1,13 +1,23 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +28,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -30,6 +42,7 @@ import com.theyestech.yes_mobile.models.Note;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -37,6 +50,8 @@ import com.theyestech.yes_mobile.utils.UserRole;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,6 +76,17 @@ public class NotesActivity extends AppCompatActivity {
     private ArrayList<Note> noteArrayList = new ArrayList<>();
     private NotesAdapter notesAdapter;
     private Note selectedNote = new Note();
+    private String title = "", url = "";
+
+    private static final int STORAGE_REQUEST_CODE = 400;
+    private static final int IMAGE_PICK_GALLERY_CODE = 1000;
+
+    private String storagePermission[];
+    private Uri selectedFile;
+    private String selectedFilePath = "";
+    private File myFile;
+
+    private Note note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +177,7 @@ public class NotesActivity extends AppCompatActivity {
                         String notes_type = jsonObject.getString("notes_type");
                         String result = jsonObject.getString("result");
 
-                        Note note = new Note();
+                        note = new Note();
                         note.setId(notes_id);
                         note.setUserId(notes_userId);
                         note.setTitle(notes_title);
@@ -174,7 +200,13 @@ public class NotesActivity extends AppCompatActivity {
                             selectedNote = noteArrayList.get(position);
 
                             if (fromButton == 1) {
-
+                                Debugger.logD("note " + selectedNote.getFile());
+                                try {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://theyestech.com/notes-files/" + selectedNote.getFile()));
+                                    startActivity(intent);
+                                } catch(Exception e) {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://theyestech.com/notes-files/" + selectedNote.getFile())));
+                                }
                             } else if (fromButton == 2) {
                                 openDeleteNoteDialog();
                             }
@@ -239,12 +271,183 @@ public class NotesActivity extends AppCompatActivity {
         final Button btn_AddEditNoteSave,btn_ChooseAddNoteFile;
         final ImageView imageView33;
 
+        et_AddEditNoteTitle = dialogView.findViewById(R.id.et_AddEditNoteTitle);
+        et_AddEditNoteUrl = dialogView.findViewById(R.id.et_AddEditNoteUrl);
+        //tvHeader = dialogView.findViewById(R.id.tvHeader);
+        btn_AddEditNoteSave = dialogView.findViewById(R.id.btn_AddEditNoteSave);
+        btn_ChooseAddNoteFile = dialogView.findViewById(R.id.btn_ChooseAddNoteFile);
+        imageView33 = dialogView.findViewById(R.id.imageView33);
+
         dialogBuilder.setView(dialogView);
         final AlertDialog b = dialogBuilder.create();
 
+        imageView33.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.hide();
+            }
+        });
+
+        btn_ChooseAddNoteFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if (!checkStoragePermission()) {
+//                    requestStoragePermission();
+//                } else {
+//                    selectedFilePath = "";
+//                    pickImageGallery();
+//                }
+                selectAction();
+            }
+        });
+
+        btn_AddEditNoteSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                title = et_AddEditNoteTitle.getText().toString();
+                url = et_AddEditNoteUrl.getText().toString();
+//                selectedFilePath = myFile.toString();
+//                Debugger.logD("selectedFilePath " + selectedFilePath);
+                if (title.isEmpty())
+                    Toasty.warning(context, "Please input note title.").show();
+                else {
+                    try {
+                        saveNotes();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         b.show();
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    private void saveNotes() throws FileNotFoundException {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("user_id", UserEducator.getID(context));
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("notes_title", title);
+        params.put("notes_url", url);
+        params.put("notes_file", myFile);
+        Debugger.logD("myFile " + myFile);
+
+        HttpProvider.post(context, "controller_global/UploadUserNotes.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                if (str.contains("success")) {
+                    Toasty.success(context, "Saved.").show();
+                    getAllNotes();
+                } else
+                    Toasty.warning(context, "Failed").show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+
+    }
+
+    private void selectAction() {
+        String[] items = {" Camera ", " Gallery ", " File "};
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("Choose File");
+        dialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+
+                } else if (which == 1) {
+                    if (!checkStoragePermission()) {
+                        requestStoragePermission();
+                    } else {
+                        selectedFilePath = "";
+                        pickImageGallery();
+                    }
+                }else if (which == 2){
+                    Toasty.success(context, "File").show();
+                }
+            }
+        });
+        dialog.create().show();
+    }
+    private void requestStoragePermission() {
+        ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
+    }
+
+    private boolean checkStoragePermission() {
+        boolean result = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result;
+    }
+
+    private void pickImageGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case STORAGE_REQUEST_CODE:
+                if (grantResults.length > 0) {
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (writeStorageAccepted) {
+                        pickImageGallery();
+                    } else {
+                        Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
+                selectedFile = data.getData();
+
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                Cursor cursor = context.getContentResolver().query(selectedFile,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                selectedFilePath = cursor.getString(columnIndex);
+                myFile = new File(selectedFilePath);
+
+//                Glide.with(context)
+//                        .load(myFile)
+//                        .apply(GlideOptions.getOptions())
+//                        .into(ivProfile);
+//
+//                if (role.equals(UserRole.Educator())) {
+//                    try {
+//                        updateEducatorProfileImage();
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    try {
+//                        updateStudentProfileImage();
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void openDeleteNoteDialog() {
