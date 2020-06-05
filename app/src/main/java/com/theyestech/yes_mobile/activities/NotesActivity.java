@@ -234,11 +234,10 @@ public class NotesActivity extends AppCompatActivity {
 
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_add_note, null);
-        final EditText etName, etDescription, etSection;
-        final MaterialSpinner spLevel, spSemester;
+        final EditText et_AddEditNoteTitle, et_AddEditNoteUrl;
         final TextView tvHeader;
-        final Button btnSave;
-        final ImageView ivClose;
+        final Button btn_AddEditNoteSave,btn_ChooseAddNoteFile;
+        final ImageView imageView33;
 
         dialogBuilder.setView(dialogView);
         final AlertDialog b = dialogBuilder.create();
