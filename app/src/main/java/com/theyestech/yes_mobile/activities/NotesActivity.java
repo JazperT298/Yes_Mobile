@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -52,10 +54,13 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
@@ -80,8 +85,11 @@ public class NotesActivity extends AppCompatActivity {
 
     private static final int STORAGE_REQUEST_CODE = 400;
     private static final int IMAGE_PICK_GALLERY_CODE = 1000;
+    private static final int CAMERA_PERMISSION_CODE = 101;
+    private static final int CAMERA_REQUEST_CODE = 102;
 
     private String storagePermission[];
+    private String cameraPermission[];
     private Uri selectedFile;
     private String selectedFilePath = "";
     private File myFile;
@@ -291,12 +299,6 @@ public class NotesActivity extends AppCompatActivity {
         btn_ChooseAddNoteFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (!checkStoragePermission()) {
-//                    requestStoragePermission();
-//                } else {
-//                    selectedFilePath = "";
-//                    pickImageGallery();
-//                }
                 selectAction();
             }
         });
@@ -364,7 +366,7 @@ public class NotesActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-
+                    askCameraPermissions();
                 } else if (which == 1) {
                     if (!checkStoragePermission()) {
                         requestStoragePermission();
@@ -378,6 +380,14 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
         dialog.create().show();
+    }
+
+    private void askCameraPermissions(){
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        }else  {
+            pickCamera();
+        }
     }
     private void requestStoragePermission() {
         ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
@@ -394,6 +404,11 @@ public class NotesActivity extends AppCompatActivity {
         startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
     }
 
+    private void pickCamera(){
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture,  CAMERA_REQUEST_CODE);//
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -402,6 +417,16 @@ public class NotesActivity extends AppCompatActivity {
                     boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (writeStorageAccepted) {
                         pickImageGallery();
+                    } else {
+                        Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case CAMERA_PERMISSION_CODE:
+                if (grantResults.length < 0) {
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (writeStorageAccepted) {
+                        pickCamera();
                     } else {
                         Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
                     }
@@ -426,24 +451,24 @@ public class NotesActivity extends AppCompatActivity {
                 selectedFilePath = cursor.getString(columnIndex);
                 myFile = new File(selectedFilePath);
 
-//                Glide.with(context)
-//                        .load(myFile)
-//                        .apply(GlideOptions.getOptions())
-//                        .into(ivProfile);
-//
-//                if (role.equals(UserRole.Educator())) {
-//                    try {
-//                        updateEducatorProfileImage();
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    try {
-//                        updateStudentProfileImage();
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+            }else if (requestCode == CAMERA_REQUEST_CODE){
+                Bitmap image = (Bitmap)data.getExtras().get("data");
+                //selectedFile = data.getData();
+                Debugger.logD("image " + image);
+                Random r = new Random();
+                int randomNumber = r.nextInt(10000);
+                selectedFilePath = String.valueOf(randomNumber);
+                File filesDir = getApplicationContext().getFilesDir();
+                myFile = new File(filesDir, selectedFilePath + ".jpg");
+                OutputStream os;
+                try {
+                    os = new FileOutputStream(myFile);
+                    image.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                    os.flush();
+                    os.close();
+                } catch (Exception e) {
+                    Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+                }
             }
         }
 
