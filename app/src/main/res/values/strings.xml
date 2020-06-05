@@ -17,4 +17,19 @@
     <string name="yestech_ginoog">Education knows no boundaries ! In order to help schools become connected with technology . Our founder together with her team of 2 PhD students and 1 developer visited Gingoog City . The principal of Odiongan Elementary School Mr. Nicomar Butalid together with 40 instructors were given a Workshop in effectively using the learning platform provided by theyestech.com. It was a fun and wonderful experience for the Teachers as they embrace technology and change.</string>
     <string name="philippine_start">The event was held at the Crowne Plaza , startups from different parts of the Philippines were showcased . This time , theyestech.com founder attended talks given by successful founders. Angeline Tahm, the founder of Angkas was there to talk about her struggles and her inpiration for starting the service.</string>
 
+
+    <string name="account_settings">In order to manage content and infomation about your profile, your activities, progress, and prefered contents, contacts you may update this feature. It basically will store information you voluntarily share in a generalized form.</string>
+    <string name="personal_info">This refers to the name you share, phone number, correspondence or email addresses as well as contact number.</string>
+    <string name="language">This page encourage educator and student to use English Language however it is not limited to that. Language and translation preference is also accomodated provided that violations of our policies are not compromised.</string>
+    <string name="payments">Manage your settings in terms of payments of courses learning materials as well as our online bookstore.</string>
+    <string name="security">In order to have a secure and safe experience, a password must be encoded at all times. Like most app and websites. Please make sure you do not share it with others.</string>
+    <string name="security_login">We suggest that you change your password every year or six months to ptotect your account from getting hacked.</string>
+    <string name="app_websites">Make sure you are able to manage the information you share with apps and website youve login to with Yestech.com.</string>
+    <string name="limitation">This learning platform is a tool for educators to help students with their learning. The Yestech.com does not guarantee leaps and bounds in terms of progress as it is the students initiative to take advantage of this offering.</string>
+    <string name="nudity">The Yestech.com will implement suspension expulsion and will block Educators and Students that post, share, create materials, videos, and even chat that may be offensive, abusive or violate policies. This platform was created to accomodate learning and will exercise to the fullest what is lawful and just. We may forward pertinent information to proper channels in order to enforce the law.</string>
+    <string name="report">An educator or a student can report offensive materials and violations to the system admin. Your report will be processed and handled after a through, assessment, evaluation and investigation.</string>
+
+
+
+
 </resources>
