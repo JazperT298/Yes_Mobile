@@ -5,60 +5,721 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MenuOurBlogActivity">
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:padding="8dp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/iv_BlogBack"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_back_white" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Our Blog"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_BlogBack"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_BlogBack"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_back_white" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Our Blog"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_BlogBack"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-        <ImageView
-            android:id="@+id/imageView41"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/bg_profile_round_white"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_menuProfile"
-            app:layout_constraintEnd_toEndOf="@+id/iv_menuProfile"
-            app:layout_constraintStart_toStartOf="@+id/iv_menuProfile"
-            app:layout_constraintTop_toTopOf="@+id/iv_menuProfile" />
+                <ImageView
+                    android:id="@+id/imageView41"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/bg_profile_round_white"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_menuProfile"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_menuProfile"
+                    app:layout_constraintStart_toStartOf="@+id/iv_menuProfile"
+                    app:layout_constraintTop_toTopOf="@+id/iv_menuProfile" />
 
-        <ImageView
-            android:id="@+id/iv_menuProfile"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_user_colored" />
-    </android.support.constraint.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_menuProfile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_user_colored" />
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+
+                <TextView
+                    android:id="@+id/tv_mission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Our Blog"
+                    android:textColor="#FF000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_mission_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:layout_marginTop="8dp"
+                    android:text="Always be on top of what is happening outside the four walls of your classroom"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_mission" />
+
+            </android.support.constraint.ConstraintLayout>
+            <!--            blog1-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+
+                <ImageView
+                    android:id="@+id/iv_menProfile"
+                    android:layout_width="0dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/award_blog"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="IESA Award - Bangkok"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile" />
+
+                <TextView
+                    android:id="@+id/textView1s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="READ MORE"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile" />
+                <TextView
+                    android:id="@+id/mainText1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/iesa_award"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView1" />
+            </android.support.constraint.ConstraintLayout>
+            <!--            blog2-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+
+                <ImageView
+                    android:id="@+id/iv_menProfile2"
+                    android:layout_width="0dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/interview_blog"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Radio Interview"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile2" />
+
+                <TextView
+                    android:id="@+id/textView2s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="READ MORE"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile2" />
+                <TextView
+                    android:id="@+id/mainText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/radio_interview"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            </android.support.constraint.ConstraintLayout>
+            <!--            blog3-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+
+                <ImageView
+                    android:id="@+id/iv_menProfile3"
+                    android:layout_width="0dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/techtonic_blog1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Techtonic Festival"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile3" />
+
+                <TextView
+                    android:id="@+id/textView3s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="READ MORE"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile3" />
+                <TextView
+                    android:id="@+id/mainText3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/techtonic_festival"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            </android.support.constraint.ConstraintLayout>
+            <!--            blog4-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+
+
+                <ImageView
+                    android:id="@+id/iv_menProfile4"
+                    android:layout_width="0dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/amihan_blog"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Benchmarking Session at Amihan"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile4" />
+
+                <TextView
+                    android:id="@+id/textView4s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="READ MORE"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile4" />
+                <TextView
+                    android:id="@+id/mainText4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/bench_marking_amihan"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            </android.support.constraint.ConstraintLayout>
+            <!--            blog5-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
+
+
+                <ImageView
+                    android:id="@+id/iv_menProfile5"
+                    android:layout_width="0dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/qbo_blog"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Benchmarking Session at QBO"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile5" />
+
+                <TextView
+                    android:id="@+id/textView5s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="READ MORE"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile5" />
+                <TextView
+                    android:id="@+id/mainText5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/bench_marking_qbo"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            </android.support.constraint.ConstraintLayout>
+            <!--            blog6-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
+
+
+                <ImageView
+                    android:id="@+id/iv_menProfile6"
+                    android:layout_width="0dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/valencia_blog"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Yestech in Valencia City"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile6" />
+
+                <TextView
+                    android:id="@+id/textView6s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="READ MORE"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile6" />
+                <TextView
+                    android:id="@+id/mainText6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/yestech_valencia"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            </android.support.constraint.ConstraintLayout>
+            <!--            blog7-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout8">
+
+
+                <ImageView
+                    android:id="@+id/iv_menProfile7"
+                    android:layout_width="0dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/puntod_blog"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Puntod National Highschool"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile7" />
+
+                <TextView
+                    android:id="@+id/textView7s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="READ MORE"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile7" />
+                <TextView
+                    android:id="@+id/mainText7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/puntod_national_highschool"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            </android.support.constraint.ConstraintLayout>
+            <!--            blog8-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout9">
+
+
+                <ImageView
+                    android:id="@+id/iv_menProfile8"
+                    android:layout_width="0dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/odiongan_blog"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Yestech in Gingoog City"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile8" />
+
+                <TextView
+                    android:id="@+id/textView8s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="READ MORE"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile8" />
+                <TextView
+                    android:id="@+id/mainText8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/yestech_ginoog"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            </android.support.constraint.ConstraintLayout>
+            <!--            blog9-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout11"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout10">
+
+
+                <ImageView
+                    android:id="@+id/iv_menProfile9"
+                    android:layout_width="0dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/ph_start_blog"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Philippine Start – Up Week"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile9" />
+
+                <TextView
+                    android:id="@+id/textView9s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="READ MORE"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_menProfile9" />
+                <TextView
+                    android:id="@+id/mainText9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/philippine_start"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
+            </android.support.constraint.ConstraintLayout>
+            <!--            footer-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout12"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:padding="5dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout11">
+
+
+                <TextView
+                    android:id="@+id/tv_copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="© Copyright 2019 All Rights Reserved by theyestech.com™"
+                    android:textAlignment="center"
+                    android:textColor="#FF000000"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
