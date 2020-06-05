@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activities.MenuPrivacyPolicyActivity"></activity>
+        <activity android:name=".activities.MenuContactUsActivity" />
+        <activity android:name=".activities.MenuOurBlogActivity" />
+        <activity android:name=".activities.MenuAboutUsActivity" />
         <activity android:name=".activities.ChatConversationActivity" />
         <activity android:name=".activities.ChatNewConversationActivity" />
         <activity android:name=".activities.ConnectionActivity" />
@@ -42,26 +46,23 @@
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.StartActivity" />
-<!--        <activity android:name=".MainActivity" />-->
+        <activity android:name=".activities.StartActivity" /> <!-- <activity android:name=".MainActivity" /> -->
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-<!--        <activity-->
-<!--            android:name=".MainActivity"-->
-<!--            android:label="@string/app_name">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-
+        </activity> <!-- <activity -->
+        <!-- android:name=".MainActivity" -->
+        <!-- android:label="@string/app_name"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <service
             android:name=".notifications.MyFirebaseIdService"
             android:enabled="true"
