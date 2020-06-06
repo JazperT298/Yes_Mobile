@@ -3,6 +3,7 @@ package com.theyestech.yes_mobile.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +14,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -56,6 +59,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -87,11 +91,14 @@ public class NotesActivity extends AppCompatActivity {
     private static final int IMAGE_PICK_GALLERY_CODE = 1000;
     private static final int CAMERA_PERMISSION_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 102;
+    private static final int DOCUMENT_PERMISSION_CODE = 103;
+    private static final int DOCUMENT_REQUEST_CODE = 104;
 
     private String storagePermission[];
     private String cameraPermission[];
     private Uri selectedFile;
     private String selectedFilePath = "";
+    private String displayName = "";
     private File myFile;
 
     private Note note;
@@ -315,6 +322,7 @@ public class NotesActivity extends AppCompatActivity {
                 else {
                     try {
                         saveNotes();
+                        b.hide();
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -328,14 +336,16 @@ public class NotesActivity extends AppCompatActivity {
 
     private void saveNotes() throws FileNotFoundException {
         ProgressPopup.showProgress(context);
-
+        Debugger.logD("myFile " + title);
+        Debugger.logD("myFile " + url);
+        Debugger.logD("myFile " + myFile);
         RequestParams params = new RequestParams();
         params.put("user_id", UserEducator.getID(context));
         params.put("user_token", UserEducator.getToken(context));
         params.put("notes_title", title);
         params.put("notes_url", url);
         params.put("notes_file", myFile);
-        Debugger.logD("myFile " + myFile);
+
 
         HttpProvider.post(context, "controller_global/UploadUserNotes.php", params, new AsyncHttpResponseHandler() {
             @Override
@@ -375,7 +385,7 @@ public class NotesActivity extends AppCompatActivity {
                         pickImageGallery();
                     }
                 }else if (which == 2){
-                    Toasty.success(context, "File").show();
+                    askDocumentPermissions();
                 }
             }
         });
@@ -389,6 +399,14 @@ public class NotesActivity extends AppCompatActivity {
             pickCamera();
         }
     }
+    private void askDocumentPermissions(){
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, DOCUMENT_PERMISSION_CODE);
+        }else  {
+            pickDocument();
+        }
+    }
+
     private void requestStoragePermission() {
         ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
     }
@@ -407,6 +425,14 @@ public class NotesActivity extends AppCompatActivity {
     private void pickCamera(){
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePicture,  CAMERA_REQUEST_CODE);//
+    }
+
+    private void pickDocument(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.setType("*/*");
+        startActivityForResult(intent, DOCUMENT_REQUEST_CODE);
     }
 
     @Override
@@ -432,6 +458,16 @@ public class NotesActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            case DOCUMENT_PERMISSION_CODE:
+                if (grantResults.length < 0) {
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (writeStorageAccepted) {
+                        pickDocument();
+                    } else {
+                        Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
         }
     }
 
@@ -450,6 +486,8 @@ public class NotesActivity extends AppCompatActivity {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 selectedFilePath = cursor.getString(columnIndex);
                 myFile = new File(selectedFilePath);
+//                displayName = myFile.getName();
+//                Debugger.logD("gallery " + displayName );
 
             }else if (requestCode == CAMERA_REQUEST_CODE){
                 Bitmap image = (Bitmap)data.getExtras().get("data");
@@ -460,6 +498,8 @@ public class NotesActivity extends AppCompatActivity {
                 selectedFilePath = String.valueOf(randomNumber);
                 File filesDir = getApplicationContext().getFilesDir();
                 myFile = new File(filesDir, selectedFilePath + ".jpg");
+//                displayName = myFile.getName();
+//                Debugger.logD("camera " + displayName );
                 OutputStream os;
                 try {
                     os = new FileOutputStream(myFile);
@@ -469,6 +509,66 @@ public class NotesActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
                 }
+            }else if (requestCode == DOCUMENT_REQUEST_CODE){
+
+                selectedFile = data.getData();
+                String uriString = selectedFile.toString();
+                myFile = new File(uriString);
+                Debugger.logD("YAWA " + myFile );
+                selectedFilePath = myFile.getAbsolutePath();
+                Debugger.logD("bwesit " + selectedFilePath );
+                if (uriString.startsWith("content://")) {
+                    Cursor cursor = null;
+                    try {
+                        cursor = getApplicationContext().getContentResolver().query(selectedFile, null, null, null, null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                } else if (uriString.startsWith("file://")) {
+                    displayName = myFile.getName();
+                }
+
+//                selectedFilePath = data.getData().getPath();
+//                Debugger.logD("selectedFilePaths " + selectedFilePath );
+                myFile = new File(selectedFilePath + '/' +  displayName);
+                Debugger.logD("file " + myFile );
+//                //getSelectedFilePath(selectedFile);
+//                myFile = new File(selectedFilePath);
+//                //Uri.parse(new File("/sdcard/cats.jpg").toString());
+//                //selectedFile = Uri.fromFile(new File(selectedFilePath));
+//                Debugger.logD("myFiles " + myFile );
+//
+//                String[] filePathColumn = {MediaStore.MediaColumns.DATA};
+//
+//                Cursor cursor = context.getContentResolver().query(selectedFile,
+//                        filePathColumn, null, null, null);
+//                Objects.requireNonNull(cursor).moveToFirst();
+//
+//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                selectedFilePath = cursor.getString(columnIndex);
+//                Debugger.logD("selectedFilePath " + selectedFilePath );
+//                myFile = new File(selectedFilePath);
+//
+//                Debugger.logD("SUCCESS " + myFile );
+//                cursor.close();
+//                selectedFile =  Uri.fromFile(new File(selectedFilePath));
+//                Debugger.logD("selectedFile " + selectedFile );
+//                String[] filePathColumn = {MediaStore.MediaColumns.DATA};
+//
+//                Cursor cursor = context.getContentResolver().query(selectedFile,
+//                        filePathColumn, null, null, null);
+//                Objects.requireNonNull(cursor).moveToFirst();
+//
+//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                selectedFilePath = cursor.getString(columnIndex);
+//                Debugger.logD("selectedFilePath " + selectedFilePath );
+//                myFile = new File(selectedFilePath);
+//
+//                Debugger.logD("SUCCESS " + myFile );
+//                cursor.close();
             }
         }
 
@@ -490,4 +590,5 @@ public class NotesActivity extends AppCompatActivity {
                 .create();
         dialog.show();
     }
+
 }
