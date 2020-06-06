@@ -28,6 +28,7 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.ConnectionActivity;
+import com.theyestech.yes_mobile.activities.NewNewsfeedActivity;
 import com.theyestech.yes_mobile.activities.NotesActivity;
 import com.theyestech.yes_mobile.activities.StartActivity;
 import com.theyestech.yes_mobile.activities.SubjectActivity;
@@ -156,7 +157,8 @@ public class HomeFragment extends Fragment {
         cvNewsfeeds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, NewNewsfeedActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -168,7 +168,7 @@ public class NotesActivity extends AppCompatActivity {
         params.put("user_token", userToken);
         params.put("user_id", userId);
 
-        HttpProvider.post(context, "controller_global/GetUserNotes.php", params, new AsyncHttpResponseHandler() {
+        HttpProvider.post(context, "controller_educator/GetUserNotes.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
@@ -336,9 +336,7 @@ public class NotesActivity extends AppCompatActivity {
 
     private void saveNotes() throws FileNotFoundException {
         ProgressPopup.showProgress(context);
-        Debugger.logD("myFile " + title);
-        Debugger.logD("myFile " + url);
-        Debugger.logD("myFile " + myFile);
+
         RequestParams params = new RequestParams();
         params.put("user_id", UserEducator.getID(context));
         params.put("user_token", UserEducator.getToken(context));
@@ -385,7 +383,8 @@ public class NotesActivity extends AppCompatActivity {
                         pickImageGallery();
                     }
                 }else if (which == 2){
-                    askDocumentPermissions();
+                    Toasty.warning(context, "To be continued... got my brain dam atm").show();
+                    //askDocumentPermissions();
                 }
             }
         });
