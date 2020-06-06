@@ -11,6 +11,7 @@ public class VideoLab {
     private String video_type;
     private String video_id;
     private String video_filename;
+    private String thumbnail;
 
     public String getVh_id() {
         return vh_id;
@@ -82,5 +83,12 @@ public class VideoLab {
 
     public void setVideo_filename(String video_filename) {
         this.video_filename = video_filename;
+    }
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

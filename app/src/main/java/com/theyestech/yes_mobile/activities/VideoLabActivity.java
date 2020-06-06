@@ -17,6 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -24,6 +27,7 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
 import com.theyestech.yes_mobile.adapters.VideoLabAdapter;
+import com.theyestech.yes_mobile.adapters.VideoLabRecyclerView;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.VideoLab;
@@ -59,6 +63,8 @@ public class VideoLabActivity extends AppCompatActivity {
     private ArrayList<String> filterVideo = new ArrayList<>();
 
     private String filterVideos = "";
+
+    private VideoLabRecyclerView mRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +91,7 @@ public class VideoLabActivity extends AppCompatActivity {
         et_SelectCourses = findViewById(R.id.et_SelectCourses);
         constraintLayout2 = findViewById(R.id.constraintLayout2);
         sp_FilterVideo = findViewById(R.id.sp_FilterVideo);
-
+        mRecyclerView = findViewById(R.id.recycler_view);
         ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,18 +187,18 @@ public class VideoLabActivity extends AppCompatActivity {
 
                     Collections.reverse(videoLabArrayList);
 
-                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    recyclerView.setHasFixedSize(true);
-                    videoLabAdapter = new VideoLabAdapter(context, videoLabArrayList, role);
-                    videoLabAdapter.setClickListener(new OnClickRecyclerView() {
-                        @Override
-                        public void onItemClick(View view, int position, int fromButton) {
-                            videoLab = videoLabArrayList.get(position);
+                    mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    mRecyclerView.setHasFixedSize(true);
+                    videoLabAdapter = new VideoLabAdapter(videoLabArrayList, initGlide());
+//                    videoLabAdapter.setClickListener(new OnClickRecyclerView() {
+//                        @Override
+//                        public void onItemClick(View view, int position, int fromButton) {
+//                            videoLab = videoLabArrayList.get(position);
+//
+//                        }
+//                    });
 
-                        }
-                    });
-
-                    recyclerView.setAdapter(videoLabAdapter);
+                    mRecyclerView.setAdapter(videoLabAdapter);
                     emptyIndicator.setVisibility(View.GONE);
 
                 } catch (Exception e) {
@@ -207,4 +213,13 @@ public class VideoLabActivity extends AppCompatActivity {
             }
         });
     }
+    private RequestManager initGlide(){
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.white_background)
+                .error(R.drawable.white_background);
+
+        return Glide.with(this)
+                .setDefaultRequestOptions(options);
+    }
+
 }
