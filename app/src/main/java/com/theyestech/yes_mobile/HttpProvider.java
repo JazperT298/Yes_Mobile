@@ -49,6 +49,10 @@ public class HttpProvider {
         return BASE_URL.replace("controllerClass/", "newsfeed-files/");
     }
 
+    public static String getVideoLabDir() {
+        return BASE_URL.replace("controllerClass/", "video-lab/");
+    }
+
     public static String getProfileDir() {
         return BASE_URL.replace("controllerClass/", "user_images/");
     }

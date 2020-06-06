@@ -137,7 +137,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //getAllNotes();
+                getAllNewsFeed();
             }
         });
 
