@@ -32,19 +32,19 @@ public class VideoLabViewHolder extends RecyclerView.ViewHolder  {
         progressBar = itemView.findViewById(R.id.progressBar);
         volumeControl = itemView.findViewById(R.id.volume_control);
         tv_VideoTitle = itemView.findViewById(R.id.tv_VideoTitle);
-        tv_Fullname = itemView.findViewById(R.id.tv_Fullname);
-        tv_VideoPrice = itemView.findViewById(R.id.tv_VideoPrice);
-        tv_VideoPreview = itemView.findViewById(R.id.tv_VideoPreview);
+//        tv_Fullname = itemView.findViewById(R.id.tv_Fullname);
+//        tv_VideoPrice = itemView.findViewById(R.id.tv_VideoPrice);
+//        tv_VideoPreview = itemView.findViewById(R.id.tv_VideoPreview);
     }
 
     public void onBind(VideoLab videoLab, RequestManager requestManager) {
         this.requestManager = requestManager;
         parent.setTag(this);
         tv_VideoTitle.setText(videoLab.getVh_title());
-        tv_Fullname.setText(videoLab.getEducator_fullname());
-        tv_VideoPrice.setText("Video Price : " + "₱ " + videoLab.getVideo_price());
+//        tv_Fullname.setText(videoLab.getEducator_fullname());
+//        tv_VideoPrice.setText("Video Price : " + "₱ " + videoLab.getVideo_price());
         this.requestManager
-                .load(videoLab.getThumbnail())
+                .load(R.drawable.yestech_banner)
                 .into(thumbnail);
     }
 }

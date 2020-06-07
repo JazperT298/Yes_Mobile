@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.util.Base64;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,16 +40,23 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.models.VideoLab;
+import com.theyestech.yes_mobile.utils.CryptUtil;
 import com.theyestech.yes_mobile.utils.Debugger;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class VideoLabRecyclerView extends RecyclerView {
 
-    private static final String TAG = "VideoPlayerRecyclerView";
+    private static byte[] cipherText;
 
     private enum VolumeState {ON, OFF};
 
@@ -70,11 +77,11 @@ public class VideoLabRecyclerView extends RecyclerView {
     private int playPosition = -1;
     private boolean isVideoViewAdded;
     private RequestManager requestManager;
-    private VideoLab videoLab;
 
     // controlling playback state
     private VolumeState volumeState;
 
+    private SecretKeySpec secret;
     public VideoLabRecyclerView(@NonNull Context context) {
         super(context);
         init(context);
@@ -119,7 +126,7 @@ public class VideoLabRecyclerView extends RecyclerView {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    Log.d(TAG, "onScrollStateChanged: called.");
+                    Debugger.logD("onScrollStateChanged: called.");
                     if(thumbnail != null){ // show the old thumbnail
                         thumbnail.setVisibility(VISIBLE);
                     }
@@ -130,6 +137,7 @@ public class VideoLabRecyclerView extends RecyclerView {
                         playVideo(true);
                     }
                     else{
+
                         playVideo(false);
                     }
                 }
@@ -177,21 +185,21 @@ public class VideoLabRecyclerView extends RecyclerView {
                 switch (playbackState) {
 
                     case Player.STATE_BUFFERING:
-                        Log.e(TAG, "onPlayerStateChanged: Buffering video.");
+                        Debugger.logD("onPlayerStateChanged: Buffering video.");
                         if (progressBar != null) {
                             progressBar.setVisibility(VISIBLE);
                         }
 
                         break;
                     case Player.STATE_ENDED:
-                        Log.d(TAG, "onPlayerStateChanged: Video ended.");
+                        Debugger.logD("onPlayerStateChanged: Video ended.");
                         videoPlayer.seekTo(0);
                         break;
                     case Player.STATE_IDLE:
 
                         break;
                     case Player.STATE_READY:
-                        Log.e(TAG, "onPlayerStateChanged: Ready to play.");
+                        Debugger.logD("onPlayerStateChanged: Ready to play.");
                         if (progressBar != null) {
                             progressBar.setVisibility(GONE);
                         }
@@ -236,7 +244,7 @@ public class VideoLabRecyclerView extends RecyclerView {
         });
     }
 
-    public void playVideo(boolean isEndOfList) {
+    public void playVideo(boolean isEndOfList){
 
         int targetPosition;
 
@@ -269,8 +277,7 @@ public class VideoLabRecyclerView extends RecyclerView {
             targetPosition = videoLabs.size() - 1;
         }
 
-        Log.d(TAG, "playVideo: target position: " + targetPosition);
-
+        Debugger.logD("playVideo: target position: " + targetPosition);
         // video is already playing so return
         if (targetPosition == playPosition) {
             return;
@@ -304,9 +311,9 @@ public class VideoLabRecyclerView extends RecyclerView {
         viewHolderParent = holder.itemView;
         requestManager = holder.requestManager;
         tv_VideoTitle = holder.tv_VideoTitle;
-        tv_Fullname = holder.tv_Fullname;
-        tv_VideoPrice = holder.tv_VideoPrice;
-        tv_VideoPreview = holder.tv_VideoPreview;
+//        tv_Fullname = holder.tv_Fullname;
+//        tv_VideoPrice = holder.tv_VideoPrice;
+//        tv_VideoPreview = holder.tv_VideoPreview;
 
         frameLayout = holder.itemView.findViewById(R.id.media_container);
 
@@ -316,11 +323,30 @@ public class VideoLabRecyclerView extends RecyclerView {
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 context, Util.getUserAgent(context, "RecyclerView VideoPlayer"));
-        String mediaUrl = HttpProvider.getVideoLabDir() + videoLab.getVideo_filename();
-        Debugger.logD("mediaUrl " + mediaUrl);
+        //String mediaUrl = videoLabs.get(targetPosition).getVideo_filename();
+        String shit = "";
+        //Debugger.logD("shit " + shit);
+        try {
+            shit = CryptUtil.decrypt("Li92aWRlby1sYWIvKDVlZGIxMGE5MzFkZTUpU0VOU0UgT1JHQU5TLm1wNA==");
+//            shit = decrypt(shit, "Li92aWRlby1sYWIvKDVlZGIxMGE5MzFkZTUpU0VOU0UgT1JHQU5TLm1wNA==");
+
+        } catch (Exception e) {
+//            e.printStackTrace();
+            Debugger.logD("e " + e);
+      }
+//        try {
+//            shit = AESUtils.decrypt("Li92aWRlby1sYWIvKDVlZGIxMGE5MzFkZTUpU0VOU0UgT1JHQU5TLm1wNA==");
+//            Debugger.logD("shit " + shit);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Debugger.logD("e " + e);
+//        }
+        Debugger.logD("shit2 " + shit);
+        String mediaUrl = "Sending+Data+to+a+New+Activity+with+Intent+Extras.mp4";
+        Debugger.logD("mediaUrl : " + "https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/"  + mediaUrl);
         if (mediaUrl != null) {
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse(mediaUrl));
+                    .createMediaSource(Uri.parse("https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/" + mediaUrl));
             videoPlayer.prepare(videoSource);
             videoPlayer.setPlayWhenReady(true);
         }
@@ -341,8 +367,7 @@ public class VideoLabRecyclerView extends RecyclerView {
      */
     private int getVisibleVideoSurfaceHeight(int playPosition) {
         int at = playPosition - ((LinearLayoutManager) getLayoutManager()).findFirstVisibleItemPosition();
-        Log.d(TAG, "getVisibleVideoSurfaceHeight: at: " + at);
-
+        Debugger.logD("getVisibleVideoSurfaceHeight: at: " + at);
         View child = getChildAt(at);
         if (child == null) {
             return 0;
@@ -406,11 +431,11 @@ public class VideoLabRecyclerView extends RecyclerView {
     private void toggleVolume() {
         if (videoPlayer != null) {
             if (volumeState == VolumeState.OFF) {
-                Log.d(TAG, "togglePlaybackState: enabling volume.");
+                Debugger.logD("togglePlaybackState: enabling volume.");
                 setVolumeControl(VolumeState.ON);
 
             } else if(volumeState == VolumeState.ON) {
-                Log.d(TAG, "togglePlaybackState: disabling volume.");
+                Debugger.logD("togglePlaybackState: disabling volume");
                 setVolumeControl(VolumeState.OFF);
 
             }
@@ -450,7 +475,40 @@ public class VideoLabRecyclerView extends RecyclerView {
         }
     }
 
-    public void setMediaObjects(ArrayList<VideoLab> videoLabs){
+    public void setVideoLabs(ArrayList<VideoLab> videoLabs){
         this.videoLabs = videoLabs;
     }
+
+    private SecretKeySpec generateKey(String sampleText) throws Exception{
+        final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] bytes = sampleText.getBytes("UTF-8");
+        digest.update(bytes, 0, bytes.length);
+        byte[] key = digest.digest();
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+        return secretKeySpec;
+    }
+
+    private String decrypt(String outputString, String sampleText) throws Exception{
+        SecretKeySpec secretKeySpec = generateKey(sampleText);
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+        byte[] decodeValue = Base64.decode(outputString, Base64.DEFAULT);
+        byte[] decValue = cipher.doFinal(decodeValue);
+        String decryptedValue = new String(decValue);
+        return decryptedValue;
+
+    }
+    public static String decryptMsg(byte[] cipherText, SecretKey secret)
+            throws Exception
+    {
+        //VideoLabRecyclerView.cipherText = cipherText;
+        /* Decrypt the message, given derived encContentValues and initialization vector. */
+        Cipher cipher = null;
+        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, secret);
+        String decryptString = new String(cipher.doFinal(cipherText), "UTF-8");
+        return decryptString;
+    }
+
+
 }

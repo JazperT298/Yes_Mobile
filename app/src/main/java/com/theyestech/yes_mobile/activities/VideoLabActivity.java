@@ -31,8 +31,10 @@ import com.theyestech.yes_mobile.adapters.VideoLabRecyclerView;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.VideoLab;
+import com.theyestech.yes_mobile.utils.AESUtils;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
+import com.theyestech.yes_mobile.utils.VerticalSpacingItemDecorator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -91,7 +93,7 @@ public class VideoLabActivity extends AppCompatActivity {
         et_SelectCourses = findViewById(R.id.et_SelectCourses);
         constraintLayout2 = findViewById(R.id.constraintLayout2);
         sp_FilterVideo = findViewById(R.id.sp_FilterVideo);
-        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.rv_VideoLab);
         ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,11 +185,14 @@ public class VideoLabActivity extends AppCompatActivity {
                         videoLab.setVideo_id(video_id);
                         videoLab.setVideo_filename(video_filename);
                         videoLabArrayList.add(videoLab);
-                    }
 
+                    }
                     Collections.reverse(videoLabArrayList);
 
                     mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(10);
+                    mRecyclerView.addItemDecoration(itemDecorator);
+                    mRecyclerView.setVideoLabs(videoLabArrayList);
                     mRecyclerView.setHasFixedSize(true);
                     videoLabAdapter = new VideoLabAdapter(videoLabArrayList, initGlide());
 //                    videoLabAdapter.setClickListener(new OnClickRecyclerView() {
@@ -220,6 +225,13 @@ public class VideoLabActivity extends AppCompatActivity {
 
         return Glide.with(this)
                 .setDefaultRequestOptions(options);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mRecyclerView!=null)
+            mRecyclerView.releasePlayer();
+        super.onDestroy();
     }
 
 }
