@@ -50,7 +50,7 @@ public class HttpProvider {
     }
 
     public static String getVideoLabDir() {
-        return BASE_URL.replace("controllerClass/", "video-lab/");
+        return BASE_URL.replace("controllerClass/", "");
     }
 
     public static String getProfileDir() {

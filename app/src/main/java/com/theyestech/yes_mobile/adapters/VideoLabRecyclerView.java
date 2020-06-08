@@ -45,6 +45,7 @@ import com.theyestech.yes_mobile.models.VideoLab;
 import com.theyestech.yes_mobile.utils.CryptUtil;
 import com.theyestech.yes_mobile.utils.Debugger;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -61,13 +62,13 @@ public class VideoLabRecyclerView extends RecyclerView {
     private enum VolumeState {ON, OFF};
 
     // ui
-    private ImageView thumbnail, volumeControl;
+    private ImageView thumbnail, volumeControl,tv_VideoPreview;
     private ProgressBar progressBar;
     private View viewHolderParent;
     private FrameLayout frameLayout;
     private PlayerView videoSurfaceView;
     private SimpleExoPlayer videoPlayer;
-    private TextView tv_VideoTitle, tv_Fullname, tv_VideoPrice, tv_VideoPreview;
+    private TextView tv_VideoTitle, tv_Fullname, tv_VideoPrice;
 
     // vars
     private ArrayList<VideoLab> videoLabs = new ArrayList<>();
@@ -311,9 +312,9 @@ public class VideoLabRecyclerView extends RecyclerView {
         viewHolderParent = holder.itemView;
         requestManager = holder.requestManager;
         tv_VideoTitle = holder.tv_VideoTitle;
-//        tv_Fullname = holder.tv_Fullname;
-//        tv_VideoPrice = holder.tv_VideoPrice;
-//        tv_VideoPreview = holder.tv_VideoPreview;
+        tv_Fullname = holder.tv_Fullname;
+        tv_VideoPrice = holder.tv_VideoPrice;
+        tv_VideoPreview = holder.tv_VideoPreview;
 
         frameLayout = holder.itemView.findViewById(R.id.media_container);
 
@@ -322,31 +323,21 @@ public class VideoLabRecyclerView extends RecyclerView {
         viewHolderParent.setOnClickListener(videoViewClickListener);
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
-                context, Util.getUserAgent(context, "RecyclerView VideoPlayer"));
+                context, Util.getUserAgent(context, "Yes Mobile"));
         //String mediaUrl = videoLabs.get(targetPosition).getVideo_filename();
-        String shit = "";
-        //Debugger.logD("shit " + shit);
-        try {
-            shit = CryptUtil.decrypt("Li92aWRlby1sYWIvKDVlZGIxMGE5MzFkZTUpU0VOU0UgT1JHQU5TLm1wNA==");
-//            shit = decrypt(shit, "Li92aWRlby1sYWIvKDVlZGIxMGE5MzFkZTUpU0VOU0UgT1JHQU5TLm1wNA==");
 
-        } catch (Exception e) {
-//            e.printStackTrace();
-            Debugger.logD("e " + e);
-      }
-//        try {
-//            shit = AESUtils.decrypt("Li92aWRlby1sYWIvKDVlZGIxMGE5MzFkZTUpU0VOU0UgT1JHQU5TLm1wNA==");
-//            Debugger.logD("shit " + shit);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Debugger.logD("e " + e);
-//        }
-        Debugger.logD("shit2 " + shit);
-        String mediaUrl = "Sending+Data+to+a+New+Activity+with+Intent+Extras.mp4";
-        Debugger.logD("mediaUrl : " + "https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/"  + mediaUrl);
+        byte[] data = Base64.decode(videoLabs.get(targetPosition).getVideo_filename(), Base64.DEFAULT);
+        String mediaUrl = new String(data, StandardCharsets.UTF_8);
+        mediaUrl = mediaUrl.replaceAll(" ", "%20");
+        Debugger.logD("uri " + mediaUrl);
+        String url = "https://theyestech.com/" + mediaUrl;
+        //String test =  "https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/Sending+Data+to+a+New+Activity+with+Intent+Extras.mp4";
+
+
         if (mediaUrl != null) {
-            MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse("https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/" + mediaUrl));
+            MediaSource   videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(Uri.parse(url));
+            Debugger.logD("videosource" + videoSource);
             videoPlayer.prepare(videoSource);
             videoPlayer.setPlayWhenReady(true);
         }

@@ -168,7 +168,7 @@ public class NotesActivity extends AppCompatActivity {
         params.put("user_token", userToken);
         params.put("user_id", userId);
 
-        HttpProvider.post(context, "controller_educator/GetUserNotes.php", params, new AsyncHttpResponseHandler() {
+        HttpProvider.post(context, "controller_global/GetUserNotes.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
@@ -215,7 +215,7 @@ public class NotesActivity extends AppCompatActivity {
                             selectedNote = noteArrayList.get(position);
 
                             if (fromButton == 1) {
-                                Debugger.logD("note " + selectedNote.getFile());
+                                Debugger.logD("note " + "https://theyestech.com/notes-files/" + selectedNote.getFile());
                                 try {
                                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://theyestech.com/notes-files/" + selectedNote.getFile()));
                                     startActivity(intent);
@@ -349,7 +349,9 @@ public class NotesActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
+                Debugger.logD("responseBody " +responseBody);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD("TEST " +str);
                 if (str.contains("success")) {
                     Toasty.success(context, "Saved.").show();
                     getAllNotes();

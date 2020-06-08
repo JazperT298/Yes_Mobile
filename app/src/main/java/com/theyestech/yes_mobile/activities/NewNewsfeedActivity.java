@@ -171,13 +171,13 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
-        params.put("user_token", userToken);
+        params.put("user_token", UserEducator.getToken(context));
 
         HttpProvider.post(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
-
+                Debugger.logD("responseBody " + responseBody);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
 
                 Debugger.logD("SHIT " + str);
@@ -312,7 +312,12 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         Debugger.logD("myFile " + myFile);
         RequestParams params = new RequestParams();
         params.put("nf_details", details);
-        params.put("nf_file", myFile);
+        if (myFile != null){
+            params.put("nf_file", myFile);
+        }else{
+            params.put("nf_file", "");
+        }
+
 
         HttpProvider.post(context, "controller_educator/upload_post.php", params, new AsyncHttpResponseHandler() {
             @Override
@@ -321,7 +326,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                 Debugger.logD("responseBody " +responseBody);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD("TEST " +str);
-                if (str.contains("success")) {
+                if (statusCode == 200) {
                     Toasty.success(context, "Saved.").show();
                     getAllNewsFeed();
                 } else

@@ -9,30 +9,14 @@
     android:id="@+id/parent"
     android:background="#fff">
 
-    <TextView
-        android:id="@+id/tv_VideoTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="15dp"
-        android:padding="10dp"
-        android:textColor="#000"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/media_container"
-        android:text="This is the title"/>
-
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_VideoTitle"
+        app:layout_constraintTop_toTopOf="parent"
         android:background="#000"
         android:scaleType="center"
         android:id="@+id/media_container">
@@ -67,6 +51,60 @@
 
 
     </FrameLayout>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraint"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/media_container" >
+
+        <TextView
+            android:id="@+id/tv_VideoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            android:text="This is the title"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/constraint"
+            app:layout_constraintTop_toTopOf="@+id/constraint" />
+
+        <TextView
+            android:id="@+id/tv_Fullname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Educator : Alexie H Reyes"
+            android:textColor="#000"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/constraint"
+            app:layout_constraintTop_toBottomOf="@+id/tv_VideoTitle" />
+        <TextView
+            android:id="@+id/tv_VideoPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Educator : Alexie H Reyes"
+            android:textColor="#000"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/constraint"
+            app:layout_constraintTop_toBottomOf="@+id/tv_Fullname" />
+
+        <ImageView
+            android:id="@+id/tv_VideoPreview"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="10dp"
+            android:background="#fff"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_more_vert_black_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
 
 
