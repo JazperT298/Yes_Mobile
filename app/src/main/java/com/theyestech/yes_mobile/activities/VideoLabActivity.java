@@ -2,7 +2,6 @@ package com.theyestech.yes_mobile.activities;
 
 
 
-import android.Manifest;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -25,13 +24,9 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
 import com.theyestech.yes_mobile.adapters.VideoLabAdapter;
 import com.theyestech.yes_mobile.adapters.VideoLabRecyclerView;
-import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.VideoLab;
-import com.theyestech.yes_mobile.utils.AESUtils;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 import com.theyestech.yes_mobile.utils.VerticalSpacingItemDecorator;

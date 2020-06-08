@@ -42,22 +42,15 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.models.VideoLab;
-import com.theyestech.yes_mobile.utils.CryptUtil;
 import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 public class VideoLabRecyclerView extends RecyclerView {
-
-    private static byte[] cipherText;
 
     private enum VolumeState {ON, OFF};
 
@@ -324,14 +317,12 @@ public class VideoLabRecyclerView extends RecyclerView {
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 context, Util.getUserAgent(context, "Yes Mobile"));
-        //String mediaUrl = videoLabs.get(targetPosition).getVideo_filename();
 
         byte[] data = Base64.decode(videoLabs.get(targetPosition).getVideo_filename(), Base64.DEFAULT);
         String mediaUrl = new String(data, StandardCharsets.UTF_8);
         mediaUrl = mediaUrl.replaceAll(" ", "%20");
         Debugger.logD("uri " + mediaUrl);
         String url = "https://theyestech.com/" + mediaUrl;
-        //String test =  "https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/Sending+Data+to+a+New+Activity+with+Intent+Extras.mp4";
 
 
         if (mediaUrl != null) {
@@ -469,37 +460,5 @@ public class VideoLabRecyclerView extends RecyclerView {
     public void setVideoLabs(ArrayList<VideoLab> videoLabs){
         this.videoLabs = videoLabs;
     }
-
-    private SecretKeySpec generateKey(String sampleText) throws Exception{
-        final MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] bytes = sampleText.getBytes("UTF-8");
-        digest.update(bytes, 0, bytes.length);
-        byte[] key = digest.digest();
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-        return secretKeySpec;
-    }
-
-    private String decrypt(String outputString, String sampleText) throws Exception{
-        SecretKeySpec secretKeySpec = generateKey(sampleText);
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
-        byte[] decodeValue = Base64.decode(outputString, Base64.DEFAULT);
-        byte[] decValue = cipher.doFinal(decodeValue);
-        String decryptedValue = new String(decValue);
-        return decryptedValue;
-
-    }
-    public static String decryptMsg(byte[] cipherText, SecretKey secret)
-            throws Exception
-    {
-        //VideoLabRecyclerView.cipherText = cipherText;
-        /* Decrypt the message, given derived encContentValues and initialization vector. */
-        Cipher cipher = null;
-        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, secret);
-        String decryptString = new String(cipher.doFinal(cipherText), "UTF-8");
-        return decryptString;
-    }
-
 
 }
