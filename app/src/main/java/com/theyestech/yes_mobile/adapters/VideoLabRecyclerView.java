@@ -83,6 +83,8 @@ public class VideoLabRecyclerView extends RecyclerView {
     private VolumeState volumeState;
 
     private SecretKeySpec secret;
+    private String mediaUrl;
+
     public VideoLabRecyclerView(@NonNull Context context) {
         super(context);
         init(context);
@@ -321,11 +323,12 @@ public class VideoLabRecyclerView extends RecyclerView {
         videoSurfaceView.setPlayer(videoPlayer);
 
         viewHolderParent.setOnClickListener(videoViewClickListener);
-
+        byte[] datas = Base64.decode(videoLabs.get(targetPosition).getVh_id(), Base64.DEFAULT);
+        String video_id = new String(datas, StandardCharsets.UTF_8);
+        Debugger.logD("video_id " + video_id);
         tv_VideoPreview.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Debugger.logD("FUCK " + videoLabs.get(targetPosition).getVh_title());
                 PopupMenu popup = new PopupMenu(context, v);
                 popup.getMenuInflater().inflate(R.menu.video_pop_up, popup.getMenu());
 
@@ -333,6 +336,11 @@ public class VideoLabRecyclerView extends RecyclerView {
                     public boolean onMenuItemClick(MenuItem item) {
                         videoPlayer.stop();
                         Intent intent = new Intent(context, VideoLabPreviewActivity.class);
+                        intent.putExtra("VIDEO_ID",  video_id);
+                        intent.putExtra("VIDEO_TITLE",  videoLabs.get(targetPosition).getVh_title());
+                        intent.putExtra("VIDEO_PRICE",  videoLabs.get(targetPosition).getVideo_price());
+                        intent.putExtra("VIDEO_EDUCATOR",  videoLabs.get(targetPosition).getEducator_fullname());
+                        intent.putExtra("VIDEO_FILE",  mediaUrl);
                         getContext().startActivity(intent);
 
                         return true;
@@ -346,7 +354,7 @@ public class VideoLabRecyclerView extends RecyclerView {
                 context, Util.getUserAgent(context, "Yes Mobile"));
 
         byte[] data = Base64.decode(videoLabs.get(targetPosition).getVideo_filename(), Base64.DEFAULT);
-        String mediaUrl = new String(data, StandardCharsets.UTF_8);
+        mediaUrl = new String(data, StandardCharsets.UTF_8);
         mediaUrl = mediaUrl.replaceAll(" ", "%20");
         Debugger.logD("uri " + mediaUrl);
         String url = "https://theyestech.com/" + mediaUrl;
