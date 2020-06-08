@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -10,13 +11,16 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -41,6 +45,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.activities.VideoLabPreviewActivity;
 import com.theyestech.yes_mobile.models.VideoLab;
 import com.theyestech.yes_mobile.utils.Debugger;
 
@@ -49,6 +54,8 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 
 import javax.crypto.spec.SecretKeySpec;
+
+import es.dmoral.toasty.Toasty;
 
 public class VideoLabRecyclerView extends RecyclerView {
 
@@ -112,7 +119,7 @@ public class VideoLabRecyclerView extends RecyclerView {
         // Bind the player to the view.
         videoSurfaceView.setUseController(false);
         videoSurfaceView.setPlayer(videoPlayer);
-        setVolumeControl(VolumeState.ON);
+        setVolumeControl(VolumeState.OFF);
 
         addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -314,6 +321,26 @@ public class VideoLabRecyclerView extends RecyclerView {
         videoSurfaceView.setPlayer(videoPlayer);
 
         viewHolderParent.setOnClickListener(videoViewClickListener);
+
+        tv_VideoPreview.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Debugger.logD("FUCK " + videoLabs.get(targetPosition).getVh_title());
+                PopupMenu popup = new PopupMenu(context, v);
+                popup.getMenuInflater().inflate(R.menu.video_pop_up, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        videoPlayer.stop();
+                        Intent intent = new Intent(context, VideoLabPreviewActivity.class);
+                        getContext().startActivity(intent);
+
+                        return true;
+                    }
+                });
+                popup.show();//showing popup menu
+            }
+        });
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 context, Util.getUserAgent(context, "Yes Mobile"));

@@ -26,6 +26,8 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.VideoLabAdapter;
 import com.theyestech.yes_mobile.adapters.VideoLabRecyclerView;
+import com.theyestech.yes_mobile.adapters.VideoLabViewHolder;
+import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.VideoLab;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -47,9 +49,11 @@ public class VideoLabActivity extends AppCompatActivity {
     private String userToken;
     private String userId;
 
+    private VideoLab selectedVideo = new VideoLab();
     private ImageView ivBack,ivSearch;
     private SwipeRefreshLayout swipeRefreshLayout;
     private VideoLabAdapter videoLabAdapter;
+    private VideoLabViewHolder videoLabViewHolder;
     private ArrayList<VideoLab> videoLabArrayList = new ArrayList<>();
     private VideoLab videoLab;
     private RecyclerView recyclerView;
@@ -190,13 +194,6 @@ public class VideoLabActivity extends AppCompatActivity {
                     mRecyclerView.setVideoLabs(videoLabArrayList);
                     mRecyclerView.setHasFixedSize(true);
                     videoLabAdapter = new VideoLabAdapter(videoLabArrayList, initGlide());
-//                    videoLabAdapter.setClickListener(new OnClickRecyclerView() {
-//                        @Override
-//                        public void onItemClick(View view, int position, int fromButton) {
-//                            videoLab = videoLabArrayList.get(position);
-//
-//                        }
-//                    });
 
                     mRecyclerView.setAdapter(videoLabAdapter);
                     emptyIndicator.setVisibility(View.GONE);

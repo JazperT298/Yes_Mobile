@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.VideoLabActivity"></activity>
+        <activity android:name=".activities.VideoLabPreviewActivity"></activity>
+        <activity android:name=".activities.VideoLabActivity" />
         <activity android:name=".activities.MenuPrivacyPolicyActivity" />
         <activity android:name=".activities.MenuContactUsActivity" />
         <activity android:name=".activities.MenuOurBlogActivity" />

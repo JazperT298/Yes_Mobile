@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.VideoLab;
 
 public class VideoLabViewHolder extends RecyclerView.ViewHolder  {
@@ -35,6 +36,7 @@ public class VideoLabViewHolder extends RecyclerView.ViewHolder  {
         tv_Fullname = itemView.findViewById(R.id.tv_Fullname);
         tv_VideoPrice = itemView.findViewById(R.id.tv_VideoPrice);
         tv_VideoPreview = itemView.findViewById(R.id.tv_VideoPreview);
+
     }
 
     public void onBind(VideoLab videoLab, RequestManager requestManager) {
