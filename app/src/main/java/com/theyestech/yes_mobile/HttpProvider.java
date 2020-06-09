@@ -37,6 +37,18 @@ public class HttpProvider {
         client.get(context, getAbsoluteUrl(url), params, responseHandler);
     }
 
+
+    public static void defaultPost(Context ctx, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        /* Fixed Login problem where second login attempt after logout changes content type of data */
+        /* Problem - Can't Login after logout from previous account */
+        /* Cause - Content type is changed or has been added other type due to other http call (read_inventory) */
+        /* Solution - Create new AssyncHttp Instance to ensure no previous content type or header has been set */
+
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        asyncHttpClient.post(ctx, getAbsoluteUrl(url), params, responseHandler);
+    }
+
+
     private static String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;
     }

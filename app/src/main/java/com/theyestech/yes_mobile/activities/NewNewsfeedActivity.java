@@ -49,6 +49,7 @@ import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -57,6 +58,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Random;
@@ -137,7 +139,9 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getAllNewsFeed();
+                //getAllNewsFeed();
+                getEducatorNewsfeedDetails();
+                LoadHomeForEducator();
             }
         });
 
@@ -148,7 +152,9 @@ public class NewNewsfeedActivity extends AppCompatActivity {
             }
         });
 
-        getAllNewsFeed();
+        //getAllNewsFeed();
+        getEducatorNewsfeedDetails();
+        LoadHomeForEducator();
 //        ivSend.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -165,13 +171,142 @@ public class NewNewsfeedActivity extends AppCompatActivity {
 //            }
 //        });
     }
+    public void getEducatorNewsfeedDetails() {
+        newsfeedArrayList.clear();
+
+        swipeRefreshLayout.setRefreshing(true);
+
+        RequestParams params = new RequestParams();
+        params.put("teach_token", UserEducator.getToken(context));
+        Debugger.logD("teach_token2 " + UserEducator.getToken(context));
+
+        HttpProvider.defaultPost(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                swipeRefreshLayout.setRefreshing(false);
+
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD("str " + str);
+                if (str.equals(""))
+                    emptyIndicator.setVisibility(View.VISIBLE);
+                try {
+                    JSONArray jsonArray = new JSONArray(new String(responseBody));
+                    Debugger.logD("NEWSFEED: " + jsonArray);
+                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String nf_id = jsonObject.getString("nf_id");
+                        String nf_token = jsonObject.getString("nf_token");
+                        String nf_user_token = jsonObject.getString("nf_user_token");
+                        String nf_details = jsonObject.getString("nf_details");
+                        String nf_files = jsonObject.getString("nf_files");
+                        String nf_filetype = jsonObject.getString("nf_filetype");
+                        String nf_date = jsonObject.getString("nf_date");
+                        String nf_fullname = jsonObject.getString("nf_fullname");
+                        String nf_image = jsonObject.getString("nf_image");
+
+                        Newsfeed newsfeed = new Newsfeed();
+                        newsfeed.setNf_id(nf_id);
+                        newsfeed.setNf_token(nf_token);
+                        newsfeed.setNf_user_token(nf_user_token);
+                        newsfeed.setNf_details(nf_details);
+                        newsfeed.setNf_files(nf_files);
+                        newsfeed.setNf_filetype(nf_filetype);
+                        newsfeed.setNf_date(nf_date);
+                        newsfeed.setNf_fullname(nf_fullname);
+                        newsfeed.setNf_image(nf_image);
+
+                        newsfeedArrayList.add(newsfeed);
+                    }
+
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerView.setHasFixedSize(true);
+                    newsfeedAdapter = new NewsfeedAdapter(context, newsfeedArrayList, role);
+                    newsfeedAdapter.setClickListener(new OnClickRecyclerView() {
+                        @Override
+                        public void onItemClick(View view, int position, int fromButton) {
+                            //selectedNewsfeed = newsfeedArrayList.get(position);
+                        }
+                    });
+
+                    recyclerView.setAdapter(newsfeedAdapter);
+
+                    emptyIndicator.setVisibility(View.GONE);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Debugger.logD("e " +e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                swipeRefreshLayout.setRefreshing(false);
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+
+    private void LoadHomeForEducator(){
+
+        RequestParams params = new RequestParams();
+        params.put("teach_token", UserEducator.getToken(context));
+
+        Debugger.logD("teach_token " + UserEducator.getToken(context));
+
+        HttpProvider.defaultPost(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                swipeRefreshLayout.setRefreshing(false);
+
+                Debugger.logD("str " + responseBody);
+
+
+                try {
+                    JSONObject jObj = new JSONObject(Arrays.toString(responseBody));
+                    Debugger.logD("jObj: " + jObj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Debugger.logD("2e qwe" + e);
+                }
+//                try {
+//                    JSONArray jsonArray = new JSONArray(new String(responseBody));
+//                    Debugger.printO("POSTS: " + jsonArray);
+//                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
+//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                        String nf_id = jsonObject.getString("nf_id");
+//                        String nf_token = jsonObject.getString("nf_token");
+//                        String nf_user_token = jsonObject.getString("nf_user_token");
+//                        String nf_files = jsonObject.getString("nf_files");
+//                        String nf_details = jsonObject.getString("nf_details");
+//                        String nf_date = jsonObject.getString("nf_date");
+//                        String nf_fullname = jsonObject.getString("nf_fullname");
+//                        String nf_image = jsonObject.getString("nf_image");
+//
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Debugger.logD("2e " + e);
+//                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                swipeRefreshLayout.setRefreshing(false);
+                Toasty.error(context, "Something went wrong, please check your internet connection.").show();
+            }
+        });
+    }
+
+
     private void getAllNewsFeed() {
         newsfeedArrayList.clear();
 
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
-        params.put("user_token", UserEducator.getToken(context));
+        params.put("teach_token", UserEducator.getToken(context));
 
         HttpProvider.post(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
             @Override
@@ -186,7 +321,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                     emptyIndicator.setVisibility(View.VISIBLE);
 
                 try {
-                    JSONArray jsonArray = new JSONArray(str);
+                    JSONArray jsonArray = new JSONArray(responseBody);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String notes_id = jsonObject.getString("notes_id");
