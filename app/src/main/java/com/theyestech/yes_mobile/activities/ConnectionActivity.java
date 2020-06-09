@@ -2,8 +2,10 @@ package com.theyestech.yes_mobile.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,6 +22,10 @@ public class ConnectionActivity extends AppCompatActivity {
     private Context context;
     private String role;
 
+    private ImageView imageView35;
+
+    private ConstraintLayout emptyIndicator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +38,14 @@ public class ConnectionActivity extends AppCompatActivity {
     }
 
     private void initializeUI(){
-
+        imageView35 = findViewById(R.id.imageView35);
+        emptyIndicator = findViewById(R.id.view_EmptyRecord);
+        imageView35.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        emptyIndicator.setVisibility(View.VISIBLE);
     }
 }

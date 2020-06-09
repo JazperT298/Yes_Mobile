@@ -34,6 +34,7 @@ import com.theyestech.yes_mobile.activities.StartActivity;
 import com.theyestech.yes_mobile.activities.SubjectActivity;
 import com.theyestech.yes_mobile.activities.UserProfileActivity;
 import com.theyestech.yes_mobile.activities.VideoLabActivity;
+import com.theyestech.yes_mobile.activities.YestechCourseActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
@@ -174,7 +175,8 @@ public class HomeFragment extends Fragment {
         cvYestechCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, YestechCourseActivity.class);
+                startActivity(intent);
             }
         });
 
