@@ -56,7 +56,7 @@ public class YestechCourseActivity extends AppCompatActivity {
     private void initializeUI(){
         ivBack = findViewById(R.id.imageView35);
         ivSearch = findViewById(R.id.iv_YestechSearch);
-        swipeRefreshLayout = findViewById(R.id.swipe_VideoLab);
+        swipeRefreshLayout = findViewById(R.id.swipe_YestechCourse);
         emptyIndicator = findViewById(R.id.view_EmptyRecord);
         et_SelectCourses = findViewById(R.id.et_SelectCourses);
         constraintLayout2 = findViewById(R.id.constraintLayout2);
@@ -73,6 +73,12 @@ public class YestechCourseActivity extends AppCompatActivity {
                     constraintLayout2.setVisibility(View.VISIBLE);
                     ivSearch.setImageResource(R.drawable.ic_clear_white_24dp);
                 }
+            }
+        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
 

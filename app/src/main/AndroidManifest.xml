@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.YestechCourseActivity"></activity>
+        <activity android:name=".activities.MyVideosActivity"></activity>
+        <activity android:name=".activities.YestechCourseActivity" />
         <activity android:name=".activities.VideoLabPreviewActivity" />
         <activity android:name=".activities.VideoLabActivity" />
         <activity android:name=".activities.MenuPrivacyPolicyActivity" />

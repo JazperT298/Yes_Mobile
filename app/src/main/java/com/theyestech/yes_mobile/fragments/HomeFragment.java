@@ -28,6 +28,7 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.ConnectionActivity;
+import com.theyestech.yes_mobile.activities.MyVideosActivity;
 import com.theyestech.yes_mobile.activities.NewNewsfeedActivity;
 import com.theyestech.yes_mobile.activities.NotesActivity;
 import com.theyestech.yes_mobile.activities.StartActivity;
@@ -183,7 +184,7 @@ public class HomeFragment extends Fragment {
         cvMyVideos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                selectMyAction();
             }
         });
 
@@ -286,6 +287,30 @@ public class HomeFragment extends Fragment {
 
         dialog.create().show();
     }
+
+    private void selectMyAction() {
+        String[] items = {" My Course ", " My Upload "};
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("My Video");
+        dialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    Intent intent = new Intent(context, MyVideosActivity.class);
+                    intent.putExtra("MY_TITLE",  "1");
+                    startActivity(intent);
+                }
+                if (which == 1) {
+                    Intent intent = new Intent(context, MyVideosActivity.class);
+                    intent.putExtra("MY_TITLE",  "2");
+                    startActivity(intent);
+                }
+            }
+        });
+
+        dialog.create().show();
+    }
+
 
     public void getEducatorNewsfeedDetails() {
         newsfeedArrayList.clear();
