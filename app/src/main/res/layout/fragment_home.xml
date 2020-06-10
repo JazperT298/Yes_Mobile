@@ -31,9 +31,46 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:id="@+id/imageView14s"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_HomeSearch"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_HomeSearch"
+                    app:layout_constraintStart_toStartOf="@+id/iv_HomeSearch"
+                    app:layout_constraintTop_toTopOf="@+id/iv_HomeSearch"
+                    app:srcCompat="@drawable/bg_profile_round_white" />
+                <ImageView
+                    android:id="@+id/iv_HomeSearch"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView15s"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_search_colored" />
+                <ImageView
+                    android:id="@+id/imageView15s"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_HomeChat"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_HomeChat"
+                    app:layout_constraintStart_toStartOf="@+id/iv_HomeChat"
+                    app:layout_constraintTop_toTopOf="@+id/iv_HomeChat"
+                    app:srcCompat="@drawable/bg_profile_round_white" />
+                <ImageView
+                    android:id="@+id/iv_HomeChat"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView16"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_nav_chat" />
+
+                <ImageView
                     android:id="@+id/imageView16"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_HomeProfile"
                     app:layout_constraintEnd_toEndOf="@+id/iv_HomeProfile"
                     app:layout_constraintStart_toStartOf="@+id/iv_HomeProfile"
@@ -42,8 +79,8 @@
 
                 <ImageView
                     android:id="@+id/iv_HomeProfile"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -69,6 +106,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:text="Dashboard"
+                    android:textSize="20sp"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"

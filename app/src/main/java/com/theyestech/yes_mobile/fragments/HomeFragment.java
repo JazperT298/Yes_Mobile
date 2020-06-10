@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,9 +13,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
+import es.dmoral.toasty.Toasty;
 
 public class HomeFragment extends Fragment {
     private View view;
@@ -62,7 +67,7 @@ public class HomeFragment extends Fragment {
 
     private String role;
 
-    private ImageView ivProfile;
+    private ImageView ivProfile,iv_HomeSearch, iv_HomeChat;
     private TextView tvEmail, tvEducationalAttainment, tvStatSubjectCount, tvStatStudentCount, tvStatTopicCount, tvSubjectCount, tvStatistics;
     private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos, cvStickers, cvAwards, cvStatistics;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -123,7 +128,24 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipe_Home);
         recyclerView = view.findViewById(R.id.rv_Home);
         emptyIndicator = view.findViewById(R.id.view_EmptyRecord);
+        iv_HomeSearch = view.findViewById(R.id.iv_HomeSearch);
+        iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
 
+        iv_HomeSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+                dialog.setContentView(R.layout.dialog_search_user);
+
+                dialog.show();
+            }
+        });
+        iv_HomeChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toasty.warning(context, "Chat is unavailable").show();
+            }
+        });
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
