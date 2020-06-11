@@ -14,7 +14,7 @@ public class HttpProvider {
 //    private static final String BASE_URL = "http://192.168.168.7/yes_tech/controllerClass/";
 
     //MY IP
-//    private static final String BASE_URL = "http://192.168.43.8/yes_tech/controllerClass/";
+    //private static final String BASE_URL = "http://192.168.1.6/yes_tech/controllerClass/";
 
     //LIVE IP
    private static final String BASE_URL = "https://theyestech.com/controllerClass/";

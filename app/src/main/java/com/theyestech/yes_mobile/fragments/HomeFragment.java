@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
@@ -62,6 +63,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -298,7 +300,7 @@ public class HomeFragment extends Fragment {
                 RequestParams params = new RequestParams();
                 params.put("user_token", UserEducator.getToken(context));
                 params.put("user_id", UserEducator.getID(context));
-                params.put("search_text", search_text);
+                params.put("search_text", search_text.trim());
                 Debugger.logD("user_token " + UserEducator.getToken(context));
                 Debugger.logD("user_id " + UserEducator.getID(context));
                 Debugger.logD("search_text " + search_text);
@@ -318,7 +320,7 @@ public class HomeFragment extends Fragment {
                             emptyIndicator.setVisibility(View.VISIBLE);
                         else{
                             try {
-                                JSONArray jsonArray = new JSONArray(str);
+                                JSONArray jsonArray = new JSONArray(Arrays.toString(responseBody));
                                 Debugger.logD("jsonArray " + jsonArray);
                                 for (int i = 0; i <= jsonArray.length() - 1; i++) {
 
