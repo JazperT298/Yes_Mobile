@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_UserImage"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_user_colored" />
+
+    <TextView
+        android:id="@+id/tv_UserFullname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Vanne Marsmyle Pagapong"
+        android:textColor="@android:color/black"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_UserEducator"
+        app:layout_constraintStart_toEndOf="@+id/iv_UserImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_UserEducator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Educator"
+        android:textSize="11sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_UserFullname"
+        app:layout_constraintTop_toBottomOf="@+id/tv_UserFullname" />
+</android.support.constraint.ConstraintLayout>

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -19,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,8 +44,11 @@ import com.theyestech.yes_mobile.activities.UserProfileActivity;
 import com.theyestech.yes_mobile.activities.VideoLabActivity;
 import com.theyestech.yes_mobile.activities.YestechCourseActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
+import com.theyestech.yes_mobile.adapters.NotesAdapter;
+import com.theyestech.yes_mobile.adapters.SearchUserAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
+import com.theyestech.yes_mobile.models.Note;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
@@ -56,6 +62,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
@@ -82,6 +89,10 @@ public class HomeFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+
+    private SearchUserAdapter searchUserAdapter;
+    private UserEducator userEducator;
+    private ArrayList<UserEducator> userEducatorArrayList = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -134,10 +145,7 @@ public class HomeFragment extends Fragment {
         iv_HomeSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
-                dialog.setContentView(R.layout.dialog_search_user);
-
-                dialog.show();
+                openSearchDialog();
             }
         });
         iv_HomeChat.setOnClickListener(new View.OnClickListener() {
@@ -254,6 +262,87 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void openSearchDialog(){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.dialog_search_user);
+        final EditText et_SearchUser;
+        final ImageView iv_SearchBack, iv_SearchIcon;
+        final RecyclerView rv_Search;
+        final SwipeRefreshLayout swipeRefreshLayout;
+        final ConstraintLayout emptyIndicator;
+
+        et_SearchUser = dialog.findViewById(R.id.et_SearchUser);
+        iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
+        iv_SearchIcon = dialog.findViewById(R.id.iv_SearchIcon);
+        rv_Search = dialog.findViewById(R.id.rv_Search);
+        swipeRefreshLayout = dialog.findViewById(R.id.swipe_Search);
+        emptyIndicator = dialog.findViewById(R.id.view_EmptyRecord);
+
+
+        iv_SearchBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        iv_SearchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String search_text = et_SearchUser.getText().toString();
+                //Toasty.warning(context, text).show();
+
+                userEducatorArrayList.clear();
+
+                swipeRefreshLayout.setRefreshing(true);
+
+                RequestParams params = new RequestParams();
+                params.put("user_token", UserEducator.getToken(context));
+                params.put("user_id", UserEducator.getID(context));
+                params.put("search_text", search_text);
+                Debugger.logD("user_token " + UserEducator.getToken(context));
+                Debugger.logD("user_id " + UserEducator.getID(context));
+                Debugger.logD("search_text " + search_text);
+
+                HttpProvider.post(context, "controller_global/SearchUsers.php", params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        swipeRefreshLayout.setRefreshing(false);
+
+                        Debugger.logD("str " + responseBody);
+
+                        String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                        Debugger.logD("str " + str);
+
+                        if (str.contains("NO RECORD FOUND"))
+                            emptyIndicator.setVisibility(View.VISIBLE);
+                        else{
+                            try {
+                                JSONArray jsonArray = new JSONArray(str);
+                                Debugger.logD("jsonArray " + jsonArray);
+                                for (int i = 0; i <= jsonArray.length() - 1; i++) {
+
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Debugger.logD("e " + e);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        swipeRefreshLayout.setRefreshing(false);
+                        OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+                    }
+                });
+            }
+        });
+
+        dialog.show();
+    }
+
     private void displayStudentAccess(){
         cvVideoLab.setVisibility(View.GONE);
         cvConnections.setVisibility(View.GONE);
@@ -332,7 +421,6 @@ public class HomeFragment extends Fragment {
 
         dialog.create().show();
     }
-
 
     public void getEducatorNewsfeedDetails() {
         newsfeedArrayList.clear();

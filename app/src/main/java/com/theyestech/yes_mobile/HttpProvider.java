@@ -29,6 +29,10 @@ public class HttpProvider {
         client.post(context, getAbsoluteUrl(url), null, params, null, responseHandler);
     }
 
+    public static void post2(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        client.post(getAbsoluteUrl(url), params, responseHandler);
+    }
+
     public static void postLogin(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.post(context, getAbsoluteUrl(url), null, params, null, responseHandler);
     }

@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iv_ContactBack"
+            android:id="@+id/iv_SearchBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -23,40 +23,70 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_back_white" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Contact Us"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_ContactBack"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
+        <EditText
+            android:id="@+id/et_SearchUser"
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_edittext"
+            android:ems="10"
+            android:hint="Search.."
+            android:inputType="textPersonName"
+            android:paddingStart="12dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+            app:layout_constraintEnd_toStartOf="@+id/iv_SearchIcon"
+            app:layout_constraintStart_toEndOf="@+id/iv_SearchBack"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
         <ImageView
-            android:id="@+id/imageView41"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/bg_profile_round_white"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_menuProfile"
-            app:layout_constraintEnd_toEndOf="@+id/iv_menuProfile"
-            app:layout_constraintStart_toStartOf="@+id/iv_menuProfile"
-            app:layout_constraintTop_toTopOf="@+id/iv_menuProfile" />
-
-        <ImageView
-            android:id="@+id/iv_menuProfile"
+            android:id="@+id/iv_SearchIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/et_SearchUser"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_user_colored" />
+            app:srcCompat="@drawable/ic_search_colored" />
     </android.support.constraint.ConstraintLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_Search"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                layout="@layout/indicator_empty_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_Search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+            </android.support.v7.widget.RecyclerView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.constraint.ConstraintLayout>
