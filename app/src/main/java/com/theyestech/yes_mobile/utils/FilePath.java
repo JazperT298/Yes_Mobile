@@ -25,6 +25,7 @@ public class FilePath {
                     return Environment.getExternalStorageDirectory()+"/"+split[1];
                 }
             }
+            //Mag error kung emulator gamiton pag open og file tungod sa uri
             else if(isDownloadsDocument(uri)){
                 String id=DocumentsContract.getDocumentId(uri);
                 Uri contenturi= ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),Long.valueOf(id));

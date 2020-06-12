@@ -9,12 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -22,7 +24,9 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.NotesAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Note;
+import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
@@ -64,11 +68,6 @@ public class VideoLabPreviewActivity extends AppCompatActivity {
         Bundle bundle = extras.getExtras();
         assert bundle != null;
         video_id = bundle.getString("VIDEO_ID");
-        video_file = bundle.getString("VIDEO_FILE");
-        video_title = bundle.getString("VIDEO_TITLE");
-        video_price = bundle.getString("VIDEO_PRICE");
-        video_educator = bundle.getString("VIDEO_EDUCATOR");
-        Debugger.logD("video_file " + video_file);
     }
 
     @Override
@@ -89,25 +88,7 @@ public class VideoLabPreviewActivity extends AppCompatActivity {
         tv_School = findViewById(R.id.tv_School);
         iv_HomeProfile = findViewById(R.id.iv_HomeProfile);
 
-        bar=new ProgressDialog(context);
-        bar.setCancelable(false);
-        bar.show();
 
-        if(bar.isShowing()) {
-            v_MainVideo.setVideoURI(Uri.parse("https://theyestech.com/" + video_file));
-            v_MainVideo.start();
-            ctlr = new MediaController(this);
-            ctlr.setMediaPlayer(v_MainVideo);
-            v_MainVideo.setMediaController(ctlr);
-            v_MainVideo.requestFocus();
-        }
-        bar.dismiss();
-        tv_VideoTitle.setText(video_title);
-        tv_VideoPrice.setText("Video Price : " + "₱ " + video_price);
-        tv_Fullname.setText(video_educator);
-        tv_Educational.setText("");
-        tv_Subject.setText("Early Childhood Education, Elementary Educ., Educational Administration");
-        tv_School.setText("");
 
         tv_VideoPreview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +109,7 @@ public class VideoLabPreviewActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("vh_id", video_id);
 
-        HttpProvider.post(context, "controller_educator/GetAllVideosLabByHeader.php", params, new AsyncHttpResponseHandler() {
+        HttpProvider.post(context, "controller_educator/GetPreviewVideoDetails.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
@@ -138,25 +119,52 @@ public class VideoLabPreviewActivity extends AppCompatActivity {
 
                 Debugger.logD("str " + str);
 
-                if (str.equals("") || str.contains("No notes available"))
+                if (str.equals("")){
 
-                try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String notes_id = jsonObject.getString("notes_id");
-                        String notes_userId = jsonObject.getString("notes_userId");
-                        String notes_title = jsonObject.getString("notes_title");
-                        String notes_url = jsonObject.getString("notes_url");
-                        String notes_file = jsonObject.getString("notes_file");
-                        String notes_type = jsonObject.getString("notes_type");
-                        String result = jsonObject.getString("result");
+                }else{
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            tv_VideoTitle.setText(jsonObject.getString("vh_title"));
+                            tv_VideoPrice.setText("Video Price : " + "₱ " + jsonObject.getString("vh_price"));
+                            tv_Fullname.setText(jsonObject.getString("user_firstname") + " " + jsonObject.getString("user_lastname"));
+                            tv_LearnText.setText(jsonObject.getString("vh_desc"));
+                            tv_Educational.setText(jsonObject.getString("user_current_school"));
+                            tv_Subject.setText(jsonObject.getString("user_subj_major"));
+                            tv_School.setText(jsonObject.getString("user_current_school"));
+
+                            Glide.with(context)
+                                    .load(HttpProvider.getProfileDir() + jsonObject.getString("user_image"))
+                                    .apply(GlideOptions.getOptions())
+                                    .into(iv_HomeProfile);
+
+
+                            byte[] data = Base64.decode(jsonObject.getString("video_filename"), Base64.DEFAULT);
+                            String mediaUrl = new String(data, StandardCharsets.UTF_8);
+                            mediaUrl = mediaUrl.replaceAll(" ", "%20");
+                            bar=new ProgressDialog(context);
+                            bar.setCancelable(false);
+                            bar.show();
+
+                            if(bar.isShowing()) {
+                                v_MainVideo.setVideoURI(Uri.parse("https://theyestech.com/" + mediaUrl));
+                                v_MainVideo.start();
+                                ctlr = new MediaController(context);
+                                ctlr.setMediaPlayer(v_MainVideo);
+                                v_MainVideo.setMediaController(ctlr);
+                                v_MainVideo.requestFocus();
+                            }
+                            bar.dismiss();
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+
+
             }
 
             @Override

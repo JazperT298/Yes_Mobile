@@ -337,10 +337,6 @@ public class VideoLabRecyclerView extends RecyclerView {
                         videoPlayer.stop();
                         Intent intent = new Intent(context, VideoLabPreviewActivity.class);
                         intent.putExtra("VIDEO_ID",  video_id);
-                        intent.putExtra("VIDEO_TITLE",  videoLabs.get(targetPosition).getVh_title());
-                        intent.putExtra("VIDEO_PRICE",  videoLabs.get(targetPosition).getVideo_price());
-                        intent.putExtra("VIDEO_EDUCATOR",  videoLabs.get(targetPosition).getEducator_fullname());
-                        intent.putExtra("VIDEO_FILE",  mediaUrl);
                         getContext().startActivity(intent);
 
                         return true;
