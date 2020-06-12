@@ -50,6 +50,7 @@ import com.theyestech.yes_mobile.models.Note;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.FilePath;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -455,9 +456,9 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     private void pickDocument(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent();
         intent.setType("*/*");
-        intent = Intent.createChooser(intent, "Choose a file");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, DOCUMENT_REQUEST_CODE);
     }
 
@@ -489,16 +490,6 @@ public class NotesActivity extends AppCompatActivity {
                     boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (writeStorageAccepted) {
                         pickVideo();
-                    } else {
-                        Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
-            case DOCUMENT_PERMISSION_CODE:
-                if (grantResults.length < 0) {
-                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (writeStorageAccepted) {
-                        pickDocument();
                     } else {
                         Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
                     }
@@ -565,80 +556,18 @@ public class NotesActivity extends AppCompatActivity {
 
             }
             else if (requestCode == DOCUMENT_REQUEST_CODE){
-                selectedFile = data.getData();
-                String[] filePathColumn = {MediaStore.Video.Media.DATA};
-
-                Cursor cursor = context.getContentResolver().query(selectedFile,
-                        filePathColumn, null, null, null);
-                cursor.moveToFirst();
-
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                selectedFilePath = cursor.getString(columnIndex);
-
+                if (data == null) {
+                    return;
+                }
+                Uri uri = data.getData();
+                String paths = FilePath.getFilePath(context, uri);
+                Debugger.logD("File Path : " + paths);
+                if (paths != null) {
+                    tv_Filename.setText("" + new File(paths).getName());
+                }
+                selectedFilePath = paths;
                 myFile = new File(selectedFilePath);
-                tv_Filename.setText(myFile.getName());
-//                Debugger.logD("file " + myFile.getName() );
-//                String uriString = selectedFile.toString();
-////                String path = getRealPathFromURI(context, Uri.parse(selectedFile.toString()));
-////                Debugger.logD("burikat " + path );
-//                myFile = new File(uriString);
-//                Debugger.logD("YAWA " + myFile );
-//                selectedFilePath = myFile.getAbsolutePath();
-//                Debugger.logD("bwesit " + selectedFilePath );
-//
-//                if (uriString.startsWith("content://")) {
-//                    Cursor cursor = null;
-//                    try {
-//                        cursor = getApplicationContext().getContentResolver().query(selectedFile, null, null, null, null);
-//                        if (cursor != null && cursor.moveToFirst()) {
-//                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-//                        }
-//                    } finally {
-//                        cursor.close();
-//                    }
-//                } else if (uriString.startsWith("file://")) {
-//                    displayName = myFile.getName();
-//                }
-//                //selectedFilePath.replaceAll("^([0-9]+)", "");
-////                selectedFilePath = data.getData().getPath();
-//                //myFile = new File("/content:/com.android.providers.downloads.documents/document" + "/" + displayName);
-//                Debugger.logD("file " + myFile.getName() );
-//                Debugger.logD("SUCCESS " + myFile );
-//                tv_Filename.setText(displayName);
-//                //getSelectedFilePath(selectedFile);
-//                myFile = new File(selectedFilePath);
-//                //Uri.parse(new File("/sdcard/cats.jpg").toString());
-//                //selectedFile = Uri.fromFile(new File(selectedFilePath));
-//                Debugger.logD("myFiles " + myFile );
-//
-//                String[] filePathColumn = {MediaStore.MediaColumns.DATA};
-//
-//                Cursor cursor = context.getContentResolver().query(selectedFile,
-//                        filePathColumn, null, null, null);
-//                Objects.requireNonNull(cursor).moveToFirst();
-//
-//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                selectedFilePath = cursor.getString(columnIndex);
-//                Debugger.logD("selectedFilePath " + selectedFilePath );
-//                myFile = new File(selectedFilePath);
-//
-//                Debugger.logD("SUCCESS " + myFile );
-//                cursor.close();
-//                selectedFile =  Uri.fromFile(new File(selectedFilePath));
-//                Debugger.logD("selectedFile " + selectedFile );
-//                String[] filePathColumn = {MediaStore.MediaColumns.DATA};
-//
-//                Cursor cursor = context.getContentResolver().query(selectedFile,
-//                        filePathColumn, null, null, null);
-//                Objects.requireNonNull(cursor).moveToFirst();
-//
-//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                selectedFilePath = cursor.getString(columnIndex);
-//                Debugger.logD("selectedFilePath " + selectedFilePath );
-//                myFile = new File(selectedFilePath);
-//
-//                Debugger.logD("SUCCESS " + myFile );
-//                cursor.close();
+                Debugger.logD("File Path : " + myFile);
             }
         }
 
@@ -660,21 +589,5 @@ public class NotesActivity extends AppCompatActivity {
                 .create();
         dialog.show();
     }
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-
 
 }
