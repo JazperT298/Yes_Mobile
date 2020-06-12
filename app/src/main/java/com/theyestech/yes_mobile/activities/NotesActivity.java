@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentUris;
@@ -13,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -22,6 +24,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -77,6 +80,8 @@ public class NotesActivity extends AppCompatActivity {
     private String userId;
 
     private ImageView ivBack;
+    private TextView tv_Filename;
+    private Button btn_AddEditNoteSave;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ConstraintLayout emptyIndicator;
@@ -92,7 +97,9 @@ public class NotesActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 102;
     private static final int DOCUMENT_PERMISSION_CODE = 103;
-    private static final int DOCUMENT_REQUEST_CODE = 104;
+    private static final int DOCUMENT_REQUEST_CODE = 4000;
+    private static final int VIDEO_PERMISSION_CODE = 2000;
+    private static final int VIDEO_REQUEST_CODE = 3000;
 
     private String storagePermission[];
     private String cameraPermission[];
@@ -282,8 +289,7 @@ public class NotesActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_add_note, null);
         final EditText et_AddEditNoteTitle, et_AddEditNoteUrl;
-        final TextView tvHeader;
-        final Button btn_AddEditNoteSave,btn_ChooseAddNoteFile;
+        final Button btn_ChooseAddNoteFile;
         final ImageView imageView33;
 
         et_AddEditNoteTitle = dialogView.findViewById(R.id.et_AddEditNoteTitle);
@@ -292,7 +298,7 @@ public class NotesActivity extends AppCompatActivity {
         btn_AddEditNoteSave = dialogView.findViewById(R.id.btn_AddEditNoteSave);
         btn_ChooseAddNoteFile = dialogView.findViewById(R.id.btn_ChooseAddNoteFile);
         imageView33 = dialogView.findViewById(R.id.imageView33);
-
+        tv_Filename = dialogView.findViewById(R.id.tv_Filename);
         dialogBuilder.setView(dialogView);
         final AlertDialog b = dialogBuilder.create();
 
@@ -309,7 +315,6 @@ public class NotesActivity extends AppCompatActivity {
                 selectAction();
             }
         });
-
         btn_AddEditNoteSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -319,7 +324,9 @@ public class NotesActivity extends AppCompatActivity {
 //                Debugger.logD("selectedFilePath " + selectedFilePath);
                 if (title.isEmpty())
                     Toasty.warning(context, "Please input note title.").show();
-                else {
+                else if (myFile == null){
+                    Toasty.warning(context, "Please provide a file.").show();
+                }else{
                     try {
                         saveNotes();
                         b.hide();
@@ -343,6 +350,7 @@ public class NotesActivity extends AppCompatActivity {
         params.put("notes_title", title);
         params.put("notes_url", url);
         params.put("notes_file", myFile);
+        Debugger.logD("myFile " + myFile);
 
 
         HttpProvider.post(context, "controller_global/UploadUserNotes.php", params, new AsyncHttpResponseHandler() {
@@ -369,7 +377,7 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     private void selectAction() {
-        String[] items = {" Camera ", " Gallery ", " File "};
+        String[] items = {" Camera ", " Gallery ", " Video ", " File "};
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Choose File");
         dialog.setItems(items, new DialogInterface.OnClickListener() {
@@ -385,8 +393,11 @@ public class NotesActivity extends AppCompatActivity {
                         pickImageGallery();
                     }
                 }else if (which == 2){
-                    Toasty.warning(context, "To be continued... got my brain dam atm").show();
+                    askVideoPermissions();
                     //askDocumentPermissions();
+                }else if (which == 3){
+                    askDocumentPermissions();
+                    //Toasty.warning(context, "To be continued... got my brain dam atm").show();
                 }
             }
         });
@@ -400,6 +411,15 @@ public class NotesActivity extends AppCompatActivity {
             pickCamera();
         }
     }
+
+    private void askVideoPermissions(){
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, VIDEO_PERMISSION_CODE);
+        }else  {
+            pickVideo();
+        }
+    }
+
     private void askDocumentPermissions(){
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, DOCUMENT_PERMISSION_CODE);
@@ -428,11 +448,16 @@ public class NotesActivity extends AppCompatActivity {
         startActivityForResult(takePicture,  CAMERA_REQUEST_CODE);//
     }
 
+    private void pickVideo(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("video/*");
+        startActivityForResult(Intent.createChooser(intent,"Select Video"),VIDEO_REQUEST_CODE);
+    }
+
     private void pickDocument(){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         intent.setType("*/*");
+        intent = Intent.createChooser(intent, "Choose a file");
         startActivityForResult(intent, DOCUMENT_REQUEST_CODE);
     }
 
@@ -459,6 +484,16 @@ public class NotesActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            case VIDEO_PERMISSION_CODE:
+                if (grantResults.length < 0) {
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (writeStorageAccepted) {
+                        pickVideo();
+                    } else {
+                        Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
             case DOCUMENT_PERMISSION_CODE:
                 if (grantResults.length < 0) {
                     boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
@@ -477,7 +512,7 @@ public class NotesActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IMAGE_PICK_GALLERY_CODE) {
                 selectedFile = data.getData();
-
+                Debugger.logD("selectedFile " + selectedFile );
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                 Cursor cursor = context.getContentResolver().query(selectedFile,
@@ -487,8 +522,9 @@ public class NotesActivity extends AppCompatActivity {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 selectedFilePath = cursor.getString(columnIndex);
                 myFile = new File(selectedFilePath);
-//                displayName = myFile.getName();
-//                Debugger.logD("gallery " + displayName );
+                displayName = myFile.getName();
+                tv_Filename.setText(displayName);
+                Debugger.logD("gallery " + displayName );
 
             }else if (requestCode == CAMERA_REQUEST_CODE){
                 Bitmap image = (Bitmap)data.getExtras().get("data");
@@ -499,8 +535,9 @@ public class NotesActivity extends AppCompatActivity {
                 selectedFilePath = String.valueOf(randomNumber);
                 File filesDir = getApplicationContext().getFilesDir();
                 myFile = new File(filesDir, selectedFilePath + ".jpg");
-//                displayName = myFile.getName();
-//                Debugger.logD("camera " + displayName );
+                displayName = myFile.getName();
+                tv_Filename.setText(displayName);
+                Debugger.logD("camera " + displayName );
                 OutputStream os;
                 try {
                     os = new FileOutputStream(myFile);
@@ -510,32 +547,64 @@ public class NotesActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
                 }
-            }else if (requestCode == DOCUMENT_REQUEST_CODE){
-
+            }else if (requestCode == VIDEO_REQUEST_CODE){
                 selectedFile = data.getData();
-                String uriString = selectedFile.toString();
-                myFile = new File(uriString);
-                Debugger.logD("YAWA " + myFile );
-                selectedFilePath = myFile.getAbsolutePath();
-                Debugger.logD("bwesit " + selectedFilePath );
-                if (uriString.startsWith("content://")) {
-                    Cursor cursor = null;
-                    try {
-                        cursor = getApplicationContext().getContentResolver().query(selectedFile, null, null, null, null);
-                        if (cursor != null && cursor.moveToFirst()) {
-                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                        }
-                    } finally {
-                        cursor.close();
-                    }
-                } else if (uriString.startsWith("file://")) {
-                    displayName = myFile.getName();
-                }
 
-//                selectedFilePath = data.getData().getPath();
-//                Debugger.logD("selectedFilePaths " + selectedFilePath );
-                myFile = new File(selectedFilePath + '/' +  displayName);
-                Debugger.logD("file " + myFile );
+                String[] filePathColumn = {MediaStore.Video.Media.DATA};
+
+                Cursor cursor = context.getContentResolver().query(selectedFile,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                selectedFilePath = cursor.getString(columnIndex);
+
+                myFile = new File(selectedFilePath);
+                tv_Filename.setText(myFile.getName());
+                Debugger.logD("file " + myFile.getName() );
+
+            }
+            else if (requestCode == DOCUMENT_REQUEST_CODE){
+                selectedFile = data.getData();
+                String[] filePathColumn = {MediaStore.Video.Media.DATA};
+
+                Cursor cursor = context.getContentResolver().query(selectedFile,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                selectedFilePath = cursor.getString(columnIndex);
+
+                myFile = new File(selectedFilePath);
+                tv_Filename.setText(myFile.getName());
+//                Debugger.logD("file " + myFile.getName() );
+//                String uriString = selectedFile.toString();
+////                String path = getRealPathFromURI(context, Uri.parse(selectedFile.toString()));
+////                Debugger.logD("burikat " + path );
+//                myFile = new File(uriString);
+//                Debugger.logD("YAWA " + myFile );
+//                selectedFilePath = myFile.getAbsolutePath();
+//                Debugger.logD("bwesit " + selectedFilePath );
+//
+//                if (uriString.startsWith("content://")) {
+//                    Cursor cursor = null;
+//                    try {
+//                        cursor = getApplicationContext().getContentResolver().query(selectedFile, null, null, null, null);
+//                        if (cursor != null && cursor.moveToFirst()) {
+//                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+//                        }
+//                    } finally {
+//                        cursor.close();
+//                    }
+//                } else if (uriString.startsWith("file://")) {
+//                    displayName = myFile.getName();
+//                }
+//                //selectedFilePath.replaceAll("^([0-9]+)", "");
+////                selectedFilePath = data.getData().getPath();
+//                //myFile = new File("/content:/com.android.providers.downloads.documents/document" + "/" + displayName);
+//                Debugger.logD("file " + myFile.getName() );
+//                Debugger.logD("SUCCESS " + myFile );
+//                tv_Filename.setText(displayName);
 //                //getSelectedFilePath(selectedFile);
 //                myFile = new File(selectedFilePath);
 //                //Uri.parse(new File("/sdcard/cats.jpg").toString());
@@ -591,5 +660,21 @@ public class NotesActivity extends AppCompatActivity {
                 .create();
         dialog.show();
     }
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+
 
 }

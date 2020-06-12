@@ -61,6 +61,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -298,41 +299,33 @@ public class HomeFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(true);
 
                 RequestParams params = new RequestParams();
-                params.put("user_token", UserEducator.getToken(context));
                 params.put("user_id", UserEducator.getID(context));
+                params.put("user_token", UserEducator.getToken(context));
                 params.put("search_text", search_text.trim());
                 Debugger.logD("user_token " + UserEducator.getToken(context));
                 Debugger.logD("user_id " + UserEducator.getID(context));
                 Debugger.logD("search_text " + search_text);
-
                 HttpProvider.post(context, "controller_global/SearchUsers.php", params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         swipeRefreshLayout.setRefreshing(false);
-
-                        Debugger.logD("str " + responseBody);
-
+                        Debugger.logD("responseBody " + responseBody);
                         String str = new String(responseBody, StandardCharsets.UTF_8);
-
                         Debugger.logD("str " + str);
-
                         if (str.contains("NO RECORD FOUND"))
                             emptyIndicator.setVisibility(View.VISIBLE);
                         else{
                             try {
-                                JSONArray jsonArray = new JSONArray(Arrays.toString(responseBody));
+                                JSONArray jsonArray = new JSONArray(str);
                                 Debugger.logD("jsonArray " + jsonArray);
                                 for (int i = 0; i <= jsonArray.length() - 1; i++) {
-
                                 }
-
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Debugger.logD("e " + e);
                             }
                         }
                     }
-
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                         swipeRefreshLayout.setRefreshing(false);
