@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +79,7 @@ public class HomeFragment extends Fragment {
     private String role;
 
     private ImageView ivProfile,iv_HomeSearch, iv_HomeChat;
-    private TextView tvEmail, tvEducationalAttainment, tvStatSubjectCount, tvStatStudentCount, tvStatTopicCount, tvSubjectCount, tvStatistics;
+    private TextView tvEmail, tvEducationalAttainment, tvStatSubjectCount, tvStatStudentCount, tvStatTopicCount, tvSubjectCount, tvStatistics,tvStatNoteCount;
     private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos, cvStickers, cvAwards, cvStatistics;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
@@ -129,6 +130,7 @@ public class HomeFragment extends Fragment {
         tvStatTopicCount = view.findViewById(R.id.tv_HomeStatTopicCount);
         tvSubjectCount = view.findViewById(R.id.tv_HomeSubjectCount);
         tvStatistics = view.findViewById(R.id.tv_HomeStatistics);
+        tvStatNoteCount = view.findViewById(R.id.tv_HomeNoteCount);
         cvSubjects = view.findViewById(R.id.cv_Home_Subjects);
         cvNotes = view.findViewById(R.id.cv_Home_Notes);
         cvConnections = view.findViewById(R.id.cv_Home_Connections);
@@ -144,6 +146,7 @@ public class HomeFragment extends Fragment {
         emptyIndicator = view.findViewById(R.id.view_EmptyRecord);
         iv_HomeSearch = view.findViewById(R.id.iv_HomeSearch);
         iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
+
 
         iv_HomeSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -301,22 +304,23 @@ public class HomeFragment extends Fragment {
                 RequestParams params = new RequestParams();
                 params.put("user_id", UserEducator.getID(context));
                 params.put("user_token", UserEducator.getToken(context));
-                params.put("search_text", search_text.trim());
+                params.put("search_text", search_text);
                 Debugger.logD("user_token " + UserEducator.getToken(context));
                 Debugger.logD("user_id " + UserEducator.getID(context));
                 Debugger.logD("search_text " + search_text);
                 HttpProvider.post(context, "controller_global/SearchUsers.php", params, new AsyncHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                         swipeRefreshLayout.setRefreshing(false);
                         Debugger.logD("responseBody " + responseBody);
+
                         String str = new String(responseBody, StandardCharsets.UTF_8);
                         Debugger.logD("str " + str);
                         if (str.contains("NO RECORD FOUND"))
                             emptyIndicator.setVisibility(View.VISIBLE);
                         else{
                             try {
-                                JSONArray jsonArray = new JSONArray(str);
+                                JSONArray jsonArray = new JSONArray(responseBody);
                                 Debugger.logD("jsonArray " + jsonArray);
                                 for (int i = 0; i <= jsonArray.length() - 1; i++) {
                                 }

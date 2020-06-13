@@ -111,6 +111,10 @@ public class NotesActivity extends AppCompatActivity {
 
     private Note note;
 
+    private String noteCount;
+
+    private UserEducator userEducator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -211,6 +215,8 @@ public class NotesActivity extends AppCompatActivity {
 
                         noteArrayList.add(note);
                     }
+                    noteCount = String.valueOf(noteArrayList.size());
+
 
                     Collections.reverse(noteArrayList);
 
@@ -238,6 +244,7 @@ public class NotesActivity extends AppCompatActivity {
 
                     recyclerView.setAdapter(notesAdapter);
                     emptyIndicator.setVisibility(View.GONE);
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

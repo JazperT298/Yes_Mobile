@@ -141,7 +141,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
             public void onRefresh() {
                 //getAllNewsFeed();
                 getEducatorNewsfeedDetails();
-                LoadHomeForEducator();
+                //LoadHomeForEducator();
             }
         });
 
@@ -154,7 +154,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
 
         //getAllNewsFeed();
         getEducatorNewsfeedDetails();
-        LoadHomeForEducator();
+        //LoadHomeForEducator();
 //        ivSend.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -177,7 +177,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
-        params.put("teach_token", UserEducator.getToken(context));
+        params.put("teach_token", userToken);
         Debugger.logD("teach_token2 " + UserEducator.getToken(context));
 
         HttpProvider.defaultPost(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
@@ -190,7 +190,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
                 try {
-                    JSONArray jsonArray = new JSONArray(new String(responseBody));
+                    JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("NEWSFEED: " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -250,7 +250,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
     private void LoadHomeForEducator(){
 
         RequestParams params = new RequestParams();
-        params.put("teach_token", UserEducator.getToken(context));
+        params.put("teach_token", userToken);
 
         Debugger.logD("teach_token " + UserEducator.getToken(context));
 
