@@ -562,12 +562,11 @@ public class HomeFragment extends Fragment {
         final SwipeRefreshLayout swipeRefreshLayout;
         final ConstraintLayout emptyIndicator;
 
-        et_SearchUser = dialog.findViewById(R.id.et_SearchUser);
         iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
-        iv_SearchIcon = dialog.findViewById(R.id.iv_SearchIcon);
-        rv_Search = dialog.findViewById(R.id.rv_Search);
-        swipeRefreshLayout = dialog.findViewById(R.id.swipe_Search);
-        emptyIndicator = dialog.findViewById(R.id.view_EmptyRecord);
+//        iv_SearchIcon = dialog.findViewById(R.id.iv_SearchIcon);
+//        rv_Search = dialog.findViewById(R.id.rv_Search);
+//        swipeRefreshLayout = dialog.findViewById(R.id.swipe_Search);
+//        emptyIndicator = dialog.findViewById(R.id.view_EmptyRecord);
 
 
         iv_SearchBack.setOnClickListener(new View.OnClickListener() {
@@ -576,54 +575,6 @@ public class HomeFragment extends Fragment {
                 dialog.dismiss();
             }
         });
-        iv_SearchIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String search_text = et_SearchUser.getText().toString();
-                //Toasty.warning(context, text).show();
-
-                userEducatorArrayList.clear();
-
-                swipeRefreshLayout.setRefreshing(true);
-
-                RequestParams params = new RequestParams();
-                params.put("user_id", UserEducator.getID(context));
-                params.put("user_token", UserEducator.getToken(context));
-                params.put("search_text", search_text);
-                Debugger.logD("user_token " + UserEducator.getToken(context));
-                Debugger.logD("user_id " + UserEducator.getID(context));
-                Debugger.logD("search_text " + search_text);
-                HttpProvider.post(context, "controller_global/SearchUsers.php", params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                        swipeRefreshLayout.setRefreshing(false);
-                        Debugger.logD("responseBody " + responseBody);
-
-                        String str = new String(responseBody);
-                        Debugger.logD("str " + str);
-                        JSONArray jsonArray = null;
-                        try {
-                            jsonArray = new JSONArray(str);
-                            Debugger.logD("jsonArray " + jsonArray);
-                            for (int i = 0; i <= jsonArray.length() - 1; i++) {
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-
-
-                    }
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        swipeRefreshLayout.setRefreshing(false);
-                        OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
-                    }
-                });
-            }
-        });
-
         dialog.show();
     }
 
