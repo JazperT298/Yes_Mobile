@@ -17,7 +17,7 @@ public class HttpProvider {
     //private static final String BASE_URL = "http://192.168.1.6/yes_tech/controllerClass/";
 
     //LIVE IP
-   private static final String BASE_URL = "https://theyestech.com/controllerClass/";
+    private static final String BASE_URL = "https://theyestech.com/controllerClass/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
