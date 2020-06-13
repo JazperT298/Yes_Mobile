@@ -25,10 +25,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -144,9 +146,59 @@ public class SubjectTopicsActivity extends AppCompatActivity {
 //                Intent intent = new Intent(context, SubjectNewTopicActivity.class);
 //                intent.putExtra("SUBJECT", subject);
 //                startActivity(intent);
-                openAddNoteDialog();
+                openAddTopicDialog();
             }
         });
+    }
+
+    private void deleteTopic(String topic_id) {
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("topic_id", topic_id);
+        params.put("user_id", UserEducator.getID(context));
+
+        ProgressPopup.hideProgress();
+
+        HttpProvider.post(context, "controller_educator/DeleteTopicById.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                Debugger.logD("responseBody " + responseBody);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                Debugger.logD("str " + str);
+
+                if (str.contains("success")) {
+                    Toasty.success(context, "Deleted").show();
+                    getTopicDetails();
+                } else
+                    Toasty.warning(context, "Failed").show();
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void openDeleteNoteDialog(String topic_id) {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Delete")
+                .setIcon(R.drawable.ic_delete_colored)
+                .setMessage("Are you sure you want to delete ?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteTopic(topic_id);
+                    }
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
     }
 
     private void getTopicDetails() {
@@ -198,6 +250,24 @@ public class SubjectTopicsActivity extends AppCompatActivity {
 //                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
 //                            intent.putExtra("TOPIC", topic);
 //                            startActivity(intent);
+                            if(fromButton == 1){
+
+                            }else if (fromButton == 2){
+                                Intent intent = new Intent(context, SubjectTopicsCommentActivity.class);
+                                intent.putExtra("TOPIC_ID", selectedTopic.getTopic_id());
+                                context.startActivity(intent);
+                            } else if (fromButton == 3){
+                                PopupMenu popup = new PopupMenu(context, view);
+                                popup.getMenuInflater().inflate(R.menu.delete_pop_up, popup.getMenu());
+
+                                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                    public boolean onMenuItemClick(MenuItem item) {
+                                        openDeleteNoteDialog(selectedTopic.getTopic_id());
+                                        return true;
+                                    }
+                                });
+                                popup.show();//showing pop
+                            }
                         }
                     });
 
@@ -217,8 +287,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         });
     }
 
-
-    private void openAddNoteDialog() {
+    private void openAddTopicDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
         LayoutInflater inflater = getLayoutInflater();
