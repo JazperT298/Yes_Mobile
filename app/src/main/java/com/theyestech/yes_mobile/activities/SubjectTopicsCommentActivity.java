@@ -125,7 +125,7 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
         params.put("topic_id", topicId);
-        params.put("topic_id", UserEducator.getToken(context));
+        params.put("token", UserEducator.getToken(context));
 
         HttpProvider.post(context, "controller_educator/get_topic_comments.php", params, new AsyncHttpResponseHandler() {
             @Override

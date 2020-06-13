@@ -12,6 +12,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
@@ -48,9 +49,12 @@ import com.theyestech.yes_mobile.activities.YestechCourseActivity;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
 import com.theyestech.yes_mobile.adapters.NotesAdapter;
 import com.theyestech.yes_mobile.adapters.SearchUserAdapter;
+import com.theyestech.yes_mobile.adapters.StickersAdapter;
+import com.theyestech.yes_mobile.adapters.StudentStickersAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.Note;
+import com.theyestech.yes_mobile.models.Sticker;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
@@ -98,31 +102,42 @@ public class HomeFragment extends Fragment {
     private UserEducator userEducator;
     private ArrayList<UserEducator> userEducatorArrayList = new ArrayList<>();
 
+    private ArrayList<Sticker> stickerArrayList = new ArrayList<>();
+    private StudentStickersAdapter studentStickersAdapter;
+    private RecyclerView rv_Stickers;
+    private SwipeRefreshLayout swipeRefreshLayout1;
+    private ConstraintLayout emptyIndicator1;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_home, container, false);
+        context = getContext();
+
+        role = UserRole.getRole(context);
+        if(role.equals(UserRole.Educator())){
+            view = inflater.inflate(R.layout.fragment_home, container, false);
+            initializeEducatorUI();
+            setEducatorHeader();
+        }else{
+            view = inflater.inflate(R.layout.fragment_home_student, container, false);
+            initializeStudentUI();
+            setStudentHeader();
+        }
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        context = getContext();
-
-        role = UserRole.getRole(context);
-
+//        context = getContext();
+//        role = UserRole.getRole(context);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-
-        initializeUI();
     }
 
-    private void initializeUI() {
+    //    Educator
+    private void initializeEducatorUI() {
         ivProfile = view.findViewById(R.id.iv_HomeProfile);
-//        ivSearch = view.findViewById(R.id.iv_HomeSearch);
-//        ivNewPost = view.findViewById(R.id.iv_HomeNewPost);
         tvEmail = view.findViewById(R.id.tv_HomeEmail);
         tvEducationalAttainment = view.findViewById(R.id.tv_Home_EducationalAttainment);
         tvStatStudentCount = view.findViewById(R.id.tv_HomeStatSStudentCount);
@@ -146,7 +161,6 @@ public class HomeFragment extends Fragment {
         emptyIndicator = view.findViewById(R.id.view_EmptyRecord);
         iv_HomeSearch = view.findViewById(R.id.iv_HomeSearch);
         iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
-
 
         iv_HomeSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -267,7 +281,50 @@ public class HomeFragment extends Fragment {
             displayStudentAccess();
         }
     }
+    private void setEducatorHeader() {
+        tvEmail.setText(UserEducator.getEmail(context));
+        tvEducationalAttainment.setText(UserEducator.getEducationalAttainment(context));
 
+        selectionTitle = "Educator";
+
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(ivProfile);
+    }
+    private void getEducatorStatistics() {
+        RequestParams params = new RequestParams();
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_id", UserEducator.getID(context));
+
+        HttpProvider.post(context, "controller_educator/CountSubjectsAndStudents.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                try {
+                    String str = new String(responseBody, StandardCharsets.UTF_8);
+                    JSONArray jsonArray = new JSONArray(str);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String student_count = jsonObject.getString("student_count");
+                    String subject_count = jsonObject.getString("subject_count");
+
+                    tvStatSubjectCount.setText(String.format("%s Subjects", subject_count));
+                    tvStatStudentCount.setText(String.format("%s Students", student_count));
+
+                    tvSubjectCount.setText(subject_count);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Debugger.logD(e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
     private void openSearchDialog(){
         Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.dialog_search_user);
@@ -341,7 +398,121 @@ public class HomeFragment extends Fragment {
 
         dialog.show();
     }
+    //    Student
+    private void initializeStudentUI() {
+        ivProfile = view.findViewById(R.id.iv_HomeProfile);
+        tvEmail = view.findViewById(R.id.tv_HomeEmail);
+        tvEducationalAttainment = view.findViewById(R.id.tv_Home_EducationalAttainment);
+        tvStatStudentCount = view.findViewById(R.id.tv_HomeStatSStudentCount);
+        tvStatSubjectCount = view.findViewById(R.id.tv_HomeStatSubjectCount);
+        tvStatTopicCount = view.findViewById(R.id.tv_HomeStatTopicCount);
+        tvSubjectCount = view.findViewById(R.id.tv_HomeSubjectCount);
+        tvStatistics = view.findViewById(R.id.tv_HomeStatistics);
+        tvStatNoteCount = view.findViewById(R.id.tv_HomeNoteCount);
+        cvSubjects = view.findViewById(R.id.cv_Home_Subjects);
+        cvNotes = view.findViewById(R.id.cv_Home_Notes);
+        cvConnections = view.findViewById(R.id.cv_Home_Connections);
+        cvNewsfeeds = view.findViewById(R.id.cv_Home_Newsfeeds);
+        cvVideoLab = view.findViewById(R.id.cv_Home_VideoLab);
+        cvYestechCourse = view.findViewById(R.id.cv_Home_YestechCourse);
+        cvMyVideos = view.findViewById(R.id.cv_Home_MyVideos);
+        cvStickers = view.findViewById(R.id.cv_Home_Stickers);
+        cvAwards = view.findViewById(R.id.cv_Home_Awards);
+        cvStatistics = view.findViewById(R.id.cv_Home_Stats);
+        iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
 
+        iv_HomeChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toasty.warning(context, "Chat is unavailable").show();
+            }
+        });
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectAction();
+            }
+        });
+
+        cvSubjects.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SubjectActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cvNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NotesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cvConnections.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openStickersDialog();
+            }
+        });
+
+        cvNewsfeeds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NewNewsfeedActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cvVideoLab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAwardsDialog();
+            }
+        });
+
+        cvYestechCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, YestechCourseActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cvMyVideos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectMyAction();
+            }
+        });
+
+        cvStickers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openStickersDialog();
+            }
+        });
+
+        cvAwards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAwardsDialog();
+            }
+        });
+
+    }
+    private void setStudentHeader() {
+        tvEmail.setText(UserStudent.getEmail(context));
+        tvEducationalAttainment.setText(UserStudent.getEducationalAttainment(context));
+
+        selectionTitle = "Student";
+
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(ivProfile);
+    }
     private void displayStudentAccess(){
         cvVideoLab.setVisibility(View.GONE);
         cvConnections.setVisibility(View.GONE);
@@ -353,29 +524,158 @@ public class HomeFragment extends Fragment {
         cvStickers.setVisibility(View.VISIBLE);
         cvAwards.setVisibility(View.VISIBLE);
     }
+    private void openStickersDialog(){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.dialog_student_stickers);
+        final ImageView iv_SearchBack;
+//        final RecyclerView rv_Stickers;
+//        final SwipeRefreshLayout swipeRefreshLayout;
+//        final ConstraintLayout emptyIndicator;
 
-    private void setEducatorHeader() {
-        tvEmail.setText(UserEducator.getEmail(context));
-        tvEducationalAttainment.setText(UserEducator.getEducationalAttainment(context));
+        iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
+        rv_Stickers = dialog.findViewById(R.id.rv_Stickers);
+        swipeRefreshLayout1 = dialog.findViewById(R.id.swipe_Search);
+        emptyIndicator1 = dialog.findViewById(R.id.view_EmptyRecord);
 
-        selectionTitle = "Educator";
+        swipeRefreshLayout1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAllStudentStickers();
+            }
+        });
 
-        Glide.with(context)
-                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
-                .apply(GlideOptions.getOptions())
-                .into(ivProfile);
+        iv_SearchBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        getAllStudentStickers();
+    }
+    private void openAwardsDialog(){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.dialog_student_awards);
+        final EditText et_SearchUser;
+        final ImageView iv_SearchBack, iv_SearchIcon;
+        final RecyclerView rv_Search;
+        final SwipeRefreshLayout swipeRefreshLayout;
+        final ConstraintLayout emptyIndicator;
+
+        et_SearchUser = dialog.findViewById(R.id.et_SearchUser);
+        iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
+        iv_SearchIcon = dialog.findViewById(R.id.iv_SearchIcon);
+        rv_Search = dialog.findViewById(R.id.rv_Search);
+        swipeRefreshLayout = dialog.findViewById(R.id.swipe_Search);
+        emptyIndicator = dialog.findViewById(R.id.view_EmptyRecord);
+
+
+        iv_SearchBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        iv_SearchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String search_text = et_SearchUser.getText().toString();
+                //Toasty.warning(context, text).show();
+
+                userEducatorArrayList.clear();
+
+                swipeRefreshLayout.setRefreshing(true);
+
+                RequestParams params = new RequestParams();
+                params.put("user_id", UserEducator.getID(context));
+                params.put("user_token", UserEducator.getToken(context));
+                params.put("search_text", search_text);
+                Debugger.logD("user_token " + UserEducator.getToken(context));
+                Debugger.logD("user_id " + UserEducator.getID(context));
+                Debugger.logD("search_text " + search_text);
+                HttpProvider.post(context, "controller_global/SearchUsers.php", params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                        swipeRefreshLayout.setRefreshing(false);
+                        Debugger.logD("responseBody " + responseBody);
+
+                        String str = new String(responseBody);
+                        Debugger.logD("str " + str);
+                        JSONArray jsonArray = null;
+                        try {
+                            jsonArray = new JSONArray(str);
+                            Debugger.logD("jsonArray " + jsonArray);
+                            for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+
+                    }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        swipeRefreshLayout.setRefreshing(false);
+                        OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+                    }
+                });
+            }
+        });
+
+        dialog.show();
     }
 
-    private void setStudentHeader() {
-        tvEmail.setText(UserStudent.getEmail(context));
-        tvEducationalAttainment.setText(UserStudent.getEducationalAttainment(context));
+    private void getAllStudentStickers(){
+        stickerArrayList.clear();
 
-        selectionTitle = "Student";
+        swipeRefreshLayout1.setRefreshing(true);
 
-        Glide.with(context)
-                .load(HttpProvider.getProfileDir() + UserStudent.getImage(context))
-                .apply(GlideOptions.getOptions())
-                .into(ivProfile);
+        RequestParams params = new RequestParams();
+        params.put("studentId", UserStudent.getID(context));
+
+        Debugger.logD("studentId " + UserEducator.getToken(context));
+        HttpProvider.post(context, "controller_student/GetAllStickersByStudentId.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                swipeRefreshLayout1.setRefreshing(false);
+                Debugger.logD("responseBody " + responseBody);
+
+                String str = new String(responseBody);
+                Debugger.logD("str " + str);
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(str);
+                    Debugger.logD("jsonArray " + jsonArray);
+                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String sticker_id = jsonObject.getString("sticker_id");
+                        String sticker_name = jsonObject.getString("sticker_name");
+
+                        Sticker sticker = new Sticker();
+                        sticker.setId(sticker_id);
+                        sticker.setName(sticker_name);
+
+                        stickerArrayList.add(sticker);
+                    }
+                    rv_Stickers.setLayoutManager(new GridLayoutManager(context, 2));
+
+                    studentStickersAdapter = new StudentStickersAdapter(context, stickerArrayList);
+
+                    rv_Stickers.setAdapter(studentStickersAdapter);
+                    emptyIndicator1.setVisibility(View.GONE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                swipeRefreshLayout.setRefreshing(false);
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 
     private void selectAction() {
@@ -397,7 +697,6 @@ public class HomeFragment extends Fragment {
 
         dialog.create().show();
     }
-
     private void selectMyAction() {
         String[] items = {" My Course ", " My Upload "};
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
@@ -493,10 +792,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void getStudentNewsfeedDetails() {
-
-    }
-
     private void logoutUser() {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
@@ -536,37 +831,4 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
-    private void getEducatorStatistics() {
-        RequestParams params = new RequestParams();
-        params.put("user_token", UserEducator.getToken(context));
-        params.put("user_id", UserEducator.getID(context));
-
-        HttpProvider.post(context, "controller_educator/CountSubjectsAndStudents.php", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                try {
-                    String str = new String(responseBody, StandardCharsets.UTF_8);
-                    JSONArray jsonArray = new JSONArray(str);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    String student_count = jsonObject.getString("student_count");
-                    String subject_count = jsonObject.getString("subject_count");
-
-                    tvStatSubjectCount.setText(String.format("%s Subjects", subject_count));
-                    tvStatStudentCount.setText(String.format("%s Students", student_count));
-
-                    tvSubjectCount.setText(subject_count);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Debugger.logD(e.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
-            }
-        });
-    }
 }
