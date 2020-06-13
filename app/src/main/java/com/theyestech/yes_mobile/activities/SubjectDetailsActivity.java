@@ -11,18 +11,21 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
+import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.models.Section;
 import com.theyestech.yes_mobile.models.Subject;
@@ -48,7 +51,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
     private Context context;
     private String role;
 
-    private ImageView ivBack, ivClose;
+    private ImageView ivBack, ivClose,iv_SubjectDetailsMenu;
     private TextView tvHeader;
     private CardView cvDetails, cvStudents, cvTopics, cvQuiz, cvStickers, cvAwards, cvAssessment;
 
@@ -101,8 +104,16 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         cvStickers = findViewById(R.id.cv_SubjectDetails_ViewStickers);
         cvAwards = findViewById(R.id.cv_SubjectDetails_ViewAwards);
         cvAssessment = findViewById(R.id.cv_SubjectDetails_ViewAssessment);
+        iv_SubjectDetailsMenu = findViewById(R.id.iv_SubjectDetailsMenu);
 
         tvHeader.setText(subject.getTitle());
+
+        iv_SubjectDetailsMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sideMenuDialog(v);
+            }
+        });
 
         if (!role.equals(UserRole.Educator())) {
             cvDetails.setVisibility(View.GONE);
@@ -388,5 +399,30 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void sideMenuDialog(View v){
+        PopupMenu popup = new PopupMenu(context, v);
+        popup.getMenuInflater().inflate(R.menu.menu_pop_up, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()){
+                    case R.id.dashboard:
+                        Intent intent = new Intent(context, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return true;
+                    case R.id.profile:
+                        Intent intent2 = new Intent(context, UserProfileActivity.class);
+                        startActivity(intent2);
+                        finish();
+                        return true;
+                }
+                return false;
+            }
+        });
+        popup.show();//showing popup menu
     }
 }

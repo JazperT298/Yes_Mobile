@@ -16,6 +16,7 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.TopicCommentsAdapter;
+import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
@@ -124,13 +125,15 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
         params.put("topic_id", topicId);
+        params.put("topic_id", UserEducator.getToken(context));
 
         HttpProvider.post(context, "controller_educator/get_topic_comments.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
+                Debugger.logD("responseBody " +responseBody);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-
+                Debugger.logD("str " +str);
                 if (str.equals(""))
                     emptyIndicator.setVisibility(View.VISIBLE);
 
@@ -197,25 +200,30 @@ public class SubjectTopicsCommentActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("topic_id", topicId);
         params.put("topic_comment", commentDetails);
+        Debugger.logD("topic_id " + topicId);
+        Debugger.logD("topic_comment " + commentDetails);
 
         HttpProvider.post(context, "controller_educator/post_comment_topic.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
+                Debugger.logD("responseBody " + responseBody);
                 String aw = new String(responseBody, StandardCharsets.UTF_8);
-                Debugger.logD(aw);
+                Debugger.logD("aw " + aw);
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
                     JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     String result = jsonObject.getString("result");
+                    Debugger.logD("result " + result);
                     if (result.contains("success")) {
-//                        Toasty.success(context, "Saved.").show();
+                        Toasty.success(context, "Saved.").show();
                     } else
                         Toasty.warning(context, result).show();
                     getEducatorCommentDetails();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Debugger.logD("e " + e);
                 }
             }
 
