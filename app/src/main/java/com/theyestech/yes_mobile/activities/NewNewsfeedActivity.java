@@ -74,6 +74,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
     private String userId;
 
     private ImageView ivBack;
+    private TextView tv_Filename;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ConstraintLayout emptyIndicator;
@@ -87,7 +88,9 @@ public class NewNewsfeedActivity extends AppCompatActivity {
 
     private static final int STORAGE_REQUEST_CODE = 400;
     private static final int IMAGE_PICK_GALLERY_CODE = 1000;
-    private static final int VIDEO_PICK_GALLERY_CODE = 2000;
+
+    private static final int VIDEO_PERMISSION_CODE = 2000;
+    private static final int VIDEO_REQUEST_CODE = 3000;
 
     private static final int CAMERA_PERMISSION_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 102;
@@ -246,152 +249,12 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         });
     }
 
-
-    private void LoadHomeForEducator(){
-
-        RequestParams params = new RequestParams();
-        params.put("teach_token", userToken);
-
-        Debugger.logD("teach_token " + UserEducator.getToken(context));
-
-        HttpProvider.defaultPost(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                swipeRefreshLayout.setRefreshing(false);
-
-                Debugger.logD("str " + responseBody);
-
-
-                try {
-                    JSONObject jObj = new JSONObject(Arrays.toString(responseBody));
-                    Debugger.logD("jObj: " + jObj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Debugger.logD("2e qwe" + e);
-                }
-//                try {
-//                    JSONArray jsonArray = new JSONArray(new String(responseBody));
-//                    Debugger.printO("POSTS: " + jsonArray);
-//                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
-//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                        String nf_id = jsonObject.getString("nf_id");
-//                        String nf_token = jsonObject.getString("nf_token");
-//                        String nf_user_token = jsonObject.getString("nf_user_token");
-//                        String nf_files = jsonObject.getString("nf_files");
-//                        String nf_details = jsonObject.getString("nf_details");
-//                        String nf_date = jsonObject.getString("nf_date");
-//                        String nf_fullname = jsonObject.getString("nf_fullname");
-//                        String nf_image = jsonObject.getString("nf_image");
-//
-//                    }
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    Debugger.logD("2e " + e);
-//                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                swipeRefreshLayout.setRefreshing(false);
-                Toasty.error(context, "Something went wrong, please check your internet connection.").show();
-            }
-        });
-    }
-
-
-    private void getAllNewsFeed() {
-        newsfeedArrayList.clear();
-
-        swipeRefreshLayout.setRefreshing(true);
-
-        RequestParams params = new RequestParams();
-        params.put("teach_token", UserEducator.getToken(context));
-
-        HttpProvider.post(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                swipeRefreshLayout.setRefreshing(false);
-                Debugger.logD("responseBody " + responseBody);
-                String str = new String(responseBody, StandardCharsets.UTF_8);
-
-                Debugger.logD("SHIT " + str);
-
-                if (str.equals("") || str.contains("No notes available"))
-                    emptyIndicator.setVisibility(View.VISIBLE);
-
-                try {
-                    JSONArray jsonArray = new JSONArray(responseBody);
-                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String notes_id = jsonObject.getString("notes_id");
-                        String notes_userId = jsonObject.getString("notes_userId");
-                        String notes_title = jsonObject.getString("notes_title");
-                        String notes_url = jsonObject.getString("notes_url");
-                        String notes_file = jsonObject.getString("notes_file");
-                        String notes_type = jsonObject.getString("notes_type");
-                        String result = jsonObject.getString("result");
-
-//                        newsfeed = new Newsfeed();
-//                        newsfeed.setNf_id(notes_id);
-//                        newsfeed.setNf_token();
-//                        newsfeed.setNf_user_token(notes_title);
-//                        newsfeed.setNf_details(notes_url);
-//                        newsfeed.setNf_files(notes_file);
-//                        newsfeed.setNf_filetype(notes_type);
-//                        newsfeed.setNf_date(result);
-//                        newsfeed.setNf_fullname();
-//                        newsfeed.setNf_image();
-                        newsfeedArrayList.add(newsfeed);
-                    }
-
-                    Collections.reverse(newsfeedArrayList);
-
-                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    recyclerView.setHasFixedSize(true);
-                    newsfeedAdapter = new NewsfeedAdapter(context, newsfeedArrayList, role);
-                    newsfeedAdapter.setClickListener(new OnClickRecyclerView() {
-                        @Override
-                        public void onItemClick(View view, int position, int fromButton) {
-                            selectedNewsFeed = newsfeedArrayList.get(position);
-
-//                            if (fromButton == 1) {
-//                                Debugger.logD("note " + selectedNote.getFile());
-//                                try {
-//                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://theyestech.com/notes-files/" + selectedNote.getFile()));
-//                                    startActivity(intent);
-//                                } catch(Exception e) {
-//                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://theyestech.com/notes-files/" + selectedNote.getFile())));
-//                                }
-//                            } else if (fromButton == 2) {
-//                                openDeleteNoteDialog();
-//                            }
-                        }
-                    });
-
-                    recyclerView.setAdapter(newsfeedAdapter);
-                    emptyIndicator.setVisibility(View.GONE);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                swipeRefreshLayout.setRefreshing(false);
-                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
-            }
-        });
-    }
-
     private void openAddNewsFeedDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_add_newsfeed, null);
         final EditText et_AddEditDetails;
-        final TextView tvHeader;
         final Button btn_ChooseAddNewsFeedFile,btn_AddEditNewsFeedSave;
         final ImageView imageView33;
 
@@ -400,6 +263,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         btn_ChooseAddNewsFeedFile = dialogView.findViewById(R.id.btn_ChooseAddNewsFeedFile);
         btn_AddEditNewsFeedSave = dialogView.findViewById(R.id.btn_AddEditNewsFeedSave);
         imageView33 = dialogView.findViewById(R.id.imageView33);
+        tv_Filename = dialogView.findViewById(R.id.tv_Filename);
 
         dialogBuilder.setView(dialogView);
         final AlertDialog b = dialogBuilder.create();
@@ -445,6 +309,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
 
         Debugger.logD("details " + details);
         Debugger.logD("myFile " + myFile);
+
         RequestParams params = new RequestParams();
         params.put("nf_details", details);
         if (myFile != null){
@@ -459,15 +324,14 @@ public class NewNewsfeedActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
                 Debugger.logD("responseBody " +responseBody);
-                String str = new String(responseBody, StandardCharsets.UTF_8);
+                String str = new String(responseBody, StandardCharsets.US_ASCII);
                 Debugger.logD("TEST " +str);
-                if (statusCode == 200) {
+                if (str.contains("success")) {
                     Toasty.success(context, "Saved.").show();
-                    getAllNewsFeed();
+                    getEducatorNewsfeedDetails();
                 } else
-                    Toasty.warning(context, "Failed.").show();
+                    Toasty.warning(context, "Failed").show();
             }
-
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 ProgressPopup.hideProgress();
@@ -496,7 +360,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                     if (!checkStoragePermission()) {
                         requestStoragePermission();
                     } else {
-                        pickVideoGallery();
+                        askVideoPermissions();
                     }
                 }
             }
@@ -508,6 +372,13 @@ public class NewNewsfeedActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
         }else  {
             pickCamera();
+        }
+    }
+    private void askVideoPermissions(){
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, VIDEO_PERMISSION_CODE);
+        }else  {
+            pickVideo();
         }
     }
 
@@ -531,10 +402,10 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         startActivityForResult(takePicture,  CAMERA_REQUEST_CODE);//
     }
 
-    private void pickVideoGallery() {
+    private void pickVideo(){
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("video/*");
-        startActivityForResult(intent, VIDEO_PICK_GALLERY_CODE);
+        startActivityForResult(Intent.createChooser(intent,"Select Video"),VIDEO_REQUEST_CODE);
     }
 
     private void selectAction() {
@@ -555,7 +426,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                     if (!checkStoragePermission()) {
                         requestStoragePermission();
                     } else {
-                        pickVideoGallery();
+                        //pickVideoGallery();
                     }
                 }
                 if (which == 2) {
@@ -607,6 +478,9 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 selectedFilePath = cursor.getString(columnIndex);
                 myFile = new File(selectedFilePath);
+                displayName = myFile.getName();
+                tv_Filename.setText(displayName);
+                Debugger.logD("gallery " + displayName );
 
             }else if (requestCode == CAMERA_REQUEST_CODE) {
                 Bitmap image = (Bitmap) data.getExtras().get("data");
@@ -617,8 +491,9 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                 selectedFilePath = String.valueOf(randomNumber);
                 File filesDir = getApplicationContext().getFilesDir();
                 myFile = new File(filesDir, selectedFilePath + ".jpg");
-//                displayName = myFile.getName();
-//                Debugger.logD("camera " + displayName );
+                displayName = myFile.getName();
+                tv_Filename.setText(displayName);
+                Debugger.logD("camera " + displayName );
                 OutputStream os;
                 try {
                     os = new FileOutputStream(myFile);
@@ -628,21 +503,36 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
                 }
-            } else if (requestCode == VIDEO_PICK_GALLERY_CODE) {
-                selectedFile = data.getData();
-//                vvVideo.setVideoPath(selectedFile.getPath());
-//                vvVideo.setVisibility(View.VISIBLE);
+            } else if (requestCode == VIDEO_REQUEST_CODE) {
+//                selectedFile = data.getData();
+////                vvVideo.setVideoPath(selectedFile.getPath());
+////                vvVideo.setVisibility(View.VISIBLE);
+//
+//                Uri selectedVideo = data.getData();
+//
+//                String[] filePathColumn = {MediaStore.Video.Media.DATA};
+//
+//                Cursor cursor = context.getContentResolver().query(selectedVideo,
+//                        filePathColumn, null, null, null);
+//                cursor.moveToFirst();
+//
+//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                selectedFilePath = cursor.getString(columnIndex);
 
-                Uri selectedVideo = data.getData();
+                selectedFile = data.getData();
 
                 String[] filePathColumn = {MediaStore.Video.Media.DATA};
 
-                Cursor cursor = context.getContentResolver().query(selectedVideo,
+                Cursor cursor = context.getContentResolver().query(selectedFile,
                         filePathColumn, null, null, null);
                 cursor.moveToFirst();
 
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 selectedFilePath = cursor.getString(columnIndex);
+
+                myFile = new File(selectedFilePath);
+                tv_Filename.setText(myFile.getName());
+                Debugger.logD("file " + myFile.getName() );
             }
         }
 
