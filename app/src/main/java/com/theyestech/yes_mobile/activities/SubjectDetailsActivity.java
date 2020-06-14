@@ -35,6 +35,7 @@ import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.StudentRequestAdapter;
 import com.theyestech.yes_mobile.adapters.StudentStickersAdapter;
+import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Section;
 import com.theyestech.yes_mobile.models.Sticker;
 import com.theyestech.yes_mobile.models.Student;
@@ -542,6 +543,16 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                     rv_StudentRequest.setLayoutManager(new LinearLayoutManager(context));
 
                     studentRequestAdapter = new StudentRequestAdapter(context, studentArrayList);
+                    studentRequestAdapter.setClickListener(new OnClickRecyclerView() {
+                        @Override
+                        public void onItemClick(View view, int position, int fromButton) {
+                            if (fromButton == 1){
+
+                            }else if (fromButton == 2){
+                                acceptStudentRequest();
+                            }
+                        }
+                    });
 
                     rv_StudentRequest.setAdapter(studentRequestAdapter);
                     emptyIndicator1.setVisibility(View.GONE);
@@ -553,6 +564,39 @@ public class SubjectDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 swipeRefreshLayout1.setRefreshing(false);
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    private void acceptStudentRequest(){
+        ProgressPopup.showProgress(context);
+        RequestParams params = new RequestParams();
+        params.put("stud_id", UserStudent.getID(context));
+        params.put("subj_id", subject.getId());
+
+        HttpProvider.post(context, "controller_educator/accept_student_request.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                Debugger.logD("responseBody " + responseBody);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+
+                Debugger.logD("str " + str);
+
+                if (str.contains("success")) {
+                    Toasty.success(context, "Student Accepted").show();
+                    getAllStudentSubjectRequest();
+                } else{
+                    Toasty.warning(context, "Failed").show();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
