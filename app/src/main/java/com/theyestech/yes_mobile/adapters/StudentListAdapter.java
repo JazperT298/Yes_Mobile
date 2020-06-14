@@ -72,6 +72,9 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 //                    if (onClickRecyclerView != null)
 //                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
+                    if(isChecked){
+                        onClickRecyclerView.onItemClick(buttonView, getAdapterPosition(), 1);
+                    }
                 }
             });
         }

@@ -191,6 +191,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SubjectStickersActivity.class);
+                intent.putExtra("SUBJECT", subject);
                 startActivity(intent);
             }
         });
