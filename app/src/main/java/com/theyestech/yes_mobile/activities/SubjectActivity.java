@@ -618,7 +618,7 @@ public class SubjectActivity extends AppCompatActivity {
                 if (str.contains("success"))
                     Toasty.success(context, "Request to join sent.").show();
                 else
-                    Toasty.success(context, str).show();
+                    Toasty.warning(context, "You're already enrolled").show();
             }
 
             @Override

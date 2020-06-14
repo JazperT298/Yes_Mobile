@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -113,6 +114,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         initializeUI();
     }
 
+    @SuppressLint("RestrictedApi")
     private void initializeUI() {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            Window window = getWindow();
@@ -125,7 +127,9 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rv_SubjectTopics);
         floatingActionButton = findViewById(R.id.fab_SubjectTopicsAdd);
         emptyIndicator = findViewById(R.id.view_EmptyRecord);
-
+        if (!role.equals(UserRole.Educator())){
+            floatingActionButton.setVisibility(View.GONE);
+        }
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

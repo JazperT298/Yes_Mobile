@@ -166,9 +166,10 @@
                 app:cardBackgroundColor="@color/colorAmethyst"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/cv_SubjectDetails_ViewAwards"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/cv_SubjectDetails_ViewQuizzes"
-                app:layout_constraintTop_toTopOf="@+id/cv_SubjectDetails_ViewTopics">
+                app:layout_constraintTop_toBottomOf="@+id/cv_SubjectDetails_ViewTopics">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -261,7 +262,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/cv_SubjectDetails_ViewTopics"
-                app:layout_constraintTop_toTopOf="@+id/cv_SubjectDetails_ViewStickers">
+                app:layout_constraintTop_toTopOf="@+id/cv_SubjectDetails_ViewTopics">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

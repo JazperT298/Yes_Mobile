@@ -53,7 +53,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
     private ImageView ivBack, ivClose,iv_SubjectDetailsMenu;
     private TextView tvHeader;
-    private CardView cvDetails, cvStudents, cvTopics, cvQuiz, cvStickers, cvAwards, cvAssessment;
+    private CardView cvDetails, cvStudents, cvTopics, cvQuiz, cvStickers, cvAwards, cvAssessment, cvRequest;
 
     private EditText etName, etDescription, etSection;
     private MaterialSpinner spSection, spLevel, spSemester;
@@ -104,6 +104,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         cvStickers = findViewById(R.id.cv_SubjectDetails_ViewStickers);
         cvAwards = findViewById(R.id.cv_SubjectDetails_ViewAwards);
         cvAssessment = findViewById(R.id.cv_SubjectDetails_ViewAssessment);
+        cvRequest = findViewById(R.id.cv_SubjectDetails_ViewStudentRequest);
         iv_SubjectDetailsMenu = findViewById(R.id.iv_SubjectDetailsMenu);
 
         tvHeader.setText(subject.getTitle());
@@ -119,6 +120,9 @@ public class SubjectDetailsActivity extends AppCompatActivity {
             cvDetails.setVisibility(View.GONE);
             cvStudents.setVisibility(View.GONE);
             cvAssessment.setVisibility(View.GONE);
+            cvRequest.setVisibility(View.GONE);
+            cvStickers.setVisibility(View.GONE);
+            cvAwards.setVisibility(View.GONE);
         }
 
         ivBack.setOnClickListener(new View.OnClickListener() {
