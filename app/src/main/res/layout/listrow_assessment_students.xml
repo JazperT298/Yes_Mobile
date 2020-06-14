@@ -5,74 +5,149 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/imageView38"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintStart_toStartOf="@+id/imageView36"
-        app:layout_constraintTop_toBottomOf="@+id/imageView36"
-        app:srcCompat="@drawable/ic_score_colored" />
-
-    <TextView
-        android:id="@+id/tv_ListrowAssessmentStudentScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Score"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView38"
-        app:layout_constraintStart_toEndOf="@+id/imageView38"
-        app:layout_constraintTop_toTopOf="@+id/imageView38" />
-
-    <ImageView
-        android:id="@+id/imageView39"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintStart_toStartOf="@+id/imageView38"
-        app:layout_constraintTop_toBottomOf="@+id/imageView38"
-        app:srcCompat="@drawable/ic_percentage_colored" />
-
-    <ImageView
-        android:id="@+id/imageView36"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_student_profile" />
-
-    <TextView
-        android:id="@+id/tv_ListrowAssessmentStudentName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Student Name"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView36"
-        app:layout_constraintStart_toEndOf="@+id/imageView36"
-        app:layout_constraintTop_toTopOf="@+id/imageView36" />
-
-    <TextView
-        android:id="@+id/tv_ListrowAssessmentStudentPercentage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Percentage"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView39"
-        app:layout_constraintStart_toEndOf="@+id/imageView39"
-        app:layout_constraintTop_toTopOf="@+id/imageView39" />
-
-    <View
-        android:id="@+id/view10"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/colorCloud"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraint"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView39" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/student_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Student Name"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view17"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <View
+            android:id="@+id/view17"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@color/colorBlack"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/quiz_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view18"
+            app:layout_constraintStart_toEndOf="@+id/view17"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view18"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@color/colorBlack"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view17"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/total_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total %"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view18"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view19"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlack"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view17" />
+    </android.support.constraint.ConstraintLayout>
+
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView38"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/imageView36"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView36"-->
+<!--        app:srcCompat="@drawable/ic_score_colored" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_ListrowAssessmentStudentScore"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:text="Score"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/imageView38"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/imageView38"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/imageView38" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView39"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/imageView38"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView38"-->
+<!--        app:srcCompat="@drawable/ic_percentage_colored" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView36"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/ic_student_profile" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_ListrowAssessmentStudentName"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:text="Student Name"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/imageView36"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/imageView36"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/imageView36" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_ListrowAssessmentStudentPercentage"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:text="Percentage"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/imageView39"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/imageView39"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/imageView39" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/view10"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:background="@color/colorCloud"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView39" />-->
 
 </android.support.constraint.ConstraintLayout>

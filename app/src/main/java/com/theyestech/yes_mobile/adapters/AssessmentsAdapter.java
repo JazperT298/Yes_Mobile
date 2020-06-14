@@ -59,9 +59,9 @@ public class AssessmentsAdapter extends RecyclerView.Adapter<AssessmentsAdapter.
         public ViewHolder(View view) {
             super(view);
 
-            tvName = view.findViewById(R.id.tv_ListrowAssessmentStudentName);
-            tvScore = view.findViewById(R.id.tv_ListrowAssessmentStudentScore);
-            tvPercentage = view.findViewById(R.id.tv_ListrowAssessmentStudentPercentage);
+            tvName = view.findViewById(R.id.student_name);
+            tvScore = view.findViewById(R.id.quiz_score);
+            tvPercentage = view.findViewById(R.id.total_percentage);
         }
     }
 

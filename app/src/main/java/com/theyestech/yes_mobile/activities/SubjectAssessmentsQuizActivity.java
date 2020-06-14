@@ -2,8 +2,10 @@ package com.theyestech.yes_mobile.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,6 +23,7 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.AssessmentQuizAdapter;
 import com.theyestech.yes_mobile.adapters.AssessmentsAdapter;
+import com.theyestech.yes_mobile.adapters.NotesAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Assessment;
 import com.theyestech.yes_mobile.models.Quiz;
@@ -54,6 +57,9 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
 
     private ArrayList<Assessment> assessmentArrayList = new ArrayList<>();
     private AssessmentsAdapter assessmentsAdapter;
+    private RecyclerView recyclerView1;
+    private SwipeRefreshLayout swipeRefreshLayout1;
+    private ConstraintLayout emptyIndicator1;
 
     private Subject subject;
 
@@ -154,7 +160,8 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
                             selectedQuiz = quizArrayList.get(position);
-                            getStudentAssessment();
+                            //getStudentAssessment();
+                            openAssessmentStudentsDialog();
                         }
                     });
 
@@ -174,22 +181,62 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
             }
         });
     }
+    private void openAssessmentStudentsDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_view_assessment, null);
+
+        ImageView ivClose = dialogView.findViewById(R.id.iv_ViewAssessmentClose);
+        TextView tvHeader = dialogView.findViewById(R.id.tv_ViewAssessmentHeader);
+        recyclerView1 = dialogView.findViewById(R.id.rv_ViewAssessment);
+        swipeRefreshLayout1 = dialogView.findViewById(R.id.swipe_StudentList);
+        emptyIndicator1 = dialogView.findViewById(R.id.view_EmptyRecord);
+
+        dialogBuilder.setView(dialogView);
+        final AlertDialog b = dialogBuilder.create();
+
+        tvHeader.setText(selectedQuiz.getQuiz_title());
+
+//        if (assessmentArrayList.size() <= 0)
+//            eIndicator.setVisibility(View.VISIBLE);
+//
+//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//        recyclerView.setHasFixedSize(true);
+//        assessmentsAdapter = new AssessmentsAdapter(context, assessmentArrayList);
+//        recyclerView.setAdapter(assessmentsAdapter);
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.hide();
+            }
+        });
+
+        b.show();
+        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getStudentAssessment();
+    }
+
 
     private void getStudentAssessment() {
         assessmentArrayList.clear();
 
-        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout1.setRefreshing(true);
 
         RequestParams params = new RequestParams();
         params.put("quizId", selectedQuiz.getQuiz_id());
+        Debugger.logD("quizId " + selectedQuiz.getQuiz_id());
 
         HttpProvider.post(context, "controller_educator/GetQuizAssessment.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                swipeRefreshLayout.setRefreshing(false);
-
+                swipeRefreshLayout1.setRefreshing(false);
+                Debugger.logD("responseBody " + responseBody);
                 final String str = new String(responseBody, StandardCharsets.UTF_8);
-
+                Debugger.logD("str " + str);
+                if (str.equals(""))
+                    emptyIndicator1.setVisibility(View.VISIBLE);
                 try {
                     JSONArray jsonArray = new JSONArray(str);
                     Debugger.logD("ASSESSMENT: " + jsonArray);
@@ -209,54 +256,29 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
                         assessmentArrayList.add(assessment);
                     }
 
+                    recyclerView1.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerView1.setHasFixedSize(true);
+                    assessmentsAdapter = new AssessmentsAdapter(context, assessmentArrayList);
+                    assessmentsAdapter.setClickListener(new OnClickRecyclerView() {
+                        @Override
+                        public void onItemClick(View view, int position, int fromButton) {
+                        }
+                    });
+
+                    recyclerView1.setAdapter(assessmentsAdapter);
+                    emptyIndicator1.setVisibility(View.GONE);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Debugger.logD(e.toString());
                 }
-
-                openAssessmentStudentsDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout1.setRefreshing(false);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
-    }
-
-    private void openAssessmentStudentsDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-
-        LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_view_assessment, null);
-
-        ImageView ivClose = dialogView.findViewById(R.id.iv_ViewAssessmentClose);
-        TextView tvHeader = dialogView.findViewById(R.id.tv_ViewAssessmentHeader);
-        RecyclerView recyclerView = dialogView.findViewById(R.id.rv_ViewAssessment);
-        ConstraintLayout eIndicator = dialogView.findViewById(R.id.view_EmptyRecord);
-
-        dialogBuilder.setView(dialogView);
-        final AlertDialog b = dialogBuilder.create();
-
-        tvHeader.setText(selectedQuiz.getQuiz_title());
-
-        if (assessmentArrayList.size() <= 0)
-            eIndicator.setVisibility(View.VISIBLE);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setHasFixedSize(true);
-        assessmentsAdapter = new AssessmentsAdapter(context, assessmentArrayList);
-        recyclerView.setAdapter(assessmentsAdapter);
-
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                b.hide();
-            }
-        });
-
-        b.show();
-        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 }
