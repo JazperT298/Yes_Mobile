@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Subject;
+import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.util.ArrayList;
 
@@ -30,7 +31,7 @@ public class SubjectSearchAdapter extends RecyclerView.Adapter<SubjectSearchAdap
 
     @NonNull
     @Override
-    public SubjectSearchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.listrow_subject_search, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
@@ -44,6 +45,7 @@ public class SubjectSearchAdapter extends RecyclerView.Adapter<SubjectSearchAdap
         viewHolder.tvName.setText(String.format("%s %s", subject.getUser_firstname(), subject.getUser_lastname()));
         viewHolder.tvSchoolYear.setText(subject.getSchool_year());
         viewHolder.tvSubject.setText(subject.getTitle());
+        Debugger.logD("title " + subject.getTitle());
 
     }
 

@@ -165,7 +165,7 @@ public class HomeFragment extends Fragment {
         iv_HomeSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openSearchDialog();
+                openSearchUserDialog();
             }
         });
         iv_HomeChat.setOnClickListener(new View.OnClickListener() {
@@ -325,7 +325,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-    private void openSearchDialog(){
+    private void openSearchUserDialog(){
         Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.dialog_search_user);
         final EditText et_SearchUser;
@@ -421,6 +421,8 @@ public class HomeFragment extends Fragment {
         cvStatistics = view.findViewById(R.id.cv_Home_Stats);
         iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
 
+        //tvStatSubjectCount.setText(UserStudent.getCode(context));
+
         iv_HomeChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -483,7 +485,7 @@ public class HomeFragment extends Fragment {
         cvMyVideos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectMyAction();
+                selectPaidCourses();
             }
         });
 
@@ -652,6 +654,29 @@ public class HomeFragment extends Fragment {
         String[] items = {" My Course ", " My Upload "};
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("My Video");
+        dialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    Intent intent = new Intent(context, MyVideosActivity.class);
+                    intent.putExtra("MY_TITLE",  "1");
+                    startActivity(intent);
+                }
+                if (which == 1) {
+                    Intent intent = new Intent(context, MyVideosActivity.class);
+                    intent.putExtra("MY_TITLE",  "2");
+                    startActivity(intent);
+                }
+            }
+        });
+
+        dialog.create().show();
+    }
+
+    private void selectPaidCourses() {
+        String[] items = {" Video Lab ", " Yestech "};
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("Paid Courses");
         dialog.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

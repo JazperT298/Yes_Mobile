@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.activities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.adapters.SubjectSearchAdapter;
 import com.theyestech.yes_mobile.adapters.SubjectsEducatorAdapter;
 import com.theyestech.yes_mobile.adapters.SubjectsStudentAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
@@ -38,6 +40,7 @@ import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
@@ -70,6 +73,12 @@ public class SubjectActivity extends AppCompatActivity {
     private ArrayList<String> sSemester = new ArrayList<>();
 
     private String name = "", description = "", section = "", level = "", semester = "", schoolYear = "";
+
+    private SubjectSearchAdapter subjectSearchAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout1;
+    private ConstraintLayout emptyIndicator1;
+    private RecyclerView rv_Search;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +128,9 @@ public class SubjectActivity extends AppCompatActivity {
                 if (role.equals(UserRole.Educator()))
                     openAddSubjectDialog();
                 else {
-                    Intent intent = new Intent(context, SubjectSearchActivity.class);
-                    startActivity(intent);
+                    openSearchSubjectDialog();
+//                    Intent intent = new Intent(context, SubjectSearchActivity.class);
+//                    startActivity(intent);
                 }
             }
         });
@@ -476,6 +486,147 @@ public class SubjectActivity extends AppCompatActivity {
                 .setNegativeButton("NO", null)
                 .create();
         dialog.show();
+    }
+
+    private void openSearchSubjectDialog(){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.dialog_search_subject);
+        final EditText et_SearchSubject;
+        final ImageView iv_SearchBack, iv_SearchIcon;
+
+        et_SearchSubject = dialog.findViewById(R.id.et_SearchSubject);
+        iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
+        iv_SearchIcon = dialog.findViewById(R.id.iv_SearchIcon);
+        rv_Search = dialog.findViewById(R.id.rv_Search);
+        swipeRefreshLayout1 = dialog.findViewById(R.id.swipe_Search);
+        emptyIndicator1 = dialog.findViewById(R.id.view_EmptyRecord);
+
+
+        iv_SearchBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        iv_SearchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String search_text = et_SearchSubject.getText().toString();
+                //Toasty.warning(context, text).show();
+
+                swipeRefreshLayout1.setRefreshing(true);
+
+                ProgressPopup.showProgress(context);
+
+                subjectArrayList.clear();
+
+                RequestParams params = new RequestParams();
+                params.put("stud_token", UserStudent.getToken(context));
+                params.put("stud_id", UserStudent.getID(context));
+                params.put("search_text", search_text);
+
+                HttpProvider.post(context, "controller_student/search_subject.php", params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        ProgressPopup.hideProgress();
+                        swipeRefreshLayout1.setRefreshing(false);
+                        String str = new String(responseBody, StandardCharsets.UTF_8);
+                        if (str.contains("NO RECORD FOUND"))
+                            emptyIndicator1.setVisibility(View.VISIBLE);
+                        try {
+                            JSONArray jsonArray = new JSONArray(str);
+                            Debugger.logD("SUBJECTS: " + jsonArray);
+                            for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String subj_id = jsonObject.getString("subj_id");
+                                String subj_level = jsonObject.getString("subj_level");
+                                String user_id = jsonObject.getString("user_id");
+                                String subj_section = jsonObject.getString("subj_section");
+                                String subj_title = jsonObject.getString("subj_title");
+                                String subj_description = jsonObject.getString("subj_description");
+                                String subj_semester = jsonObject.getString("subj_semester");
+                                String subj_school_year = jsonObject.getString("subj_school_year");
+                                String subj_file = jsonObject.getString("subj_file");
+                                String subj_code = jsonObject.getString("subj_code");
+                                String user_firstname = jsonObject.getString("user_firstname");
+                                String user_lastname = jsonObject.getString("user_lastname");
+
+
+                                Subject subject = new Subject();
+                                subject.setId(subj_id);
+                                subject.setLevel(subj_level);
+                                subject.setUser_id(user_id);
+                                subject.setSection(subj_section);
+                                subject.setTitle(subj_title);
+                                subject.setDescription(subj_description);
+                                subject.setSemester(subj_semester);
+                                subject.setSchool_year(subj_school_year);
+                                subject.setImage(subj_file);
+                                subject.setCode(subj_code);
+                                subject.setUser_firstname(user_firstname);
+                                subject.setUser_lastname(user_lastname);
+
+                                subjectArrayList.add(subject);
+                            }
+
+                            rv_Search.setLayoutManager(new LinearLayoutManager(context));
+                            rv_Search.setHasFixedSize(true);
+                            subjectSearchAdapter = new SubjectSearchAdapter(context, subjectArrayList);
+                            subjectSearchAdapter.setClickListener(new OnClickRecyclerView() {
+                                @Override
+                                public void onItemClick(View view, int position, int fromButton) {
+                                    selectedSubject = subjectArrayList.get(position);
+                                    sendSubjectRequest();
+                                }
+                            });
+
+                            rv_Search.setAdapter(subjectSearchAdapter);
+                            emptyIndicator1.setVisibility(View.GONE);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        ProgressPopup.hideProgress();
+                        OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+                    }
+                });
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void sendSubjectRequest(){
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("stud_token", UserStudent.getToken(context));
+        params.put("stud_id", UserStudent.getID(context));
+        params.put("subj_code", selectedSubject.getCode());
+
+        HttpProvider.post(context, "controller_student/request_join_subject.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                Debugger.logD("responseBody: " + responseBody);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD("str: " + str);
+                if (str.contains("success"))
+                    Toasty.success(context, "Request to join sent.").show();
+                else
+                    Toasty.success(context, str).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 
     @Override
