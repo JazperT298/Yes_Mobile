@@ -164,6 +164,20 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                         onClickRecyclerView.onItemClick(v, getAdapterPosition(), 3);
                 }
             });
+            ivImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickRecyclerView != null)
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 4);
+                }
+            });
+            videoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickRecyclerView != null)
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 4);
+                }
+            });
         }
     }
 

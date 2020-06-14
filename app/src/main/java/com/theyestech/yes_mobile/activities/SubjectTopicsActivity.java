@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,10 +32,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -254,6 +258,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
 //                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
 //                            intent.putExtra("TOPIC", topic);
 //                            startActivity(intent);
+
                             if(fromButton == 1){
 
                             }else if (fromButton == 2){
@@ -266,11 +271,17 @@ public class SubjectTopicsActivity extends AppCompatActivity {
 
                                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                                     public boolean onMenuItemClick(MenuItem item) {
-                                        openDeleteNoteDialog(selectedTopic.getTopic_id());
+                                        if (!role.equals(UserRole.Educator())){
+                                            Toasty.warning(context, "You can't delete a topic").show();
+                                        }else {
+                                            openDeleteNoteDialog(selectedTopic.getTopic_id());
+                                        }
                                         return true;
                                     }
                                 });
                                 popup.show();//showing pop
+                            }else if (fromButton == 4){
+                                openViewTopicDialog(selectedTopic.getTopic_id(),selectedTopic.getTopic_details(), selectedTopic.getTopic_file(),  selectedTopic.getTopic_filetype());
                             }
                         }
                     });
@@ -383,6 +394,55 @@ public class SubjectTopicsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void openViewTopicDialog(String id, String title, String file, String type){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.dialog_view_topic_desc);
+        final ImageView close,iv_ListrowSubjectTopicsImage;
+        final VideoView vv_ListrowSubjectTopicVideo;
+        final TextView tv_ListrowSubjectTopicsDetails;
+        final ConstraintLayout constraint_ListrowSubjectTopicsYes, constraint_ListrowSubjectTopicsComments;
+
+        close = dialog.findViewById(R.id.close);
+        iv_ListrowSubjectTopicsImage = dialog.findViewById(R.id.iv_ListrowSubjectTopicsImage);
+        vv_ListrowSubjectTopicVideo = dialog.findViewById(R.id.vv_ListrowSubjectTopicVideo);
+        tv_ListrowSubjectTopicsDetails = dialog.findViewById(R.id.tv_ListrowSubjectTopicsDetails);
+        constraint_ListrowSubjectTopicsComments = dialog.findViewById(R.id.constraint_ListrowSubjectTopicsComments);
+        constraint_ListrowSubjectTopicsYes = dialog.findViewById(R.id.constraint_ListrowSubjectTopicsYes);
+
+        constraint_ListrowSubjectTopicsComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SubjectTopicsCommentActivity.class);
+                intent.putExtra("TOPIC_ID", selectedTopic.getTopic_id());
+                context.startActivity(intent);
+            }
+        });
+
+        tv_ListrowSubjectTopicsDetails.setText(title);
+        if (type.equalsIgnoreCase("image")){
+            //iv_ListrowSubjectTopicsImage.setImageURI(Uri.parse(HttpProvider.getTopicDir() + file));
+            //iv_ListrowSubjectTopicsImage.setVisibility(View.VISIBLE);
+            Debugger.logD("as " + HttpProvider.getTopicDir() + file);
+            Glide.with(context)
+                    .load(HttpProvider.getTopicDir() + file)
+                    .into(iv_ListrowSubjectTopicsImage);
+            iv_ListrowSubjectTopicsImage.setVisibility(View.VISIBLE);
+        }else{
+            vv_ListrowSubjectTopicVideo.setVideoURI(Uri.parse(HttpProvider.getTopicDir() + file));
+            vv_ListrowSubjectTopicVideo.setMediaController(new MediaController(context));
+            vv_ListrowSubjectTopicVideo.start();
+            iv_ListrowSubjectTopicsImage.setVisibility(View.GONE);
+            vv_ListrowSubjectTopicVideo.setVisibility(View.VISIBLE);
+        }
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private void selectAction() {
