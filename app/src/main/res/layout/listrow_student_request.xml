@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_ListrowStudents"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tv_ListrowSubjectStudentsEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_ListrowSubjectStudentsProfile"
+        app:layout_constraintStart_toStartOf="@+id/tv_ListrowSubjectStudentsFullname"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ListrowSubjectStudentsFullname" />
+
+    <TextView
+        android:id="@+id/tv_ListrowSubjectStudentsFullname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Jasper Tony D. Atillo"
+        android:textColor="@android:color/primary_text_light_nodisable"
+        app:layout_constraintStart_toEndOf="@+id/iv_ListrowSubjectStudentsProfile"
+        app:layout_constraintTop_toTopOf="@+id/iv_ListrowSubjectStudentsProfile" />
+
+    <ImageView
+        android:id="@+id/iv_ListrowSubjectStudentsProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_student_profile" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorCloud"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_ListrowSubjectStudentsProfile" />
+
+    <TextView
+        android:id="@+id/tv_AcceptRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_request_button"
+        android:gravity="center"
+        android:text="    Accept    "
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_DeclineRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_request_button"
+        android:gravity="center"
+        android:text="    Decline    "
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_AcceptRequest"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+</android.support.constraint.ConstraintLayout>

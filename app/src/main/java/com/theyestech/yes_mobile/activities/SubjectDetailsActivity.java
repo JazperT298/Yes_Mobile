@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.activities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,8 +9,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,20 +33,27 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.adapters.StudentRequestAdapter;
+import com.theyestech.yes_mobile.adapters.StudentStickersAdapter;
 import com.theyestech.yes_mobile.models.Section;
+import com.theyestech.yes_mobile.models.Sticker;
+import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
@@ -66,6 +79,12 @@ public class SubjectDetailsActivity extends AppCompatActivity {
     private ArrayList<String> sSemester = new ArrayList<>();
 
     private String name = "", description = "", section = "", level = "", semester = "", schoolYear = "";
+
+    private RecyclerView rv_StudentRequest;
+    private SwipeRefreshLayout swipeRefreshLayout1;
+    private ConstraintLayout emptyIndicator1;
+    private ArrayList<Student> studentArrayList = new ArrayList<>();
+    private StudentRequestAdapter studentRequestAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +208,12 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, SubjectAssessmentsQuizActivity.class);
                 intent.putExtra("SUBJECT", subject);
                 startActivity(intent);
+            }
+        });
+        cvRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openStudentRequestDialog();
             }
         });
     }
@@ -428,5 +453,108 @@ public class SubjectDetailsActivity extends AppCompatActivity {
             }
         });
         popup.show();//showing popup menu
+    }
+
+    private void openStudentRequestDialog(){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.dialog_student_subject_request);
+        final ImageView iv_SearchBack;
+
+        iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
+        rv_StudentRequest = dialog.findViewById(R.id.rv_StudentRequest);
+        swipeRefreshLayout1 = dialog.findViewById(R.id.swipe_StudentRequest);
+        emptyIndicator1 = dialog.findViewById(R.id.view_EmptyRecord);
+
+        swipeRefreshLayout1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAllStudentSubjectRequest();
+            }
+        });
+
+        iv_SearchBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        getAllStudentSubjectRequest();
+    }
+
+    private void getAllStudentSubjectRequest(){
+        studentArrayList.clear();
+
+        swipeRefreshLayout1.setRefreshing(true);
+
+        RequestParams params = new RequestParams();
+        params.put("subj_id", subject.getId());
+
+        Debugger.logD("subj_id " + subject.getId());
+        HttpProvider.post(context, "controller_educator/get_pending_students_subject.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                swipeRefreshLayout1.setRefreshing(false);
+                Debugger.logD("responseBody " + responseBody);
+
+                String str = new String(responseBody);
+                Debugger.logD("str " + str);
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(str);
+                    Debugger.logD("jsonArray " + jsonArray);
+                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String user_id = jsonObject.getString("user_id");
+                        String user_token = jsonObject.getString("user_token");
+                        String user_email_address = jsonObject.getString("user_email_address");
+                        String user_password = jsonObject.getString("user_password");
+                        String user_firstname = jsonObject.getString("user_firstname");
+                        String user_lastname = jsonObject.getString("user_lastname");
+                        String user_middlename = jsonObject.getString("user_middlename");
+                        String user_suffixes = jsonObject.getString("user_suffixes");
+                        String user_gender = jsonObject.getString("user_gender");
+                        String user_contact_number = jsonObject.getString("user_contact_number");
+                        String user_image = jsonObject.getString("user_image");
+                        String user_activation = jsonObject.getString("user_activation");
+                        String validated = jsonObject.getString("validated");
+
+                        Student student = new Student();
+                        student.setUser_id(user_id);
+                        student.setUser_token(user_token);
+                        student.setUser_email_address(user_email_address);
+                        student.setUser_password(user_password);
+                        student.setUser_firstname(user_firstname);
+                        student.setUser_lastname(user_lastname);
+                        student.setUser_middlename(user_middlename);
+                        student.setUser_suffixes(user_suffixes);
+                        student.setUser_gender(user_gender);
+                        student.setUser_contact_number(user_contact_number);
+                        student.setUser_image(user_image);
+                        student.setUser_activiation(user_activation);
+                        student.setUser_validated(validated);
+
+
+                        studentArrayList.add(student);
+                    }
+                    Collections.reverse(studentArrayList);
+
+                    rv_StudentRequest.setLayoutManager(new LinearLayoutManager(context));
+
+                    studentRequestAdapter = new StudentRequestAdapter(context, studentArrayList);
+
+                    rv_StudentRequest.setAdapter(studentRequestAdapter);
+                    emptyIndicator1.setVisibility(View.GONE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                swipeRefreshLayout1.setRefreshing(false);
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
     }
 }
