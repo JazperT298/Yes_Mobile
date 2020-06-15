@@ -180,7 +180,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
-        params.put("teach_token", userToken);
+        params.put("teach_token", UserEducator.getToken(context));
         Debugger.logD("teach_token2 " + UserEducator.getToken(context));
 
         HttpProvider.defaultPost(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
