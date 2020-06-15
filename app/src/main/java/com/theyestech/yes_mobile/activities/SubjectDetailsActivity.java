@@ -86,6 +86,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
     private ConstraintLayout emptyIndicator1;
     private ArrayList<Student> studentArrayList = new ArrayList<>();
     private StudentRequestAdapter studentRequestAdapter;
+    private Student student;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -502,6 +503,8 @@ public class SubjectDetailsActivity extends AppCompatActivity {
 
                 String str = new String(responseBody);
                 Debugger.logD("str " + str);
+                if (str.equals(""))
+                    emptyIndicator1.setVisibility(View.VISIBLE);
                 JSONArray jsonArray = null;
                 try {
                     jsonArray = new JSONArray(str);
@@ -537,7 +540,6 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                         student.setUser_activiation(user_activation);
                         student.setUser_validated(validated);
 
-
                         studentArrayList.add(student);
                     }
                     Collections.reverse(studentArrayList);
@@ -548,10 +550,11 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                     studentRequestAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
+                            student = studentArrayList.get(position);
                             if (fromButton == 1){
 
                             }else if (fromButton == 2){
-                                acceptStudentRequest();
+                                acceptStudentRequest(student.getUser_id());
                             }
                         }
                     });
@@ -571,11 +574,12 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void acceptStudentRequest(){
+    private void acceptStudentRequest(String stud_id){
         ProgressPopup.showProgress(context);
         RequestParams params = new RequestParams();
-        params.put("stud_id", UserStudent.getID(context));
+        params.put("stud_id", stud_id);
         params.put("subj_id", subject.getId());
+        Debugger.logD("subj_id " + subject.getId());
 
         HttpProvider.post(context, "controller_educator/accept_student_request.php", params, new AsyncHttpResponseHandler() {
             @Override
@@ -583,9 +587,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 ProgressPopup.hideProgress();
                 Debugger.logD("responseBody " + responseBody);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-
                 Debugger.logD("str " + str);
-
                 if (str.contains("success")) {
                     Toasty.success(context, "Student Accepted").show();
                     getAllStudentSubjectRequest();
