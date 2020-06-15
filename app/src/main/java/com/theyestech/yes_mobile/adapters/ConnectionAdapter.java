@@ -16,6 +16,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Note;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
@@ -23,12 +24,12 @@ import java.util.ArrayList;
 public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.ViewHolder> {
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<UserEducator> userEducatorArrayList;
+    private ArrayList<UserStudent> userStudentArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public ConnectionAdapter(Context context, ArrayList<UserEducator> userEducatorArrayList) {
+    public ConnectionAdapter(Context context, ArrayList<UserStudent> userStudentArrayList) {
         this.context = context;
-        this.userEducatorArrayList = userEducatorArrayList;
+        this.userStudentArrayList = userStudentArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -43,18 +44,18 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        UserEducator userEducator = userEducatorArrayList.get(i);
-        viewHolder.tv_ConnectionFullname.setText(userEducator.getFirsname() + " " + userEducator.getLastname());
+        UserStudent userStudent = userStudentArrayList.get(i);
+        viewHolder.tv_ConnectionFullname.setText(userStudent.getFirsname() + " " + userStudent.getLastname());
 
         Glide.with(context)
-                .load(HttpProvider.getProfileDir() + userEducator.getImage())
+                .load(HttpProvider.getProfileDir() + userStudent.getImage())
                 .apply(GlideOptions.getOptions())
                 .into(viewHolder.iv_ConnectionProfile);
     }
 
     @Override
     public int getItemCount() {
-        return userEducatorArrayList.size();
+        return userStudentArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -383,7 +383,7 @@ public class HomeFragment extends Fragment {
                             jsonArray = new JSONArray(str);
                             Debugger.logD("jsonArray " + jsonArray);
                             for (int i = 0; i <= jsonArray.length() - 1; i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String user_id = jsonObject.getString("user_id");
                                 String user_token = jsonObject.getString("user_token");
                                 String user_code = jsonObject.getString("user_code");

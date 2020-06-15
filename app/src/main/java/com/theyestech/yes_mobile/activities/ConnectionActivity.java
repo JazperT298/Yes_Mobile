@@ -1,5 +1,6 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -15,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -26,17 +29,21 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import es.dmoral.toasty.Toasty;
 
 public class ConnectionActivity extends AppCompatActivity {
     private Context context;
@@ -49,7 +56,8 @@ public class ConnectionActivity extends AppCompatActivity {
     private RecyclerView rv_Connection;
     private FloatingActionButton fab_Connection;
     private ConnectionAdapter connectionAdapter;
-    private ArrayList<UserEducator> userEducatorArrayList = new ArrayList<>();
+    private ArrayList<UserStudent> userStudentArrayList = new ArrayList<>();
+    private UserStudent userStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +93,13 @@ public class ConnectionActivity extends AppCompatActivity {
 
     }
     private void getUserConnection(){
-        userEducatorArrayList.clear();
+        userStudentArrayList.clear();
 
         swipeRefreshLayout.setRefreshing(true);
 
         RequestParams params = new RequestParams();
-        params.put("user_id", UserEducator.getID(context));
         params.put("user_token", UserEducator.getToken(context));
+        params.put("user_id", UserEducator.getID(context));
         Debugger.logD("user_token " + UserEducator.getToken(context));
         Debugger.logD("user_id " + UserEducator.getID(context));
 
@@ -105,63 +113,88 @@ public class ConnectionActivity extends AppCompatActivity {
                 if (str.equals("") || str.equals("[]" )|| str.contains("NO RECORD FOUND"))
                     emptyIndicator.setVisibility(View.VISIBLE);
 
+                JSONArray jsonArray = null;
                 try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    Debugger.logD("STUDENTS: " + jsonArray);
+                    jsonArray = new JSONArray(str);
+                    Debugger.logD("jsonArray " + jsonArray);
                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
-//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                        String user_id = jsonObject.getString("user_id");
-//                        String user_token = jsonObject.getString("user_token");
-//                        String user_email_address = jsonObject.getString("user_email_address");
-//                        String user_password = jsonObject.getString("user_password");
-//                        String user_firstname = jsonObject.getString("user_firstname");
-//                        String user_lastname = jsonObject.getString("user_lastname");
-//                        String user_middlename = jsonObject.getString("user_middlename");
-//                        String user_suffixes = jsonObject.getString("user_suffixes");
-//                        String user_gender = jsonObject.getString("user_gender");
-//                        String user_contact_number = jsonObject.getString("user_contact_number");
-//                        String user_image = jsonObject.getString("user_image");
-//                        String user_activation = jsonObject.getString("user_activation");
-//                        String validated = jsonObject.getString("validated");
-//
-//                        Student student = new Student();
-//                        student.setUser_id(user_id);
-//                        student.setUser_token(user_token);
-//                        student.setUser_email_address(user_email_address);
-//                        student.setUser_password(user_password);
-//                        student.setUser_firstname(user_firstname);
-//                        student.setUser_lastname(user_lastname);
-//                        student.setUser_middlename(user_middlename);
-//                        student.setUser_suffixes(user_suffixes);
-//                        student.setUser_gender(user_gender);
-//                        student.setUser_contact_number(user_contact_number);
-//                        student.setUser_image(user_image);
-//                        student.setUser_activiation(user_activation);
-//                        student.setUser_validated(validated);
-//
-//                        studentArrayList.add(student);
+                        JSONObject jsonObject = jsonArray.getJSONObject(i );
+                        String user_id = jsonObject.getString("user_id");
+                        String user_token = jsonObject.getString("user_token");
+                        String user_code = jsonObject.getString("user_code");
+                        String user_email_address = jsonObject.getString("user_email_address");
+                        String user_password = jsonObject.getString("user_password");
+                        String user_fullname = jsonObject.getString("user_fullname");
+                        String user_firstname = jsonObject.getString("user_firstname");
+                        String user_lastname = jsonObject.getString("user_lastname");
+                        String user_middlename = jsonObject.getString("user_middlename");
+                        String user_suffixes = jsonObject.getString("user_suffixes");
+                        String user_gender = jsonObject.getString("user_gender");
+                        String user_contact_number = jsonObject.getString("user_contact_number");
+                        String user_image = jsonObject.getString("user_image");
+                        String user_educational_attainment = jsonObject.getString("user_educational_attainment");
+                        String user_subj_major = jsonObject.getString("user_subj_major");
+                        String user_current_school = jsonObject.getString("user_current_school");
+                        String user_position = jsonObject.getString("user_position");
+                        String user_facebook = jsonObject.getString("user_facebook");
+                        String user_instagram = jsonObject.getString("user_instagram");
+                        String user_twitter = jsonObject.getString("user_twitter");
+                        String user_gmail = jsonObject.getString("user_gmail");
+                        String user_motto = jsonObject.getString("user_motto");
+                        String user_activation = jsonObject.getString("user_activation");
+                        String user_role = jsonObject.getString("user_role");
+                        String validated = jsonObject.getString("validated");
+                        String result = jsonObject.getString("result");
+                        String connection = jsonObject.getString("connection");
+
+                        UserStudent userStudent = new UserStudent();
+                        userStudent.setId(user_id);
+                        userStudent.setToken(user_token);
+                        userStudent.setCode(user_code);
+                        userStudent.setEmail_address(user_email_address);
+                        userStudent.setPassword(user_password);
+                        userStudent.setFirsname(user_firstname);
+                        userStudent.setLastname(user_lastname);
+                        userStudent.setMiddlename(user_middlename);
+                        userStudent.setSuffix(user_suffixes);
+                        userStudent.setGender(user_gender);
+                        userStudent.setContact_number(user_contact_number);
+                        userStudent.setImage(user_image);
+                        userStudent.setEducational_attainment(user_educational_attainment);
+                        userStudent.setSubj_major(user_subj_major);
+                        userStudent.setCurrent_school(user_current_school);
+                        userStudent.setPosition(user_position);
+                        userStudent.setFacebook(user_facebook);
+                        userStudent.setInstagram(user_instagram);
+                        userStudent.setTwitter(user_twitter);
+                        userStudent.setGmail(user_gmail);
+                        userStudent.setMotto(user_motto);
+                        userStudent.setUser_activation(user_activation);
+                        userStudent.setUser_role(user_role);
+                        userStudent.setValidated(validated);
+                        userStudent.setConnection(connection);
+
+                        userStudentArrayList.add(userStudent);
+                        Debugger.logD("user_fullname " + user_fullname);
+
                     }
-
-                    rv_Connection.setLayoutManager(new LinearLayoutManager(context));
-                    rv_Connection.setHasFixedSize(true);
-                    connectionAdapter = new ConnectionAdapter(context, userEducatorArrayList);
-                    connectionAdapter.setClickListener(new OnClickRecyclerView() {
-                        @Override
-                        public void onItemClick(View view, int position, int fromButton) {
-//                            student = studentArrayList.get(position);
-//                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
-//                            intent.putExtra("STUDENT", student);
-//                            startActivity(intent);
-                        }
-                    });
-
-                    rv_Connection.setAdapter(connectionAdapter);
-                    emptyIndicator.setVisibility(View.GONE);
-
-                } catch (Exception e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
-                    Debugger.logD(e.toString());
                 }
+                rv_Connection.setLayoutManager(new LinearLayoutManager(context));
+                rv_Connection.setHasFixedSize(true);
+                connectionAdapter = new ConnectionAdapter(context, userStudentArrayList);
+                connectionAdapter.setClickListener(new OnClickRecyclerView() {
+                    @Override
+                    public void onItemClick(View view, int position, int fromButton) {
+                        userStudent = userStudentArrayList.get(position);
+                        openUsersProfileDialog();
+                        Debugger.logD("user_fullname " + userStudent.getId());
+                    }
+                });
+
+                rv_Connection.setAdapter(connectionAdapter);
+                emptyIndicator.setVisibility(View.GONE);
             }
 
             @Override
@@ -170,5 +203,93 @@ public class ConnectionActivity extends AppCompatActivity {
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
+    }
+    private void openUsersProfileDialog(){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.search_user_profile);
+        final ImageView iv_UserProfileImage, iv_UserProfileBackground, iv_UserProfileClose;
+        final TextView tv_UserProfileFullname, tv_UserProfileEmail, tv_UserProfileInfoFullname, tv_UserProfileInfoGender, tv_UserProfileInfoPhone, tv_UserProfileInfoEmail, tv_UserProfileInfoMotto;
+        final TextView tv_UserProfileInfoEducationalAttainment, tv_UserProfileInfoSubjectMajor, tv_UserProfileInfoCurrentSchool, tv_UserProfileInfoSchoolPosition;
+        final TextView tv_UserProfileInfoFacebook, tv_UserProfileInfoTwitter, tv_UserProfileInfoInstagram,tv_SendMessage,tv_SendRequest;
+
+        iv_UserProfileImage = dialog.findViewById(R.id.iv_UserProfileImage);
+        iv_UserProfileBackground = dialog.findViewById(R.id.iv_UserProfileBackground);
+        iv_UserProfileClose = dialog.findViewById(R.id.iv_UserProfileClose);
+        tv_UserProfileFullname = dialog.findViewById(R.id.tv_UserProfileFullname);
+        tv_UserProfileEmail = dialog.findViewById(R.id.tv_UserProfileEmail);
+        tv_UserProfileInfoFullname = dialog.findViewById(R.id.tv_UserProfileInfoFullname);
+        tv_UserProfileInfoGender = dialog.findViewById(R.id.tv_UserProfileInfoGender);
+        tv_UserProfileInfoPhone = dialog.findViewById(R.id.tv_UserProfileInfoPhone);
+        tv_UserProfileInfoEmail = dialog.findViewById(R.id.tv_UserProfileInfoEmail);
+        tv_UserProfileInfoMotto = dialog.findViewById(R.id.tv_UserProfileInfoMotto);
+        tv_UserProfileInfoEducationalAttainment = dialog.findViewById(R.id.tv_UserProfileInfoEducationalAttainment);
+        tv_UserProfileInfoSubjectMajor = dialog.findViewById(R.id.tv_UserProfileInfoSubjectMajor);
+        tv_UserProfileInfoCurrentSchool = dialog.findViewById(R.id.tv_UserProfileInfoCurrentSchool);
+        tv_UserProfileInfoSchoolPosition = dialog.findViewById(R.id.tv_UserProfileInfoSchoolPosition);
+        tv_UserProfileInfoFacebook = dialog.findViewById(R.id.tv_UserProfileInfoFacebook);
+        tv_UserProfileInfoTwitter = dialog.findViewById(R.id.tv_UserProfileInfoTwitter);
+        tv_UserProfileInfoInstagram = dialog.findViewById(R.id.tv_UserProfileInfoInstagram);
+        tv_SendMessage = dialog.findViewById(R.id.tv_SendMessage);
+        tv_SendRequest = dialog.findViewById(R.id.tv_SendRequest);
+
+        tv_UserProfileFullname.setText(userStudent.getFirsname() + " " + userStudent.getMiddlename() + " " + userStudent.getLastname());
+        tv_UserProfileEmail.setText(userStudent.getEmail_address());
+        tv_UserProfileInfoFullname.setText(userStudent.getFirsname() + " " + userStudent.getMiddlename() + " " + userStudent.getLastname() + " " + userStudent.getSuffix() );
+        if (userStudent.getGender().equals("1")){
+            tv_UserProfileInfoGender.setText("Male");
+        }else if (userStudent.getGender().equals("2")){
+            tv_UserProfileInfoGender.setText("Female");
+        }else{
+            tv_UserProfileInfoGender.setText("N/A");
+        }
+        if (userStudent.getConnection().equals("connected")){
+            tv_SendRequest.setText("   Connected   ");
+            tv_SendRequest.setEnabled(false);
+        }else if (userStudent.getConnection().equals("requestsent")){
+            tv_SendRequest.setText("   Request sent   ");
+            tv_SendRequest.setEnabled(false);
+        }else if (userStudent.getConnection().equals("none")){
+            tv_SendRequest.setText("   Send Request   ");
+        }
+        tv_UserProfileInfoPhone.setText(userStudent.getContact_number());
+        tv_UserProfileInfoEmail.setText(userStudent.getEmail_address());
+        tv_UserProfileInfoMotto.setText(userStudent.getMotto());
+        tv_UserProfileInfoEducationalAttainment.setText(userStudent.getEducational_attainment());
+        tv_UserProfileInfoSubjectMajor.setText(userStudent.getSubj_major());
+        tv_UserProfileInfoCurrentSchool.setText(userStudent.getCurrent_school());
+        tv_UserProfileInfoSchoolPosition.setText(userStudent.getPosition());
+        tv_UserProfileInfoFacebook.setText(userStudent.getFacebook());
+        tv_UserProfileInfoTwitter.setText(userStudent.getTwitter());
+        tv_UserProfileInfoInstagram.setText(userStudent.getInstagram());
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + userStudent.getImage())
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
+                .apply(GlideOptions.getOptions())
+                .into(iv_UserProfileBackground);
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + userStudent.getImage())
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
+                .apply(GlideOptions.getOptions())
+                .into(iv_UserProfileImage);
+        iv_UserProfileClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        tv_SendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toasty.warning(context, "Chat is Unavailable").show();
+            }
+        });
+        tv_SendRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sendUserConnection();
+            }
+        });
+
+        dialog.show();
     }
 }
