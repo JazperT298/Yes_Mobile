@@ -386,6 +386,8 @@ public class HomeFragment extends Fragment {
 
 
 
+
+
                     }
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
