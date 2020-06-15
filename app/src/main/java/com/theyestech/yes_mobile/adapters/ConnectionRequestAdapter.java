@@ -14,21 +14,23 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Student;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
-public class StudentRequestAdapter extends RecyclerView.Adapter<StudentRequestAdapter.ViewHolder> {
+public class ConnectionRequestAdapter extends RecyclerView.Adapter<ConnectionRequestAdapter.ViewHolder>  {
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Student> studentArrayList;
+    private ArrayList<UserStudent> userStudentArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public StudentRequestAdapter(Context context, ArrayList<Student> studentArrayList) {
+    public ConnectionRequestAdapter(Context context, ArrayList<UserStudent> userStudentArrayList) {
         this.context = context;
-        this.studentArrayList = studentArrayList;
+        this.userStudentArrayList = userStudentArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -39,21 +41,21 @@ public class StudentRequestAdapter extends RecyclerView.Adapter<StudentRequestAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StudentRequestAdapter.ViewHolder viewHolder, int i) {
-        Student student = studentArrayList.get(i);
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        UserStudent userStudent = userStudentArrayList.get(i);
 
-        viewHolder.tvName.setText(student.getUser_firstname() + " " + student.getUser_lastname());
-        //viewHolder.tvEmail.setText(student.getUser_email_address());
+        viewHolder.tvName.setText(userStudent.getFirsname() + " " + userStudent.getLastname());
+        //viewHolder.tvEmail.setText(userStudent.getEmail_address());
 
         Glide.with(context)
-                .load(HttpProvider.getProfileDir() + student.getUser_image())
+                .load(HttpProvider.getProfileDir() + userStudent.getImage())
                 .apply(GlideOptions.getOptions())
                 .into(viewHolder.ivImage);
     }
 
     @Override
     public int getItemCount() {
-        return studentArrayList.size();
+        return userStudentArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -82,7 +84,6 @@ public class StudentRequestAdapter extends RecyclerView.Adapter<StudentRequestAd
             });
         }
     }
-
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
     }

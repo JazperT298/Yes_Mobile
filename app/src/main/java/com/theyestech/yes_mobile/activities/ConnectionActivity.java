@@ -24,6 +24,8 @@ import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ConnectionAdapter;
+import com.theyestech.yes_mobile.adapters.ConnectionRequestAdapter;
+import com.theyestech.yes_mobile.adapters.StudentRequestAdapter;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Student;
@@ -33,6 +35,7 @@ import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -41,23 +44,29 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
 
 public class ConnectionActivity extends AppCompatActivity {
     private Context context;
-    private String role;
+    private String role, count;
 
-    private ImageView imageView35;
+    private ImageView imageView35,iv_connection;
+    private TextView tv_count;
 
     private ConstraintLayout emptyIndicator;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rv_Connection;
-    private FloatingActionButton fab_Connection;
     private ConnectionAdapter connectionAdapter;
     private ArrayList<UserStudent> userStudentArrayList = new ArrayList<>();
     private UserStudent userStudent;
+
+    private RecyclerView rv_StudentRequest;
+    private SwipeRefreshLayout swipeRefreshLayout1;
+    private ConstraintLayout emptyIndicator1;
+    private ConnectionRequestAdapter connectionRequestAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +84,14 @@ public class ConnectionActivity extends AppCompatActivity {
         emptyIndicator = findViewById(R.id.view_EmptyRecord);
         swipeRefreshLayout = findViewById(R.id.swipe_Connections);
         rv_Connection = findViewById(R.id.rv_Connection);
-        fab_Connection = findViewById(R.id.fab_Connection);
+        tv_count = findViewById(R.id.tv_count);
+        iv_connection = findViewById(R.id.iv_connection);
+        iv_connection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openConnectionRequestDialog();
+            }
+        });
         imageView35.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +106,40 @@ public class ConnectionActivity extends AppCompatActivity {
             }
         });
         getUserConnection();
+        getRequestCount();
+    }
+    private void getRequestCount(){
+        RequestParams params = new RequestParams();
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_id", UserEducator.getID(context));
 
+        HttpProvider.post(context, "controller_global/GetUserRequestsConnections.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                Debugger.logD("responseBody " + responseBody);
+
+                String str = new String(responseBody);
+                Debugger.logD("str " + str);
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(str);
+                    if(String.valueOf(jsonArray.length()).equals("0")){
+                        tv_count.setText(String.valueOf(jsonArray.length()));
+                        tv_count.setVisibility(View.VISIBLE);
+                    }else{
+                        tv_count.setVisibility(View.GONE);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            }
+        });
     }
     private void getUserConnection(){
         userStudentArrayList.clear();
@@ -292,4 +341,201 @@ public class ConnectionActivity extends AppCompatActivity {
 
         dialog.show();
     }
+    private void openConnectionRequestDialog(){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.dialog_connection_request);
+        final ImageView iv_SearchBack;
+
+        iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
+        rv_StudentRequest = dialog.findViewById(R.id.rv_StudentRequest);
+        swipeRefreshLayout1 = dialog.findViewById(R.id.swipe_StudentRequest);
+        emptyIndicator1 = dialog.findViewById(R.id.view_EmptyRecord);
+
+        swipeRefreshLayout1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAllConnectionRequest();
+            }
+        });
+
+        iv_SearchBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        getAllConnectionRequest();
+    }
+    private void getAllConnectionRequest(){
+        userStudentArrayList.clear();
+
+        swipeRefreshLayout1.setRefreshing(true);
+
+        RequestParams params = new RequestParams();
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_id", UserEducator.getID(context));
+
+        HttpProvider.post(context, "controller_global/GetUserRequestsConnections.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                swipeRefreshLayout1.setRefreshing(false);
+                Debugger.logD("responseBody " + responseBody);
+
+                String str = new String(responseBody);
+                Debugger.logD("str " + str);
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(str);
+                    Debugger.logD("jsonArray " + jsonArray);
+                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i );
+                        String user_id = jsonObject.getString("user_id");
+                        String user_token = jsonObject.getString("user_token");
+                        String user_code = jsonObject.getString("user_code");
+                        String user_email_address = jsonObject.getString("user_email_address");
+                        String user_password = jsonObject.getString("user_password");
+                        String user_fullname = jsonObject.getString("user_fullname");
+                        String user_firstname = jsonObject.getString("user_firstname");
+                        String user_lastname = jsonObject.getString("user_lastname");
+                        String user_middlename = jsonObject.getString("user_middlename");
+                        String user_suffixes = jsonObject.getString("user_suffixes");
+                        String user_gender = jsonObject.getString("user_gender");
+                        String user_contact_number = jsonObject.getString("user_contact_number");
+                        String user_image = jsonObject.getString("user_image");
+                        String user_educational_attainment = jsonObject.getString("user_educational_attainment");
+                        String user_subj_major = jsonObject.getString("user_subj_major");
+                        String user_current_school = jsonObject.getString("user_current_school");
+                        String user_position = jsonObject.getString("user_position");
+                        String user_facebook = jsonObject.getString("user_facebook");
+                        String user_instagram = jsonObject.getString("user_instagram");
+                        String user_twitter = jsonObject.getString("user_twitter");
+                        String user_gmail = jsonObject.getString("user_gmail");
+                        String user_motto = jsonObject.getString("user_motto");
+                        String user_activation = jsonObject.getString("user_activation");
+                        String user_role = jsonObject.getString("user_role");
+                        String validated = jsonObject.getString("validated");
+                        String result = jsonObject.getString("result");
+                        String connection = jsonObject.getString("connection");
+
+                        UserStudent userStudent = new UserStudent();
+                        userStudent.setId(user_id);
+                        userStudent.setToken(user_token);
+                        userStudent.setCode(user_code);
+                        userStudent.setEmail_address(user_email_address);
+                        userStudent.setPassword(user_password);
+                        userStudent.setFirsname(user_firstname);
+                        userStudent.setLastname(user_lastname);
+                        userStudent.setMiddlename(user_middlename);
+                        userStudent.setSuffix(user_suffixes);
+                        userStudent.setGender(user_gender);
+                        userStudent.setContact_number(user_contact_number);
+                        userStudent.setImage(user_image);
+                        userStudent.setEducational_attainment(user_educational_attainment);
+                        userStudent.setSubj_major(user_subj_major);
+                        userStudent.setCurrent_school(user_current_school);
+                        userStudent.setPosition(user_position);
+                        userStudent.setFacebook(user_facebook);
+                        userStudent.setInstagram(user_instagram);
+                        userStudent.setTwitter(user_twitter);
+                        userStudent.setGmail(user_gmail);
+                        userStudent.setMotto(user_motto);
+                        userStudent.setUser_activation(user_activation);
+                        userStudent.setUser_role(user_role);
+                        userStudent.setValidated(validated);
+                        userStudent.setConnection(connection);
+
+                        userStudentArrayList.add(userStudent);
+                    }
+                    Debugger.logD("asd " + userStudentArrayList.size());
+                    count = String.valueOf(userStudentArrayList.size());
+                    tv_count.setText(count);
+                    tv_count.setVisibility(View.VISIBLE);
+
+
+                    rv_StudentRequest.setLayoutManager(new LinearLayoutManager(context));
+
+                    connectionRequestAdapter = new ConnectionRequestAdapter(context, userStudentArrayList);
+                    connectionRequestAdapter.setClickListener(new OnClickRecyclerView() {
+                        @Override
+                        public void onItemClick(View view, int position, int fromButton) {
+                            userStudent = userStudentArrayList.get(position);
+                            if (fromButton == 1){
+                                //Decline
+                                deleteConnectionRequest();
+                            }else if (fromButton == 2){
+                                //Accept
+                                acceptConnectionRequest();
+                            }
+                        }
+                    });
+
+                    rv_StudentRequest.setAdapter(connectionRequestAdapter);
+                    emptyIndicator1.setVisibility(View.GONE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                swipeRefreshLayout1.setRefreshing(false);
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+    private void acceptConnectionRequest(){
+        ProgressPopup.showProgress(context);
+        RequestParams params = new RequestParams();
+        params.put("userOtherId", userStudent.getId());
+        params.put("user_id", UserEducator.getID(context));
+
+        HttpProvider.post(context, "controller_global/AcceptRequestConnection.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                Debugger.logD("responseBody " + responseBody);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD("str " + str);
+                if (str.contains("success")) {
+                    Toasty.success(context, "New Connection Accepted").show();
+                    getAllConnectionRequest();
+                } else{
+                    Toasty.warning(context, "Failed").show();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+    private void deleteConnectionRequest(){
+        ProgressPopup.showProgress(context);
+        RequestParams params = new RequestParams();
+        params.put("userOtherId", userStudent.getId());
+        params.put("user_id", UserEducator.getID(context));
+        HttpProvider.post(context, "controller_global/CancelConnectionRequest.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                Debugger.logD("responseBody " + responseBody);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD("str " + str);
+                if (str.contains("success")) {
+                    Toasty.success(context, "New Connection Cancelled").show();
+                    getAllConnectionRequest();
+                } else{
+                    Toasty.warning(context, "Failed").show();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
 }
