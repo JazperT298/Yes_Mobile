@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +62,7 @@ import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
@@ -499,15 +501,81 @@ public class HomeFragment extends Fragment {
         tv_SendMessage = dialog.findViewById(R.id.tv_SendMessage);
         tv_SendRequest = dialog.findViewById(R.id.tv_SendRequest);
 
+        tv_UserProfileFullname.setText(userStudent.getFirsname() + " " + userStudent.getMiddlename() + " " + userStudent.getLastname());
+        tv_UserProfileEmail.setText(userStudent.getEmail_address());
+        tv_UserProfileInfoFullname.setText(userStudent.getFirsname() + " " + userStudent.getMiddlename() + " " + userStudent.getLastname() + " " + userStudent.getSuffix() );
+        Debugger.logD("userStudent.getGender() " + userStudent.getGender());
+        tv_UserProfileInfoGender.setText(userStudent.getGender());
+        tv_UserProfileInfoPhone.setText(userStudent.getContact_number());
+        tv_UserProfileInfoEmail.setText(userStudent.getEmail_address());
+        tv_UserProfileInfoMotto.setText(userStudent.getMotto());
+        tv_UserProfileInfoEducationalAttainment.setText(userStudent.getEducational_attainment());
+        tv_UserProfileInfoSubjectMajor.setText(userStudent.getSubj_major());
+        tv_UserProfileInfoCurrentSchool.setText(userStudent.getCurrent_school());
+        tv_UserProfileInfoSchoolPosition.setText(userStudent.getPosition());
+        tv_UserProfileInfoFacebook.setText(userStudent.getFacebook());
+        Debugger.logD("userStudent.getFacebook() " + userStudent.getFacebook());
+        tv_UserProfileInfoTwitter.setText(userStudent.getTwitter());
+        tv_UserProfileInfoInstagram.setText(userStudent.getInstagram());
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + userStudent.getImage())
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
+                .apply(GlideOptions.getOptions())
+                .into(iv_UserProfileBackground);
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + userStudent.getImage())
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
+                .apply(GlideOptions.getOptions())
+                .into(iv_UserProfileImage);
         iv_UserProfileClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
+        tv_SendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toasty.warning(context, "Chat is Unavailable").show();
+            }
+        });
+        tv_SendRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendUserConnection();
+            }
+        });
 
-
+        dialog.show();
     }
+    private void sendUserConnection(){
+        ProgressPopup.showProgress(context);
+
+        RequestParams params = new RequestParams();
+        params.put("userOtherId", userStudent.getId());
+        params.put("user_id", UserEducator.getID(context));
+
+        HttpProvider.post(context, "controller_global/SendConnectionRequest.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                ProgressPopup.hideProgress();
+                Debugger.logD("responseBody " +responseBody);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD("TEST " +str);
+                if (str.contains("success")) {
+                    Toasty.success(context, "Request Sent.").show();
+                } else
+                    Toasty.warning(context, "Failed").show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                ProgressPopup.hideProgress();
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
     //    Student
     private void initializeStudentUI() {
         ivProfile = view.findViewById(R.id.iv_HomeProfile);
