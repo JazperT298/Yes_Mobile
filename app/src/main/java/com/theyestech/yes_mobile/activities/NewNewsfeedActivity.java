@@ -159,25 +159,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                 openAddNewsFeedDialog();
             }
         });
-
-        //getAllNewsFeed();
         getEducatorNewsfeedDetails();
-        //LoadHomeForEducator();
-//        ivSend.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (etDetails.getText().toString().isEmpty()) {
-//                    Toasty.warning(context, "Please input details.").show();
-//                } else {
-//                    if (selectedFilePath.isEmpty()) {
-//                        Toasty.warning(context, "Please select image or video.").show();
-//                    } else {
-//                        myFile = new File(selectedFilePath);
-//                        saveNewNewsfeed();
-//                    }
-//                }
-//            }
-//        });
     }
     public void getEducatorNewsfeedDetails() {
         newsfeedArrayList.clear();
@@ -225,6 +207,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
 
                         newsfeedArrayList.add(newsfeed);
                     }
+                    Collections.reverse(newsfeedArrayList);
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
@@ -374,7 +357,8 @@ public class NewNewsfeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, NewsfeedCommentActivity.class);
-                intent.putExtra("TOPIC_ID", selectedNewsFeed.getNf_id());
+                intent.putExtra("NEWSFEED_ID", selectedNewsFeed.getNf_id());
+                intent.putExtra("NEWSFEED_TOKEN", selectedNewsFeed.getNf_token());
                 context.startActivity(intent);
             }
         });
@@ -573,21 +557,6 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                     Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
                 }
             } else if (requestCode == VIDEO_REQUEST_CODE) {
-//                selectedFile = data.getData();
-////                vvVideo.setVideoPath(selectedFile.getPath());
-////                vvVideo.setVisibility(View.VISIBLE);
-//
-//                Uri selectedVideo = data.getData();
-//
-//                String[] filePathColumn = {MediaStore.Video.Media.DATA};
-//
-//                Cursor cursor = context.getContentResolver().query(selectedVideo,
-//                        filePathColumn, null, null, null);
-//                cursor.moveToFirst();
-//
-//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                selectedFilePath = cursor.getString(columnIndex);
-
                 selectedFile = data.getData();
 
                 String[] filePathColumn = {MediaStore.Video.Media.DATA};
