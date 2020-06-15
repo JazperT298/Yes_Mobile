@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ public class MenuPrivacyPolicyActivity extends AppCompatActivity {
     private ImageView iv_PrivacyBack;
     private ConstraintLayout constraintLayout2,constraintLayout3,constraintLayout4,constraintLayout5,constraintLayout6,constraintLayout7,constraintLayout8,constraintLayout9,constraintLayout10,constraintLayout11;
     private ImageView iv_account_setting_icon,iv_personal_info_icon,iv_language_icon,iv_payments_icon,iv_security_icon,iv_security_login_icon,iv_app_websites_icon,iv_limitation_icon,iv_nudity_icon,iv_report_icon;
-    private TextView account_settings,personal_info,language,payments,security,security_login,app_websites,limitation,nudity,report;
+    private TextView account_settings,personal_info,language,payments,security,security_login,app_websites,limitation,nudity,report,tv_copy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +72,9 @@ public class MenuPrivacyPolicyActivity extends AppCompatActivity {
         limitation = findViewById(R.id.limitation);
         nudity = findViewById(R.id.nudity);
         report = findViewById(R.id.report);
+        tv_copy = findViewById(R.id.tv_copy);
+        String text = "<font color=#C0C0C0>© Copyright 2019 All Rights Reserved by </font> <font color=#19c880>theyestech.com™</font>";
+        tv_copy.setText(Html.fromHtml(text));
 
         constraintLayout2.setOnClickListener(new View.OnClickListener() {
             @Override

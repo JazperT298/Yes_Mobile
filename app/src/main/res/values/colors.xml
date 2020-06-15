@@ -24,4 +24,6 @@
 
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
+
+    <color name="footerBackground">#323232</color>
 </resources>

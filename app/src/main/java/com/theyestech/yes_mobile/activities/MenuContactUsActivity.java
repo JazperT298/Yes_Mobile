@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -29,6 +31,7 @@ public class MenuContactUsActivity extends AppCompatActivity {
     private ImageView iv_ContactBack, imageViewFb,imageViewTw,imageVieIns;
     private Button btn_message;
     private EditText et_FullName, et_Email, et_Message;
+    private TextView tv_copy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,9 @@ public class MenuContactUsActivity extends AppCompatActivity {
         et_FullName = findViewById(R.id.et_FullName);
         et_Email = findViewById(R.id.et_Email);
         et_Message = findViewById(R.id.et_Message);
+        tv_copy = findViewById(R.id.tv_copy);
+        String text = "<font color=#C0C0C0>© Copyright 2019 All Rights Reserved by </font> <font color=#19c880>theyestech.com™</font>";
+        tv_copy.setText(Html.fromHtml(text));
 
         iv_ContactBack.setOnClickListener(new View.OnClickListener() {
             @Override

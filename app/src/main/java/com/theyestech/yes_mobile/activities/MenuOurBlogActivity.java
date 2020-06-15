@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,7 +19,7 @@ public class MenuOurBlogActivity extends AppCompatActivity {
 
     private ImageView iv_BlogBack;
     private TextView textView1s, textView2s,textView3s,textView4s,textView5s,textView6s,textView7s,textView8s,textView9s;
-    private TextView mainText1,mainText2, mainText3,mainText4,mainText5, mainText6,mainText7,mainText8, mainText9;
+    private TextView mainText1,mainText2, mainText3,mainText4,mainText5, mainText6,mainText7,mainText8, mainText9,tv_copy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,9 @@ public class MenuOurBlogActivity extends AppCompatActivity {
         mainText7 = findViewById(R.id.mainText7);
         mainText8 = findViewById(R.id.mainText8);
         mainText9 = findViewById(R.id.mainText9);
+        tv_copy = findViewById(R.id.tv_copy);
+        String text = "<font color=#C0C0C0>© Copyright 2019 All Rights Reserved by </font> <font color=#19c880>theyestech.com™</font>";
+        tv_copy.setText(Html.fromHtml(text));
 
         iv_BlogBack.setOnClickListener(new View.OnClickListener() {
             @Override

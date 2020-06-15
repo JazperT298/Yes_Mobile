@@ -4,8 +4,10 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -17,6 +19,7 @@ public class MenuAboutUsActivity extends AppCompatActivity {
     private String role;
 
     private ImageView iv_AboutBack;
+    private TextView tv_copy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,9 @@ public class MenuAboutUsActivity extends AppCompatActivity {
 
     private void initializeUI(){
         iv_AboutBack = findViewById(R.id.iv_AboutBack);
+        tv_copy = findViewById(R.id.tv_copy);
+        String text = "<font color=#C0C0C0>© Copyright 2019 All Rights Reserved by </font> <font color=#19c880>theyestech.com™</font>";
+        tv_copy.setText(Html.fromHtml(text));
 
         iv_AboutBack.setOnClickListener(new View.OnClickListener() {
             @Override
