@@ -183,11 +183,11 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         params.put("teach_token", UserEducator.getToken(context));
         Debugger.logD("teach_token2 " + UserEducator.getToken(context));
 
-        HttpProvider.defaultPost(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
+        HttpProvider.post(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 swipeRefreshLayout.setRefreshing(false);
-
+                Debugger.logD("responseBody " + responseBody);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
                 Debugger.logD("str " + str);
                 if (str.equals(""))

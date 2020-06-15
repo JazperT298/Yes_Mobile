@@ -103,6 +103,7 @@ public class ConnectionActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 getUserConnection();
+                getRequestCount();
             }
         });
         getUserConnection();
@@ -364,8 +365,8 @@ public class ConnectionActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        dialog.show();
         getAllConnectionRequest();
+        dialog.show();
     }
     private void getAllConnectionRequest(){
         userStudentArrayList.clear();
@@ -465,7 +466,7 @@ public class ConnectionActivity extends AppCompatActivity {
                                 deleteConnectionRequest();
                             }else if (fromButton == 2){
                                 //Accept
-                                acceptConnectionRequest();
+                                acceptConnectionRequest(userStudent.getId());
                             }
                         }
                     });
@@ -484,10 +485,10 @@ public class ConnectionActivity extends AppCompatActivity {
             }
         });
     }
-    private void acceptConnectionRequest(){
+    private void acceptConnectionRequest(String user_id){
         ProgressPopup.showProgress(context);
         RequestParams params = new RequestParams();
-        params.put("userOtherId", userStudent.getId());
+        params.put("userOtherId", user_id);
         params.put("user_id", UserEducator.getID(context));
 
         HttpProvider.post(context, "controller_global/AcceptRequestConnection.php", params, new AsyncHttpResponseHandler() {
