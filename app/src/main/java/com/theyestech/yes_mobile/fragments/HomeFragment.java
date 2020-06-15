@@ -504,8 +504,22 @@ public class HomeFragment extends Fragment {
         tv_UserProfileFullname.setText(userStudent.getFirsname() + " " + userStudent.getMiddlename() + " " + userStudent.getLastname());
         tv_UserProfileEmail.setText(userStudent.getEmail_address());
         tv_UserProfileInfoFullname.setText(userStudent.getFirsname() + " " + userStudent.getMiddlename() + " " + userStudent.getLastname() + " " + userStudent.getSuffix() );
-        Debugger.logD("userStudent.getGender() " + userStudent.getGender());
-        tv_UserProfileInfoGender.setText(userStudent.getGender());
+        if (userStudent.getGender().equals("1")){
+            tv_UserProfileInfoGender.setText("Male");
+        }else if (userStudent.getGender().equals("2")){
+            tv_UserProfileInfoGender.setText("Female");
+        }else{
+            tv_UserProfileInfoGender.setText("N/A");
+        }
+        if (userStudent.getConnection().equals("connected")){
+            tv_SendRequest.setText("   Connected   ");
+            tv_SendRequest.setEnabled(false);
+        }else if (userStudent.getConnection().equals("requestsent")){
+            tv_SendRequest.setText("   Request sent   ");
+            tv_SendRequest.setEnabled(false);
+        }else if (userStudent.getConnection().equals("none")){
+            tv_SendRequest.setText("   Send Request   ");
+        }
         tv_UserProfileInfoPhone.setText(userStudent.getContact_number());
         tv_UserProfileInfoEmail.setText(userStudent.getEmail_address());
         tv_UserProfileInfoMotto.setText(userStudent.getMotto());
@@ -514,7 +528,6 @@ public class HomeFragment extends Fragment {
         tv_UserProfileInfoCurrentSchool.setText(userStudent.getCurrent_school());
         tv_UserProfileInfoSchoolPosition.setText(userStudent.getPosition());
         tv_UserProfileInfoFacebook.setText(userStudent.getFacebook());
-        Debugger.logD("userStudent.getFacebook() " + userStudent.getFacebook());
         tv_UserProfileInfoTwitter.setText(userStudent.getTwitter());
         tv_UserProfileInfoInstagram.setText(userStudent.getInstagram());
         Glide.with(context)
