@@ -50,6 +50,7 @@ import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
 import com.theyestech.yes_mobile.adapters.NotesAdapter;
 import com.theyestech.yes_mobile.adapters.SearchUserAdapter;
 import com.theyestech.yes_mobile.adapters.StickersAdapter;
+import com.theyestech.yes_mobile.adapters.StudentListAdapter;
 import com.theyestech.yes_mobile.adapters.StudentStickersAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
@@ -100,7 +101,9 @@ public class HomeFragment extends Fragment {
 
     private SearchUserAdapter searchUserAdapter;
     private UserEducator userEducator;
-    private ArrayList<UserEducator> userEducatorArrayList = new ArrayList<>();
+    private ArrayList<UserStudent> userStudentArrayList = new ArrayList<>();
+    private UserStudent userStudent;
+
 
     private ArrayList<Sticker> stickerArrayList = new ArrayList<>();
     private StudentStickersAdapter studentStickersAdapter;
@@ -354,7 +357,7 @@ public class HomeFragment extends Fragment {
                 String search_text = et_SearchUser.getText().toString();
                 //Toasty.warning(context, text).show();
 
-                userEducatorArrayList.clear();
+                userStudentArrayList.clear();
 
                 swipeRefreshLayout.setRefreshing(true);
 
@@ -378,15 +381,82 @@ public class HomeFragment extends Fragment {
                             jsonArray = new JSONArray(str);
                             Debugger.logD("jsonArray " + jsonArray);
                             for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                String user_id = jsonObject.getString("user_id");
+                                String user_token = jsonObject.getString("user_token");
+                                String user_code = jsonObject.getString("user_code");
+                                String user_email_address = jsonObject.getString("user_email_address");
+                                String user_password = jsonObject.getString("user_password");
+                                String user_firstname = jsonObject.getString("user_firstname");
+                                String user_lastname = jsonObject.getString("user_lastname");
+                                String user_middlename = jsonObject.getString("user_middlename");
+                                String user_suffixes = jsonObject.getString("user_suffixes");
+                                String user_gender = jsonObject.getString("user_gender");
+                                String user_contact_number = jsonObject.getString("user_contact_number");
+                                String user_image = jsonObject.getString("user_image");
+                                String user_educational_attainment = jsonObject.getString("user_educational_attainment");
+                                String user_subj_major = jsonObject.getString("user_subj_major");
+                                String user_current_school = jsonObject.getString("user_current_school");
+                                String user_position = jsonObject.getString("user_position");
+                                String user_facebook = jsonObject.getString("user_facebook");
+                                String user_instagram = jsonObject.getString("user_instagram");
+                                String user_twitter = jsonObject.getString("user_twitter");
+                                String user_gmail = jsonObject.getString("user_gmail");
+                                String user_motto = jsonObject.getString("user_motto");
+                                String user_activation = jsonObject.getString("user_activation");
+                                String user_role = jsonObject.getString("user_role");
+                                String validated = jsonObject.getString("validated");
+                                String result = jsonObject.getString("result");
+                                String connection = jsonObject.getString("connection");
+
+                                UserStudent userStudent = new UserStudent();
+                                userStudent.setId(user_id);
+                                userStudent.setToken(user_token);
+                                userStudent.setCode(user_code);
+                                userStudent.setEmail_address(user_email_address);
+                                userStudent.setPassword(user_password);
+                                userStudent.setFirsname(user_firstname);
+                                userStudent.setLastname(user_lastname);
+                                userStudent.setMiddlename(user_middlename);
+                                userStudent.setSuffix(user_suffixes);
+                                userStudent.setGender(user_gender);
+                                userStudent.setContact_number(user_contact_number);
+                                userStudent.setImage(user_image);
+                                userStudent.setEducational_attainment(user_educational_attainment);
+                                userStudent.setSubj_major(user_subj_major);
+                                userStudent.setCurrent_school(user_current_school);
+                                userStudent.setPosition(user_position);
+                                userStudent.setFacebook(user_facebook);
+                                userStudent.setInstagram(user_instagram);
+                                userStudent.setTwitter(user_twitter);
+                                userStudent.setGmail(user_gmail);
+                                userStudent.setMotto(user_motto);
+                                userStudent.setUser_activation(user_activation);
+                                userStudent.setUser_role(user_role);
+                                userStudent.setValidated(validated);
+                                userStudent.setConnection(connection);
+
+                                userStudentArrayList.add(userStudent);
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        rv_Search.setLayoutManager(new LinearLayoutManager(context));
+                        rv_Search.setHasFixedSize(true);
+                        searchUserAdapter = new SearchUserAdapter(context, userStudentArrayList);
+                        searchUserAdapter.setClickListener(new OnClickRecyclerView() {
+                            @Override
+                            public void onItemClick(View view, int position, int fromButton) {
+//                            student = studentArrayList.get(position);
+//                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
+//                            intent.putExtra("STUDENT", student);
+//                            startActivity(intent);
+                            }
+                        });
 
-
-
-
-
+                        rv_Search.setAdapter(searchUserAdapter);
+                        emptyIndicator.setVisibility(View.GONE);
 
                     }
                     @Override

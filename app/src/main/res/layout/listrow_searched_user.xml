@@ -51,8 +51,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Educator"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 android:textStyle="italic"
+                android:textColor="@color/colorNephritis"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_UserFullname"
                 app:layout_constraintTop_toBottomOf="@+id/tv_UserFullname" />

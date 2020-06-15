@@ -18,6 +18,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Note;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
@@ -26,30 +27,35 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<UserEducator> userEducatorArrayList;
+    private ArrayList<UserStudent> userStudentArrayList;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public SearchUserAdapter(Context context, ArrayList<UserEducator> userEducatorArrayList) {
+    public SearchUserAdapter(Context context, ArrayList<UserStudent> userStudentArrayList) {
         this.context = context;
-        this.userEducatorArrayList = userEducatorArrayList;
+        this.userStudentArrayList = userStudentArrayList;
         this.layoutInflater = LayoutInflater.from(context);
     }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.dialog_search_user, viewGroup, false);
+        View view = layoutInflater.inflate(R.layout.listrow_searched_user, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        UserEducator userEducator = userEducatorArrayList.get(i);
-        viewHolder.tv_UserFullname.setText(userEducator.getFirsname() + " " + userEducator.getMiddlename() + " " + userEducator.getLastname());
+        UserStudent userStudent = userStudentArrayList.get(i);
+        viewHolder.tv_UserFullname.setText(userStudent.getFirsname() + " " + userStudent.getMiddlename() + " " + userStudent.getLastname());
 
+        if (userStudent.getUser_role().contains("1")){
+            viewHolder.tv_UserEducator.setText("Educator");
+        }else{
+            viewHolder.tv_UserEducator.setText("Student");
+        }
         Glide.with(context)
-                .load(HttpProvider.getProfileDir() + userEducator.getImage())
+                .load(HttpProvider.getProfileDir() + userStudent.getImage())
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
                 .apply(GlideOptions.getOptions())
                 .into(viewHolder.iv_UserImage);
@@ -57,7 +63,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return userEducatorArrayList.size();
+        return userStudentArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
