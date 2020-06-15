@@ -448,7 +448,8 @@ public class HomeFragment extends Fragment {
                         searchUserAdapter.setClickListener(new OnClickRecyclerView() {
                             @Override
                             public void onItemClick(View view, int position, int fromButton) {
-//                            student = studentArrayList.get(position);
+                                userStudent = userStudentArrayList.get(position);
+                                openUsersProfileDialog();
 //                            Intent intent = new Intent(context, SubjectDetailsActivity.class);
 //                            intent.putExtra("STUDENT", student);
 //                            startActivity(intent);
@@ -469,6 +470,43 @@ public class HomeFragment extends Fragment {
         });
 
         dialog.show();
+    }
+    private void openUsersProfileDialog(){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.search_user_profile);
+        final ImageView iv_UserProfileImage, iv_UserProfileBackground, iv_UserProfileClose;
+        final TextView tv_UserProfileFullname, tv_UserProfileEmail, tv_UserProfileInfoFullname, tv_UserProfileInfoGender, tv_UserProfileInfoPhone, tv_UserProfileInfoEmail, tv_UserProfileInfoMotto;
+        final TextView tv_UserProfileInfoEducationalAttainment, tv_UserProfileInfoSubjectMajor, tv_UserProfileInfoCurrentSchool, tv_UserProfileInfoSchoolPosition;
+        final TextView tv_UserProfileInfoFacebook, tv_UserProfileInfoTwitter, tv_UserProfileInfoInstagram,tv_SendMessage,tv_SendRequest;
+
+        iv_UserProfileImage = dialog.findViewById(R.id.iv_UserProfileImage);
+        iv_UserProfileBackground = dialog.findViewById(R.id.iv_UserProfileBackground);
+        iv_UserProfileClose = dialog.findViewById(R.id.iv_UserProfileClose);
+        tv_UserProfileFullname = dialog.findViewById(R.id.tv_UserProfileFullname);
+        tv_UserProfileEmail = dialog.findViewById(R.id.tv_UserProfileEmail);
+        tv_UserProfileInfoFullname = dialog.findViewById(R.id.tv_UserProfileInfoFullname);
+        tv_UserProfileInfoGender = dialog.findViewById(R.id.tv_UserProfileInfoGender);
+        tv_UserProfileInfoPhone = dialog.findViewById(R.id.tv_UserProfileInfoPhone);
+        tv_UserProfileInfoEmail = dialog.findViewById(R.id.tv_UserProfileInfoEmail);
+        tv_UserProfileInfoMotto = dialog.findViewById(R.id.tv_UserProfileInfoMotto);
+        tv_UserProfileInfoEducationalAttainment = dialog.findViewById(R.id.tv_UserProfileInfoEducationalAttainment);
+        tv_UserProfileInfoSubjectMajor = dialog.findViewById(R.id.tv_UserProfileInfoSubjectMajor);
+        tv_UserProfileInfoCurrentSchool = dialog.findViewById(R.id.tv_UserProfileInfoCurrentSchool);
+        tv_UserProfileInfoSchoolPosition = dialog.findViewById(R.id.tv_UserProfileInfoSchoolPosition);
+        tv_UserProfileInfoFacebook = dialog.findViewById(R.id.tv_UserProfileInfoFacebook);
+        tv_UserProfileInfoTwitter = dialog.findViewById(R.id.tv_UserProfileInfoTwitter);
+        tv_UserProfileInfoInstagram = dialog.findViewById(R.id.tv_UserProfileInfoInstagram);
+        tv_SendMessage = dialog.findViewById(R.id.tv_SendMessage);
+        tv_SendRequest = dialog.findViewById(R.id.tv_SendRequest);
+
+        iv_UserProfileClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
     }
     //    Student
     private void initializeStudentUI() {
