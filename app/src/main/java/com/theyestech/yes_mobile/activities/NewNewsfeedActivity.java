@@ -3,6 +3,7 @@ package com.theyestech.yes_mobile.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,9 +30,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
@@ -43,6 +47,7 @@ import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.Note;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
+import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.Debugger;
@@ -227,7 +232,10 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                     newsfeedAdapter.setClickListener(new OnClickRecyclerView() {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
-                            //selectedNewsfeed = newsfeedArrayList.get(position);
+                            selectedNewsFeed = newsfeedArrayList.get(position);
+                            if(fromButton == 1){
+                                getNewsfeedByToken();
+                            }
                         }
                     });
 
@@ -340,6 +348,66 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         });
     }
 
+    private void getNewsfeedByToken(){
+        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+        dialog.setContentView(R.layout.dialog_view_newsfeed_bytoken);
+        final ImageView close,iv_user_image, iv_image,iv_type;
+        final VideoView vv_video;
+        final TextView tv_user_name, tv_date,tv_details;
+        final ConstraintLayout constraint_comments, constraint_yes;
+        close = dialog.findViewById(R.id.close);
+        iv_user_image = dialog.findViewById(R.id.iv_user_image);
+        iv_image = dialog.findViewById(R.id.iv_image);
+        iv_type = dialog.findViewById(R.id.iv_type);
+        vv_video = dialog.findViewById(R.id.vv_video);
+        tv_user_name = dialog.findViewById(R.id.tv_user_name);
+        tv_date = dialog.findViewById(R.id.tv_date);
+        tv_details = dialog.findViewById(R.id.tv_details);
+        constraint_comments = dialog.findViewById(R.id.constraint_comments);
+        constraint_yes = dialog.findViewById(R.id.constraint_yes);
+
+        tv_user_name.setText(selectedNewsFeed.getNf_fullname());
+        tv_date.setText(selectedNewsFeed.getNf_date());
+        tv_details.setText(selectedNewsFeed.getNf_details());
+
+        constraint_comments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NewsfeedCommentActivity.class);
+                intent.putExtra("TOPIC_ID", selectedNewsFeed.getNf_id());
+                context.startActivity(intent);
+            }
+        });
+        if (selectedNewsFeed.getNf_filetype().equalsIgnoreCase("image")){
+            //iv_ListrowSubjectTopicsImage.setImageURI(Uri.parse(HttpProvider.getTopicDir() + file));
+            //iv_ListrowSubjectTopicsImage.setVisibility(View.VISIBLE);
+            Debugger.logD("as " + HttpProvider.getTopicDir() + selectedNewsFeed.getNf_files());
+            Glide.with(context)
+                    .load(HttpProvider.getTopicDir() + selectedNewsFeed.getNf_files())
+                    .into(iv_image);
+            iv_image.setVisibility(View.VISIBLE);
+        }else{
+            vv_video.setVideoURI(Uri.parse(HttpProvider.getTopicDir() + selectedNewsFeed.getNf_files()));
+            vv_video.setMediaController(new MediaController(context));
+            vv_video.start();
+            vv_video.setVisibility(View.GONE);
+            vv_video.setVisibility(View.VISIBLE);
+            iv_type.setImageResource(R.drawable.ic_video);
+        }
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + selectedNewsFeed.getNf_image())
+                .apply(GlideOptions.getOptions())
+                .into(iv_user_image);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     private void selectActions() {
         String[] items = {" Camera ", " Gallery ", " Videos "};
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
@@ -367,6 +435,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         });
         dialog.create().show();
     }
+
     private void askCameraPermissions(){
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);

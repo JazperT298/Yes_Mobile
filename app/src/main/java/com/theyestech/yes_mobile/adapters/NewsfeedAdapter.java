@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,6 +149,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         private TextView tvDetails, tvFullname, tvDateTime, tvYes;
         private VideoView videoView;
         private ConstraintLayout constraintYes, constraintComment;
+        private CardView cardView3;
 
         public ViewHolder(View view) {
             super(view);
@@ -164,8 +166,8 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
             ivDelete = view.findViewById(R.id.iv_ListrowHomeDelete);
             constraintYes = view.findViewById(R.id.constraint_ListrowHomeYes);
             constraintComment = view.findViewById(R.id.constraint_ListrowHomeComments);
-
-            constraintYes.setOnClickListener(new View.OnClickListener() {
+            cardView3 = view.findViewById(R.id.cardView3);
+            cardView3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
@@ -173,11 +175,19 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 }
             });
 
+            constraintYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickRecyclerView != null)
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 2);
+                }
+            });
+
             constraintComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
-                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 3);
                 }
             });
         }
