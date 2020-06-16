@@ -44,26 +44,33 @@ import com.theyestech.yes_mobile.activities.NewNewsfeedActivity;
 import com.theyestech.yes_mobile.activities.NotesActivity;
 import com.theyestech.yes_mobile.activities.StartActivity;
 import com.theyestech.yes_mobile.activities.SubjectActivity;
+import com.theyestech.yes_mobile.activities.SubjectDetailsActivity;
 import com.theyestech.yes_mobile.activities.UserProfileActivity;
 import com.theyestech.yes_mobile.activities.VideoLabActivity;
 import com.theyestech.yes_mobile.activities.YestechCourseActivity;
+import com.theyestech.yes_mobile.adapters.ConnectionAdapter;
 import com.theyestech.yes_mobile.adapters.NewsfeedAdapter;
 import com.theyestech.yes_mobile.adapters.NotesAdapter;
 import com.theyestech.yes_mobile.adapters.SearchUserAdapter;
 import com.theyestech.yes_mobile.adapters.StickersAdapter;
 import com.theyestech.yes_mobile.adapters.StudentListAdapter;
 import com.theyestech.yes_mobile.adapters.StudentStickersAdapter;
+import com.theyestech.yes_mobile.adapters.SubjectsEducatorAdapter;
+import com.theyestech.yes_mobile.adapters.VideoLabAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.Note;
 import com.theyestech.yes_mobile.models.Sticker;
+import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
+import com.theyestech.yes_mobile.models.VideoLab;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
+import com.theyestech.yes_mobile.utils.VerticalSpacingItemDecorator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,14 +94,11 @@ public class HomeFragment extends Fragment {
 
     private ImageView ivProfile,iv_HomeSearch, iv_HomeChat;
     private TextView tvEmail, tvEducationalAttainment, tvStatSubjectCount, tvStatStudentCount, tvStatTopicCount, tvSubjectCount, tvStatistics,tvStatNoteCount;
+    private TextView tv_HomeConnectionCount, tv_HomeNewsfeedCount, tv_HomeVideolabCount, tv_HomeCourseCount, tv_HomeMyvideosCount;
     private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos, cvStickers, cvAwards, cvStatistics;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ConstraintLayout emptyIndicator;
-
-    private ArrayList<Newsfeed> newsfeedArrayList = new ArrayList<>();
-    private NewsfeedAdapter newsfeedAdapter;
-    private Newsfeed selectedNewsfeed = new Newsfeed();
 
     private String selectionTitle;
 
@@ -123,10 +127,13 @@ public class HomeFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_home, container, false);
             initializeEducatorUI();
             setEducatorHeader();
+            getEducatorStatistics();
+            getAllEducatorCounts();
         }else{
             view = inflater.inflate(R.layout.fragment_home_student, container, false);
             initializeStudentUI();
             setStudentHeader();
+            displayStudentAccess();
         }
         return view;
     }
@@ -151,6 +158,11 @@ public class HomeFragment extends Fragment {
         tvSubjectCount = view.findViewById(R.id.tv_HomeSubjectCount);
         tvStatistics = view.findViewById(R.id.tv_HomeStatistics);
         tvStatNoteCount = view.findViewById(R.id.tv_HomeNoteCount);
+        tv_HomeConnectionCount = view.findViewById(R.id.tv_HomeConnectionCount);
+        tv_HomeNewsfeedCount = view.findViewById(R.id.tv_HomeNewsfeedCount);
+        tv_HomeVideolabCount = view.findViewById(R.id.tv_HomeVideolabCount);
+        tv_HomeCourseCount = view.findViewById(R.id.tv_HomeCourseCount);
+        tv_HomeMyvideosCount = view.findViewById(R.id.tv_HomeMyvideosCount);
         cvSubjects = view.findViewById(R.id.cv_Home_Subjects);
         cvNotes = view.findViewById(R.id.cv_Home_Notes);
         cvConnections = view.findViewById(R.id.cv_Home_Connections);
@@ -182,8 +194,6 @@ public class HomeFragment extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(context, UserProfileActivity.class);
-//                startActivity(intent);
                 selectAction();
             }
         });
@@ -262,29 +272,8 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                if (role.equals(UserRole.Educator()))
-//                    getEducatorNewsfeedDetails();
-//                else
-//                    getStudentNewsfeedDetails();
             }
         });
-
-
-//        ivNewPost.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, NewNewsfeedActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-        if (role.equals(UserRole.Educator())) {
-            setEducatorHeader();
-            getEducatorStatistics();
-        } else {
-            setStudentHeader();
-            displayStudentAccess();
-        }
     }
     private void setEducatorHeader() {
         tvEmail.setText(UserEducator.getEmail(context));
@@ -588,6 +577,79 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+    private void getAllEducatorCounts(){
+        RequestParams params = new RequestParams();
+        params.put("user_token", UserEducator.getToken(context));
+        params.put("user_id", UserEducator.getID(context));
+        HttpProvider.post(context, "controller_global/GetUserNotes.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                try {
+                    JSONArray jsonArray = new JSONArray(str);
+                    tvStatNoteCount.setText(String.valueOf(jsonArray.length()));
+                    Debugger.logD(String.valueOf(jsonArray.length()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            }
+        });
+        HttpProvider.post(context, "controller_global/GetUserConnections.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                try {
+                    JSONArray jsonArray = new JSONArray(str);
+                    tv_HomeConnectionCount.setText(String.valueOf(jsonArray.length()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            }
+        });
+        RequestParams params1 = new RequestParams();
+        params1.put("teach_token", UserEducator.getToken(context));
+        HttpProvider.post(context, "controller_educator/get_post.php", params1, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                try {
+                    JSONArray jsonArray = new JSONArray(str);
+                    tv_HomeNewsfeedCount.setText(String.valueOf(jsonArray.length()));
+                    Debugger.logD(String.valueOf(jsonArray.length()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+            }
+        });
+        RequestParams params2 = new RequestParams();
+        HttpProvider.post(context, "controller_educator/GetAllVideoLabs.php", params2, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                try {
+                    JSONArray jsonArray = new JSONArray(str);
+                    tv_HomeVideolabCount.setText(String.valueOf(jsonArray.length()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            }
+        });
+        tv_HomeCourseCount.setText("0");
+        tv_HomeMyvideosCount.setText("0");
+    }
 
     //    Student
     private void initializeStudentUI() {
@@ -756,11 +818,6 @@ public class HomeFragment extends Fragment {
         final ConstraintLayout emptyIndicator;
 
         iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
-//        iv_SearchIcon = dialog.findViewById(R.id.iv_SearchIcon);
-//        rv_Search = dialog.findViewById(R.id.rv_Search);
-//        swipeRefreshLayout = dialog.findViewById(R.id.swipe_Search);
-//        emptyIndicator = dialog.findViewById(R.id.view_EmptyRecord);
-
 
         iv_SearchBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -770,7 +827,8 @@ public class HomeFragment extends Fragment {
         });
         dialog.show();
     }
-
+    private void getAllStudentCounts(){
+    }
     private void getAllStudentStickers(){
         stickerArrayList.clear();
 
@@ -863,7 +921,6 @@ public class HomeFragment extends Fragment {
 
         dialog.create().show();
     }
-
     private void selectPaidCourses() {
         String[] items = {" Video Lab ", " Yestech "};
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
@@ -886,79 +943,6 @@ public class HomeFragment extends Fragment {
 
         dialog.create().show();
     }
-
-    public void getEducatorNewsfeedDetails() {
-        newsfeedArrayList.clear();
-
-        swipeRefreshLayout.setRefreshing(true);
-
-        RequestParams params = new RequestParams();
-        params.put("teach_token", UserEducator.getToken(context));
-
-        HttpProvider.post(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                swipeRefreshLayout.setRefreshing(false);
-                String str = new String(responseBody, StandardCharsets.UTF_8);
-                if (str.equals(""))
-                    emptyIndicator.setVisibility(View.VISIBLE);
-                try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    Debugger.logD("NEWSFEED: " + jsonArray);
-                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String nf_id = jsonObject.getString("nf_id");
-                        String nf_token = jsonObject.getString("nf_token");
-                        String nf_user_token = jsonObject.getString("nf_user_token");
-                        String nf_details = jsonObject.getString("nf_details");
-                        String nf_files = jsonObject.getString("nf_files");
-                        String nf_filetype = jsonObject.getString("nf_filetype");
-                        String nf_date = jsonObject.getString("nf_date");
-                        String nf_fullname = jsonObject.getString("nf_fullname");
-                        String nf_image = jsonObject.getString("nf_image");
-
-                        Newsfeed newsfeed = new Newsfeed();
-                        newsfeed.setNf_id(nf_id);
-                        newsfeed.setNf_token(nf_token);
-                        newsfeed.setNf_user_token(nf_user_token);
-                        newsfeed.setNf_details(nf_details);
-                        newsfeed.setNf_files(nf_files);
-                        newsfeed.setNf_filetype(nf_filetype);
-                        newsfeed.setNf_date(nf_date);
-                        newsfeed.setNf_fullname(nf_fullname);
-                        newsfeed.setNf_image(nf_image);
-
-                        newsfeedArrayList.add(newsfeed);
-                    }
-
-                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    recyclerView.setHasFixedSize(true);
-                    newsfeedAdapter = new NewsfeedAdapter(context, newsfeedArrayList, role);
-                    newsfeedAdapter.setClickListener(new OnClickRecyclerView() {
-                        @Override
-                        public void onItemClick(View view, int position, int fromButton) {
-                            selectedNewsfeed = newsfeedArrayList.get(position);
-                        }
-                    });
-
-                    recyclerView.setAdapter(newsfeedAdapter);
-
-                    emptyIndicator.setVisibility(View.GONE);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Debugger.logD(e.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-                swipeRefreshLayout.setRefreshing(false);
-                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
-            }
-        });
-    }
-
     private void logoutUser() {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
@@ -981,7 +965,6 @@ public class HomeFragment extends Fragment {
             Objects.requireNonNull(getActivity()).finish();
         }
     }
-
     private void openLogoutDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Logout")
@@ -998,4 +981,10 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getAllEducatorCounts();
+        getEducatorStatistics();
+    }
 }
