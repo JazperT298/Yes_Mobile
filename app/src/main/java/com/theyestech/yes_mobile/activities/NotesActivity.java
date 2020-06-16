@@ -277,10 +277,10 @@ public class NotesActivity extends AppCompatActivity {
 
                 if (str.contains("success")) {
                     Toasty.success(context, "Deleted").show();
-                } else
+                    getAllNotes();
+                } else {
                     Toasty.warning(context, "Failed").show();
-
-                getAllNotes();
+                }
             }
 
             @Override

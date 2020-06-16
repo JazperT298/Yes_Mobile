@@ -8,9 +8,12 @@ import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
 import android.util.Base64;
+import android.view.Display;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -21,21 +24,15 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.adapters.NotesAdapter;
-import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
-import com.theyestech.yes_mobile.models.Note;
-import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -43,16 +40,10 @@ public class VideoLabPreviewActivity extends AppCompatActivity {
 
     private Context context;
     private String role;
-    private String userToken;
-    private String userId;
     private String video_id;
-    private String video_file;
-    private String video_title;
-    private String video_price;
-    private String video_educator;
 
     private VideoView v_MainVideo;
-    private TextView tv_VideoTitle, tv_VideoPrice, tv_VideoPreview, tv_Fullname, tv_LearnText, tv_Educational, tv_Subject , tv_School;
+    private TextView tv_VideoTitle, tv_VideoPrice, tv_VideoPreview, tv_Fullname, tv_LearnText, tv_Educational, tv_Subject , tv_School,tv_copy;
     private ImageView iv_HomeProfile;
 
     private ProgressDialog bar;
@@ -87,8 +78,9 @@ public class VideoLabPreviewActivity extends AppCompatActivity {
         tv_Subject = findViewById(R.id.tv_Subject);
         tv_School = findViewById(R.id.tv_School);
         iv_HomeProfile = findViewById(R.id.iv_HomeProfile);
-
-
+        tv_copy = findViewById(R.id.tv_copy);
+        String text = "<font color=#C0C0C0>© Copyright 2019 All Rights Reserved by </font> <font color=#19c880>theyestech.com™</font>";
+        tv_copy.setText(Html.fromHtml(text));
 
         tv_VideoPreview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +95,6 @@ public class VideoLabPreviewActivity extends AppCompatActivity {
         });
 
     }
-
 
     private void getAllVideoLabByHeader(){
         RequestParams params = new RequestParams();
@@ -148,12 +139,13 @@ public class VideoLabPreviewActivity extends AppCompatActivity {
                             bar.show();
 
                             if(bar.isShowing()) {
-                                v_MainVideo.setVideoURI(Uri.parse("https://theyestech.com/" + mediaUrl));
-                                v_MainVideo.start();
+                                v_MainVideo.setVideoURI(Uri.parse("http://ec2-3-0-89-51.ap-southeast-1.compute.amazonaws.com/" + mediaUrl));
                                 ctlr = new MediaController(context);
                                 ctlr.setMediaPlayer(v_MainVideo);
+                                ctlr.setAnchorView(v_MainVideo);
                                 v_MainVideo.setMediaController(ctlr);
                                 v_MainVideo.requestFocus();
+                                v_MainVideo.start();
                             }
                             bar.dismiss();
                         }

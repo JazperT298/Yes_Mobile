@@ -588,27 +588,37 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    tvStatNoteCount.setText(String.valueOf(jsonArray.length()));
-                    Debugger.logD(String.valueOf(jsonArray.length()));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(str.contains("No notes available") || str.equals("")){
+                    tvStatNoteCount.setText("0");
+                }else{
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        tvStatNoteCount.setText(String.valueOf(jsonArray.length()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             }
         });
-        HttpProvider.post(context, "controller_global/GetUserConnections.php", params, new AsyncHttpResponseHandler() {
+        RequestParams params3 = new RequestParams();
+        params3.put("user_token", UserEducator.getToken(context));
+        params3.put("user_id", UserEducator.getID(context));
+        HttpProvider.post(context, "controller_global/GetUserConnections.php", params3, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    tv_HomeConnectionCount.setText(String.valueOf(jsonArray.length()));
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(str.contains("NO RECORD FOUND") || str.equals("")){
+                    tv_HomeConnectionCount.setText("0");
+                }else {
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        tv_HomeConnectionCount.setText(String.valueOf(jsonArray.length()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             @Override
@@ -621,12 +631,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    tv_HomeNewsfeedCount.setText(String.valueOf(jsonArray.length()));
-                    Debugger.logD(String.valueOf(jsonArray.length()));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(str.contains("NO RECORD FOUND") || str.equals("")){
+                    tv_HomeNewsfeedCount.setText("0");
+                }else {
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        tv_HomeNewsfeedCount.setText(String.valueOf(jsonArray.length()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             @Override
@@ -638,11 +651,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    tv_HomeVideolabCount.setText(String.valueOf(jsonArray.length()));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(str.contains("NO RECORD FOUND") || str.equals("")){
+                    tv_HomeVideolabCount.setText("0");
+                }else {
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        tv_HomeVideolabCount.setText(String.valueOf(jsonArray.length()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -837,6 +854,7 @@ public class HomeFragment extends Fragment {
                 try {
                     JSONArray jsonArray = new JSONArray(str);
                     tvSubjectCount.setText(String.valueOf(jsonArray.length()));
+                    Debugger.logD("asdasd " + jsonArray.length());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -845,15 +863,23 @@ public class HomeFragment extends Fragment {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             }
         });
-        HttpProvider.post(context, "controller_global/GetUserNotes.php", params, new AsyncHttpResponseHandler() {
+        RequestParams params3 = new RequestParams();
+        params3.put("user_token", UserStudent.getToken(context));
+        params3.put("user_id", UserStudent.getID(context));
+        HttpProvider.post(context, "controller_global/GetUserNotes.php", params3, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    tvStatNoteCount.setText(String.valueOf(jsonArray.length()));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                Debugger.logD("asdasd ee" + str);
+                if(str.contains("No notes available") || str.equals("")){
+                    tvStatNoteCount.setText("0");
+                }else{
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        tvStatNoteCount.setText(String.valueOf(jsonArray.length()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             @Override
@@ -866,12 +892,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                 String str = new String(responseBody);
-                try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    Debugger.logD("jsonArray " + jsonArray);
-                    tv_HomeStickersCount.setText(String.valueOf(jsonArray.length()));
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(str.equals("")){
+                    tv_HomeStickersCount.setText("0");
+                }else {
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        tv_HomeStickersCount.setText(String.valueOf(jsonArray.length()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             @Override
@@ -884,12 +913,16 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                try {
-                    JSONArray jsonArray = new JSONArray(str);
-                    tv_HomeNewsfeedCount.setText(String.valueOf(jsonArray.length()));
-                    Debugger.logD(String.valueOf(jsonArray.length()));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(str.equals("")){
+                    tv_HomeNewsfeedCount.setText("0");
+                }else {
+                    try {
+                        JSONArray jsonArray = new JSONArray(str);
+                        tv_HomeNewsfeedCount.setText(String.valueOf(jsonArray.length()));
+                        Debugger.logD(String.valueOf(jsonArray.length()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             @Override

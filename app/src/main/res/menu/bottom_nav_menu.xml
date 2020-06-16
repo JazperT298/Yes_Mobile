@@ -6,10 +6,10 @@
         android:icon="@drawable/ic_nav_home"
         android:title="Dashboard"/>
 
-<!--    <item-->
-<!--        android:id="@+id/navigation_chat"-->
-<!--        android:icon="@drawable/ic_nav_chat"-->
-<!--        android:title="Chat"/>-->
+    <item
+        android:id="@+id/navigation_chat"
+        android:icon="@drawable/ic_nav_chat"
+        android:title="Chat"/>
 
 <!--    <item-->
 <!--        android:id="@+id/navigation_rank"-->
