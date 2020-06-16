@@ -86,6 +86,8 @@
                     android:layout_height="60dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_educator_profile" />
@@ -114,73 +116,73 @@
                     app:layout_constraintStart_toStartOf="@+id/tv_UserProfileFullname"
                     app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileFullname" />
 
-                <TextView
-                    android:id="@+id/tv_UserProfileConnectionCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="100"
-                    android:textColor="@android:color/black"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_UserProfileSubjectsCount"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_UserProfileImage" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_UserProfileConnectionCount"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:text="100"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/tv_UserProfileSubjectsCount"-->
+<!--                    app:layout_constraintHorizontal_bias="0.5"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/iv_UserProfileImage" />-->
 
-                <TextView
-                    android:id="@+id/textView75"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:text="Connections"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_UserProfileConnectionCount"
-                    app:layout_constraintStart_toStartOf="@+id/tv_UserProfileConnectionCount"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileConnectionCount" />
+<!--                <TextView-->
+<!--                    android:id="@+id/textView75"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginBottom="16dp"-->
+<!--                    android:text="Connections"-->
+<!--                    android:textSize="12sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="@+id/tv_UserProfileConnectionCount"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/tv_UserProfileConnectionCount"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileConnectionCount" />-->
 
-                <TextView
-                    android:id="@+id/tv_UserProfileSubjectsCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="100"
-                    android:textColor="@android:color/black"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_UserProfileStudentsCount"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/tv_UserProfileConnectionCount"
-                    app:layout_constraintTop_toTopOf="@+id/tv_UserProfileConnectionCount" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_UserProfileSubjectsCount"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="100"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/tv_UserProfileStudentsCount"-->
+<!--                    app:layout_constraintHorizontal_bias="0.5"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/tv_UserProfileConnectionCount"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/tv_UserProfileConnectionCount" />-->
 
-                <TextView
-                    android:id="@+id/textView77"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Subjects"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView75"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_UserProfileSubjectsCount"
-                    app:layout_constraintStart_toStartOf="@+id/tv_UserProfileSubjectsCount"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileSubjectsCount" />
+<!--                <TextView-->
+<!--                    android:id="@+id/textView77"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Subjects"-->
+<!--                    android:textSize="12sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/textView75"-->
+<!--                    app:layout_constraintEnd_toEndOf="@+id/tv_UserProfileSubjectsCount"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/tv_UserProfileSubjectsCount"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileSubjectsCount" />-->
 
-                <TextView
-                    android:id="@+id/tv_UserProfileStudentsCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="100"
-                    android:textColor="@android:color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/tv_UserProfileSubjectsCount"
-                    app:layout_constraintTop_toTopOf="@+id/tv_UserProfileSubjectsCount" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_UserProfileStudentsCount"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="100"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintHorizontal_bias="0.5"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/tv_UserProfileSubjectsCount"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/tv_UserProfileSubjectsCount" />-->
 
-                <TextView
-                    android:id="@+id/textView79"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Students"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView77"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_UserProfileStudentsCount"
-                    app:layout_constraintStart_toStartOf="@+id/tv_UserProfileStudentsCount"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileStudentsCount" />
+<!--                <TextView-->
+<!--                    android:id="@+id/textView79"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Students"-->
+<!--                    android:textSize="12sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/textView77"-->
+<!--                    app:layout_constraintEnd_toEndOf="@+id/tv_UserProfileStudentsCount"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/tv_UserProfileStudentsCount"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileStudentsCount" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

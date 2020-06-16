@@ -63,9 +63,6 @@ public class UserProfileActivity extends AppCompatActivity {
         ivOptions = findViewById(R.id.iv_UserProfileOptions);
         tvFullname = findViewById(R.id.tv_UserProfileFullname);
         tvEmail = findViewById(R.id.tv_UserProfileEmail);
-        tvConnectionsCount = findViewById(R.id.tv_UserProfileConnectionCount);
-        tvSubjectsCount = findViewById(R.id.tv_UserProfileSubjectsCount);
-        tvStudentsCount = findViewById(R.id.tv_UserProfileStudentsCount);
         tvInfoFullname = findViewById(R.id.tv_UserProfileInfoFullname);
         tvInfoGender = findViewById(R.id.tv_UserProfileInfoGender);
         tvInfoPhone = findViewById(R.id.tv_UserProfileInfoPhone);
