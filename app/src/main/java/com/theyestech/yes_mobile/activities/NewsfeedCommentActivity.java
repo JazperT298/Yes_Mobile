@@ -97,6 +97,8 @@ public class NewsfeedCommentActivity extends AppCompatActivity {
                     etComment.setText("");
                     if (role.equals(UserRole.Educator()))
                         saveComment();
+                    else
+                        saveComment();
                 }
             }
         });
@@ -106,10 +108,14 @@ public class NewsfeedCommentActivity extends AppCompatActivity {
             public void onRefresh() {
                 if (role.equals(UserRole.Educator()))
                     getEducatorCommentDetails();
+                else
+                    getEducatorCommentDetails();
             }
         });
 
         if (role.equals(UserRole.Educator()))
+            getEducatorCommentDetails();
+        else
             getEducatorCommentDetails();
     }
 

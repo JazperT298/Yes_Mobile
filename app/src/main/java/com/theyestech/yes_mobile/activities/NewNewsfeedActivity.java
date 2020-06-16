@@ -118,6 +118,7 @@ public class NewNewsfeedActivity extends AppCompatActivity {
 
         context = this;
         role = UserRole.getRole(context);
+        Debugger.logD("role " + role);
 
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
@@ -140,16 +141,24 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         if (role.equals(UserRole.Educator())) {
             userId = UserEducator.getID(context);
             userToken = UserEducator.getToken(context);
+            getEducatorNewsfeedDetails();
         } else {
             userId = UserStudent.getID(context);
             userToken = UserStudent.getToken(context);
+            getStudentNewsfeedDetails();
         }
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //getAllNewsFeed();
-                getEducatorNewsfeedDetails();
-                //LoadHomeForEducator();
+                if (role.equals(UserRole.Educator())) {
+                    userId = UserEducator.getID(context);
+                    userToken = UserEducator.getToken(context);
+                    getEducatorNewsfeedDetails();
+                } else {
+                    userId = UserStudent.getID(context);
+                    userToken = UserStudent.getToken(context);
+                    getStudentNewsfeedDetails();
+                }
             }
         });
 
@@ -159,7 +168,6 @@ public class NewNewsfeedActivity extends AppCompatActivity {
                 openAddNewsFeedDialog();
             }
         });
-        getEducatorNewsfeedDetails();
     }
     public void getEducatorNewsfeedDetails() {
         newsfeedArrayList.clear();
@@ -169,6 +177,85 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("teach_token", UserEducator.getToken(context));
         Debugger.logD("teach_token2 " + UserEducator.getToken(context));
+
+        HttpProvider.post(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                swipeRefreshLayout.setRefreshing(false);
+                Debugger.logD("responseBody " + responseBody);
+                String str = new String(responseBody, StandardCharsets.UTF_8);
+                Debugger.logD("str " + str);
+                if (str.equals(""))
+                    emptyIndicator.setVisibility(View.VISIBLE);
+                try {
+                    JSONArray jsonArray = new JSONArray(str);
+                    Debugger.logD("NEWSFEED: " + jsonArray);
+                    for (int i = 0; i <= jsonArray.length() - 1; i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String nf_id = jsonObject.getString("nf_id");
+                        String nf_token = jsonObject.getString("nf_token");
+                        String nf_user_token = jsonObject.getString("nf_user_token");
+                        String nf_details = jsonObject.getString("nf_details");
+                        String nf_files = jsonObject.getString("nf_files");
+                        String nf_filetype = jsonObject.getString("nf_filetype");
+                        String nf_date = jsonObject.getString("nf_date");
+                        String nf_fullname = jsonObject.getString("nf_fullname");
+                        String nf_image = jsonObject.getString("nf_image");
+
+                        Newsfeed newsfeed = new Newsfeed();
+                        newsfeed.setNf_id(nf_id);
+                        newsfeed.setNf_token(nf_token);
+                        newsfeed.setNf_user_token(nf_user_token);
+                        newsfeed.setNf_details(nf_details);
+                        newsfeed.setNf_files(nf_files);
+                        newsfeed.setNf_filetype(nf_filetype);
+                        newsfeed.setNf_date(nf_date);
+                        newsfeed.setNf_fullname(nf_fullname);
+                        newsfeed.setNf_image(nf_image);
+
+                        newsfeedArrayList.add(newsfeed);
+                    }
+                    Collections.reverse(newsfeedArrayList);
+
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerView.setHasFixedSize(true);
+                    newsfeedAdapter = new NewsfeedAdapter(context, newsfeedArrayList, role);
+                    newsfeedAdapter.setClickListener(new OnClickRecyclerView() {
+                        @Override
+                        public void onItemClick(View view, int position, int fromButton) {
+                            selectedNewsFeed = newsfeedArrayList.get(position);
+                            if(fromButton == 1){
+                                getNewsfeedByToken();
+                            }
+                        }
+                    });
+
+                    recyclerView.setAdapter(newsfeedAdapter);
+
+                    emptyIndicator.setVisibility(View.GONE);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Debugger.logD("e " +e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                swipeRefreshLayout.setRefreshing(false);
+                OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
+            }
+        });
+    }
+
+    public void getStudentNewsfeedDetails() {
+        newsfeedArrayList.clear();
+
+        swipeRefreshLayout.setRefreshing(true);
+
+        RequestParams params = new RequestParams();
+        params.put("teach_token", UserStudent.getToken(context));
+        Debugger.logD("teach_token2 " + UserStudent.getToken(context));
 
         HttpProvider.post(context, "controller_educator/get_post.php", params, new AsyncHttpResponseHandler() {
             @Override
