@@ -79,7 +79,25 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                     .load(HttpProvider.getTopicDir() + topic.getTopic_file())
                     .into(viewHolder.ivImage);
             viewHolder.ivImage.setVisibility(View.VISIBLE);
-        } else {
+        } else if (topic.getTopic_filetype().equalsIgnoreCase("word")){
+            Glide.with(context)
+                    .load("http://ec2-3-0-89-51.ap-southeast-1.compute.amazonaws.com/img/word-template.jpg")
+                    .into(viewHolder.ivImage);
+            viewHolder.tvDetails.setText(topic.getTopic_details() + " " + "\n" + "\nThere is no preview for this file type");
+            viewHolder.ivImage.setVisibility(View.VISIBLE);
+        }else if (topic.getTopic_filetype().equalsIgnoreCase("pdf")){
+            Glide.with(context)
+                    .load("http://ec2-3-0-89-51.ap-southeast-1.compute.amazonaws.com/img/pdf-template.jpg")
+                    .into(viewHolder.ivImage);
+            viewHolder.tvDetails.setText(topic.getTopic_details() + " " + "\n" + "\nThere is no preview for this file type");
+            viewHolder.ivImage.setVisibility(View.VISIBLE);
+        }else if (topic.getTopic_filetype().equalsIgnoreCase("pptx")){
+            Glide.with(context)
+                    .load("http://ec2-3-0-89-51.ap-southeast-1.compute.amazonaws.com/img/pp-template.jpg")
+                    .into(viewHolder.ivImage);
+            viewHolder.tvDetails.setText(topic.getTopic_details() + " " + "\n" + "\nThere is no preview for this file type");
+            viewHolder.ivImage.setVisibility(View.VISIBLE);
+        }else{
             viewHolder.videoView.setVideoURI(Uri.parse(HttpProvider.getTopicDir() + topic.getTopic_file()));
             viewHolder.videoView.setMediaController(new MediaController(context));
 //            viewHolder.videoView.start();
