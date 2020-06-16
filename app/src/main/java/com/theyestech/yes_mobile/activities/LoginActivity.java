@@ -363,10 +363,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
                     String str = new String(responseBody, StandardCharsets.UTF_8);
-
+                    Debugger.logD("str " + str);
                     JSONArray jsonArray = new JSONArray(str);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
 
+                    String user_code = jsonObject.getString("user_code");
                     String user_email_address = jsonObject.getString("user_email_address");
                     String user_firstname = jsonObject.getString("user_firstname");
                     String user_lastname = jsonObject.getString("user_lastname");
@@ -396,6 +397,7 @@ public class LoginActivity extends AppCompatActivity {
                     else
                         user_gender = "Female";
 
+                    userStudent.setCode(user_code);
                     userStudent.setEmail_address(user_email_address);
                     userStudent.setPassword(etPassword.getText().toString());
                     userStudent.setFirsname(user_firstname);

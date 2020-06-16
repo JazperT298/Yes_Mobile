@@ -47,7 +47,7 @@
                     android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toStartOf="@+id/imageView16"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_nav_chat" />
+                    app:srcCompat="@drawable/chat_icon" />
 
                 <ImageView
                     android:id="@+id/imageView16"
@@ -164,7 +164,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/tv_HomeStatSStudentCount"
                         app:layout_constraintStart_toStartOf="@+id/tv_HomeStatSStudentCount"
                         app:layout_constraintTop_toTopOf="@+id/imageView11"
-                        app:srcCompat="@drawable/ic_students_colored" />
+                        app:srcCompat="@drawable/nickname" />
 
                     <ImageView
                         android:id="@+id/imageView11"
@@ -174,7 +174,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/tv_HomeStatSubjectCount"
                         app:layout_constraintStart_toStartOf="@+id/tv_HomeStatSubjectCount"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_subjects_colored" />
+                        app:srcCompat="@drawable/student_code" />
 
                     <ImageView
                         android:id="@+id/imageView15"
@@ -183,7 +183,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/tv_HomeStatTopicCount"
                         app:layout_constraintStart_toStartOf="@+id/tv_HomeStatTopicCount"
                         app:layout_constraintTop_toTopOf="@+id/imageView10"
-                        app:srcCompat="@drawable/ic_topics_colored" />
+                        app:srcCompat="@drawable/dream_job" />
 
                     <TextView
                         android:id="@+id/tv_HomeStatSubjectCount"
