@@ -117,7 +117,6 @@ public class ConnectionActivity extends AppCompatActivity {
         HttpProvider.post(context, "controller_global/GetUserRequestsConnections.php", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                Debugger.logD("responseBody " + responseBody);
 
                 String str = new String(responseBody);
                 Debugger.logD("str " + str);
