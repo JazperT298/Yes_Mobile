@@ -27,6 +27,7 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.Conversation;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.util.ArrayList;
@@ -83,6 +84,8 @@ public class ChatConversationActivity extends AppCompatActivity {
         senderId = firebaseUser.getUid();
         receiverId = contact.getId();
         threadId = thread.getId();
+        Debugger.logD("contact " + receiverId);
+        Debugger.logD("thread " + threadId);
 
         if (!thread.getSenderId().equals(firebaseUser.getUid())) {
             threadRef = FirebaseDatabase.getInstance().getReference("Threads");

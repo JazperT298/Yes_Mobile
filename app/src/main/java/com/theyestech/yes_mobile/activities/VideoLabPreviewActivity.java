@@ -139,7 +139,7 @@ public class VideoLabPreviewActivity extends AppCompatActivity {
                             bar.show();
 
                             if(bar.isShowing()) {
-                                v_MainVideo.setVideoURI(Uri.parse("http://ec2-3-0-89-51.ap-southeast-1.compute.amazonaws.com/" + mediaUrl));
+                                v_MainVideo.setVideoURI(Uri.parse("https://theyestech.com/" + mediaUrl));
                                 ctlr = new MediaController(context);
                                 ctlr.setMediaPlayer(v_MainVideo);
                                 ctlr.setAnchorView(v_MainVideo);
