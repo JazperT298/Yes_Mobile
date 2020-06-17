@@ -3,23 +3,20 @@ package com.theyestech.yes_mobile.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,14 +31,11 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.StudentRequestAdapter;
-import com.theyestech.yes_mobile.adapters.StudentStickersAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Section;
-import com.theyestech.yes_mobile.models.Sticker;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
@@ -65,7 +59,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
     private Context context;
     private String role;
 
-    private ImageView ivBack, ivClose,iv_SubjectDetailsMenu;
+    private ImageView ivBack, ivClose, iv_SubjectDetailsMenu;
     private TextView tvHeader;
     private CardView cvDetails, cvStudents, cvTopics, cvQuiz, cvStickers, cvAwards, cvAssessment, cvRequest;
 
@@ -434,14 +428,14 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void sideMenuDialog(View v){
+    private void sideMenuDialog(View v) {
         PopupMenu popup = new PopupMenu(context, v);
         popup.getMenuInflater().inflate(R.menu.menu_pop_up, popup.getMenu());
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
 
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.dashboard:
                         Intent intent = new Intent(context, MainActivity.class);
                         startActivity(intent);
@@ -456,12 +450,15 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 return false;
             }
         });
+
         popup.show();//showing popup menu
     }
 
-    private void openStudentRequestDialog(){
-        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+    private void openStudentRequestDialog() {
+        Dialog dialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.dialog_student_subject_request);
+        Objects.requireNonNull(dialog.getWindow()).addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        dialog.getWindow().setStatusBarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         final ImageView iv_SearchBack;
 
         iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
@@ -486,7 +483,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         getAllStudentSubjectRequest();
     }
 
-    private void getAllStudentSubjectRequest(){
+    private void getAllStudentSubjectRequest() {
         studentArrayList.clear();
 
         swipeRefreshLayout1.setRefreshing(true);
@@ -551,9 +548,9 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
                             student = studentArrayList.get(position);
-                            if (fromButton == 1){
+                            if (fromButton == 1) {
 
-                            }else if (fromButton == 2){
+                            } else if (fromButton == 2) {
                                 acceptStudentRequest(student.getUser_id());
                             }
                         }
@@ -566,6 +563,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 }
 
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 swipeRefreshLayout1.setRefreshing(false);
@@ -574,7 +572,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void acceptStudentRequest(String stud_id){
+    private void acceptStudentRequest(String stud_id) {
         ProgressPopup.showProgress(context);
         RequestParams params = new RequestParams();
         params.put("stud_id", stud_id);
@@ -591,7 +589,7 @@ public class SubjectDetailsActivity extends AppCompatActivity {
                 if (str.contains("success")) {
                     Toasty.success(context, "Student Accepted").show();
                     getAllStudentSubjectRequest();
-                } else{
+                } else {
                     Toasty.warning(context, "Failed").show();
                 }
 

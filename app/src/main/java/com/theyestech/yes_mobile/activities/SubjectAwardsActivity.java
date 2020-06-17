@@ -2,15 +2,14 @@ package com.theyestech.yes_mobile.activities;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +20,6 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.StickersAdapter;
 import com.theyestech.yes_mobile.adapters.StudentListAdapter;
-import com.theyestech.yes_mobile.adapters.StudentsAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Sticker;
 import com.theyestech.yes_mobile.models.Student;
@@ -35,6 +33,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
@@ -45,7 +44,7 @@ public class SubjectAwardsActivity extends AppCompatActivity {
     private String role;
 
     private ImageView ivBack;
-    private TextView tv_SendAward1,tv_SendAward2,tv_SendAward3;
+    private TextView tv_SendAward1, tv_SendAward2, tv_SendAward3;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ConstraintLayout emptyIndicator;
@@ -60,6 +59,7 @@ public class SubjectAwardsActivity extends AppCompatActivity {
     private ArrayList<Student> studentArrayList = new ArrayList<>();
     private StudentListAdapter studentListAdapter;
     private Subject subject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,11 +74,12 @@ public class SubjectAwardsActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorGreensea));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(getResources().getColor(R.color.colorGreensea));
+//        }
+
         ivBack = findViewById(R.id.imageView34);
         tv_SendAward1 = findViewById(R.id.tv_SendAward1);
         tv_SendAward2 = findViewById(R.id.tv_SendAward2);
@@ -110,10 +111,13 @@ public class SubjectAwardsActivity extends AppCompatActivity {
         });
     }
 
-    private void openStudentDialog(){
-        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+    private void openStudentDialog() {
+        Dialog dialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.dialog_student_list);
-        final ImageView iv_SearchBack,iv_SendToStudent;
+        Objects.requireNonNull(dialog.getWindow()).addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        dialog.getWindow().setStatusBarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
+
+        final ImageView iv_SearchBack, iv_SendToStudent;
 
         iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
         rv_StudentList = dialog.findViewById(R.id.rv_StudentList);
@@ -142,11 +146,13 @@ public class SubjectAwardsActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
         dialog.show();
+
         getAllStudentFromSubject();
     }
 
-    private void getAllStudentFromSubject(){
+    private void getAllStudentFromSubject() {
         studentArrayList.clear();
 
         swipeRefreshLayout1.setRefreshing(true);
@@ -231,7 +237,7 @@ public class SubjectAwardsActivity extends AppCompatActivity {
         });
     }
 
-    private void sendAwardToStudent(){
+    private void sendAwardToStudent() {
 
     }
 

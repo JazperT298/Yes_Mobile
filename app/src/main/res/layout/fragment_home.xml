@@ -31,23 +31,14 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageView14s"
+                    android:id="@+id/iv_HomeSearch"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_HomeSearch"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_HomeSearch"
-                    app:layout_constraintStart_toStartOf="@+id/iv_HomeSearch"
-                    app:layout_constraintTop_toTopOf="@+id/iv_HomeSearch"
-                    app:srcCompat="@drawable/bg_profile_round_white" />
-                <ImageView
-                    android:id="@+id/iv_HomeSearch"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toStartOf="@+id/imageView15s"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_search_colored" />
+                    app:srcCompat="@drawable/ic_search_white" />
                 <ImageView
                     android:id="@+id/imageView15s"
                     android:layout_width="32dp"

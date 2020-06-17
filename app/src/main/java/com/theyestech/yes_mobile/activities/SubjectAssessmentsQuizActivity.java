@@ -2,10 +2,8 @@ package com.theyestech.yes_mobile.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,7 +21,6 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.AssessmentQuizAdapter;
 import com.theyestech.yes_mobile.adapters.AssessmentsAdapter;
-import com.theyestech.yes_mobile.adapters.NotesAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Assessment;
 import com.theyestech.yes_mobile.models.Quiz;
@@ -181,6 +178,7 @@ public class SubjectAssessmentsQuizActivity extends AppCompatActivity {
             }
         });
     }
+
     private void openAssessmentStudentsDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 

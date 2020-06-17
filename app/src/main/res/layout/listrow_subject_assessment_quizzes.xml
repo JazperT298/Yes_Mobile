@@ -4,24 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraint_ListrowSubjectAssessment"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/cv_ListrowSubjectAssessment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:background="@drawable/selector3"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/selector3">
 
             <ImageView
                 android:id="@+id/imageView37"
@@ -37,7 +41,7 @@
                 android:id="@+id/tv_ListrowSubjectAssessmentQuizTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:text="Quiz"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView37"
                 app:layout_constraintStart_toEndOf="@+id/imageView37"

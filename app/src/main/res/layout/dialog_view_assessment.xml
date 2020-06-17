@@ -10,6 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="500dp"
         app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,8 +68,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Student Name"
-                    android:textStyle="bold"
                     android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/view17"
                     app:layout_constraintStart_toStartOf="parent"
@@ -97,6 +98,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/view18"
                     app:layout_constraintStart_toEndOf="@+id/view17"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <View
                     android:id="@+id/view18"
                     android:layout_width="1dp"
@@ -158,25 +160,25 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </android.support.v4.widget.SwipeRefreshLayout>
-<!--            <include-->
-<!--                android:id="@+id/include"-->
-<!--                layout="@layout/indicator_empty_record"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="32dp"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/constraintLayout37" />-->
+            <!--            <include-->
+            <!--                android:id="@+id/include"-->
+            <!--                layout="@layout/indicator_empty_record"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="32dp"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/constraintLayout37" />-->
 
-<!--            <android.support.v7.widget.RecyclerView-->
-<!--                android:id="@+id/rv_ViewAssessment"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/constraint" />-->
+            <!--            <android.support.v7.widget.RecyclerView-->
+            <!--                android:id="@+id/rv_ViewAssessment"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/constraint" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </android.support.constraint.ConstraintLayout>

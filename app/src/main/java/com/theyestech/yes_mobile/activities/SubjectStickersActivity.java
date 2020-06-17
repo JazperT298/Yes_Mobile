@@ -7,12 +7,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -64,8 +66,8 @@ public class SubjectStickersActivity extends AppCompatActivity {
     private ArrayList<Student> studentArrayList = new ArrayList<>();
     private StudentListAdapter studentListAdapter;
     private Student student;
-    private String user_id = "";
-    private  ArrayList<String> user_ids = new ArrayList<>();
+    private ArrayList<String> user_ids = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,33 +168,28 @@ public class SubjectStickersActivity extends AppCompatActivity {
         });
     }
 
-    private void openSendStickerDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-
-        LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_send_sticker_to_student, null);
-
-        dialogBuilder.setView(dialogView);
-        final AlertDialog b = dialogBuilder.create();
-
-        b.show();
-        Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-    }
-
-    private void openStudentDialog(String subject_id, String sticker_id){
-        Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+    private void openStudentDialog(String subject_id, String sticker_id) {
+        Dialog dialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.dialog_student_list);
-        final ImageView iv_SearchBack,iv_SendToStudent;
+        Objects.requireNonNull(dialog.getWindow()).addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        dialog.getWindow().setStatusBarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
+
+        final ImageView iv_SearchBack, iv_SendToStudent;
 
         iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
         rv_StudentList = dialog.findViewById(R.id.rv_StudentList);
         swipeRefreshLayout1 = dialog.findViewById(R.id.swipe_StudentList);
         emptyIndicator1 = dialog.findViewById(R.id.view_EmptyRecord);
         iv_SendToStudent = dialog.findViewById(R.id.iv_SendToStudent);
+
         iv_SendToStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sentStickerToStudent(subject_id, sticker_id);
+
+                if (user_ids.isEmpty())
+                    Toasty.warning(context, "Please select student.").show();
+                else
+                    sentStickerToStudent(subject_id, sticker_id);
             }
         });
 
@@ -209,12 +206,15 @@ public class SubjectStickersActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
         dialog.show();
+
         getAllStudentFromSubject();
     }
 
-    private void getAllStudentFromSubject(){
+    private void getAllStudentFromSubject() {
         studentArrayList.clear();
+        user_ids.clear();
 
         swipeRefreshLayout1.setRefreshing(true);
 
@@ -275,9 +275,11 @@ public class SubjectStickersActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position, int fromButton) {
                             student = studentArrayList.get(position);
-                            user_id = student.getUser_id();
-                            Debugger.logD("user ID  " + student.getUser_id());
-                            user_ids.add(student.getUser_id());
+
+                            if (user_ids.contains(student.getUser_id()))
+                                user_ids.remove(student.getUser_id());
+                            else
+                                user_ids.add(student.getUser_id());
                         }
                     });
 
@@ -298,7 +300,7 @@ public class SubjectStickersActivity extends AppCompatActivity {
         });
     }
 
-    private void sentStickerToStudent(String sticker_id, String subject_id){
+    private void sentStickerToStudent(String sticker_id, String subject_id) {
         ProgressPopup.showProgress(context);
 
         RequestParams params = new RequestParams();
@@ -310,9 +312,9 @@ public class SubjectStickersActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ProgressPopup.hideProgress();
-                Debugger.logD("responseBody " +responseBody);
+                Debugger.logD("responseBody " + responseBody);
                 String str = new String(responseBody, StandardCharsets.UTF_8);
-                Debugger.logD("TEST " +str);
+                Debugger.logD("TEST " + str);
                 if (str.contains("success")) {
                     Toasty.success(context, "Successfully sent to Student.").show();
                     getAllStudentFromSubject();
