@@ -18,6 +18,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -67,6 +71,13 @@ public class ConnectionActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout1;
     private ConstraintLayout emptyIndicator1;
     private ConnectionRequestAdapter connectionRequestAdapter;
+
+    //Firebase
+    private FirebaseUser firebaseUser;
+    private DatabaseReference registerRef;
+    private DatabaseReference userRef;
+    private DatabaseReference threadRef;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,6 +267,12 @@ public class ConnectionActivity extends AppCompatActivity {
     private void openUsersProfileDialog(){
         Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.search_user_profile);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        userRef = FirebaseDatabase.getInstance().getReference("Users");
+        threadRef = FirebaseDatabase.getInstance().getReference("Threads");
+
         final ImageView iv_UserProfileImage, iv_UserProfileBackground, iv_UserProfileClose;
         final TextView tv_UserProfileFullname, tv_UserProfileEmail, tv_UserProfileInfoFullname, tv_UserProfileInfoGender, tv_UserProfileInfoPhone, tv_UserProfileInfoEmail, tv_UserProfileInfoMotto;
         final TextView tv_UserProfileInfoEducationalAttainment, tv_UserProfileInfoSubjectMajor, tv_UserProfileInfoCurrentSchool, tv_UserProfileInfoSchoolPosition;
