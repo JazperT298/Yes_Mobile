@@ -4,8 +4,8 @@
 
     <gradient
         android:endColor="@color/colorPeterriver"
-        android:centerColor="@color/colorPeterriver"
-        android:startColor="@color/color1"
+        android:centerColor="#2D81BA"
+        android:startColor="#1E567C"
         android:type="linear"
         android:angle="180"/>
 

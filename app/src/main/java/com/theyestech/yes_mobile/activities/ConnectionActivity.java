@@ -5,12 +5,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,6 +47,7 @@ import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
@@ -344,6 +347,8 @@ public class ConnectionActivity extends AppCompatActivity {
     private void openConnectionRequestDialog(){
         Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.dialog_connection_request);
+        Objects.requireNonNull(dialog.getWindow()).addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        dialog.getWindow().setStatusBarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         final ImageView iv_SearchBack;
 
         iv_SearchBack = dialog.findViewById(R.id.iv_SearchBack);
