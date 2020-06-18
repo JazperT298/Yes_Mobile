@@ -256,7 +256,7 @@ public class MessageActivity extends AppCompatActivity {
                 Contact contact = dataSnapshot.getValue(Contact.class);
                 if (notify) {
                     assert contact != null;
-                    sendEducatorNotifiaction(receiver, contact.getEmail(), msg);
+//                    sendEducatorNotifiaction(receiver, contact.getEmail(), msg);
                 }
                 notify = false;
             }
@@ -267,46 +267,46 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
-    //Firebase Database
-    private void sendEducatorNotifiaction(String receiver, final String username, final String message){
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
-        Query query = tokens.orderByKey().equalTo(receiver);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message",
-                            userid);
-
-                    Sender sender = new Sender(data, token.getToken());
-
-                    apiService.sendNotification(sender)
-                            .enqueue(new Callback<MyResponse>() {
-                                @Override
-                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                                    if (response.code() == 200){
-                                        assert response.body() != null;
-                                        if (response.body().success != 1){
-//                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<MyResponse> call, Throwable t) {
-
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    //Firebase Database
+//    private void sendEducatorNotifiaction(String receiver, final String username, final String message){
+//        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+//        Query query = tokens.orderByKey().equalTo(receiver);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+//                    Token token = snapshot.getValue(Token.class);
+//                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message",
+//                            userid);
+//
+//                    Sender sender = new Sender(data, token.getToken());
+//
+//                    apiService.sendNotification(sender)
+//                            .enqueue(new Callback<MyResponse>() {
+//                                @Override
+//                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+//                                    if (response.code() == 200){
+//                                        assert response.body() != null;
+//                                        if (response.body().success != 1){
+////                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<MyResponse> call, Throwable t) {
+//
+//                                }
+//                            });
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
     //Firebase Database
     private void readEducatorMessages(final String myid, final String userid, final String imageurl){
         mchat = new ArrayList<>();
@@ -446,7 +446,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Student student = dataSnapshot.getValue(Student.class);
                 if (notify) {
-                    sendStudentNotifiaction(receiver, student.getUser_firstname(), msg);
+                    //sendStudentNotifiaction(receiver, student.getUser_firstname(), msg);
                 }
                 notify = false;
             }
@@ -458,44 +458,44 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
     //Firebase Database
-    private void sendStudentNotifiaction(String receiver, final String username, final String message){
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
-        Query query = tokens.orderByKey().equalTo(receiver);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message",
-                            userid);
-
-                    Sender sender = new Sender(data, token.getToken());
-
-                    apiService.sendNotification(sender)
-                            .enqueue(new Callback<MyResponse>() {
-                                @Override
-                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                                    if (response.code() == 200){
-                                        if (response.body().success != 1){
-                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<MyResponse> call, Throwable t) {
-
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void sendStudentNotifiaction(String receiver, final String username, final String message){
+//        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+//        Query query = tokens.orderByKey().equalTo(receiver);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+//                    Token token = snapshot.getValue(Token.class);
+//                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message",
+//                            userid);
+//
+//                    Sender sender = new Sender(data, token.getToken());
+//
+//                    apiService.sendNotification(sender)
+//                            .enqueue(new Callback<MyResponse>() {
+//                                @Override
+//                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+//                                    if (response.code() == 200){
+//                                        if (response.body().success != 1){
+//                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<MyResponse> call, Throwable t) {
+//
+//                                }
+//                            });
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
     //Firebase Database
     private void readStudentMessages(final String myid, final String userid, final String imageurl){
         mchat = new ArrayList<>();

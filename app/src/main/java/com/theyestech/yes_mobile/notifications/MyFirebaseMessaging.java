@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.theyestech.yes_mobile.activities.ChatConversationActivity;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 
 import java.util.Objects;
@@ -88,7 +89,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         assert user != null;
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, MessageActivity.class);
+        Intent intent = new Intent(this, ChatConversationActivity.class);
         //intent.putExtra("ROLE", role);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
@@ -121,7 +122,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         assert user != null;
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, MessageActivity.class);
+        Intent intent = new Intent(this, ChatConversationActivity.class);
         //intent.putExtra("ROLE", role);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);

@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,10 +25,18 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ChatConversationAdapter;
+import com.theyestech.yes_mobile.interfaces.APIService;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.Conversation;
+import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
+import com.theyestech.yes_mobile.notifications.Client;
+import com.theyestech.yes_mobile.notifications.Data;
+import com.theyestech.yes_mobile.notifications.MyResponse;
+import com.theyestech.yes_mobile.notifications.Sender;
+import com.theyestech.yes_mobile.notifications.Token;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
@@ -36,6 +46,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatConversationActivity extends AppCompatActivity {
     private Context context;
@@ -52,6 +66,7 @@ public class ChatConversationActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private DatabaseReference threadRef;
     private DatabaseReference conversationRef;
+    private DatabaseReference reference;
     private ValueEventListener conversationListener;
 
     private Query query;
@@ -67,6 +82,12 @@ public class ChatConversationActivity extends AppCompatActivity {
     private String conversationId;
     private String message;
     private String threadId;
+    private String fullname, email;
+
+    APIService apiService;
+
+    boolean notify = false;
+    boolean isEmpty = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +95,8 @@ public class ChatConversationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_conversation);
 
         context = this;
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -84,6 +107,8 @@ public class ChatConversationActivity extends AppCompatActivity {
         senderId = firebaseUser.getUid();
         receiverId = contact.getId();
         threadId = thread.getId();
+        fullname = firebaseUser.getDisplayName();
+        email = firebaseUser.getEmail();
         Debugger.logD("contact " + receiverId);
         Debugger.logD("thread " + threadId);
 
@@ -93,6 +118,7 @@ public class ChatConversationActivity extends AppCompatActivity {
         }
 
         role = UserRole.getRole(context);
+
 
         initializeUI();
     }
@@ -142,6 +168,7 @@ public class ChatConversationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 message = etMessage.getText().toString();
                 if (!message.isEmpty()){
+                    notify = true;
                     sendMessage();
                     ivSend.setEnabled(false);
                     ivSend.setImageResource(R.drawable.ic_send_colored_disabled);
@@ -218,8 +245,99 @@ public class ChatConversationActivity extends AppCompatActivity {
         threadRef.child(threadId).child("lastMessage").setValue(message);
         threadRef.child(threadId).child("lastMessageDateCreated").setValue(currentDate);
 
+//        if (notify) {
+//            Debugger.logD("Message fuck");
+//            sendNotification(receiverId, fullname, message);
+//            Debugger.logD("Message Sent");
+//        }
+//        notify = false;
+
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserEducator userEducator = dataSnapshot.getValue(UserEducator.class);
+                if (notify) {
+//                    if(userEducator.getFirsname() == null){
+//                        sendNotification(receiverId, userEducator.getFirsname(), message);
+//                    }else{
+                        sendNotification(receiverId, email , message);
+                    //}
+                }
+                notify = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         etMessage.setText("");
         etMessage.requestFocus();
+    }
+    private void sendNotification(String receiver, final String username, final String message){
+        Debugger.logD("Message yawa");
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = tokens.orderByKey().equalTo(receiver);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(senderId, R.mipmap.ic_launcher, username+": "+message, "New Message", currentDate,
+                            receiverId);
+                    Sender sender = new Sender(data, token.getToken());
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    if (response.code() == 200){
+                                        if (response.body().success != 1){
+                                            Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                }
+                            });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void currentUser(String receiverId){
+        SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+        editor.putString("currentuser", receiverId);
+        editor.apply();
+    }
+
+    private void status(String status){
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+
+        reference.updateChildren(hashMap);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+        currentUser(receiverId);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        reference.removeEventListener(conversationListener);
+        status("offline");
+        currentUser("none");
     }
 
     @Override

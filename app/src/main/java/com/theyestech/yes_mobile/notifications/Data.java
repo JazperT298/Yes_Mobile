@@ -1,21 +1,23 @@
 package com.theyestech.yes_mobile.notifications;
 
+import java.util.Date;
+
 public class Data {
     private String user;
     private int icon;
     private String body;
     private String title;
+    private Date date;
     private String sented;
 
-    public Data(String user, int icon, String body, String title, String sented) {
+
+    public Data(String user, int icon, String body, String title, Date date, String sented) {
         this.user = user;
         this.icon = icon;
         this.body = body;
         this.title = title;
+        this.date = date;
         this.sented = sented;
-    }
-
-    public Data() {
     }
 
     public String getUser() {
@@ -48,6 +50,14 @@ public class Data {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getSented() {

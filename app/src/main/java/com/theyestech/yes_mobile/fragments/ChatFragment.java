@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
@@ -44,6 +45,7 @@ import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.notifications.Token;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -147,6 +149,7 @@ public class ChatFragment extends Fragment {
 
             }
         });
+        updateToken(FirebaseInstanceId.getInstance().getToken());
     }
 
     @SuppressLint("RestrictedApi")
@@ -364,6 +367,11 @@ public class ChatFragment extends Fragment {
                 swipeThreads.setRefreshing(false);
             }
         });
+    }
+    private void updateToken(String token){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token token1 = new Token(token);
+        reference.child(firebaseUser.getUid()).setValue(token1);
     }
 
     @Override
