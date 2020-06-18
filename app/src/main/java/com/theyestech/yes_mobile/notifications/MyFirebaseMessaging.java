@@ -16,9 +16,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.activities.ChatConversationActivity;
 import com.theyestech.yes_mobile.activities.MessageActivity;
+import com.theyestech.yes_mobile.models.ChatThread;
+import com.theyestech.yes_mobile.models.Contact;
+import com.theyestech.yes_mobile.models.Sticker;
+import com.theyestech.yes_mobile.utils.Debugger;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -84,7 +95,20 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-        String role = "EDUCATOR";
+        String name = remoteMessage.getData().get("name");
+        String threadId = remoteMessage.getData().get("threadId");
+        String photo_name = remoteMessage.getData().get("photo_name");
+        //String contact = remoteMessage.getData().get("contact");
+        //String thread = remoteMessage.getData().get("thread");
+        Class<? extends Map> contact1 = remoteMessage.getData().getClass();
+        Class<? extends Map> thread1 = remoteMessage.getData().getClass();
+
+        //String role = "EDUCATOR";
+        Debugger.logD("contact" + user);
+        Debugger.logD("body " + body);
+        Debugger.logD("title " + title);
+        Debugger.logD("contact1 " + contact1);
+        Debugger.logD(" threadId " + threadId);
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         assert user != null;
@@ -92,8 +116,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Intent intent = new Intent(this, ChatConversationActivity.class);
         //intent.putExtra("ROLE", role);
         Bundle bundle = new Bundle();
-        bundle.putString("userid", user);
-        bundle.putString("ROLE", role);
+//        bundle.putString("CONTACT", remoteMessage.getData().get("contact"));
+//        bundle.putString("THREAD", remoteMessage.getData().get("thread"));
+        intent.putExtra("RECEIVER_ID", user);
+        intent.putExtra("RECEIVER_NAME", name);
+        intent.putExtra("RECEIVER_PHOTO", photo_name);
+        intent.putExtra("THREAD_ID", threadId);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -113,11 +141,22 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
 
     private void sendNotification(RemoteMessage remoteMessage) {
-
         String user = remoteMessage.getData().get("user");
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
+        String date = remoteMessage.getData().get("date");
+        String name = remoteMessage.getData().get("name");
+        String threadId = remoteMessage.getData().get("threadId");
+        String photo_name = remoteMessage.getData().get("photo_name");
+        Debugger.logD("contact" );
+        Debugger.logD("body " + body);
+        Debugger.logD("title " + title);
+        Debugger.logD(" date " + date);
+        Debugger.logD(" threadId " + threadId);
+        //Contact contacts = remoteMessage.getClass().get("contacts");
+        //String contact = remoteMessage.getData().get("contact");
+        //String thread = remoteMessage.getData().get("thread");
         String role = "EDUCATOR";
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         assert user != null;
@@ -125,8 +164,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Intent intent = new Intent(this, ChatConversationActivity.class);
         //intent.putExtra("ROLE", role);
         Bundle bundle = new Bundle();
-        bundle.putString("userid", user);
-        bundle.putString("ROLE", role);
+//        intent.putExtra("CONTACT", contact);
+//        intent.putExtra("THREAD", thread);
+        intent.putExtra("RECEIVER_ID", user);
+        intent.putExtra("RECEIVER_NAME", name);
+        intent.putExtra("RECEIVER_PHOTO", photo_name);
+        intent.putExtra("THREAD_ID", threadId);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);

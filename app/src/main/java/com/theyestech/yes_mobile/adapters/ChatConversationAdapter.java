@@ -40,15 +40,17 @@ public class ChatConversationAdapter extends RecyclerView.Adapter<ChatConversati
     private ArrayList<Conversation> conversationArrayList;
     private OnClickRecyclerView onClickRecyclerView;
     private Contact contact;
+    private String photo_name;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
 
-    public ChatConversationAdapter(Context context, ArrayList<Conversation> conversationArrayList, Contact contact) {
+    public ChatConversationAdapter(Context context, ArrayList<Conversation> conversationArrayList, String photo_name) {
         this.context = context;
         this.conversationArrayList = conversationArrayList;
         this.layoutInflater = LayoutInflater.from(context);
-        this.contact = contact;
+        //this.contact = contact;
+        this.photo_name = photo_name;
 
         this.firebaseAuth = FirebaseAuth.getInstance();
         this.firebaseUser = this.firebaseAuth.getCurrentUser();
@@ -75,7 +77,7 @@ public class ChatConversationAdapter extends RecyclerView.Adapter<ChatConversati
 
         if (isFromSender){
             Glide.with(context)
-                    .load(HttpProvider.getProfileDir() + contact.getPhotoName())
+                    .load(HttpProvider.getProfileDir() + photo_name)
                     .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
                     .apply(GlideOptions.getOptions())
                     .into(viewHolder.ivProfile);

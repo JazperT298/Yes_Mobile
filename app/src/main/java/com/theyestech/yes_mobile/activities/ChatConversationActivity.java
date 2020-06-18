@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -74,10 +75,12 @@ public class ChatConversationActivity extends AppCompatActivity {
     private ChatConversationAdapter chatConversationAdapter;
     private Contact contact;
     private ArrayList<Conversation> conversationArrayList = new ArrayList<>();
-    private ChatThread thread;
+//    private ChatThread thread;
 
     private String senderId;
     private String receiverId;
+    private String receivername;
+    private String photo_name;
     private Date currentDate;
     private String conversationId;
     private String message;
@@ -101,18 +104,29 @@ public class ChatConversationActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
-        contact = getIntent().getParcelableExtra("CONTACT");
-        thread = getIntent().getParcelableExtra("THREAD");
+//        contact = getIntent().getParcelableExtra("CONTACT");
+//        thread = getIntent().getParcelableExtra("THREAD");
+        Intent extras = getIntent();
+        Bundle bundle = extras.getExtras();
+        assert bundle != null;
+        receiverId = bundle.getString("RECEIVER_ID");
+        receivername = bundle.getString("RECEIVER_NAME");
+        threadId = bundle.getString("THREAD_ID");
+        photo_name = bundle.getString("RECEIVER_PHOTO");
 
         senderId = firebaseUser.getUid();
-        receiverId = contact.getId();
-        threadId = thread.getId();
+//        receiverId = contact.getId();
+//        threadId = thread.getId();
         fullname = firebaseUser.getDisplayName();
         email = firebaseUser.getEmail();
-        Debugger.logD("contact " + receiverId);
-        Debugger.logD("thread " + threadId);
+//        Debugger.logD("contact " + receiverId);
+//        Debugger.logD("thread " + threadId);
 
-        if (!thread.getSenderId().equals(firebaseUser.getUid())) {
+//        if (!thread.getSenderId().equals(firebaseUser.getUid())) {
+//            threadRef = FirebaseDatabase.getInstance().getReference("Threads");
+//            threadRef.child(threadId).child("isSeen").setValue(true);
+//        }
+        if (!threadId.equals(firebaseUser.getUid())) {
             threadRef = FirebaseDatabase.getInstance().getReference("Threads");
             threadRef.child(threadId).child("isSeen").setValue(true);
         }
@@ -125,7 +139,6 @@ public class ChatConversationActivity extends AppCompatActivity {
 
     private void initializeUI() {
         tvName = findViewById(R.id.tv_ChatConversationName);
-        tvEmail = findViewById(R.id.tv_ChatConversationEmail);
         ivBack = findViewById(R.id.iv_ChatConversationBack);
         ivSend = findViewById(R.id.iv_ChatConversationSend);
         etMessage = findViewById(R.id.et_ChatConversationMessage);
@@ -178,8 +191,8 @@ public class ChatConversationActivity extends AppCompatActivity {
     }
 
     private void setHeader() {
-        tvName.setText(contact.getFullName());
-        tvEmail.setText(contact.getEmail());
+        tvName.setText(receivername);
+//        tvEmail.setText(contact.getEmail());
     }
 
     private void getAllConversation() {
@@ -196,7 +209,11 @@ public class ChatConversationActivity extends AppCompatActivity {
                     }
                 }
 
-                if (!thread.getSenderId().equals(senderId)) {
+//                if (!thread.getSenderId().equals(senderId)) {
+//                    threadRef = FirebaseDatabase.getInstance().getReference("Threads");
+//                    threadRef.child(threadId).child("isSeen").setValue(true);
+//                }
+                if (!threadRef.equals(senderId)) {
                     threadRef = FirebaseDatabase.getInstance().getReference("Threads");
                     threadRef.child(threadId).child("isSeen").setValue(true);
                 }
@@ -207,7 +224,7 @@ public class ChatConversationActivity extends AppCompatActivity {
                 linearLayoutManager.setReverseLayout(true);
                 recyclerView.setLayoutManager(linearLayoutManager);
                 recyclerView.setHasFixedSize(true);
-                chatConversationAdapter = new ChatConversationAdapter(context, conversationArrayList, contact);
+                chatConversationAdapter = new ChatConversationAdapter(context, conversationArrayList, photo_name);
                 chatConversationAdapter.setClickListener(new OnClickRecyclerView() {
                     @Override
                     public void onItemClick(View view, int position, int fromButton) {
@@ -261,7 +278,7 @@ public class ChatConversationActivity extends AppCompatActivity {
 //                    if(userEducator.getFirsname() == null){
 //                        sendNotification(receiverId, userEducator.getFirsname(), message);
 //                    }else{
-                        sendNotification(receiverId, email , message);
+                        sendNotification(receiverId, email, message);
                     //}
                 }
                 notify = false;
@@ -277,7 +294,6 @@ public class ChatConversationActivity extends AppCompatActivity {
         etMessage.requestFocus();
     }
     private void sendNotification(String receiver, final String username, final String message){
-        Debugger.logD("Message yawa");
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -286,7 +302,9 @@ public class ChatConversationActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Token token = snapshot.getValue(Token.class);
                     Data data = new Data(senderId, R.mipmap.ic_launcher, username+": "+message, "New Message", currentDate,
-                            receiverId);
+                            receiverId, receivername, threadId, photo_name);
+                    Debugger.logD("threadId " + threadId);
+                    Debugger.logD("contact " + contact);
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<MyResponse>() {

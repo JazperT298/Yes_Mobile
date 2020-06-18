@@ -346,8 +346,10 @@ public class ChatFragment extends Fragment {
 
                         if (fromButton == 1) {
                             Intent intent = new Intent(context, ChatConversationActivity.class);
-                            intent.putExtra("CONTACT", selectedContact);
-                            intent.putExtra("THREAD", selectedThread);
+                            intent.putExtra("RECEIVER_ID", selectedContact.getId());
+                            intent.putExtra("RECEIVER_NAME", selectedContact.getFullName());
+                            intent.putExtra("RECEIVER_PHOTO", selectedContact.getPhotoName());
+                            intent.putExtra("THREAD_ID", selectedThread.getId());
                             startActivity(intent);
                         } else if (fromButton == 2) {
 

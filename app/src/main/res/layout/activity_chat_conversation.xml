@@ -31,22 +31,23 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Vanne Marsmyle Pagapong"
+            android:textSize="16sp"
             android:textColor="@color/colorWhite"
-            app:layout_constraintBottom_toTopOf="@+id/tv_ChatConversationEmail"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_ChatConversationBack"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <TextView
-            android:id="@+id/tv_ChatConversationEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="marsmylepagapong13@gmail.com"
-            android:textColor="@color/colorWhite"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_ChatConversationName"
-            app:layout_constraintTop_toBottomOf="@+id/tv_ChatConversationName" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_ChatConversationEmail"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="marsmylepagapong13@gmail.com"-->
+<!--            android:textColor="@color/colorWhite"-->
+<!--            android:textSize="12sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/tv_ChatConversationName"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_ChatConversationName" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -76,9 +77,10 @@
             android:background="@drawable/bg_edittext"
             android:ems="10"
             android:hint="Write something"
-            android:inputType="textPersonName"
             android:padding="12dp"
             android:textSize="14sp"
+            android:inputType="textMultiLine"
+            android:gravity="top"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_ChatConversationSend"
             app:layout_constraintStart_toStartOf="parent"
