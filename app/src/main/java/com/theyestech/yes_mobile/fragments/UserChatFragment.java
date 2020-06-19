@@ -40,14 +40,18 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.ChatNewConversationActivity;
+import com.theyestech.yes_mobile.activities.MessageActivity;
 import com.theyestech.yes_mobile.adapters.ChatThreadsAdapter;
 import com.theyestech.yes_mobile.adapters.UserChatAdapter;
 import com.theyestech.yes_mobile.adapters.UserChatListAdapter;
+import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.ChatThread;
 import com.theyestech.yes_mobile.models.Chatlist;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.notifications.Token;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
@@ -98,6 +102,7 @@ public class UserChatFragment extends Fragment {
 
     private ArrayList<Chatlist> chatlistArrayList;
     private DatabaseReference reference;
+    private Contact selectedContact;
 
     public UserChatFragment() {
         // Required empty public constructor
@@ -129,7 +134,7 @@ public class UserChatFragment extends Fragment {
     }
 
     private void initializeUI(){
-        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         iv_UserImage = view.findViewById(R.id.iv_UserImage);
         tv_UserName = view.findViewById(R.id.tv_UserName);
@@ -140,11 +145,23 @@ public class UserChatFragment extends Fragment {
         floatingActionButton = view.findViewById(R.id.fab_ChatThreadNew);
         progressBar = view.findViewById(R.id.progress_ChatThreads);
 
-        tv_UserName.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context) );
-        Glide.with(context)
-                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
-                .apply(GlideOptions.getOptions())
-                .into(iv_UserImage);
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Contact contact = dataSnapshot.getValue(Contact.class);
+                tv_UserName.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context) );
+                Glide.with(context)
+                        .load(HttpProvider.getProfileDir() + contact.getPhotoName())
+                        .apply(GlideOptions.getOptions())
+                        .into(iv_UserImage);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         getAllContacts();
 
         updateToken(FirebaseInstanceId.getInstance().getToken());
@@ -159,25 +176,39 @@ public class UserChatFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        Debugger.logD("password " +  UserEducator.getPassword(context));
     }
 
     private void getAllContacts(){
         accessingServer(true);
-        contactArrayList.clear();
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
 
-        userRef.addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                contactArrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Contact contacts = snapshot.getValue(Contact.class);
-                    if (!contacts.getId().equals(firebaseUser.getUid())) {
-                        contactArrayList.add(contacts);
+                    Contact contact = snapshot.getValue(Contact.class);
+                    assert contact != null;
+
+                    if (!contact.getId().equals(firebaseUser.getUid())) {
+                        contactArrayList.add(contact);
                     }
+                    Debugger.logD("s " + contactArrayList.size());
                     rv_Contacts.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false));
                     rv_Contacts.setHasFixedSize(true);
                     userChatAdapter = new UserChatAdapter(context, contactArrayList, false);
+                    userChatAdapter.setClickListener(new OnClickRecyclerView() {
+                        @Override
+                        public void onItemClick(View view, int position, int fromButton) {
+                            selectedContact = contactArrayList.get(position);
+                            Intent intent = new Intent(context, MessageActivity.class);
+                            intent.putExtra("userid", selectedContact.getId());
+                            context.startActivity(intent);
+                        }
+                    });
                     rv_Contacts.setAdapter(userChatAdapter);
                 }
                 accessingServer(false);
@@ -267,10 +298,24 @@ public class UserChatFragment extends Fragment {
 
                             registerRef.setValue(hashMap);
 
+                            firebaseAuth.signInWithEmailAndPassword(email, password)
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
+                                                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                                                assert firebaseUser != null;
+                                                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                                                usersRef.child("status").setValue("online");
+                                            }
+                                        }
+                                    });
+
                             if (b != null) {
                                 b.dismiss();
                                 initializeUI();
                             }
+
 
                         } else {
                             Toasty.warning(context, "Email address already exists.").show();
@@ -330,7 +375,7 @@ public class UserChatFragment extends Fragment {
                 rv_ChatThreads.setLayoutManager(new LinearLayoutManager(context));
                 rv_ChatThreads.setHasFixedSize(true);
 
-                userChatListAdapter = new UserChatListAdapter(getContext(), contactArrayList2, true);
+                userChatListAdapter = new UserChatListAdapter(context, contactArrayList2, true);
                 rv_ChatThreads.setAdapter(userChatListAdapter);
             }
 
@@ -345,5 +390,15 @@ public class UserChatFragment extends Fragment {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token1 = new Token(token);
         reference.child(firebaseUser.getUid()).setValue(token1);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

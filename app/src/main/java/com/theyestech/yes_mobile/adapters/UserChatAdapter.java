@@ -14,8 +14,10 @@ import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.MessageActivity;
+import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.Contact;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
     private ArrayList<Contact> contactArrayList;
     private boolean ischat;
     private LayoutInflater layoutInflater;
+    private OnClickRecyclerView onClickRecyclerView;
 
     String theLastMessage;
 
@@ -40,7 +43,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.user_chat_item, viewGroup, false);
+        view = layoutInflater.inflate(R.layout.user_chat_item, viewGroup, false);
         return new ViewHolder(view);
     }
 
@@ -61,15 +64,11 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
                 viewHolder.name.setText(contact.getFullName().substring(0, 6) + "." );
             }
         }
-
-        if (contact.getPhotoName().equals("default")){
-            viewHolder.profile_image.setImageResource(R.mipmap.ic_launcher);
-        } else {
-            Glide.with(context)
-                    .load(HttpProvider.getProfileDir()  + contact.getPhotoName())
-                    .apply(GlideOptions.getOptions())
-                    .into(viewHolder.profile_image);
-        }
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir()  + contact.getPhotoName())
+                .apply(GlideOptions.getOptions())
+                .into(viewHolder.profile_image);
+        Debugger.logD("image " + contact.getPhotoName());
         if (ischat){
             if (contact.getStatus().equals("online")){
                 viewHolder.img_on.setVisibility(View.VISIBLE);
@@ -83,14 +82,14 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
             viewHolder.img_off.setVisibility(View.GONE);
         }
 
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, MessageActivity.class);
-                intent.putExtra("userid", contact.getId());
-                context.startActivity(intent);
-            }
-        });
+//        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(context, MessageActivity.class);
+//                intent.putExtra("userid", contact.getId());
+//                context.startActivity(intent);
+//            }
+//        });
     }
 
     @Override
@@ -103,7 +102,6 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
         public ImageView profile_image;
         private ImageView img_on;
         private ImageView img_off;
-        private TextView last_msg;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -111,45 +109,17 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
             profile_image = itemView.findViewById(R.id.profile_image);
             img_on = itemView.findViewById(R.id.img_on);
             img_off = itemView.findViewById(R.id.img_off);
-            //last_msg = itemView.findViewById(R.id.last_msg);
+
+            profile_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickRecyclerView != null)
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
+                }
+            });
         }
     }
-    //check for last message
-//    private void lastMessage(final String userid, final TextView last_msg){
-//        theLastMessage = "default";
-//        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
-//
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-//                    Chat chat = snapshot.getValue(Chat.class);
-//                    if (firebaseUser != null && chat != null) {
-//                        if (chat.getReceiverId().equals(firebaseUser.getUid()) && chat.getSenderId().equals(userid) ||
-//                                chat.getReceiverId().equals(userid) && chat.getSenderId().equals(firebaseUser.getUid())) {
-//                            theLastMessage = chat.getMessage();
-//                        }
-//                    }
-//                }
-//
-//                switch (theLastMessage){
-//                    case  "default":
-//                        last_msg.setText("No Message");
-//                        break;
-//
-//                    default:
-//                        last_msg.setText(theLastMessage);
-//                        break;
-//                }
-//
-//                theLastMessage = "default";
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+    public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
+        this.onClickRecyclerView = onClickRecyclerView;
+    }
 }

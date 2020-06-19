@@ -39,12 +39,14 @@ import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.OkayClosePopup;
+import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
@@ -59,11 +61,12 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView ivBack;
     private FloatingActionButton floatingActionButton;
     private ProgressBar progressBar;
+    private DatabaseReference registerRef;
 
     private String role;
 
     private FirebaseAuth firebaseAuth;
-
+    private FirebaseUser firebaseUser;
     private UserEducator fireBaseEducator;
     private UserStudent fireBaseStudent;
 
@@ -73,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         firebaseAuth = FirebaseAuth.getInstance();
-
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Intent extras = getIntent();
         Bundle bundle = extras.getExtras();
         assert bundle != null;
@@ -337,6 +340,13 @@ public class LoginActivity extends AppCompatActivity {
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Educator());
 
+                    //fireBaseEducator.saveUserSession(context);
+
+                    //userRole.saveRole(context);
+
+//                    Intent intent = new Intent(context, MainActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
                     tryFirebaseLogin(userEducator, userRole);
 
                 } catch (Exception e) {
@@ -427,6 +437,13 @@ public class LoginActivity extends AppCompatActivity {
                     UserRole userRole = new UserRole();
                     userRole.setUserRole(UserRole.Student());
 
+                    //fireBaseStudent.saveUserSession(context);
+
+                    //userRole.saveRole(context);
+
+//                    Intent intent = new Intent(context, MainActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
                     tryFirebaseLogin(userStudent, userRole);
 
                 } catch (Exception e) {
@@ -451,6 +468,7 @@ public class LoginActivity extends AppCompatActivity {
             return false;
     }
 
+
     private void tryFirebaseLogin(Object user, final UserRole userRole) {
         String email;
         String password;
@@ -469,13 +487,6 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                            assert firebaseUser != null;
-                            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-                            usersRef.child("status").setValue("online");
-                        }
-
                         if (role.equals(UserRole.Educator()))
                             fireBaseEducator.saveUserSession(context);
                         else

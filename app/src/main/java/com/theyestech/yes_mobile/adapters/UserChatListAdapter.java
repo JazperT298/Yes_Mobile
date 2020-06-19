@@ -37,8 +37,8 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
     String theLastMessage;
 
     public UserChatListAdapter(Context context, ArrayList<Contact> contactArrayList, boolean ischat){
-        this.contactArrayList = contactArrayList;
         this.context = context;
+        this.contactArrayList = contactArrayList;
         this.ischat = ischat;
         this.layoutInflater = LayoutInflater.from(context);
     }
@@ -47,8 +47,9 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.user_chat_list_item, viewGroup, false);
-        return new ViewHolder(view);
+        view = layoutInflater.inflate(R.layout.user_chat_list_item, viewGroup, false);
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
@@ -141,7 +142,11 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
                         break;
 
                     default:
-                        last_msg.setText(theLastMessage);
+                        if (theLastMessage.length() <= 35){
+                            last_msg.setText(theLastMessage);
+                        }else{
+                            last_msg.setText(theLastMessage.substring(0, 35) + "..." );
+                        }
                         break;
                 }
 
