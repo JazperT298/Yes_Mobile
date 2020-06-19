@@ -105,31 +105,31 @@
                     app:layout_constraintStart_toStartOf="@+id/tv_UserProfileFullname"
                     app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileFullname" />
 
-                <TextView
-                    android:id="@+id/tv_SendMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/bg_request_button"
-                    android:gravity="center"
-                    android:text="   Send Message   "
-                    android:textAlignment="center"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="12sp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileEmail"
-                    app:layout_constraintVertical_chainStyle="packed" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_SendMessage"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:background="@drawable/bg_request_button"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="   Send Message   "-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:textColor="@color/colorWhite"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:layout_marginBottom="16dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileEmail"-->
+<!--                    app:layout_constraintVertical_chainStyle="packed" />-->
 
                 <TextView
                     android:id="@+id/tv_SendRequest"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/bg_request_button"
                     android:gravity="center"
                     android:text="   Send Request   "
@@ -137,7 +137,7 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_SendMessage"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_UserProfileEmail"
                     app:layout_constraintVertical_chainStyle="packed" />
             </androidx.constraintlayout.widget.ConstraintLayout>

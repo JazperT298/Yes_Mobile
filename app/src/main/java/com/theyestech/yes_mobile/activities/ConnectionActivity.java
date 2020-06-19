@@ -293,7 +293,6 @@ public class ConnectionActivity extends AppCompatActivity {
                     id = contact.getId();
                     fullname = contact.getFullName();
                     photoname = contact.getPhotoName();
-                    getThreadsById(id);
                 }
             }
             @Override
@@ -324,7 +323,7 @@ public class ConnectionActivity extends AppCompatActivity {
         tv_UserProfileInfoFacebook = dialog.findViewById(R.id.tv_UserProfileInfoFacebook);
         tv_UserProfileInfoTwitter = dialog.findViewById(R.id.tv_UserProfileInfoTwitter);
         tv_UserProfileInfoInstagram = dialog.findViewById(R.id.tv_UserProfileInfoInstagram);
-        tv_SendMessage = dialog.findViewById(R.id.tv_SendMessage);
+//        tv_SendMessage = dialog.findViewById(R.id.tv_SendMessage);
         tv_SendRequest = dialog.findViewById(R.id.tv_SendRequest);
 
         tv_UserProfileFullname.setText(userStudent.getFirsname() + " " + userStudent.getMiddlename() + " " + userStudent.getLastname());
@@ -372,26 +371,14 @@ public class ConnectionActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        tv_SendMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Debugger.logD("id" + id);
-                Debugger.logD("fullname" + fullname);
-                Debugger.logD("photoname" + photoname);
-                Debugger.logD("threadID" + threadId);
-                Intent intent = new Intent(context, ChatConversationActivity.class);
-                intent.putExtra("RECEIVER_ID", id);
-                intent.putExtra("RECEIVER_NAME", fullname);
-                intent.putExtra("RECEIVER_PHOTO", photoname);
-                intent.putExtra("THREAD_ID", threadId);
-                intent.putExtra("THREAD_SENDER_ID", senderId);
-                startActivity(intent);
-//                4RPQGHCCyVcqeDbTckppHQj5buj2
-//                Jasper Tony Atillo Mr.
-//                (af6)IMG_20200226_101656.jpg
-//                c01ed631-d99a-4a4e-bd76-d2f9b4862f6d1592314124
-            }
-        });
+//        tv_SendMessage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, MessageActivity.class);
+//                intent.putExtra("userid", id);
+//                startActivity(intent);
+//            }
+//        });
         tv_SendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -400,24 +387,6 @@ public class ConnectionActivity extends AppCompatActivity {
         });
 
         dialog.show();
-    }
-    private void getThreadsById(String id){
-        threadRef = FirebaseDatabase.getInstance().getReference("Threads");
-        Query query2 =  threadRef.orderByChild("senderId").equalTo(id);
-        query2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    ChatThread chatThread = postSnapshot.getValue(ChatThread.class);
-                    threadId = chatThread.getId();
-                    senderId = chatThread.getSenderId();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Debugger.logD("Failed" );
-            }
-        });
     }
     private void openConnectionRequestDialog(){
         Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);

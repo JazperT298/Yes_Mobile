@@ -472,7 +472,7 @@ public class HomeFragment extends Fragment {
         tv_UserProfileInfoFacebook = dialog.findViewById(R.id.tv_UserProfileInfoFacebook);
         tv_UserProfileInfoTwitter = dialog.findViewById(R.id.tv_UserProfileInfoTwitter);
         tv_UserProfileInfoInstagram = dialog.findViewById(R.id.tv_UserProfileInfoInstagram);
-        tv_SendMessage = dialog.findViewById(R.id.tv_SendMessage);
+//        tv_SendMessage = dialog.findViewById(R.id.tv_SendMessage);
         tv_SendRequest = dialog.findViewById(R.id.tv_SendRequest);
 
         tv_UserProfileFullname.setText(userStudent.getFirsname() + " " + userStudent.getMiddlename() + " " + userStudent.getLastname());
@@ -520,12 +520,12 @@ public class HomeFragment extends Fragment {
                 dialog.dismiss();
             }
         });
-        tv_SendMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasty.warning(context, "Chat is Unavailable").show();
-            }
-        });
+//        tv_SendMessage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toasty.warning(context, "Chat is Unavailable").show();
+//            }
+//        });
         tv_SendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
