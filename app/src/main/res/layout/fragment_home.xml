@@ -36,27 +36,27 @@
                     android:layout_height="32dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="12dp"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView15s"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_search_white" />
-                <ImageView
-                    android:id="@+id/imageView15s"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_HomeChat"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_HomeChat"
-                    app:layout_constraintStart_toStartOf="@+id/iv_HomeChat"
-                    app:layout_constraintTop_toTopOf="@+id/iv_HomeChat"
-                    app:srcCompat="@drawable/bg_profile_round_white" />
-                <ImageView
-                    android:id="@+id/iv_HomeChat"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toStartOf="@+id/imageView16"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/chat_icon" />
+                    app:srcCompat="@drawable/ic_search_white" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/imageView15s"-->
+<!--                    android:layout_width="32dp"-->
+<!--                    android:layout_height="32dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/iv_HomeChat"-->
+<!--                    app:layout_constraintEnd_toEndOf="@+id/iv_HomeChat"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/iv_HomeChat"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/iv_HomeChat"-->
+<!--                    app:srcCompat="@drawable/bg_profile_round_white" />-->
+<!--                <ImageView-->
+<!--                    android:id="@+id/iv_HomeChat"-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:layout_marginEnd="12dp"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/imageView16"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:srcCompat="@drawable/chat_icon" />-->
 
                 <ImageView
                     android:id="@+id/imageView16"

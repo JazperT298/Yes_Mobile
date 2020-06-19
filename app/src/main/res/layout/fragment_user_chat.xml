@@ -17,9 +17,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/imageView15s"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_UserImage"
+            app:layout_constraintEnd_toEndOf="@+id/iv_UserImage"
+            app:layout_constraintStart_toStartOf="@+id/iv_UserImage"
+            app:layout_constraintTop_toTopOf="@+id/iv_UserImage"
+            app:srcCompat="@drawable/bg_profile_round_black" />
+        <ImageView
             android:id="@+id/iv_UserImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +53,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="150dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">

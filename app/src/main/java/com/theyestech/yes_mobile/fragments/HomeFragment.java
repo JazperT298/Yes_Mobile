@@ -162,7 +162,7 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rv_Home);
         emptyIndicator = view.findViewById(R.id.view_EmptyRecord);
         iv_HomeSearch = view.findViewById(R.id.iv_HomeSearch);
-        iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
+//        iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
 
         iv_HomeSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,12 +170,12 @@ public class HomeFragment extends Fragment {
                 openSearchUserDialog();
             }
         });
-        iv_HomeChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasty.warning(context, "Chat is unavailable").show();
-            }
-        });
+//        iv_HomeChat.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toasty.warning(context, "Chat is unavailable").show();
+//            }
+//        });
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -679,16 +679,16 @@ public class HomeFragment extends Fragment {
         cvStickers = view.findViewById(R.id.cv_Home_Stickers);
         cvAwards = view.findViewById(R.id.cv_Home_Awards);
         cvStatistics = view.findViewById(R.id.cv_Home_Stats);
-        iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
+//        iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
 
         //tvStatSubjectCount.setText(UserStudent.getCode(context));
 
-        iv_HomeChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasty.warning(context, "Chat is unavailable").show();
-            }
-        });
+//        iv_HomeChat.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toasty.warning(context, "Chat is unavailable").show();
+//            }
+//        });
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
