@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_chat"
-        android:name="com.theyestech.yes_mobile.fragments.ChatFragment"
+        android:name="com.theyestech.yes_mobile.fragments.UserChatFragment"
         android:label="Chat"
         tools:layout="@layout/fragment_chat" />
 

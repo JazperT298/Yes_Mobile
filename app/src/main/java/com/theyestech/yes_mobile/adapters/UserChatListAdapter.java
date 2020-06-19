@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 import com.theyestech.yes_mobile.models.Chat;
@@ -26,85 +27,90 @@ import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
 
-public class ChatConversationAndContactAdapter extends RecyclerView.Adapter<ChatConversationAndContactAdapter.ViewHolder>{
-    private Context mContext;
-    private ArrayList<Contact> contactListArray;
+public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapter.ViewHolder> {
+    private View view;
+    private Context context;
+    private ArrayList<Contact> contactArrayList;
     private boolean ischat;
+    private LayoutInflater layoutInflater;
 
     String theLastMessage;
-    public ChatConversationAndContactAdapter(Context context, ArrayList<Contact> contactListArray, boolean ischats){
-        this.contactListArray = contactListArray;
-        mContext = context;
-        ischat = ischats;
+
+    public UserChatListAdapter(Context context, ArrayList<Contact> contactArrayList, boolean ischat){
+        this.contactArrayList = contactArrayList;
+        this.context = context;
+        this.ischat = ischat;
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.educator_items, viewGroup, false);
+        layoutInflater = LayoutInflater.from(context);
+        View view = layoutInflater.inflate(R.layout.user_chat_list_item, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        final Contact contact = contactListArray.get(i);
+        final Contact contact = contactArrayList.get(i);
 
-        viewHolder.username.setText(contact.getEmail());
-
-        Glide.with(mContext)
-                .load(R.drawable.ic_educator_profile)
-                .apply(GlideOptions.getOptions())
-                .into(viewHolder.profile_image);
-        //}
-
+        viewHolder.name.setText(contact.getFullName());
         if (ischat){
             lastMessage(contact.getId(), viewHolder.last_msg);
         } else {
             viewHolder.last_msg.setVisibility(View.GONE);
         }
 
-//        if (ischat){
-//            if (userEducator.getStatus().equals("online")){
-//                viewHolder.img_on.setVisibility(View.VISIBLE);
-//                viewHolder.img_off.setVisibility(View.GONE);
-//            } else {
-//                viewHolder.img_on.setVisibility(View.GONE);
-//                viewHolder.img_off.setVisibility(View.VISIBLE);
-//            }
-//        } else {
-//            viewHolder.img_on.setVisibility(View.GONE);
-//            viewHolder.img_off.setVisibility(View.GONE);
-//        }
-        final String role = "EDUCATOR";
+
+        if (contact.getPhotoName().equals("default")){
+            viewHolder.profile_image.setImageResource(R.mipmap.ic_launcher);
+        } else {
+            Glide.with(context)
+                    .load(HttpProvider.getProfileDir()  + contact.getPhotoName())
+                    .apply(GlideOptions.getOptions())
+                    .into(viewHolder.profile_image);
+        }
+        if (ischat){
+            if (contact.getStatus().equals("online")){
+                viewHolder.img_on.setVisibility(View.VISIBLE);
+                viewHolder.img_off.setVisibility(View.GONE);
+            } else {
+                viewHolder.img_on.setVisibility(View.GONE);
+                viewHolder.img_off.setVisibility(View.VISIBLE);
+            }
+        } else {
+            viewHolder.img_on.setVisibility(View.GONE);
+            viewHolder.img_off.setVisibility(View.GONE);
+        }
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Bundle bundle = new Bundle();
-//                bundle.putString("ROLE", role);
-                Intent intent = new Intent(mContext, MessageActivity.class);
-                intent.putExtra("ROLE", role);
+                Intent intent = new Intent(context, MessageActivity.class);
                 intent.putExtra("userid", contact.getId());
-                mContext.startActivity(intent);
+                context.startActivity(intent);
             }
         });
     }
 
+
     @Override
     public int getItemCount() {
-        return contactListArray.size();
+        return contactArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView username;
+        private TextView name;
         public ImageView profile_image;
         private ImageView img_on;
         private ImageView img_off;
         private TextView last_msg;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            username = itemView.findViewById(R.id.username);
-            profile_image = itemView.findViewById(R.id.iv_ProfileEducatorImage);
+            name = itemView.findViewById(R.id.username);
+            profile_image = itemView.findViewById(R.id.profile_image);
             img_on = itemView.findViewById(R.id.img_on);
             img_off = itemView.findViewById(R.id.img_off);
             last_msg = itemView.findViewById(R.id.last_msg);

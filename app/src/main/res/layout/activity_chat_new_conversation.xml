@@ -66,6 +66,15 @@
         app:layout_constraintStart_toEndOf="@+id/imageView56"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout39" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout40"
+        app:layout_constraintTop_toBottomOf="@+id/et_NewConversationSearch">
+
+    </android.support.v7.widget.RecyclerView>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout40"
         android:layout_width="match_parent"

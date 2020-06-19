@@ -57,37 +57,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 }
             }
         }
-
-//        String title = Objects.requireNonNull(remoteMessage.getNotification()).getTitle();
-//        String message = remoteMessage.getNotification().getBody();
-//
-//        Bundle b=new Bundle();
-//        b.putString("title",title);
-//        b.putString("message",message);
-//        Intent intent = new Intent(this,Notification.class);
-//        intent.putExtra("notificationData", "This is the message from the notification.");
-//        intent.putExtras(b);
-//
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_ONE_SHOT);
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-//        notificationBuilder.setContentTitle(title);
-//        notificationBuilder.setContentText(message);
-//        notificationBuilder.setSmallIcon(android.R.drawable.ic_lock_idle_alarm);
-//        notificationBuilder.setAutoCancel(true);
-//        notificationBuilder.setContentIntent(pendingIntent);
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(0,notificationBuilder.build());
-
-        //Notification for student
-//        String CHANNEL_ID = "myChannelID1";
-//        String title = getIntent().getExtras().getString("title");
-//        String message = getIntent().getExtras().getString("message");
-//        NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID);
-//        notification.setAutoCancel(true);
-//        notification.setSmallIcon(android.R.drawable.ic_lock_idle_alarm);
-//        notification.setContentTitle(title);
-//        notification.setContentText(message);
     }
 
     private void sendOreoNotification(RemoteMessage remoteMessage){
@@ -96,32 +65,13 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         String name = remoteMessage.getData().get("name");
-        String threadId = remoteMessage.getData().get("threadId");
-        String photo_name = remoteMessage.getData().get("photo_name");
-        //String contact = remoteMessage.getData().get("contact");
-        //String thread = remoteMessage.getData().get("thread");
-        Class<? extends Map> contact1 = remoteMessage.getData().getClass();
-        Class<? extends Map> thread1 = remoteMessage.getData().getClass();
-
-        //String role = "EDUCATOR";
-        Debugger.logD("contact" + user);
-        Debugger.logD("body " + body);
-        Debugger.logD("title " + title);
-        Debugger.logD("contact1 " + contact1);
-        Debugger.logD(" threadId " + threadId);
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         assert user != null;
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, ChatConversationActivity.class);
-        //intent.putExtra("ROLE", role);
+        Intent intent = new Intent(this, MessageActivity.class);
         Bundle bundle = new Bundle();
-//        bundle.putString("CONTACT", remoteMessage.getData().get("contact"));
-//        bundle.putString("THREAD", remoteMessage.getData().get("thread"));
-        intent.putExtra("RECEIVER_ID", user);
-        intent.putExtra("RECEIVER_NAME", name);
-        intent.putExtra("RECEIVER_PHOTO", photo_name);
-        intent.putExtra("THREAD_ID", threadId);
+        intent.putExtra("userid", user);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -146,30 +96,14 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         String date = remoteMessage.getData().get("date");
-        String name = remoteMessage.getData().get("name");
-        String threadId = remoteMessage.getData().get("threadId");
-        String photo_name = remoteMessage.getData().get("photo_name");
-        Debugger.logD("contact" );
-        Debugger.logD("body " + body);
-        Debugger.logD("title " + title);
-        Debugger.logD(" date " + date);
-        Debugger.logD(" threadId " + threadId);
-        //Contact contacts = remoteMessage.getClass().get("contacts");
-        //String contact = remoteMessage.getData().get("contact");
-        //String thread = remoteMessage.getData().get("thread");
         String role = "EDUCATOR";
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         assert user != null;
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, ChatConversationActivity.class);
+        Intent intent = new Intent(this, MessageActivity.class);
         //intent.putExtra("ROLE", role);
         Bundle bundle = new Bundle();
-//        intent.putExtra("CONTACT", contact);
-//        intent.putExtra("THREAD", thread);
-        intent.putExtra("RECEIVER_ID", user);
-        intent.putExtra("RECEIVER_NAME", name);
-        intent.putExtra("RECEIVER_PHOTO", photo_name);
-        intent.putExtra("THREAD_ID", threadId);
+        intent.putExtra("userid", user);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);

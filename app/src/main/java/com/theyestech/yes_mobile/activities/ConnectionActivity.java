@@ -2,7 +2,9 @@ package com.theyestech.yes_mobile.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -22,8 +24,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -34,6 +40,8 @@ import com.theyestech.yes_mobile.adapters.ConnectionRequestAdapter;
 import com.theyestech.yes_mobile.adapters.StudentRequestAdapter;
 import com.theyestech.yes_mobile.adapters.StudentsAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
+import com.theyestech.yes_mobile.models.ChatThread;
+import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.Student;
 import com.theyestech.yes_mobile.models.Subject;
 import com.theyestech.yes_mobile.models.UserEducator;
@@ -82,6 +90,9 @@ public class ConnectionActivity extends AppCompatActivity {
     private DatabaseReference threadRef;
     private FirebaseAuth firebaseAuth;
 
+    private String id, fullname, photoname, threadId,senderId;
+    private Contact contact;
+    private ChatThread chatThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -270,11 +281,26 @@ public class ConnectionActivity extends AppCompatActivity {
     private void openUsersProfileDialog(){
         Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.search_user_profile);
-
         firebaseAuth = FirebaseAuth.getInstance();
-
         userRef = FirebaseDatabase.getInstance().getReference("Users");
-        threadRef = FirebaseDatabase.getInstance().getReference("Threads");
+        Query query =  userRef.orderByChild("email").equalTo(userStudent.getEmail_address());
+        Debugger.logD("query " + query);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    Contact contact = postSnapshot.getValue(Contact.class);
+                    id = contact.getId();
+                    fullname = contact.getFullName();
+                    photoname = contact.getPhotoName();
+                    getThreadsById(id);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debugger.logD("Failed" );
+            }
+        });
 
         final ImageView iv_UserProfileImage, iv_UserProfileBackground, iv_UserProfileClose;
         final TextView tv_UserProfileFullname, tv_UserProfileEmail, tv_UserProfileInfoFullname, tv_UserProfileInfoGender, tv_UserProfileInfoPhone, tv_UserProfileInfoEmail, tv_UserProfileInfoMotto;
@@ -349,7 +375,21 @@ public class ConnectionActivity extends AppCompatActivity {
         tv_SendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toasty.warning(context, "Chat is Unavailable").show();
+                Debugger.logD("id" + id);
+                Debugger.logD("fullname" + fullname);
+                Debugger.logD("photoname" + photoname);
+                Debugger.logD("threadID" + threadId);
+                Intent intent = new Intent(context, ChatConversationActivity.class);
+                intent.putExtra("RECEIVER_ID", id);
+                intent.putExtra("RECEIVER_NAME", fullname);
+                intent.putExtra("RECEIVER_PHOTO", photoname);
+                intent.putExtra("THREAD_ID", threadId);
+                intent.putExtra("THREAD_SENDER_ID", senderId);
+                startActivity(intent);
+//                4RPQGHCCyVcqeDbTckppHQj5buj2
+//                Jasper Tony Atillo Mr.
+//                (af6)IMG_20200226_101656.jpg
+//                c01ed631-d99a-4a4e-bd76-d2f9b4862f6d1592314124
             }
         });
         tv_SendRequest.setOnClickListener(new View.OnClickListener() {
@@ -360,6 +400,24 @@ public class ConnectionActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+    private void getThreadsById(String id){
+        threadRef = FirebaseDatabase.getInstance().getReference("Threads");
+        Query query2 =  threadRef.orderByChild("senderId").equalTo(id);
+        query2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    ChatThread chatThread = postSnapshot.getValue(ChatThread.class);
+                    threadId = chatThread.getId();
+                    senderId = chatThread.getSenderId();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debugger.logD("Failed" );
+            }
+        });
     }
     private void openConnectionRequestDialog(){
         Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);

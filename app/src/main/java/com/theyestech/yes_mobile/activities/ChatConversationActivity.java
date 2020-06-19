@@ -81,6 +81,7 @@ public class ChatConversationActivity extends AppCompatActivity {
     private String receiverId;
     private String receivername;
     private String photo_name;
+    private String senderid;
     private Date currentDate;
     private String conversationId;
     private String message;
@@ -113,6 +114,7 @@ public class ChatConversationActivity extends AppCompatActivity {
         receivername = bundle.getString("RECEIVER_NAME");
         threadId = bundle.getString("THREAD_ID");
         photo_name = bundle.getString("RECEIVER_PHOTO");
+        senderid = bundle.getString("THREAD_SENDER_ID");
 
         senderId = firebaseUser.getUid();
 //        receiverId = contact.getId();
@@ -126,7 +128,7 @@ public class ChatConversationActivity extends AppCompatActivity {
 //            threadRef = FirebaseDatabase.getInstance().getReference("Threads");
 //            threadRef.child(threadId).child("isSeen").setValue(true);
 //        }
-        if (!threadId.equals(firebaseUser.getUid())) {
+        if (!senderid.equals(firebaseUser.getUid())) {
             threadRef = FirebaseDatabase.getInstance().getReference("Threads");
             threadRef.child(threadId).child("isSeen").setValue(true);
         }
@@ -302,7 +304,7 @@ public class ChatConversationActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Token token = snapshot.getValue(Token.class);
                     Data data = new Data(senderId, R.mipmap.ic_launcher, username+": "+message, "New Message", currentDate,
-                            receiverId, receivername, threadId, photo_name);
+                            receiverId);
                     Debugger.logD("threadId " + threadId);
                     Debugger.logD("contact " + contact);
                     Sender sender = new Sender(data, token.getToken());

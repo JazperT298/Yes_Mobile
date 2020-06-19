@@ -22,8 +22,8 @@
 
             <ImageView
                 android:id="@+id/iv_ProfileEducatorImage"
-                android:layout_width="35dp"
-                android:layout_height="35dp" />
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
 
             <TextView
                 android:id="@+id/username"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:textSize="16dp" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -58,6 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/btn_send"
+            android:inputType="textMultiLine"
+            android:gravity="top"
             android:background="@android:color/transparent"
             android:hint="Type a message..."
             android:textSize="18sp" />

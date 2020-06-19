@@ -1,5 +1,6 @@
 package com.theyestech.yes_mobile.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -25,8 +26,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.adapters.ChatMessageAdapter;
+import com.theyestech.yes_mobile.adapters.MessageAdapter;
 import com.theyestech.yes_mobile.interfaces.APIService;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.Contact;
@@ -36,9 +39,13 @@ import com.theyestech.yes_mobile.notifications.Data;
 import com.theyestech.yes_mobile.notifications.MyResponse;
 import com.theyestech.yes_mobile.notifications.Sender;
 import com.theyestech.yes_mobile.notifications.Token;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
+import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,6 +54,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MessageActivity extends AppCompatActivity {
+
+    private Context context;
     //Widgets
     private ImageView profile_image;
     private TextView username;
@@ -56,9 +65,10 @@ public class MessageActivity extends AppCompatActivity {
     private String role;
 
     //Array, Adapter, Variables
-    private ChatMessageAdapter messageAdapter;
-    private List<Chat> mchat;
+    private MessageAdapter messageAdapter;
+    private ArrayList<Chat> chatArrayList;
     private String userid;
+    private Date currentDate;
 
     private Intent intent;
 
@@ -67,6 +77,7 @@ public class MessageActivity extends AppCompatActivity {
     private ValueEventListener seenListener;
 
     //Firebase
+    FirebaseAuth firebaseAuth;
     FirebaseUser fuser;
     DatabaseReference reference;
 
@@ -75,25 +86,18 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-
-        Intent extras = getIntent();
-        Bundle bundle = extras.getExtras();
-        assert bundle != null;
-        role = bundle.getString("ROLE");
-
+        context = this;
+        role = UserRole.getRole(context);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        if (role.equals("EDUCATOR")) {
+        if (role.equals(UserRole.Educator())) {
             initializeUI();
-            initializeEducatorUI();
-
         } else {
             initializeUI();
-            initializeStudentUI();
         }
     }
 
@@ -126,7 +130,11 @@ public class MessageActivity extends AppCompatActivity {
 
         intent = getIntent();
         userid = intent.getStringExtra("userid");
+
+        firebaseAuth = FirebaseAuth.getInstance();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+        currentDate = Calendar.getInstance().getTime();
 
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,10 +142,10 @@ public class MessageActivity extends AppCompatActivity {
                 notify = true;
                 String msg = text_send.getText().toString();
                 if (!msg.equals("")){
-                    if (role.equals("EDUCATOR")){
-                        sendEducatorMessage(fuser.getUid(), userid, msg);
+                    if (role.equals(UserRole.Educator())){
+                        sendUserMessage(fuser.getUid(), userid, msg, currentDate);
                     }else {
-                        sendStudentMessage(fuser.getUid(), userid, msg);
+                        sendUserMessage(fuser.getUid(), userid, msg, currentDate);
                     }
 
                 } else {
@@ -147,35 +155,22 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-
+        setUserHeader();
     }
-    //-----------------------------------------Firebase----------------------------------------//
-    //-----------------------------------------Educator----------------------------------------//
 
-    private void initializeEducatorUI() {
-
-        reference = FirebaseDatabase.getInstance().getReference("Educator").child(userid);
-
+    private void setUserHeader(){
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Contact contact = dataSnapshot.getValue(Contact.class);
-                username.setText(contact.getEmail());
-                username.setTextColor(Color.parseColor("#212121"));
-//                if (educator.getImage().equals("default")){
-//                    profile_image.setImageResource(R.mipmap.ic_launcher);
-//                } else {
-                    //and this
-                Glide.with(getApplicationContext())
-                        .load(R.drawable.ic_educator_profile)
+                username.setText(contact.getFullName());
+                Glide.with(context)
+                        .load(HttpProvider.getProfileDir() + contact.getPhotoName())
                         .apply(GlideOptions.getOptions())
                         .into(profile_image);
-                //}
 
-                readEducatorMessages(fuser.getUid(), userid, String.valueOf(Glide.with(getApplicationContext())
-                        .load(R.drawable.ic_educator_profile)
-                        .apply(GlideOptions.getOptions())
-                        .into(profile_image)));
+                readUserMessages(fuser.getUid(), userid, contact.getPhotoName());
             }
 
             @Override
@@ -183,19 +178,16 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
-
-        seenEducatorMessage(userid);
+        seenUserMessage(userid);
     }
-
-    //Firebase Database
-    private void seenEducatorMessage(final String userid){
+    private void seenUserMessage(final String userid){
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         seenListener = reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(fuser.getUid()) && chat.getSender().equals(userid)){
+                    if (chat.getReceiverId().equals(fuser.getUid()) && chat.getSenderId().equals(userid)){
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("isseen", true);
                         snapshot.getRef().updateChildren(hashMap);
@@ -209,15 +201,16 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
-    //Firebase Database
-    private void sendEducatorMessage(String sender, final String receiver, String message){
+
+    private void sendUserMessage(String senderId, final String receiverId, String message, Date currentDate){
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("sender", sender);
-        hashMap.put("receiver", receiver);
+        hashMap.put("senderId", senderId);
+        hashMap.put("receiverId", receiverId);
         hashMap.put("message", message);
+        hashMap.put("messageDateCreated", currentDate);
         hashMap.put("isseen", false);
 
         reference.child("Chats").push().setValue(hashMap);
@@ -249,14 +242,17 @@ public class MessageActivity extends AppCompatActivity {
 
         final String msg = message;
 
-        reference = FirebaseDatabase.getInstance().getReference("Educator").child(fuser.getUid());
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Contact contact = dataSnapshot.getValue(Contact.class);
                 if (notify) {
-                    assert contact != null;
-//                    sendEducatorNotifiaction(receiver, contact.getEmail(), msg);
+                    if (contact.getFullName() == null){
+                        sendUserNotification(receiverId, contact.getEmail(), msg);
+                    }else{
+                        sendUserNotification(receiverId, contact.getFullName(), msg);
+                    }
                 }
                 notify = false;
             }
@@ -267,64 +263,23 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
-//    //Firebase Database
-//    private void sendEducatorNotifiaction(String receiver, final String username, final String message){
-//        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
-//        Query query = tokens.orderByKey().equalTo(receiver);
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-//                    Token token = snapshot.getValue(Token.class);
-//                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message",
-//                            userid);
-//
-//                    Sender sender = new Sender(data, token.getToken());
-//
-//                    apiService.sendNotification(sender)
-//                            .enqueue(new Callback<MyResponse>() {
-//                                @Override
-//                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-//                                    if (response.code() == 200){
-//                                        assert response.body() != null;
-//                                        if (response.body().success != 1){
-////                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<MyResponse> call, Throwable t) {
-//
-//                                }
-//                            });
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-    //Firebase Database
-    private void readEducatorMessages(final String myid, final String userid, final String imageurl){
-        mchat = new ArrayList<>();
+
+    private void readUserMessages(final String myid, final String userid, final String imageurl){
+        chatArrayList = new ArrayList<>();
 
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mchat.clear();
+                chatArrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
-                    assert chat != null;
-                    if (chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||
-                            chat.getReceiver().equals(userid) && chat.getSender().equals(myid)){
-                        mchat.add(chat);
+                    if (chat.getReceiverId().equals(myid) && chat.getSenderId().equals(userid) ||
+                            chat.getReceiverId().equals(userid) && chat.getSenderId().equals(myid)){
+                        chatArrayList.add(chat);
                     }
 
-                    messageAdapter = new ChatMessageAdapter(MessageActivity.this, mchat, imageurl);
+                    messageAdapter = new MessageAdapter(context, chatArrayList, imageurl);
                     recyclerView.setAdapter(messageAdapter);
                 }
             }
@@ -335,62 +290,36 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
-    //Firebase Database
-    private void statusEducator(String status){
-        reference = FirebaseDatabase.getInstance().getReference("Educator").child(fuser.getUid());
 
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("status", status);
-
-        reference.updateChildren(hashMap);
-    }
-
-
-    //-----------------------------------------Firebase----------------------------------------//
-    //-----------------------------------------Student----------------------------------------//
-
-    private void initializeStudentUI() {
-
-        reference = FirebaseDatabase.getInstance().getReference("Student").child(userid);
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Student student = dataSnapshot.getValue(Student.class);
-                username.setText(student.getUser_firstname());
-                username.setTextColor(Color.parseColor("#212121"));
-//                if (student.getUser_image().equals("default")){
-//                    profile_image.setImageResource(R.mipmap.ic_launcher);
-//                } else {
-                    //and this
-                    Glide.with(getApplicationContext()).load(student.getUser_image()).into(profile_image);
-                //}
-
-                readStudentMessages(fuser.getUid(), userid, student.getUser_image());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        seenStudentMessage(userid);
-    }
-
-    //Firebase Database
-    private void seenStudentMessage(final String userid){
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
-        seenListener = reference.addValueEventListener(new ValueEventListener() {
+    private void sendUserNotification(String receiver, final String username, final String message){
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = tokens.orderByKey().equalTo(receiver);
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(fuser.getUid()) && chat.getSender().equals(userid)){
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("isseen", true);
-                        snapshot.getRef().updateChildren(hashMap);
-                    }
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message", currentDate,
+                            userid);
+
+                    Sender sender = new Sender(data, token.getToken());
+
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    if (response.code() == 200){
+                                        if (response.body().success != 1){
+                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                }
+                            });
                 }
             }
 
@@ -400,139 +329,6 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
-    //Firebase Database
-    private void sendStudentMessage(String sender, final String receiver, String message){
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("sender", sender);
-        hashMap.put("receiver", receiver);
-        hashMap.put("message", message);
-        hashMap.put("isseen", false);
-
-        reference.child("Chats").push().setValue(hashMap);
-
-
-        // add user to chat fragment
-        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
-                .child(fuser.getUid())
-                .child(userid);
-
-        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()){
-                    chatRef.child("id").setValue(userid);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        final DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference("Chatlist")
-                .child(userid)
-                .child(fuser.getUid());
-        chatRefReceiver.child("id").setValue(fuser.getUid());
-
-        final String msg = message;
-
-        reference = FirebaseDatabase.getInstance().getReference("Student").child(fuser.getUid());
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Student student = dataSnapshot.getValue(Student.class);
-                if (notify) {
-                    //sendStudentNotifiaction(receiver, student.getUser_firstname(), msg);
-                }
-                notify = false;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-    //Firebase Database
-//    private void sendStudentNotifiaction(String receiver, final String username, final String message){
-//        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
-//        Query query = tokens.orderByKey().equalTo(receiver);
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-//                    Token token = snapshot.getValue(Token.class);
-//                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message",
-//                            userid);
-//
-//                    Sender sender = new Sender(data, token.getToken());
-//
-//                    apiService.sendNotification(sender)
-//                            .enqueue(new Callback<MyResponse>() {
-//                                @Override
-//                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-//                                    if (response.code() == 200){
-//                                        if (response.body().success != 1){
-//                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<MyResponse> call, Throwable t) {
-//
-//                                }
-//                            });
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-    //Firebase Database
-    private void readStudentMessages(final String myid, final String userid, final String imageurl){
-        mchat = new ArrayList<>();
-
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mchat.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||
-                            chat.getReceiver().equals(userid) && chat.getSender().equals(myid)){
-                        mchat.add(chat);
-                    }
-
-                    messageAdapter = new ChatMessageAdapter(MessageActivity.this, mchat, imageurl);
-                    recyclerView.setAdapter(messageAdapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-    //Firebase Database
-    private void statusStudent(String status){
-        reference = FirebaseDatabase.getInstance().getReference("Student").child(fuser.getUid());
-
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("status", status);
-
-        reference.updateChildren(hashMap);
-    }
-
 
     private void currentUser(String userid){
         SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
@@ -540,15 +336,19 @@ public class MessageActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    private void status(String status){
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+
+        reference.updateChildren(hashMap);
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //if (role.equals("EDUCATOR")){
-            statusEducator("online");
-//        }else{
-//            statusStudent("online");
-//        }
+        status("online");
         currentUser(userid);
     }
 
@@ -556,11 +356,7 @@ public class MessageActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         reference.removeEventListener(seenListener);
-//        if (role.equals("EDUCATOR")){
-            statusEducator("offline");
-//        }else{
-//            statusStudent("offline");
-//        }
+        status("offline");
         currentUser("none");
     }
 }

@@ -1383,12 +1383,12 @@ public class HomeFragment extends Fragment {
             setEducatorHeader();
             getEducatorStatistics();
             getAllEducatorCounts();
-            loginEducator();
+            //loginEducator();
         }else{
             initializeStudentUI();
             setStudentHeader();
             getAllStudentCounts();
-            loginStudent();
+            //loginStudent();
         }
     }
 }

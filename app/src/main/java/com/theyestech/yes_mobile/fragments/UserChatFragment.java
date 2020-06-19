@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -38,37 +39,44 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.activities.ChatConversationActivity;
 import com.theyestech.yes_mobile.activities.ChatNewConversationActivity;
 import com.theyestech.yes_mobile.adapters.ChatThreadsAdapter;
-import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
+import com.theyestech.yes_mobile.adapters.UserChatAdapter;
+import com.theyestech.yes_mobile.adapters.UserChatListAdapter;
 import com.theyestech.yes_mobile.models.ChatThread;
+import com.theyestech.yes_mobile.models.Chatlist;
 import com.theyestech.yes_mobile.models.Contact;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.notifications.Token;
-import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.ProgressPopup;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
-public class ChatFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class UserChatFragment extends Fragment {
     private View view;
     private Context context;
 
-    private TextView tvHeader;
-    private ImageView ivProfile;
+    private TextView tvHeader,tv_UserName;
+    private ImageView ivProfile,iv_UserImage;
     private TabLayout tabLayout;
-    private SwipeRefreshLayout swipeThreads, swipeContacts;
-    private RecyclerView rvThreads, rvContacts;
+    private SwipeRefreshLayout swipe_ChatThreads;
+    private RecyclerView rv_ChatThreads, rv_Contacts;
     private ConstraintLayout emptyIndicator;
     private FloatingActionButton floatingActionButton;
     private ProgressBar progressBar;
+    private UserChatAdapter userChatAdapter;
+    private UserChatListAdapter userChatListAdapter;
 
     private String role;
 
@@ -82,14 +90,25 @@ public class ChatFragment extends Fragment {
     private ValueEventListener threadListener;
 
     private ArrayList<Contact> contactArrayList = new ArrayList<>();
+    private ArrayList<Contact> contactArrayList2 = new ArrayList<>();
 
     private ArrayList<ChatThread> threadArrayList = new ArrayList<>();
     private ChatThreadsAdapter chatThreadsAdapter;
     private ChatThread selectedThread = new ChatThread();
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_chat, container, false);
+    private ArrayList<Chatlist> chatlistArrayList;
+    private DatabaseReference reference;
+
+    public UserChatFragment() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_user_chat, container, false);
         context = getContext();
         return view;
     }
@@ -106,79 +125,31 @@ public class ChatFragment extends Fragment {
         threadRef = FirebaseDatabase.getInstance().getReference("Threads");
 
         checkFirebaseLogin();
+
     }
 
-    public void initializeUi() {
-        tabLayout = view.findViewById(R.id.tabLayout_Chat);
-        tvHeader = view.findViewById(R.id.tv_ChatHeader);
-        ivProfile = view.findViewById(R.id.iv_ChatProfile);
-        swipeThreads = view.findViewById(R.id.swipe_ChatThreads);
-        swipeContacts = view.findViewById(R.id.swipe_ChatContacts);
-        rvThreads = view.findViewById(R.id.rv_ChatThreads);
-        rvContacts = view.findViewById(R.id.rv_ChatContacts);
+    private void initializeUI(){
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        iv_UserImage = view.findViewById(R.id.iv_UserImage);
+        tv_UserName = view.findViewById(R.id.tv_UserName);
+        rv_Contacts = view.findViewById(R.id.rv_Contacts);
+        rv_ChatThreads = view.findViewById(R.id.rv_ChatThreads);
+        swipe_ChatThreads = view.findViewById(R.id.swipe_ChatThreads);
         emptyIndicator = view.findViewById(R.id.view_EmptyChat);
         floatingActionButton = view.findViewById(R.id.fab_ChatThreadNew);
         progressBar = view.findViewById(R.id.progress_ChatThreads);
 
-        if (role.equals(UserRole.Educator()))
-            setEducatorHeader();
-
-        firebaseUser = firebaseAuth.getCurrentUser();
-
-        displayConversationView();
-
-        getAllContacts();
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0) {
-                    displayConversationView();
-                } else {
-                    swipeThreads.setVisibility(View.GONE);
-                    swipeContacts.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        updateToken(FirebaseInstanceId.getInstance().getToken());
-    }
-
-    @SuppressLint("RestrictedApi")
-    private void accessingServer(boolean isAccessing) {
-        floatingActionButton.setVisibility(isAccessing ? View.GONE : View.VISIBLE);
-        progressBar.setVisibility(isAccessing ? View.VISIBLE : View.GONE);
-    }
-
-    private void setEducatorHeader() {
+        tv_UserName.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context) );
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
                 .apply(GlideOptions.getOptions())
-                .into(ivProfile);
-    }
+                .into(iv_UserImage);
+        getAllContacts();
 
-    private void displayConversationView() {
-        swipeThreads.setVisibility(View.VISIBLE);
-        swipeContacts.setVisibility(View.GONE);
-        emptyIndicator.setVisibility(View.GONE);
+        updateToken(FirebaseInstanceId.getInstance().getToken());
 
-        swipeThreads.setRefreshing(true);
-
-        swipeThreads.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getAllThreads();
-            }
-        });
+        getAllChats();
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,11 +161,39 @@ public class ChatFragment extends Fragment {
         });
     }
 
+    private void getAllContacts(){
+        accessingServer(true);
+        contactArrayList.clear();
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Contact contacts = snapshot.getValue(Contact.class);
+                    if (!contacts.getId().equals(firebaseUser.getUid())) {
+                        contactArrayList.add(contacts);
+                    }
+                    rv_Contacts.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false));
+                    rv_Contacts.setHasFixedSize(true);
+                    userChatAdapter = new UserChatAdapter(context, contactArrayList, false);
+                    rv_Contacts.setAdapter(userChatAdapter);
+                }
+                accessingServer(false);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                accessingServer(false);
+            }
+        });
+    }
+
     private void checkFirebaseLogin() {
         if (firebaseAuth.getCurrentUser() == null) {
             openWelcomeChatDialog();
         } else {
-            initializeUi();
+            initializeUI();
         }
     }
 
@@ -270,7 +269,7 @@ public class ChatFragment extends Fragment {
 
                             if (b != null) {
                                 b.dismiss();
-                                initializeUi();
+                                initializeUI();
                             }
 
                         } else {
@@ -280,116 +279,71 @@ public class ChatFragment extends Fragment {
                 });
     }
 
-    private void getAllContacts() {
+    @SuppressLint("RestrictedApi")
+    private void accessingServer(boolean isAccessing) {
+        floatingActionButton.setVisibility(isAccessing ? View.GONE : View.VISIBLE);
+        progressBar.setVisibility(isAccessing ? View.VISIBLE : View.GONE);
+    }
+
+    private void getAllChats(){
         accessingServer(true);
+        chatlistArrayList = new ArrayList<>();
 
-        userListener = userRef.addValueEventListener(new ValueEventListener() {
+        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(firebaseUser.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                contactArrayList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Contact contact = snapshot.getValue(Contact.class);
-                    assert contact != null;
-                    assert firebaseUser != null;
-                    if (!contact.getId().equals(firebaseUser.getUid())) {
-                        contactArrayList.add(contact);
-                    }
+                chatlistArrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chatlist chatlist = snapshot.getValue(Chatlist.class);
+                    chatlistArrayList.add(chatlist);
                 }
-
+                Collections.reverse(chatlistArrayList);
+                chatUserList();
                 accessingServer(false);
-                getAllThreads();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 accessingServer(false);
             }
         });
+        updateToken(FirebaseInstanceId.getInstance().getToken());
     }
-
-    private void getAllThreads() {
-        threadListener = threadRef.addValueEventListener(new ValueEventListener() {
+    private void chatUserList() {
+        contactArrayList2 = new ArrayList<>();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                swipeThreads.setRefreshing(false);
-                threadArrayList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    ChatThread chatThread = snapshot.getValue(ChatThread.class);
-                    assert chatThread != null;
-                    if (chatThread.getSenderId().equals(firebaseUser.getUid())) {
-                        for (Contact contact : contactArrayList) {
-                            if (chatThread.getReceiverId().equals(contact.getId())) {
-                                chatThread.setContact(contact);
-                                break;
-                            }
+                contactArrayList2.clear();
+                emptyIndicator.setVisibility(View.GONE);
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Contact user = snapshot.getValue(Contact.class);
+                    for (Chatlist chatlist : chatlistArrayList){
+                        if (user.getId().equals(chatlist.getId())){
+                            contactArrayList2.add(user);
                         }
-                        threadArrayList.add(chatThread);
-
-                    } else if (chatThread.getReceiverId().equals(firebaseUser.getUid())) {
-                        for (Contact contact : contactArrayList) {
-                            if (chatThread.getSenderId().equals(contact.getId())) {
-                                chatThread.setContact(contact);
-                                break;
-                            }
-                        }
-                        threadArrayList.add(chatThread);
                     }
                 }
+                Collections.reverse(contactArrayList2);
 
-                rvThreads.setLayoutManager(new LinearLayoutManager(context));
-                rvThreads.setHasFixedSize(true);
-                chatThreadsAdapter = new ChatThreadsAdapter(context, threadArrayList);
-                chatThreadsAdapter.setClickListener(new OnClickRecyclerView() {
-                    @Override
-                    public void onItemClick(View view, int position, int fromButton) {
-                        selectedThread = threadArrayList.get(position);
-                        Contact selectedContact = selectedThread.getContact();
+                rv_ChatThreads.setLayoutManager(new LinearLayoutManager(context));
+                rv_ChatThreads.setHasFixedSize(true);
 
-                        if (fromButton == 1) {
-                            Debugger.logD("id" + selectedContact.getId());
-                            Debugger.logD("name" + selectedContact.getFullName());
-                            Debugger.logD("photo" + selectedContact.getPhotoName());
-                            Debugger.logD("thread" + selectedThread.getId());
-                            Intent intent = new Intent(context, ChatConversationActivity.class);
-                            intent.putExtra("RECEIVER_ID", selectedContact.getId());
-                            intent.putExtra("RECEIVER_NAME", selectedContact.getFullName());
-                            intent.putExtra("RECEIVER_PHOTO", selectedContact.getPhotoName());
-                            intent.putExtra("THREAD_ID", selectedThread.getId());
-                            intent.putExtra("THREAD_SENDER_ID", selectedThread.getSenderId());
-                            startActivity(intent);
-                        } else if (fromButton == 2) {
-
-                        }
-                    }
-                });
-                rvThreads.setAdapter(chatThreadsAdapter);
-
-                if (threadArrayList.isEmpty())
-                    emptyIndicator.setVisibility(View.VISIBLE);
-
-                swipeThreads.setRefreshing(false);
+                userChatListAdapter = new UserChatListAdapter(getContext(), contactArrayList2, true);
+                rv_ChatThreads.setAdapter(userChatListAdapter);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                swipeThreads.setRefreshing(false);
+
             }
         });
     }
+
     private void updateToken(String token){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token1 = new Token(token);
         reference.child(firebaseUser.getUid()).setValue(token1);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        if (userListener != null)
-            userRef.removeEventListener(userListener);
-
-        if (threadListener != null)
-            threadRef.removeEventListener(threadListener);
     }
 }
