@@ -229,12 +229,21 @@ public class NotesActivity extends AppCompatActivity {
                             selectedNote = noteArrayList.get(position);
 
                             if (fromButton == 1) {
-                                Debugger.logD("note " + "https://theyestech.com/notes-files/" + selectedNote.getFile());
-                                try {
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://theyestech.com/notes-files/" + selectedNote.getFile()));
-                                    startActivity(intent);
-                                } catch(Exception e) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://theyestech.com/notes-files/" + selectedNote.getFile())));
+                                Debugger.logD("note " + HttpProvider.getNotesDir() + selectedNote.getFile());
+                                if(selectedNote.getType().equals("video")){
+                                    try {
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile() + ".mp4"));
+                                        startActivity(intent);
+                                    } catch(Exception e) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile() + ".mp4")));
+                                    }
+                                }else{
+                                    try {
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile()));
+                                        startActivity(intent);
+                                    } catch(Exception e) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile())));
+                                    }
                                 }
                             } else if (fromButton == 2) {
                                 openDeleteNoteDialog();
