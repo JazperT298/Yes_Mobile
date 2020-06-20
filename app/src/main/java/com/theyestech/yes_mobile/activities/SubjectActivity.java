@@ -51,6 +51,9 @@ import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
 
 public class SubjectActivity extends AppCompatActivity {
 
@@ -100,6 +103,16 @@ public class SubjectActivity extends AppCompatActivity {
         initializeUI();
 
         swipeRefreshLayout.setRefreshing(true);
+        if (role.equals(UserRole.Educator())) {
+            if (UserEducator.getFirstname(context) == null) {
+            ShowEducatorIntro("Add Subject", "Add subjects to your collection", R.id.fab_SubjectsAdd, 1);
+            }
+        }
+        else {
+            if (UserStudent.getFirstname(context) == null) {
+            ShowEducatorIntro("Search Subject", "Search your desire subject here", R.id.fab_SubjectsAdd, 1);
+            }
+        }
     }
 
     private void initializeUI() {
@@ -627,6 +640,24 @@ public class SubjectActivity extends AppCompatActivity {
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });
+    }
+
+    private void ShowEducatorIntro(String title, String text, int viewId, final int type) {
+
+        new GuideView.Builder(context)
+                .setTitle(title)
+                .setContentText(text)
+                .setTargetView(findViewById(viewId))
+                .setContentTextSize(12)//optional
+                .setTitleTextSize(14)//optional
+                .setDismissType(DismissType.targetView) //optional - default dismissible by TargetView
+                .setGuideListener(new GuideListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                    }
+                })
+                .build()
+                .show();
     }
 
     @Override

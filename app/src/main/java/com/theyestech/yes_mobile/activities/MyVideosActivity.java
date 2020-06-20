@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.models.UserEducator;
+import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.io.FileNotFoundException;
@@ -32,6 +34,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
 
 public class MyVideosActivity extends AppCompatActivity {
     private Context context;
@@ -73,6 +78,16 @@ public class MyVideosActivity extends AppCompatActivity {
 
         initializeUI();
 
+        if (role.equals(UserRole.Educator())) {
+            if (UserEducator.getFirstname(context) == null) {
+            ShowEducatorIntro("Search", "Search your saved videos here", R.id.iv_VideosSearch, 1);
+            }
+        }
+        else {
+            if (UserStudent.getFirstname(context) == null) {
+            ShowEducatorIntro("Search", "Search your saved videos here", R.id.iv_VideosSearch, 1);
+            }
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -188,5 +203,23 @@ public class MyVideosActivity extends AppCompatActivity {
 
         b.show();
         Objects.requireNonNull(b.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    private void ShowEducatorIntro(String title, String text, int viewId, final int type) {
+
+        new GuideView.Builder(context)
+                .setTitle(title)
+                .setContentText(text)
+                .setTargetView(findViewById(viewId))
+                .setContentTextSize(12)//optional
+                .setTitleTextSize(14)//optional
+                .setDismissType(DismissType.targetView) //optional - default dismissible by TargetView
+                .setGuideListener(new GuideListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                    }
+                })
+                .build()
+                .show();
     }
 }

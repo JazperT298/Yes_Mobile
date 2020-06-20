@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -66,6 +68,9 @@ import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
 
 public class HomeFragment extends Fragment {
     private View view;
@@ -74,7 +79,7 @@ public class HomeFragment extends Fragment {
     private String role,password;
 
     private ImageView ivProfile,iv_HomeSearch, iv_HomeChat;
-    private TextView tvEmail, tvEducationalAttainment, tvStatSubjectCount, tvStatStudentCount, tvStatTopicCount, tvSubjectCount, tvStatistics,tvStatNoteCount;
+    private TextView tvEmail, tvEducationalAttainment, tvStatSubjectCount, tvStatStudentCount, tvStatTopicCount, tvSubjectCount, tvStatistics,tvStatNoteCount,textView64;
     private TextView tv_HomeConnectionCount, tv_HomeNewsfeedCount, tv_HomeVideolabCount, tv_HomeCourseCount, tv_HomeMyvideosCount,tv_HomeStickersCount,tv_HomeAwardsCount;
     private CardView cvSubjects, cvNotes, cvConnections, cvNewsfeeds, cvVideoLab, cvYestechCourse, cvMyVideos, cvStickers, cvAwards, cvStatistics;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -102,6 +107,10 @@ public class HomeFragment extends Fragment {
     private UserEducator fireBaseEducator;
     private UserStudent fireBaseStudent;
 
+    //Showcase View
+    private GuideView mGuideView;
+    private GuideView.Builder builder;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -114,11 +123,19 @@ public class HomeFragment extends Fragment {
             setEducatorHeader();
             getEducatorStatistics();
             getAllEducatorCounts();
+            if (UserEducator.getFirstname(context) == null){
+                ShowEducatorIntro("Learning Becomes Easier", "Welcome to our learning platform this site was created \n for educators" +
+                        "and students from Pre-k to Phd. \n Experience our digital learning revolution!", R.id.textView64, 1);
+            }
         }else{
             view = inflater.inflate(R.layout.fragment_home_student, container, false);
             initializeStudentUI();
             setStudentHeader();
             getAllStudentCounts();
+            if (UserStudent.getFirstname(context) == null){
+                ShowStudentIntro("Learning Becomes Easier", "Welcome to our learning platform this site was created \n for educators" +
+                        "and students from Pre-k to Phd. \n Experience our digital learning revolution!", R.id.textView64, 1);
+            }
         }
         return view;
     }
@@ -134,6 +151,7 @@ public class HomeFragment extends Fragment {
 
     //    Educator
     private void initializeEducatorUI() {
+        textView64 = view.findViewById(R.id.textView64);
         ivProfile = view.findViewById(R.id.iv_HomeProfile);
         tvEmail = view.findViewById(R.id.tv_HomeEmail);
         tvEducationalAttainment = view.findViewById(R.id.tv_Home_EducationalAttainment);
@@ -966,6 +984,43 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+    private void ShowEducatorIntro(String title, String text, int viewId, final int type) {
+
+        new GuideView.Builder(context)
+                .setTitle(title)
+                .setContentText(text)
+                .setTargetView(view.findViewById(viewId))
+                .setContentTextSize(12)//optional
+                .setTitleTextSize(14)//optional
+                .setDismissType(DismissType.targetView) //optional - default dismissible by TargetView
+                .setGuideListener(new GuideListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                        if (type == 1) {
+                            ShowEducatorIntro("Search", "Search, make connects and view profile", R.id.iv_HomeSearch, 2);
+                        } else if (type == 2) {
+                            ShowEducatorIntro("Profile", "View and update your profile here", R.id.iv_HomeProfile, 3);
+                        } else if (type == 3) {
+                            ShowEducatorIntro("Subjects", "Add and manage your subjects ", R.id.cv_Home_Subjects, 4);
+                        }else if (type == 4) {
+                            ShowEducatorIntro("Notes", "Create your own notes here ", R.id.cv_Home_Notes, 5);
+                        }else if (type == 5) {
+                            ShowEducatorIntro("Connects", "View users that connected to you ", R.id.cv_Home_Connections, 6);
+                        }else if (type == 6) {
+                            ShowEducatorIntro("Newsfeed", "Explore and make comments in your newsfeed", R.id.cv_Home_Newsfeeds, 7);
+                        }else if (type == 7) {
+                            ShowEducatorIntro("VideoLab", "Watch and explore videos here", R.id.cv_Home_VideoLab, 8);
+                        }else if (type == 8) {
+                            ShowEducatorIntro("Courses", "Search and view available courses", R.id.cv_Home_YestechCourse, 9);
+                        }else if (type == 9) {
+                            ShowEducatorIntro("My Videos", "Your personalise videos here", R.id.cv_Home_MyVideos, 10);
+                        }
+
+                    }
+                })
+                .build()
+                .show();
+    }
 
     private void selectAction() {
         String[] items = {" Profile ", " Logout "};
@@ -1066,6 +1121,45 @@ public class HomeFragment extends Fragment {
                 .setNegativeButton("NO", null)
                 .create();
         dialog.show();
+    }
+
+    private void ShowStudentIntro(String title, String text, int viewId, final int type) {
+
+        new GuideView.Builder(context)
+                .setTitle(title)
+                .setContentText(text)
+                .setTargetView(view.findViewById(viewId))
+                .setContentTextSize(12)//optional
+                .setTitleTextSize(14)//optional
+                .setDismissType(DismissType.targetView) //optional - default dismissible by TargetView
+                .setGuideListener(new GuideListener() {
+                    @Override
+                    public void onDismiss(View view) {
+//                        if (type == 1) {
+//                            ShowEducatorIntro("Search", "Search, make connects and view profile", R.id.iv_HomeSearch, 2);
+//                        } else
+                        if (type == 1) {
+                            ShowStudentIntro("Profile", "View and update your profile here", R.id.iv_HomeProfile, 2);
+                        } else if (type == 2) {
+                            ShowStudentIntro("Subjects", "Add and manage your subjects ", R.id.cv_Home_Subjects, 3);
+                        }else if (type == 3) {
+                            ShowStudentIntro("Notes", "Create your own notes here ", R.id.cv_Home_Notes, 4);
+                        }else if (type == 4) {
+                            ShowStudentIntro("Stickers", "View all your collected stickers ", R.id.cv_Home_Connections, 5);
+                        }else if (type == 5) {
+                            ShowStudentIntro("Newsfeed", "Explore and make comments in your newsfeed", R.id.cv_Home_Newsfeeds, 6);
+                        }else if (type == 6) {
+                            ShowStudentIntro("Awards", "Your awards collection here", R.id.cv_Home_VideoLab, 7);
+                        }else if (type == 7) {
+                            ShowStudentIntro("Courses", "Search and view available courses", R.id.cv_Home_YestechCourse, 8);
+                        }else if (type == 8) {
+                            ShowStudentIntro("My Videos", "Your personalise videos here", R.id.cv_Home_MyVideos, 9);
+                        }
+
+                    }
+                })
+                .build()
+                .show();
     }
 
     private void loginEducator() {

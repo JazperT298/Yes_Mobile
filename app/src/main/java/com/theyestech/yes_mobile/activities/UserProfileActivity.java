@@ -20,6 +20,10 @@ import com.theyestech.yes_mobile.models.UserStudent;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 import com.theyestech.yes_mobile.utils.UserRole;
 
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
+
 public class UserProfileActivity extends AppCompatActivity {
     private Context context;
 
@@ -50,10 +54,18 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if (role.equals(UserRole.Educator()))
+        if (role.equals(UserRole.Educator())) {
             setEducatorProfile();
-        else
+            //if (UserEducator.getFirstname(context) == null) {
+                ShowEducatorIntro("Manage Profile", "Manage your personalize profile here", R.id.iv_UserProfileOptions, 1);
+            //}
+        }
+        else {
             setStudentProfile();
+            //if (UserStudent.getFirstname(context) == null) {
+                ShowEducatorIntro("Manage Profile", "Manage your personalize profile here", R.id.iv_UserProfileOptions, 1);
+            //}
+        }
     }
 
     private void initializeUI() {
@@ -164,6 +176,24 @@ public class UserProfileActivity extends AppCompatActivity {
         tvInfoFacebook.setText(UserStudent.getFacebook(context));
         tvInfoTwitter.setText(UserStudent.getTwitter(context));
         tvInfoInstagram.setText(UserStudent.getInstragram(context));
+    }
+
+    private void ShowEducatorIntro(String title, String text, int viewId, final int type) {
+
+        new GuideView.Builder(context)
+                .setTitle(title)
+                .setContentText(text)
+                .setTargetView(findViewById(viewId))
+                .setContentTextSize(12)//optional
+                .setTitleTextSize(14)//optional
+                .setDismissType(DismissType.targetView) //optional - default dismissible by TargetView
+                .setGuideListener(new GuideListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                    }
+                })
+                .build()
+                .show();
     }
 
 }

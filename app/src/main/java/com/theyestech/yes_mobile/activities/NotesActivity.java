@@ -72,6 +72,9 @@ import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
 
 public class NotesActivity extends AppCompatActivity {
 
@@ -124,6 +127,17 @@ public class NotesActivity extends AppCompatActivity {
         role = UserRole.getRole(context);
 
         initializeUI();
+
+        if (role.equals(UserRole.Educator())) {
+            if (UserEducator.getFirstname(context) == null) {
+            ShowEducatorIntro("Add Notes", "Add text, images and videos to your notes", R.id.fab_Notes, 1);
+            }
+        }
+        else {
+            if (UserStudent.getFirstname(context) == null) {
+            ShowEducatorIntro("Add Notes", "Add text, images and videos to your notes", R.id.fab_Notes, 1);
+            }
+        }
     }
 
     private void initializeUI() {
@@ -231,11 +245,20 @@ public class NotesActivity extends AppCompatActivity {
                             if (fromButton == 1) {
                                 Debugger.logD("note " + HttpProvider.getNotesDir() + selectedNote.getFile());
                                 if(selectedNote.getType().equals("video")){
-                                    try {
-                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile() + ".mp4"));
-                                        startActivity(intent);
-                                    } catch(Exception e) {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile() + ".mp4")));
+                                    if(selectedNote.getType().contains(".mp4")){
+                                        try {
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile()));
+                                            startActivity(intent);
+                                        } catch(Exception e) {
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile())));
+                                        }
+                                    }else{
+                                        try {
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile() + ".mp4"));
+                                            startActivity(intent);
+                                        } catch(Exception e) {
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(HttpProvider.getNotesDir() + selectedNote.getFile() + ".mp4")));
+                                        }
                                     }
                                 }else{
                                     try {
@@ -391,6 +414,24 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void ShowEducatorIntro(String title, String text, int viewId, final int type) {
+
+        new GuideView.Builder(context)
+                .setTitle(title)
+                .setContentText(text)
+                .setTargetView(findViewById(viewId))
+                .setContentTextSize(12)//optional
+                .setTitleTextSize(14)//optional
+                .setDismissType(DismissType.targetView) //optional - default dismissible by TargetView
+                .setGuideListener(new GuideListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                    }
+                })
+                .build()
+                .show();
     }
 
     private void selectAction() {

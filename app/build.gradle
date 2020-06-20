@@ -63,4 +63,7 @@ dependencies {
 
     //Exo player
     implementation 'com.google.android.exoplayer:exoplayer:2.8.4'
+
+    //ShowCase View
+    implementation 'com.github.mreram:showcaseview:1.1'
 }

@@ -50,6 +50,9 @@ import java.nio.charset.StandardCharsets;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
 
 public class UserDetailsActivity extends AppCompatActivity {
 
@@ -87,11 +90,17 @@ public class UserDetailsActivity extends AppCompatActivity {
         initializeUI();
         setFieldsMode(false);
 
-        if (role.equals(UserRole.Educator()))
+        if (role.equals(UserRole.Educator())) {
             setEducatorFieldsData();
-        else
+            if (UserEducator.getFirstname(context) == null) {
+                ShowEducatorIntro("Edit Profile", "Edit your personalize profile here", R.id.tv_UserDetailsEditSave, 1);
+            }
+        }else {
             setStudentFieldsData();
-
+            if (UserStudent.getFirstname(context) == null) {
+                ShowEducatorIntro("Edit Profile", "Edit your personalize profile here", R.id.tv_UserDetailsEditSave, 1);
+            }
+        }
     }
 
     private void initializeUI() {
@@ -190,6 +199,25 @@ public class UserDetailsActivity extends AppCompatActivity {
         });
         dialog.create().show();
     }
+
+    private void ShowEducatorIntro(String title, String text, int viewId, final int type) {
+
+        new GuideView.Builder(context)
+                .setTitle(title)
+                .setContentText(text)
+                .setTargetView(findViewById(viewId))
+                .setContentTextSize(12)//optional
+                .setTitleTextSize(14)//optional
+                .setDismissType(DismissType.targetView) //optional - default dismissible by TargetView
+                .setGuideListener(new GuideListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                    }
+                })
+                .build()
+                .show();
+    }
+
 
     private void requestStoragePermission() {
         ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);

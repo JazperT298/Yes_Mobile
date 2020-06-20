@@ -70,6 +70,9 @@ import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
 
 public class NewNewsfeedActivity extends AppCompatActivity {
 
@@ -123,6 +126,17 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         initializeUI();
+
+        if (role.equals(UserRole.Educator())) {
+            if (UserEducator.getFirstname(context) == null) {
+            ShowEducatorIntro("New Newsfeed", "Add text, images and videos to newsfeed", R.id.fab_NewsFeed, 1);
+            }
+        }
+        else {
+            if (UserStudent.getFirstname(context) == null) {
+            ShowEducatorIntro("New Newsfeed", "Add text, images and videos to newsfeed", R.id.fab_NewsFeed, 1);
+            }
+        }
     }
 
     private void initializeUI () {
@@ -477,6 +491,24 @@ public class NewNewsfeedActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    private void ShowEducatorIntro(String title, String text, int viewId, final int type) {
+
+        new GuideView.Builder(context)
+                .setTitle(title)
+                .setContentText(text)
+                .setTargetView(findViewById(viewId))
+                .setContentTextSize(12)//optional
+                .setTitleTextSize(14)//optional
+                .setDismissType(DismissType.targetView) //optional - default dismissible by TargetView
+                .setGuideListener(new GuideListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                    }
+                })
+                .build()
+                .show();
     }
 
     private void selectActions() {
