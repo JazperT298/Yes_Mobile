@@ -146,21 +146,12 @@ public class UserChatFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_ChatThreads);
 
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Contact contact = dataSnapshot.getValue(Contact.class);
-                tv_UserName.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context) );
-                Glide.with(context)
-                        .load(HttpProvider.getProfileDir() + contact.getPhotoName())
-                        .apply(GlideOptions.getOptions())
-                        .into(iv_UserImage);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+        tv_UserName.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context) );
+        Glide.with(context)
+                .load(HttpProvider.getProfileDir() + UserEducator.getImage(context))
+                .apply(GlideOptions.getOptions())
+                .into(iv_UserImage);
 
         getAllContacts();
 
@@ -176,8 +167,6 @@ public class UserChatFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-        Debugger.logD("password " +  UserEducator.getPassword(context));
     }
 
     private void getAllContacts(){
@@ -192,11 +181,11 @@ public class UserChatFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Contact contact = snapshot.getValue(Contact.class);
                     assert contact != null;
-
-                    if (!contact.getId().equals(firebaseUser.getUid())) {
+                    if (contact.getId() == null){
+                        Debugger.logD("s " + contact.getId() );
+                    } else if (!contact.getId().equals(firebaseUser.getUid())){
                         contactArrayList.add(contact);
                     }
-                    Debugger.logD("s " + contactArrayList.size());
                     rv_Contacts.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false));
                     rv_Contacts.setHasFixedSize(true);
                     userChatAdapter = new UserChatAdapter(context, contactArrayList, false);
@@ -225,6 +214,11 @@ public class UserChatFragment extends Fragment {
             openWelcomeChatDialog();
         } else {
             initializeUI();
+            if (role.equals(UserRole.Educator())) {
+                loginFirebase(UserEducator.getEmail(context).toLowerCase(), UserEducator.getPassword(context));
+            }else {
+                loginFirebase(UserStudent.getEmail(context).toLowerCase(), UserStudent.getPassword(context));
+            }
         }
     }
 
@@ -319,6 +313,21 @@ public class UserChatFragment extends Fragment {
 
                         } else {
                             Toasty.warning(context, "Email address already exists.").show();
+                        }
+                    }
+                });
+    }
+
+    private void loginFirebase(String email, String password){
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                            assert firebaseUser != null;
+                            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                            usersRef.child("status").setValue("online");
                         }
                     }
                 });
