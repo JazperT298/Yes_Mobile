@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageView15s"
-        android:layout_width="63dp"
-        android:layout_height="63dp"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="@+id/profile_image"
         app:layout_constraintStart_toStartOf="@+id/profile_image"
@@ -17,10 +17,10 @@
         app:srcCompat="@drawable/bg_profile_round_black" />
 
     <ImageView
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:id="@+id/profile_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,10 +29,10 @@
 
 
     <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="11dp"
+        android:layout_height="11dp"
         android:id="@+id/img_on"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/background_right"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="-15dp"
         android:visibility="gone"
@@ -41,12 +41,12 @@
 
     <ImageView
         android:id="@+id/img_off"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="11dp"
+        android:layout_height="11dp"
         android:layout_toEndOf="@id/profile_image"
         android:layout_toRightOf="@id/profile_image"
         android:visibility="gone"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/active_dot"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="@+id/profile_image" />
 
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Vanne"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:layout_marginTop="8dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -68,28 +68,13 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
                 .load(HttpProvider.getProfileDir()  + contact.getPhotoName())
                 .apply(GlideOptions.getOptions())
                 .into(viewHolder.profile_image);
-        Debugger.logD("image " + contact.getPhotoName());
-        if (ischat){
-            if (contact.getStatus().equals("online")){
-                viewHolder.img_on.setVisibility(View.VISIBLE);
-                viewHolder.img_off.setVisibility(View.GONE);
-            } else {
-                viewHolder.img_on.setVisibility(View.GONE);
-                viewHolder.img_off.setVisibility(View.VISIBLE);
-            }
+        if (contact.getStatus().equals("online")){
+            viewHolder.img_on.setVisibility(View.VISIBLE);
+            viewHolder.img_off.setVisibility(View.GONE);
         } else {
             viewHolder.img_on.setVisibility(View.GONE);
-            viewHolder.img_off.setVisibility(View.GONE);
+            viewHolder.img_off.setVisibility(View.VISIBLE);
         }
-
-//        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(context, MessageActivity.class);
-//                intent.putExtra("userid", contact.getId());
-//                context.startActivity(intent);
-//            }
-//        });
     }
 
     @Override

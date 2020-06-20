@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/imageView15s"
-        android:layout_width="53dp"
-        android:layout_height="53dp"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="@+id/profile_image"
         app:layout_constraintStart_toStartOf="@+id/profile_image"
@@ -16,12 +16,12 @@
         app:srcCompat="@drawable/bg_profile_round_black" />
     <ImageView
         android:id="@+id/profile_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@mipmap/ic_launcher"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/view10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,27 +35,27 @@
         android:layout_toRightOf="@id/profile_image"
         android:text="username"
         android:textStyle="bold"
-        android:textSize="19sp"
+        android:textSize="14sp"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
     <ImageView
         android:id="@+id/img_on"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="11dp"
+        android:layout_height="11dp"
         android:layout_below="@id/username"
         android:layout_toEndOf="@id/profile_image"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/background_right"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="@+id/profile_image" />
 
     <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="11dp"
+        android:layout_height="11dp"
         android:id="@+id/img_off"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/active_dot"
         android:layout_below="@id/username"
         android:layout_marginTop="10dp"
         android:visibility="gone"
