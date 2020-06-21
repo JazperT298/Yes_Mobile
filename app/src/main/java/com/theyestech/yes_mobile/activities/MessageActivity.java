@@ -165,7 +165,8 @@ public class MessageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Contact contact = dataSnapshot.getValue(Contact.class);
                 username.setText(contact.getFullName());
-                Glide.with(context)
+                Debugger.logD("image " +HttpProvider.getProfileDir()+ contact.getPhotoName());
+                Glide.with(getApplicationContext())
                         .load(HttpProvider.getProfileDir() + contact.getPhotoName())
                         .apply(GlideOptions.getOptions())
                         .into(profile_image);
@@ -350,6 +351,7 @@ public class MessageActivity extends AppCompatActivity {
         super.onResume();
         status("online");
         currentUser(userid);
+        setUserHeader();
     }
 
     @Override
@@ -358,5 +360,6 @@ public class MessageActivity extends AppCompatActivity {
         reference.removeEventListener(seenListener);
         status("offline");
         currentUser("none");
+        setUserHeader();
     }
 }

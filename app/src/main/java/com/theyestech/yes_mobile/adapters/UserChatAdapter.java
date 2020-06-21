@@ -51,7 +51,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final Contact contact = contactArrayList.get(i);
 
-        if (contact.getFullName().isEmpty() || contact.getFullName().equals("")){
+        if (contact.getFullName().isEmpty() || contact.getFullName().equals("  ")){
             if (contact.getEmail().length() <= 6){
                 viewHolder.name.setText(contact.getEmail());
             }else{

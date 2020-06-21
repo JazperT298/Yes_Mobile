@@ -23,6 +23,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.Contact;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
@@ -55,8 +56,12 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final Contact contact = contactArrayList.get(i);
+        if (contact.getFullName().equals("  ") || contact.getFullName() == null || contact.getFullName().isEmpty()){
+            viewHolder.name.setText(contact.getEmail());
+        }else{
+            viewHolder.name.setText(contact.getFullName());
+        }
 
-        viewHolder.name.setText(contact.getFullName());
         if (ischat){
             lastMessage(contact.getId(), viewHolder.last_msg);
         } else {

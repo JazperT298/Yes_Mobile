@@ -404,6 +404,7 @@ public class UserChatFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getAllChats();
     }
 
     @Override
