@@ -164,8 +164,11 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Contact contact = dataSnapshot.getValue(Contact.class);
-                username.setText(contact.getFullName());
-                Debugger.logD("image " +HttpProvider.getProfileDir()+ contact.getPhotoName());
+                if (contact.getFullName().isEmpty() || contact.getFullName().equals("  ")){
+                    username.setText(contact.getEmail());
+                }else{
+                    username.setText(contact.getFullName());
+                }
                 Glide.with(getApplicationContext())
                         .load(HttpProvider.getProfileDir() + contact.getPhotoName())
                         .apply(GlideOptions.getOptions())
