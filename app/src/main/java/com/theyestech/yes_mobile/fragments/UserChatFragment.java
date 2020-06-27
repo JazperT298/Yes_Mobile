@@ -212,7 +212,19 @@ public class UserChatFragment extends Fragment {
 
     private void checkFirebaseLogin() {
         if (firebaseAuth.getCurrentUser() == null) {
-            openWelcomeChatDialog();
+            if (role.equals(UserRole.Educator())){
+                if (UserEducator.getFirstname(context).equals("")){
+                    Toasty.warning(context, "Please update your profile to use chat function").show();
+                }else{
+                    openWelcomeChatDialog();
+                }
+            }else{
+                if (UserStudent.getFirstname(context).equals("")){
+                    Toasty.warning(context, "Please update your profile to use chat function").show();
+                }else{
+                    openWelcomeChatDialog();
+                }
+            }
         } else {
             initializeUI();
             if (role.equals(UserRole.Educator())) {
