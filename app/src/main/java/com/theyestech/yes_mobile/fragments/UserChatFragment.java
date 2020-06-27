@@ -125,9 +125,10 @@ public class UserChatFragment extends Fragment {
         role = UserRole.getRole(context);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        userRef = FirebaseDatabase.getInstance().getReference("Users");
-        threadRef = FirebaseDatabase.getInstance().getReference("Threads");
+        //userRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        //threadRef = FirebaseDatabase.getInstance().getReference("Threads");
 
         checkFirebaseLogin();
 
@@ -404,7 +405,7 @@ public class UserChatFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getAllChats();
+        //getAllChats();
     }
 
     @Override

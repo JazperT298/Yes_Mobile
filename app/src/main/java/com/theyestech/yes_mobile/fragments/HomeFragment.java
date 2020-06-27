@@ -127,7 +127,7 @@ public class HomeFragment extends Fragment {
             setEducatorHeader();
             getEducatorStatistics();
             getAllEducatorCounts();
-            if (UserEducator.getFirstname(context) == null){
+            if (UserEducator.getFirstname(context).equals("")){
                 ShowEducatorIntro("Learning Becomes Easier", "Welcome to our learning platform this site was created \n for educators" +
                         "and students from Pre-k to Phd. \n Experience our digital learning revolution!", R.id.textView64, 1);
             }
@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment {
             initializeStudentUI();
             setStudentHeader();
             getAllStudentCounts();
-            if (UserStudent.getFirstname(context) == null){
+            if (UserStudent.getFirstname(context).equals("")){
                 ShowStudentIntro("Learning Becomes Easier", "Welcome to our learning platform this site was created \n for educators" +
                         "and students from Pre-k to Phd. \n Experience our digital learning revolution!", R.id.textView64, 1);
             }
@@ -793,9 +793,21 @@ public class HomeFragment extends Fragment {
 
         selectionTitle = "Student";
 
-        tvStatStudentCount.setText(UserStudent.getCode(context));
-        tvStatStudentCount.setText(UserStudent.getNickname(context));
-        tvStatTopicCount.setText(UserStudent.getDreamJob(context));
+        if(UserStudent.getCode(context) == null){
+            tvStatSubjectCount.setText("Student Code");
+        }else{
+            tvStatSubjectCount.setText(UserStudent.getCode(context));
+        }
+        if(UserStudent.getNickname(context).equals("")){
+            tvStatStudentCount.setText("Nickname");
+        }else {
+            tvStatStudentCount.setText(UserStudent.getNickname(context));
+        }
+        if(UserStudent.getDreamJob(context).equals("")){
+            tvStatTopicCount.setText("Dream Job");
+        }else {
+            tvStatTopicCount.setText(UserStudent.getDreamJob(context));
+        }
 
 
         Glide.with(context)

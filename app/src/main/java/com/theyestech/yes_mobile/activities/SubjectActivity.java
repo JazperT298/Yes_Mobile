@@ -104,12 +104,12 @@ public class SubjectActivity extends AppCompatActivity {
 
         swipeRefreshLayout.setRefreshing(true);
         if (role.equals(UserRole.Educator())) {
-            if (UserEducator.getFirstname(context) == null) {
+            if (UserEducator.getFirstname(context).equals("")) {
             ShowEducatorIntro("Add Subject", "Add subjects to your collection", R.id.fab_SubjectsAdd, 1);
             }
         }
         else {
-            if (UserStudent.getFirstname(context) == null) {
+            if (UserStudent.getFirstname(context).equals("")) {
             ShowEducatorIntro("Search Subject", "Search your desire subject here", R.id.fab_SubjectsAdd, 1);
             }
         }

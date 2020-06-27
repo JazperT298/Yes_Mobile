@@ -92,14 +92,8 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         if (role.equals(UserRole.Educator())) {
             setEducatorFieldsData();
-            if (UserEducator.getFirstname(context) == null) {
-                ShowEducatorIntro("Edit Profile", "Edit your personalize profile here", R.id.tv_UserDetailsEditSave, 1);
-            }
         }else {
             setStudentFieldsData();
-            if (UserStudent.getFirstname(context) == null) {
-                ShowEducatorIntro("Edit Profile", "Edit your personalize profile here", R.id.tv_UserDetailsEditSave, 1);
-            }
         }
     }
 

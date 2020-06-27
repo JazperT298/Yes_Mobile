@@ -79,12 +79,12 @@ public class MyVideosActivity extends AppCompatActivity {
         initializeUI();
 
         if (role.equals(UserRole.Educator())) {
-            if (UserEducator.getFirstname(context) == null) {
+            if (UserEducator.getFirstname(context).equals("")) {
             ShowEducatorIntro("Search", "Search your saved videos here", R.id.iv_VideosSearch, 1);
             }
         }
         else {
-            if (UserStudent.getFirstname(context) == null) {
+            if (UserStudent.getFirstname(context).equals("")) {
             ShowEducatorIntro("Search", "Search your saved videos here", R.id.iv_VideosSearch, 1);
             }
         }

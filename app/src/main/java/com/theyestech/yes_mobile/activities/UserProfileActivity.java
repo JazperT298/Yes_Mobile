@@ -56,15 +56,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
         if (role.equals(UserRole.Educator())) {
             setEducatorProfile();
-            if (UserEducator.getFirstname(context) == null) {
-                ShowEducatorIntro("Manage Profile", "Manage your personalize profile here", R.id.iv_UserProfileOptions, 1);
-            }
         }
         else {
             setStudentProfile();
-            if (UserStudent.getFirstname(context) == null) {
-                ShowEducatorIntro("Manage Profile", "Manage your personalize profile here", R.id.iv_UserProfileOptions, 1);
-            }
         }
     }
 
