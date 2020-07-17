@@ -127,6 +127,7 @@ public class HomeFragment extends Fragment {
             setEducatorHeader();
             getEducatorStatistics();
             getAllEducatorCounts();
+            getActivity().startService(new Intent(context, LoginService.class));
             if (UserEducator.getFirstname(context).equals("")){
                 ShowEducatorIntro("Learning Becomes Easier", "Welcome to our learning platform this site was created \n for educators" +
                         "and students from Pre-k to Phd. \n Experience our digital learning revolution!", R.id.textView64, 1);
@@ -136,6 +137,7 @@ public class HomeFragment extends Fragment {
             initializeStudentUI();
             setStudentHeader();
             getAllStudentCounts();
+            getActivity().startService(new Intent(context, LoginService.class));
             if (UserStudent.getFirstname(context).equals("")){
                 ShowStudentIntro("Learning Becomes Easier", "Welcome to our learning platform this site was created \n for educators" +
                         "and students from Pre-k to Phd. \n Experience our digital learning revolution!", R.id.textView64, 1);
@@ -151,7 +153,7 @@ public class HomeFragment extends Fragment {
 //        role = UserRole.getRole(context);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        context.startService(new Intent(context, LoginService.class));
+        getActivity().startService(new Intent(context, LoginService.class));
     }
 
     //    Educator
@@ -181,9 +183,9 @@ public class HomeFragment extends Fragment {
         cvStickers = view.findViewById(R.id.cv_Home_Stickers);
         cvAwards = view.findViewById(R.id.cv_Home_Awards);
         cvStatistics = view.findViewById(R.id.cv_Home_Stats);
-        swipeRefreshLayout = view.findViewById(R.id.swipe_Home);
-        recyclerView = view.findViewById(R.id.rv_Home);
-        emptyIndicator = view.findViewById(R.id.view_EmptyRecord);
+//        swipeRefreshLayout = view.findViewById(R.id.swipe_Home);
+//        recyclerView = view.findViewById(R.id.rv_Home);
+//        emptyIndicator = view.findViewById(R.id.view_EmptyRecord);
         iv_HomeSearch = view.findViewById(R.id.iv_HomeSearch);
 //        iv_HomeChat = view.findViewById(R.id.iv_HomeChat);
 
@@ -275,16 +277,18 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        swipeRefreshLayout.setRefreshing(false);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-            }
-        });
+//        swipeRefreshLayout.setRefreshing(false);
+//
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                getActivity().startService(new Intent(context, LoginService.class));
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
     }
     private void setEducatorHeader() {
-        tvEmail.setText(UserEducator.getEmail(context));
+        tvEmail.setText(UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context));
         tvEducationalAttainment.setText(UserEducator.getEducationalAttainment(context));
 
         selectionTitle = "Educator";
@@ -530,7 +534,6 @@ public class HomeFragment extends Fragment {
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + userStudent.getImage())
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
-                .apply(GlideOptions.getOptions())
                 .into(iv_UserProfileBackground);
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + userStudent.getImage())
@@ -788,7 +791,7 @@ public class HomeFragment extends Fragment {
 
     }
     private void setStudentHeader() {
-        tvEmail.setText(UserStudent.getEmail(context));
+        tvEmail.setText( UserStudent.getFirstname(context) + " " + UserStudent.getLastname(context));
         tvEducationalAttainment.setText(UserStudent.getEducationalAttainment(context));
 
         selectionTitle = "Student";

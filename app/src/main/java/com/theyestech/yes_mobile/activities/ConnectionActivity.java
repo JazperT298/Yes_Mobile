@@ -174,8 +174,6 @@ public class ConnectionActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("user_token", UserEducator.getToken(context));
         params.put("user_id", UserEducator.getID(context));
-        Debugger.logD("user_token " + UserEducator.getToken(context));
-        Debugger.logD("user_id " + UserEducator.getID(context));
 
         HttpProvider.post(context, "controller_global/GetUserConnections.php", params, new AsyncHttpResponseHandler() {
             @Override
@@ -249,7 +247,6 @@ public class ConnectionActivity extends AppCompatActivity {
                         userStudent.setConnection(connection);
 
                         userStudentArrayList.add(userStudent);
-                        Debugger.logD("user_fullname " + user_fullname);
 
                     }
                 } catch (JSONException e) {
@@ -358,7 +355,6 @@ public class ConnectionActivity extends AppCompatActivity {
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + userStudent.getImage())
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_user_colored))
-                .apply(GlideOptions.getOptions())
                 .into(iv_UserProfileBackground);
         Glide.with(context)
                 .load(HttpProvider.getProfileDir() + userStudent.getImage())
