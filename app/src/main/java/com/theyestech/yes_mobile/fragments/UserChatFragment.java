@@ -168,6 +168,12 @@ public class UserChatFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        swipe_ChatThreads.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAllChats();
+            }
+        });
     }
 
     private void getAllContacts(){
@@ -277,7 +283,7 @@ public class UserChatFragment extends Fragment {
 
         final String email = UserEducator.getEmail(context).toLowerCase();
         String password = UserEducator.getPassword(context);
-        final String fullName = UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context) + " " + UserEducator.getSuffix(context);
+        final String fullName = UserEducator.getFirstname(context) + " " + UserEducator.getLastname(context);
         final String search = UserEducator.getLastname(context).toLowerCase();
         final String role = UserRole.getRole(context);
         final String photoName = UserEducator.getImage(context);
@@ -360,6 +366,7 @@ public class UserChatFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                swipe_ChatThreads.setRefreshing(false);
                 chatlistArrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);

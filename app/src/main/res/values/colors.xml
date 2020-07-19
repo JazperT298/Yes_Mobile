@@ -26,4 +26,6 @@
     <color name="colorBlack">#000000</color>
 
     <color name="footerBackground">#323232</color>
+
+    <color name="colorGrey">#A0A0A0</color>
 </resources>

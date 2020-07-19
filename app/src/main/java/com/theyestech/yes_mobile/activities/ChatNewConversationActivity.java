@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -121,6 +122,11 @@ public class ChatNewConversationActivity extends AppCompatActivity {
 
         contactDropdownAdapter = new ContactDropdownAdapter(context, R.layout.listrow_chat_contacts_dropdown, contactArrayList);
         etSearch.setAdapter(contactDropdownAdapter);
+
+        recycler_view.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setStackFromEnd(true);
+        recycler_view.setLayoutManager(linearLayoutManager);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,11 +291,11 @@ public class ChatNewConversationActivity extends AppCompatActivity {
                     Chat chat = snapshot.getValue(Chat.class);
                     if (chat.getReceiverId().equals(myid) && chat.getSenderId().equals(userid) ||
                             chat.getReceiverId().equals(userid) && chat.getSenderId().equals(myid)){
-                        Intent intent = new Intent(context, MessageActivity.class);
-                        intent.putExtra("userid", userid);
-                        startActivity(intent);
-                        finish();
+                        chatArrayList.add(chat);
                     }
+
+                    messageAdapter = new MessageAdapter(context, chatArrayList, imageurl);
+                    recycler_view.setAdapter(messageAdapter);
                 }
             }
 
