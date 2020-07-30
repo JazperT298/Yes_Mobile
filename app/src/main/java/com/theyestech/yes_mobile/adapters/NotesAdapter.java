@@ -64,6 +64,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                         .load(R.drawable.ic_note_powerpoint)
                         .into(viewHolder.ivImage);
                 break;
+            case "video":
+                Glide.with(context)
+                        .load(R.drawable.ic_video)
+                        .into(viewHolder.ivImage);
+                break;
+            case "image":
+                Glide.with(context)
+                        .load(R.drawable.ic_image_colored)
+                        .into(viewHolder.ivImage);
+                break;
         }
 
         viewHolder.tvTitle.setText(note.getTitle());
