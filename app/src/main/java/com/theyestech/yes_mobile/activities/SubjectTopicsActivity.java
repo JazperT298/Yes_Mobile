@@ -446,7 +446,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
     }
 
     private void selectAction() {
-        String[] items = {" Camera ", " Gallery ", " Video "};//, " File "};
+        String[] items = {" Camera ", " Gallery ", " Video ", " File "};
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Choose File");
         dialog.setItems(items, new DialogInterface.OnClickListener() {
@@ -464,9 +464,9 @@ public class SubjectTopicsActivity extends AppCompatActivity {
                 }else if (which == 2){
                     askVideoPermissions();
                     //askDocumentPermissions();
-//                }else if (which == 3){
-//                    askDocumentPermissions();
-//                    //Toasty.warning(context, "To be continued... got my brain dam atm").show();
+                }else if (which == 3){
+                    askDocumentPermissions();
+                    //Toasty.warning(context, "To be continued... got my brain dam atm").show();
                 }
             }
         });

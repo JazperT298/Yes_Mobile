@@ -20,6 +20,8 @@ public class HttpProvider {
     //LIVE IP
     private static final String BASE_URL = "https://theyestech.com/controllerClass/";
 
+    private static final String FILE_URL = "https://yestechfreeium.s3-ap-southeast-1.amazonaws.com/controllerClass/";
+
     private static AsyncHttpClient client = new AsyncHttpClient();
 
 //    public static void post(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
@@ -63,35 +65,35 @@ public class HttpProvider {
     }
 
     public static String getNewsfeedDir() {
-        return BASE_URL.replace("controllerClass/", "newsfeed-files/");
+        return FILE_URL.replace("controllerClass/", "newsfeed-files/");
     }
 
     public static String getVideoLabDir() {
-        return BASE_URL.replace("controllerClass/", "");
+        return FILE_URL.replace("controllerClass/", "");
     }
 
     public static String getProfileDir() {
-        return BASE_URL.replace("controllerClass/", "user_images/");
+        return FILE_URL.replace("controllerClass/", "user_images/");
     }
 
     public static String getSubjectDir() {
-        return BASE_URL.replace("controllerClass/", "subject-files/");
+        return FILE_URL.replace("controllerClass/", "subject-files/");
     }
 
     public static String getTopicDir() {
-        return BASE_URL.replace("controllerClass/", "topic-files/");
+        return FILE_URL.replace("controllerClass/", "topic-files/");
     }
 
     public static String getQuizDir() {
-        return BASE_URL.replace("controllerClass/", "");
+        return FILE_URL.replace("controllerClass/", "");
     }
 
     public static String getStickerDir() {
-        return BASE_URL.replace("controllerClass/", "img/");
+        return FILE_URL.replace("controllerClass/", "img/");
     }
 
     public static String getNotesDir() {
-        return BASE_URL.replace("controllerClass/", "notes-files/");
+        return FILE_URL.replace("controllerClass/", "notes-files/");
     }
 
 }
