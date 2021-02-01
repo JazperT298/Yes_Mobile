@@ -14,6 +14,7 @@ import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Sticker;
+import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,8 @@ public class StudentStickersAdapter extends RecyclerView.Adapter<StudentStickers
         Glide.with(context)
                 .load(HttpProvider.getStickerDir() + sticker.getName())
                 .into(viewHolder.ivImage);
+
+        Debugger.logD("stickers " + HttpProvider.getStickerDir() + sticker.getName());
     }
 
     @Override
