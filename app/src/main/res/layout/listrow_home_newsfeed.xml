@@ -94,38 +94,48 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout19" />
 
-            <ImageView
-                android:id="@+id/iv_ListrowHomeImage"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cons"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_ListrowHomeDetails"
-                app:srcCompat="@drawable/ic_new_post_colored" />
+                app:layout_constraintBottom_toBottomOf="@+id/view_EmptyChat">
+                <ImageView
+                    android:id="@+id/iv_ListrowHomeImage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:srcCompat="@drawable/ic_new_post_colored" />
 
-            <VideoView
-                android:id="@+id/vv_ListrowHomeVideo"
-                android:layout_width="0dp"
-                android:layout_height="500dp"
-                android:layout_marginTop="8dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_ListrowHomeDetails" />
+                <VideoView
+                    android:id="@+id/vv_ListrowHomeVideo"
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/view_EmptyChat"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:background="@android:color/darker_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ListrowHomeImage" />
+                app:layout_constraintTop_toBottomOf="@+id/cons" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/constraint_ListrowHomeYes"

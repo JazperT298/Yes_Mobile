@@ -466,16 +466,16 @@ public class NewNewsfeedActivity extends AppCompatActivity {
         if (selectedNewsFeed.getNf_filetype().equalsIgnoreCase("image")){
             //iv_ListrowSubjectTopicsImage.setImageURI(Uri.parse(HttpProvider.getTopicDir() + file));
             //iv_ListrowSubjectTopicsImage.setVisibility(View.VISIBLE);
-            Debugger.logD("as " + HttpProvider.getTopicDir() + selectedNewsFeed.getNf_files());
+            Debugger.logD("as " + HttpProvider.getNewsfeedDir() + selectedNewsFeed.getNf_files());
             Glide.with(context)
-                    .load(HttpProvider.getTopicDir() + selectedNewsFeed.getNf_files())
+                    .load(HttpProvider.getNewsfeedDir() + selectedNewsFeed.getNf_files())
                     .into(iv_image);
             iv_image.setVisibility(View.VISIBLE);
         }else{
-            vv_video.setVideoURI(Uri.parse(HttpProvider.getTopicDir() + selectedNewsFeed.getNf_files()));
+            vv_video.setVideoURI(Uri.parse(HttpProvider.getNewsfeedDir() + selectedNewsFeed.getNf_files()));
             vv_video.setMediaController(new MediaController(context));
             vv_video.start();
-            vv_video.setVisibility(View.GONE);
+            iv_image.setVisibility(View.GONE);
             vv_video.setVisibility(View.VISIBLE);
             iv_type.setImageResource(R.drawable.ic_video);
         }
