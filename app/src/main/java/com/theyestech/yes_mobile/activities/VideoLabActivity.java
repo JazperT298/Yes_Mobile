@@ -87,7 +87,6 @@ public class VideoLabActivity extends AppCompatActivity {
         ivBack = findViewById(R.id.iv_VideoLabBack);
         ivSearch = findViewById(R.id.iv_VideoLabSearch);
         swipeRefreshLayout = findViewById(R.id.swipe_VideoLab);
-        recyclerView = findViewById(R.id.rv_VideoLab);
         emptyIndicator = findViewById(R.id.view_EmptyRecord);
         et_SelectCourses = findViewById(R.id.et_SelectCourses);
         constraintLayout2 = findViewById(R.id.constraintLayout2);

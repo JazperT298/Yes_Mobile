@@ -353,12 +353,12 @@ public class VideoLabRecyclerView extends RecyclerView {
         mediaUrl = new String(data, StandardCharsets.UTF_8);
         mediaUrl = mediaUrl.replaceAll(" ", "%20");
         Debugger.logD("uri " + mediaUrl);
-        String url = "https://theyestech.com/" + mediaUrl;
+        //String url = ("https:" + mediaUrl);
 
-
+        //Debugger.logD("url " + url);
         if (mediaUrl != null) {
             MediaSource   videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse(url));
+                    .createMediaSource(Uri.parse(mediaUrl));
             Debugger.logD("videosource" + videoSource);
             videoPlayer.prepare(videoSource);
             videoPlayer.setPlayWhenReady(true);
