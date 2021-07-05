@@ -410,6 +410,7 @@ public class NotesActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 ProgressPopup.hideProgress();
+                Debugger.logD("responseBodyF " +responseBody);
                 OkayClosePopup.showDialog(context, "No internet connect. Please try again.", "Close");
             }
         });

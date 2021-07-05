@@ -6,11 +6,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatTextView;
@@ -30,7 +32,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallState;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,6 +49,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
+import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.ConnectionActivity;
 import com.theyestech.yes_mobile.activities.MyVideosActivity;
@@ -75,6 +86,8 @@ import es.dmoral.toasty.Toasty;
 import smartdevelop.ir.eram.showcaseviewlib.GuideView;
 import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
 import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
+
+import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment {
     private View view;
@@ -115,6 +128,9 @@ public class HomeFragment extends Fragment {
     private GuideView mGuideView;
     private GuideView.Builder builder;
 
+    private AppUpdateManager mAppUpdateManager;
+    private static final int RC_APP_UPDATE = 4;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -154,7 +170,59 @@ public class HomeFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         getActivity().startService(new Intent(context, LoginService.class));
+        //updateManager();
+
+
     }
+
+    private void updateManager(){
+        Debugger.logD("YAWA");
+        mAppUpdateManager = AppUpdateManagerFactory.create(context);
+
+        mAppUpdateManager.registerListener(installStateUpdatedListener);
+
+        mAppUpdateManager.getAppUpdateInfo().addOnSuccessListener(appUpdateInfo -> {
+
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE /*AppUpdateType.IMMEDIATE*/)){
+
+                try {
+                    mAppUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo, AppUpdateType.IMMEDIATE /*AppUpdateType.IMMEDIATE*/, getActivity(), RC_APP_UPDATE);
+
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED){
+                //CHECK THIS if AppUpdateType.FLEXIBLE, otherwise you can skip
+                popupSnackbarForCompleteUpdate();
+            } else {
+                Debugger.logD("checkForAppUpdateAvailability: something else");
+            }
+        });
+
+
+    }
+    InstallStateUpdatedListener installStateUpdatedListener = new
+            InstallStateUpdatedListener() {
+                @Override
+                public void onStateUpdate(InstallState state) {
+                    if (state.installStatus() == InstallStatus.DOWNLOADED){
+                        //CHECK THIS if AppUpdateType.FLEXIBLE, otherwise you can skip
+                        popupSnackbarForCompleteUpdate();
+                    } else if (state.installStatus() == InstallStatus.INSTALLED){
+                        if (mAppUpdateManager != null){
+                            mAppUpdateManager.unregisterListener(installStateUpdatedListener);
+                        }
+
+                    } else {
+                        Debugger.logD("InstallStateUpdatedListener: state: " + state.installStatus());
+                    }
+                }
+
+
+            };
 
     //    Educator
     private void initializeEducatorUI() {
@@ -1464,25 +1532,22 @@ public class HomeFragment extends Fragment {
         }
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                            assert firebaseUser != null;
-                            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-                            usersRef.child("status").setValue("online");
-                        }
-
-                        if (role.equals(UserRole.Educator()))
-                            fireBaseEducator.saveUserSession(context);
-                        else
-                            fireBaseStudent.saveUserSession(context);
-
-                        userRole.saveRole(context);
-
-                        Debugger.printO(task);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                        assert firebaseUser != null;
+                        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                        usersRef.child("status").setValue("online");
                     }
+
+                    if (role.equals(UserRole.Educator()))
+                        fireBaseEducator.saveUserSession(context);
+                    else
+                        fireBaseStudent.saveUserSession(context);
+
+                    userRole.saveRole(context);
+
+                    Debugger.printO(task);
                 });
     }
     @Override
@@ -1503,6 +1568,42 @@ public class HomeFragment extends Fragment {
             setStudentHeader();
             getAllStudentCounts();
             //loginStudent();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_APP_UPDATE) {
+            if (resultCode != RESULT_OK) {
+                Debugger.logD("onActivityResult: app download failed");
+            }
+        }
+    }
+    private void popupSnackbarForCompleteUpdate() {
+
+        Snackbar snackbar =
+                Snackbar.make(
+                        view.findViewById(R.id.coordinatorLayout_main),
+                        "New app is ready!",
+                        Snackbar.LENGTH_INDEFINITE);
+
+        snackbar.setAction("Install", view -> {
+            if (mAppUpdateManager != null){
+                mAppUpdateManager.completeUpdate();
+            }
+        });
+
+
+        snackbar.setActionTextColor(getResources().getColor(R.color.color1));
+        snackbar.show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAppUpdateManager != null) {
+            mAppUpdateManager.unregisterListener(installStateUpdatedListener);
         }
     }
 }
