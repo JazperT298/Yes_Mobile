@@ -10,27 +10,13 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.theyestech.yes_mobile.MainActivity;
-import com.theyestech.yes_mobile.activities.ChatConversationActivity;
 import com.theyestech.yes_mobile.activities.MessageActivity;
-import com.theyestech.yes_mobile.models.ChatThread;
-import com.theyestech.yes_mobile.models.Contact;
-import com.theyestech.yes_mobile.models.Sticker;
-import com.theyestech.yes_mobile.utils.Debugger;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
 
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {

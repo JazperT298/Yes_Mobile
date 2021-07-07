@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.ProfileActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -36,7 +36,7 @@
             app:layout_constraintStart_toEndOf="@+id/iv_ProfileEducatorBack"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:layout_width="0dp"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
         app:layout_constraintVertical_bias="0.0">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -160,7 +160,7 @@
                 app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorNotes"
                 app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorNotes" />
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -171,7 +171,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_ProfileEducatorEmail">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -249,9 +249,9 @@
                         app:layout_constraintEnd_toEndOf="@+id/tv_ProfileEducatorStudents"
                         app:layout_constraintStart_toStartOf="@+id/tv_ProfileEducatorStudents"
                         app:layout_constraintTop_toBottomOf="@+id/tv_ProfileEducatorStudents" />
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <ImageView
                 android:id="@+id/iv_ProfileEducatorRewards"
@@ -314,7 +314,7 @@
                 app:layout_constraintStart_toStartOf="@+id/iv_ProfileEducatorLogout"
                 app:layout_constraintTop_toBottomOf="@+id/iv_ProfileEducatorLogout" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

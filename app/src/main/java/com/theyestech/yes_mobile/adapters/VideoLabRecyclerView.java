@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.view.Display;
@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -50,12 +49,9 @@ import com.theyestech.yes_mobile.models.VideoLab;
 import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 
 import javax.crypto.spec.SecretKeySpec;
-
-import es.dmoral.toasty.Toasty;
 
 public class VideoLabRecyclerView extends RecyclerView {
 

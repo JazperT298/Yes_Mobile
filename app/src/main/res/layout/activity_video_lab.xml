@@ -48,7 +48,7 @@
             app:srcCompat="@drawable/ic_search_white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -93,9 +93,9 @@
             app:layout_constraintTop_toBottomOf="@+id/et_SelectCourses" />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_VideoLab"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -132,5 +132,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,12 +14,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout31"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -108,7 +108,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/tv_HomeEmail"
                     app:layout_constraintTop_toBottomOf="@+id/tv_HomeEmail" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline9"
@@ -137,7 +137,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout31" />
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_Stats"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -228,9 +228,9 @@
                         app:layout_constraintStart_toEndOf="@+id/tv_HomeStatSStudentCount"
                         app:layout_constraintTop_toBottomOf="@+id/imageView15" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_Subjects"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -289,9 +289,9 @@
                         app:layout_constraintStart_toStartOf="@+id/textView47"
                         app:layout_constraintTop_toBottomOf="@+id/textView47" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_Notes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -349,9 +349,9 @@
                         app:layout_constraintStart_toStartOf="@+id/textView48"
                         app:layout_constraintTop_toBottomOf="@+id/textView48" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_Connections"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -410,9 +410,9 @@
                         app:layout_constraintStart_toStartOf="@+id/textView49"
                         app:layout_constraintTop_toBottomOf="@+id/textView49" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_Newsfeeds"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -473,9 +473,9 @@
                         app:layout_constraintStart_toStartOf="@+id/textView50"
                         app:layout_constraintTop_toBottomOf="@+id/textView50" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_VideoLab"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -533,9 +533,9 @@
                         app:layout_constraintStart_toStartOf="@+id/textView51"
                         app:layout_constraintTop_toBottomOf="@+id/textView51" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_YestechCourse"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -596,9 +596,9 @@
                         app:layout_constraintStart_toStartOf="@+id/textView52"
                         app:layout_constraintTop_toBottomOf="@+id/textView52" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_MyVideos"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -657,9 +657,9 @@
                         app:layout_constraintStart_toStartOf="@+id/textView53"
                         app:layout_constraintTop_toBottomOf="@+id/textView53" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_Stickers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -718,9 +718,9 @@
                         app:layout_constraintStart_toStartOf="@+id/textView4"
                         app:layout_constraintTop_toBottomOf="@+id/textView4" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cv_Home_Awards"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -779,13 +779,13 @@
                         app:layout_constraintStart_toStartOf="@+id/textView33"
                         app:layout_constraintTop_toBottomOf="@+id/textView33" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_Home"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -794,7 +794,7 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="gone">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -808,7 +808,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_Home"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -816,7 +816,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

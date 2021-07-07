@@ -1,45 +1,27 @@
 package com.theyestech.yes_mobile.adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.activities.SubjectTopicsCommentActivity;
-import com.theyestech.yes_mobile.activities.VideoLabPreviewActivity;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Topic;
-import com.theyestech.yes_mobile.models.UserEducator;
-import com.theyestech.yes_mobile.utils.Debugger;
-import com.theyestech.yes_mobile.utils.OkayClosePopup;
-import com.theyestech.yes_mobile.utils.ProgressPopup;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.Header;
-import es.dmoral.toasty.Toasty;
 
 public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder> {
 

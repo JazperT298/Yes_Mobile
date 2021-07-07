@@ -1,7 +1,7 @@
 package com.theyestech.yes_mobile.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.theyestech.yes_mobile.R;
-import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.VideoLab;
 
 public class VideoLabViewHolder extends RecyclerView.ViewHolder  {

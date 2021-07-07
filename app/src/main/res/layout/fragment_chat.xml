@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ChatFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
@@ -51,9 +51,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_user_colored" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout_Chat"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -71,24 +71,24 @@
         app:tabTextAppearance="@style/TextAppearance.AppCompat.Body1"
         app:tabTextColor="@android:color/secondary_text_dark">
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tabItem_Conversation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Threads">
 
-        </android.support.design.widget.TabItem>
+        </com.google.android.material.tabs.TabItem>
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tabItem_Contacts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Contacts">
 
-        </android.support.design.widget.TabItem>
-    </android.support.design.widget.TabLayout>
+        </com.google.android.material.tabs.TabItem>
+    </com.google.android.material.tabs.TabLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_ChatThreads"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -111,7 +111,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="gone" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_ChatThreads"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -120,9 +120,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            </android.support.v7.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_ChatThreadNew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-            </android.support.design.widget.FloatingActionButton>
+            </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
             <ProgressBar
                 android:id="@+id/progress_ChatThreads"
@@ -146,9 +146,9 @@
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_ChatContacts"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -157,7 +157,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout_Chat">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -171,7 +171,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="gone" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_ChatContacts"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -180,8 +180,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            </android.support.v7.widget.RecyclerView>
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+            </androidx.recyclerview.widget.RecyclerView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

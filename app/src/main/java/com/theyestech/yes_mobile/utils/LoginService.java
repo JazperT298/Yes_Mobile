@@ -3,7 +3,7 @@ package com.theyestech.yes_mobile.utils;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 
@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
-import com.theyestech.yes_mobile.MainActivity;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
 
@@ -61,8 +60,7 @@ public class LoginService extends Service {
         Debugger.logD("Service onDestroy");
     }
 
-    @Nullable
-    @android.support.annotation.Nullable
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
