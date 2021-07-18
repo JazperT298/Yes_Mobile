@@ -402,7 +402,7 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         final ImageView close,iv_ListrowSubjectTopicsImage;
         final VideoView vv_ListrowSubjectTopicVideo;
         final TextView tv_ListrowSubjectTopicsDetails;
-        final ConstraintLayout constraint_ListrowSubjectTopicsYes, constraint_ListrowSubjectTopicsComments;
+        final ConstraintLayout constraint_ListrowSubjectTopicsYes, constraint_ListrowSubjectTopicsComments,constraint_ListrowSubjectTopicsShare;
 
         close = dialog.findViewById(R.id.close);
         iv_ListrowSubjectTopicsImage = dialog.findViewById(R.id.iv_ListrowSubjectTopicsImage);
@@ -410,12 +410,24 @@ public class SubjectTopicsActivity extends AppCompatActivity {
         tv_ListrowSubjectTopicsDetails = dialog.findViewById(R.id.tv_ListrowSubjectTopicsDetails);
         constraint_ListrowSubjectTopicsComments = dialog.findViewById(R.id.constraint_ListrowSubjectTopicsComments);
         constraint_ListrowSubjectTopicsYes = dialog.findViewById(R.id.constraint_ListrowSubjectTopicsYes);
+        constraint_ListrowSubjectTopicsShare = dialog.findViewById(R.id.constraint_ListrowSubjectTopicsShare);
 
         constraint_ListrowSubjectTopicsComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SubjectTopicsCommentActivity.class);
                 intent.putExtra("TOPIC_ID", selectedTopic.getTopic_id());
+                context.startActivity(intent);
+            }
+        });
+        constraint_ListrowSubjectTopicsShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, FirebaseUserActivity.class);
+                intent.putExtra("NEWSFEED_FILES", "/topic-files/" +selectedTopic.getTopic_file());
+                intent.putExtra("NEWSFEED_TYPE", selectedTopic.getTopic_filetype());
+//                intent.putExtra("NEWSFEED_ID", newsfeed.getNf_filetype());
+
                 context.startActivity(intent);
             }
         });

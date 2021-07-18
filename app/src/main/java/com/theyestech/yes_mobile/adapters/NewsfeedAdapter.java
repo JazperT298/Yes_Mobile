@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.NonNull;
@@ -24,8 +25,10 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.activities.FirebaseUserActivity;
 import com.theyestech.yes_mobile.activities.NewsfeedCommentActivity;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
+import com.theyestech.yes_mobile.models.FirebaseUser;
 import com.theyestech.yes_mobile.models.Newsfeed;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.utils.Debugger;
@@ -109,6 +112,20 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 context.startActivity(intent);
             }
         });
+        viewHolder.constraintShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Debugger.logD(newsfeed.getNf_files());
+                Debugger.logD(newsfeed.getNf_filetype());
+                Debugger.logD(newsfeed.getNf_image());
+                Intent intent = new Intent(context, FirebaseUserActivity.class);
+                intent.putExtra("NEWSFEED_FILES", "/newsfeed-files/" + newsfeed.getNf_files());
+                intent.putExtra("NEWSFEED_TYPE",  newsfeed.getNf_filetype());
+//                intent.putExtra("NEWSFEED_ID", newsfeed.getNf_filetype());
+
+                context.startActivity(intent);
+            }
+        });
 
         viewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +167,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         private ImageView ivImage, ivProfile, ivType, ivYes, ivDelete;
         private TextView tvDetails, tvFullname, tvDateTime, tvYes;
         private VideoView videoView;
-        private ConstraintLayout constraintYes, constraintComment;
+        private ConstraintLayout constraintYes, constraintComment, constraintShare;
         private CardView cardView3;
 
         public ViewHolder(View view) {
@@ -168,6 +185,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
             ivDelete = view.findViewById(R.id.iv_ListrowHomeDelete);
             constraintYes = view.findViewById(R.id.constraint_ListrowHomeYes);
             constraintComment = view.findViewById(R.id.constraint_ListrowHomeComments);
+            constraintShare = view.findViewById(R.id.constraint_ListrowHomeShare);
             cardView3 = view.findViewById(R.id.cardView3);
             cardView3.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -190,6 +208,13 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
                         onClickRecyclerView.onItemClick(v, getAdapterPosition(), 3);
+                }
+            });
+            constraintShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickRecyclerView != null)
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 4);
                 }
             });
         }

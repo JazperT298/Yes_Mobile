@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.MyVideosActivity"></activity>
+        <activity android:name=".activities.FirebaseUserActivity"></activity>
+        <activity android:name=".activities.FilesActivity" />
+        <activity android:name=".activities.MyVideosActivity" />
         <activity android:name=".activities.YestechCourseActivity" />
         <activity android:name=".activities.VideoLabPreviewActivity" />
         <activity android:name=".activities.VideoLabActivity" />
@@ -84,7 +86,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:enabled="true" android:name=".utils.LoginService" />
+        <service
+            android:name=".utils.LoginService"
+            android:enabled="true" />
     </application>
 
 </manifest>

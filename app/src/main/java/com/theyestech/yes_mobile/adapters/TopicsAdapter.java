@@ -1,6 +1,7 @@
 package com.theyestech.yes_mobile.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,8 +19,10 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
+import com.theyestech.yes_mobile.activities.FirebaseUserActivity;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
 import com.theyestech.yes_mobile.models.Topic;
+import com.theyestech.yes_mobile.utils.Debugger;
 
 import java.util.ArrayList;
 
@@ -107,6 +110,19 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
             }
         });
 
+        viewHolder.constraintShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(context, FirebaseUserActivity.class);
+                intent.putExtra("NEWSFEED_FILES", "/topic-files/" +topic.getTopic_file());
+                intent.putExtra("NEWSFEED_TYPE",  topic.getTopic_filetype());
+//                intent.putExtra("NEWSFEED_ID", newsfeed.getNf_filetype());
+
+                context.startActivity(intent);
+            }
+        });
+
 //        viewHolder.constraintComment.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -128,7 +144,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
         private ImageView ivImage, ivYes,ivDelete;
         private TextView tvDetails, tvYes;
         private VideoView videoView;
-        private ConstraintLayout constraintYes, constraintComment;
+        private ConstraintLayout constraintYes, constraintComment, constraintShare;
 
         public ViewHolder(View view) {
             super(view);
@@ -141,6 +157,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
             ivDelete = view.findViewById(R.id.iv_ListrowSubjectTopicsDelete);
             constraintYes = view.findViewById(R.id.constraint_ListrowSubjectTopicsYes);
             constraintComment = view.findViewById(R.id.constraint_ListrowSubjectTopicsComments);
+            constraintShare = view.findViewById(R.id.constraint_ListrowSubjectTopicsShare);
 
             constraintYes.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -176,6 +193,13 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                 public void onClick(View v) {
                     if (onClickRecyclerView != null)
                         onClickRecyclerView.onItemClick(v, getAdapterPosition(), 4);
+                }
+            });
+            constraintShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickRecyclerView != null)
+                        onClickRecyclerView.onItemClick(v, getAdapterPosition(), 5);
                 }
             });
         }

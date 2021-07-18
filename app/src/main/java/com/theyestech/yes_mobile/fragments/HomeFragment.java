@@ -37,13 +37,18 @@ import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theyestech.yes_mobile.HttpProvider;
 import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.ConnectionActivity;
+import com.theyestech.yes_mobile.activities.FilesActivity;
 import com.theyestech.yes_mobile.activities.MyVideosActivity;
 import com.theyestech.yes_mobile.activities.NewNewsfeedActivity;
 import com.theyestech.yes_mobile.activities.NotesActivity;
@@ -52,9 +57,11 @@ import com.theyestech.yes_mobile.activities.SubjectActivity;
 import com.theyestech.yes_mobile.activities.UserProfileActivity;
 import com.theyestech.yes_mobile.activities.VideoLabActivity;
 import com.theyestech.yes_mobile.activities.YestechCourseActivity;
+import com.theyestech.yes_mobile.adapters.FilesAdapter;
 import com.theyestech.yes_mobile.adapters.SearchUserAdapter;
 import com.theyestech.yes_mobile.adapters.StudentStickersAdapter;
 import com.theyestech.yes_mobile.interfaces.OnClickRecyclerView;
+import com.theyestech.yes_mobile.models.Files;
 import com.theyestech.yes_mobile.models.Sticker;
 import com.theyestech.yes_mobile.models.UserEducator;
 import com.theyestech.yes_mobile.models.UserStudent;
@@ -112,6 +119,7 @@ public class HomeFragment extends Fragment {
     private ConstraintLayout emptyIndicator1;
 
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference reference;
 
     private UserEducator fireBaseEducator;
     private UserStudent fireBaseStudent;
@@ -122,6 +130,9 @@ public class HomeFragment extends Fragment {
 
     private AppUpdateManager mAppUpdateManager;
     private static final int RC_APP_UPDATE = 4;
+
+    private ArrayList<Files> filesArrayList = new ArrayList<>();
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -279,7 +290,7 @@ public class HomeFragment extends Fragment {
         cvNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, NotesActivity.class);
+                Intent intent = new Intent(context, FilesActivity.class);
                 startActivity(intent);
             }
         });
@@ -649,6 +660,32 @@ public class HomeFragment extends Fragment {
         });
     }
     private void getAllEducatorCounts(){
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//        filesArrayList.clear();
+        reference = FirebaseDatabase.getInstance().getReference("Files");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                filesArrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                    Files files = snapshot.getValue(Files.class);
+                    if (files.getReceiver().equals(firebaseUser.getUid()) && !files.getSender().equals(firebaseUser.getUid()) ||
+                            !files.getReceiver().equals(firebaseUser.getUid()) && files.getSender().equals(firebaseUser.getUid())){
+                        filesArrayList.add(files);
+                        tvStatNoteCount.setText(String.valueOf(filesArrayList.size()));
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debugger.logD("CANCELLED" + databaseError.getMessage());
+            }
+        });
+
+
         RequestParams params = new RequestParams();
         params.put("user_token", UserEducator.getToken(context));
         params.put("user_id", UserEducator.getID(context));
@@ -661,7 +698,7 @@ public class HomeFragment extends Fragment {
                 }else{
                     try {
                         JSONArray jsonArray = new JSONArray(str);
-                        tvStatNoteCount.setText(String.valueOf(jsonArray.length()));
+//                        tvStatNoteCount.setText(String.valueOf(jsonArray.length()));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -737,6 +774,9 @@ public class HomeFragment extends Fragment {
         });
         tv_HomeCourseCount.setText("0");
         tv_HomeMyvideosCount.setText("0");
+        //asd
+
+
     }
 
     //    Student
@@ -793,7 +833,7 @@ public class HomeFragment extends Fragment {
         cvNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, NotesActivity.class);
+                Intent intent = new Intent(context, FilesActivity.class);
                 startActivity(intent);
             }
         });
