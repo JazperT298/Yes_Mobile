@@ -115,15 +115,17 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.ViewHo
         viewHolder.constraintShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Debugger.logD(newsfeed.getNf_files());
-                Debugger.logD(newsfeed.getNf_filetype());
-                Debugger.logD(newsfeed.getNf_image());
-                Intent intent = new Intent(context, FirebaseUserActivity.class);
-                intent.putExtra("NEWSFEED_FILES", "/newsfeed-files/" + newsfeed.getNf_files());
-                intent.putExtra("NEWSFEED_TYPE",  newsfeed.getNf_filetype());
+                if(!newsfeed.getNf_files().equals("")){
+                    Intent intent = new Intent(context, FirebaseUserActivity.class);
+                    intent.putExtra("NEWSFEED_FILES", "/newsfeed-files/" + newsfeed.getNf_files());
+                    intent.putExtra("NEWSFEED_TYPE",  newsfeed.getNf_filetype());
 //                intent.putExtra("NEWSFEED_ID", newsfeed.getNf_filetype());
 
-                context.startActivity(intent);
+                    context.startActivity(intent);
+                }else{
+                    Toasty.warning(context, "Please select a file to share").show();
+                }
+
             }
         });
 

@@ -30,6 +30,7 @@ import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.UserRole;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FilesActivity extends AppCompatActivity {
     private Context context;
@@ -118,10 +119,16 @@ public class FilesActivity extends AppCompatActivity {
                             !files.getReceiver().equals(firebaseUser.getUid()) && files.getSender().equals(fuser.getUid())){
                         filesArrayList.add(files);
                     }
-                    rv_Files.setLayoutManager(new LinearLayoutManager(context));
-                    rv_Files.setHasFixedSize(true);
-                    filesAdapter = new FilesAdapter(context, filesArrayList);
 
+
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                    layoutManager.setReverseLayout(true);
+                    layoutManager.setStackFromEnd(true);
+                    rv_Files.setLayoutManager(layoutManager);
+                    rv_Files.setHasFixedSize(true);
+
+                    filesAdapter = new FilesAdapter(context, filesArrayList);
+                    filesAdapter.notifyDataSetChanged();
                     rv_Files.setAdapter(filesAdapter);
 
 

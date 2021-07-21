@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,6 +71,7 @@ public class FirebaseUserAdapter
     APIService apiService;
     private Date currentDate;
     private String role;
+    private String msg;
 
     public FirebaseUserAdapter(Context mContext, List<Contact> contacts, boolean ischat, String files, String fileType, Activity activity){
         this.contacts = contacts;
@@ -138,7 +140,7 @@ public class FirebaseUserAdapter
                     sendFile(fuser.getUid(), UserStudent.getFirstname(mContext) + " " + UserStudent.getLastname(mContext) , UserStudent.getImage(mContext), user.getId(), user.getFullName(), user.getPhotoName(), files, fileType);
                 }
 
-                Toast.makeText(mContext, "Shared Successfully!", Toast.LENGTH_SHORT).show();
+                Toasty.success(mContext, "Shared Successfully").show();
                 activity.finish();
 
             }
@@ -211,20 +213,44 @@ public class FirebaseUserAdapter
                 .child(fuser.getUid());
         chatRefReceiver.child("id").setValue(fuser.getUid());
 
-        final String msg = files;
+//         final String msg = files;
+
+        switch (fileType) {
+            case "pdf":
+                msg = "Pdf";
+                break;
+            case "word":
+                msg = "Word";
+                break;
+            case "excel":
+                msg = "Excel";
+                break;
+            case "powerpoint":
+                msg = "Powerpoint";
+                break;
+            case "video":
+                msg = "Video";
+                break;
+            case "image":
+                msg = "Image";
+
+                break;
+        }
+
 
         reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Contact contact = dataSnapshot.getValue(Contact.class);
-                if (notify) {
+                Debugger.logD(contact.getFullName() );
+                if (notify = true) {
                     if (contact.getFullName() == null){
-                        sendNotification(receiver, contact.getEmail(), msg);
-
+                        Debugger.logD("DRE 1");
+                        sendNotification(receiver, contact.getEmail(), "Shared a " + msg + " File");
                     }else{
-                        sendNotification(receiver, contact.getFullName(), msg);
-
+                        Debugger.logD("DRE 2");
+                        sendNotification(receiver, contact.getFullName(), "Shared a " + msg + " File");
                     }
                 }
                 notify = false;
@@ -238,6 +264,7 @@ public class FirebaseUserAdapter
     }
 
     private void sendNotification(String receiver, final String username, final String message){
+        Debugger.logD("AGI 1");
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -245,24 +272,34 @@ public class FirebaseUserAdapter
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message", currentDate,
+                    Debugger.logD("AGI 2");
+                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New File", currentDate, "file",
                             receiver);
                     Sender sender = new Sender(data, token.getToken());
-
+                    Debugger.logD("AGI 3");
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<MyResponse>() {
                                 @Override
                                 public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    Debugger.logD("SUCCESS MAN");
                                     if (response.code() == 200){
+                                        Debugger.logD(response.message());
+                                        Debugger.logDint(response.code());
+                                        Debugger.logD(String.valueOf(response.body().success));
+                                        assert response.body() != null;
                                         if (response.body().success != 1){
-                                            Toast.makeText(mContext, "Failed!", Toast.LENGTH_SHORT).show();
+                                            Toasty.error(mContext, "Failed!", Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            Debugger.logD("NAA man");
                                         }
+                                    }else{
+                                        Debugger.logD("ERROR YAWA");
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<MyResponse> call, Throwable t) {
-
+                                    Debugger.logD("ERROR YAWA BURKIAT");
                                 }
                             });
                 }

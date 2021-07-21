@@ -88,6 +88,7 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.ViewHolder> 
                 break;
             case "image":
                 fileType = "Image";
+
                 break;
         }
 

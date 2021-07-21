@@ -23,6 +23,7 @@ import com.theyestech.yes_mobile.R;
 import com.theyestech.yes_mobile.activities.MessageActivity;
 import com.theyestech.yes_mobile.models.Chat;
 import com.theyestech.yes_mobile.models.Contact;
+import com.theyestech.yes_mobile.utils.Debugger;
 import com.theyestech.yes_mobile.utils.GlideOptions;
 
 import java.util.ArrayList;
@@ -159,7 +160,7 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Debugger.logD("BURIKAT " + databaseError.getMessage());
             }
         });
     }

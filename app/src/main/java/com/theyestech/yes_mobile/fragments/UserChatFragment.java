@@ -371,7 +371,7 @@ public class UserChatFragment extends Fragment {
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
                     chatlistArrayList.add(chatlist);
                 }
-                Collections.reverse(chatlistArrayList);
+
                 chatUserList();
                 accessingServer(false);
             }
@@ -398,9 +398,11 @@ public class UserChatFragment extends Fragment {
                         }
                     }
                 }
-                Collections.reverse(contactArrayList2);
 
-                rv_ChatThreads.setLayoutManager(new LinearLayoutManager(context));
+                LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                layoutManager.setReverseLayout(true);
+                layoutManager.setStackFromEnd(true);
+                rv_ChatThreads.setLayoutManager(layoutManager);
                 rv_ChatThreads.setHasFixedSize(true);
 
                 userChatListAdapter = new UserChatListAdapter(context, contactArrayList2, true);

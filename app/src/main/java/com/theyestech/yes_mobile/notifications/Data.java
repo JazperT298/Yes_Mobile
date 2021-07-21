@@ -11,15 +11,17 @@ public class Data {
     private String body;
     private String title;
     private Date date;
+    private String type;
     private String sented;
 
 
-    public Data(String user, int icon, String body, String title, Date date, String sented) {
+    public Data(String user, int icon, String body, String title, Date date, String type, String sented) {
         this.user = user;
         this.icon = icon;
         this.body = body;
         this.title = title;
         this.date = date;
+        this.type = type;
         this.sented = sented;
     }
 
@@ -61,6 +63,14 @@ public class Data {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getSented() {
